@@ -1,0 +1,125 @@
+<include file="Common:cpheader" />
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<style>
+.selector_msg{color:red;}
+.selector_expand{display:none;}
+.table-form1:hover{background: #fbffe4;}
+#store_sales_list img{height:85px;};
+</style>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script>
+    $(function(){
+        $('#sub').click(function(){
+            $.post('?app=Agents&m=Method&a=method_do',{'agent_id':$("input[name='aid']").val(),'abn':$("input[name='abn']").val(),'type':$("input[name='type']").val(),'type_id':$("input[name='type_id']").val()},function(msg){
+                var msg = eval("("+msg+")");
+                if(msg == 1){
+                    $("form[name='myform']").submit();
+                    art.dialog({content: '审核成功',});
+                    var l = 'location.href="{:Url('Agents/Method/index')}";';
+                    setTimeout(l, 1000);
+                    return;
+                }else{
+                    art.dialog({content: '审核失败,请联系技术',}).time(3000);
+                    return;
+                }
+            });
+
+        });
+        $('#back').click(function(){
+            var url = 'location.href="?app=Agents&m=Method&a=back&type={$mt.type}&type_id={$mt.type_id}&aid={$ag.id}";';
+            setTimeout(url, 0);
+        });
+    });
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">总代理申请列表</a> > 总代理申请详情</div>
+    <div class="form">
+			<input type="hidden" name="rpp" value="{$rpp}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">申请信息</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">企业名称</th>
+                        <td>{$ag.cname}</td>
+                    </tr>
+                    <!--
+                    <tr>
+                        <th width="130">企业地址</th>
+                        <td>{$ag.qy_address}</td>
+                    </tr>
+                    -->
+                    <tr>
+                        <th width="130">企业电话</th>
+                        <td>{$ag.tel}</td>
+                    </tr>
+                    <!--
+                    <tr>
+                        <th width="130">登录账号</th>
+                        <td>{$ac.username}</td>
+                    </tr>
+                    -->
+                    <tr>
+                        <th width="130">认证资料</th>
+                        <td><if condition="$mt.auth_method eq 1" ><font color="red">资质图片</font><br /><a href="http://houtai.wine.cn{$mt.method_data}"><img src="http://houtai.wine.cn{$mt.method_data}" width="100" height="80"></a><elseif condition="$mt.auth_method eq 2" /><font color="red">电子邮件验证</font>|{$mt.method_data}<else /><font color="red">酒庄官网信息验证</font>|{$mt.method_data}</if></td>
+                    </tr>
+                    <tr>
+                        <th width="130">申请类型</th>
+                        <td><if condition="$mt.auth_method eq 1" ><font color="red">资质图片</font><elseif condition="$mt.auth_method eq 2" /><font color="red">电子邮件验证</font><else /><font color="red">酒庄官网信息验证</font></if></td>
+                    </tr>
+                    <tr>
+                        <th width="130">申请类型</th>
+                        <td>
+                            <if condition="$mt.type eq 1">按品牌申请总代理<else />按酒款申请总代理</if>&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">申请的品牌/酒款</th>
+                        <if condition="$mt.type eq 1">
+                        <td>{$mt.winery_fname}<if condition="$mt.winery_cname neq ''"> / {$mt.winery_cname}</if></td>
+                        <else />
+                        <td>{$mt.wine_fname}<if condition="$mt.winery_cname neq ''"> / {$mt.wine_cname}</if></td>
+                        </if>
+                    </tr>
+                    
+                    <tr>
+                        <th width="130">认证异常</th>
+                        <td>
+                            <table width="100%" cellspacing="0" border="1">
+                                <tr>
+                                    <th width="30">选择</th>
+                                    <th width="400" text-align="center">已存在总代理的酒款</th>
+                                    <th text-align="center">总代理资格所属企业</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" checked="checked" value="" id="check_box" onclick="selectAll('ids[]');"></td>
+                                    <td text-align="center"><font color="red">{$abn.fname} / {$abn.cname}</font></td>
+                                    <td text-align="center"><font color="red"></font>{$old.qy_name} </td>
+                                </tr>
+                                </volist>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </div>
+            <input type="hidden" name="abn" value="{$abn}" />
+            <input type="hidden" name="aid" value="{$ag.id}" />
+            <input type="hidden" name="type" value="{$mt.type}" />
+            <input type="hidden" name="type_id" value="{$mt.type_id}" />
+            <input type="hidden" name="wine_id" value="{$mt.wine_id}" />
+            <input type="hidden" name="winery_id" value="{$mt.winery_id}" />
+            <div class="bottom">
+                <if condition="$abn eq ''">
+                <input type="button" class="btn" value="审核通过" id="sub" />
+                <input type="button" class="btn" value="驳回申请" id="back" />
+                <else />
+                <input type="button" class="btn" value="更新选择酒款关系并通过审核" id="sub" />
+                <input type="button" class="btn" value="驳回申请" id="back" />
+                </if>
+            </div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

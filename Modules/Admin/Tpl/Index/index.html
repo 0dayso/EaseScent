@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>逸香网管理平台</title>
+<link href="__PUBLIC__/admin/css/admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/dialog/css/dialog.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/treeview/css/treeview.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/common/js/jquery.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dialog/js/dialog.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dialog/js/dialog.plugins.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/common/js/jquery.cookie.js" type="text/javascript"></script>
+<script src="__PUBLIC__/treeview/js/jquery.treeview.js" type="text/javascript"></script>
+<script src="__PUBLIC__/admin/js/admin.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+    //载入导航树
+    $("#leftTree").treeview({
+		animated: "fast",
+		collapsed: true,
+		unique: true,
+		persist: "cookie"
+	});
+
+    //自适应高
+    $("#mainBody").css({height:$(window).height()-80});
+	$("#leftMenu").css({height:$(window).height()-80});
+	$(window).resize(function(){
+		$("#mainBody").css({height:$(window).height()-80});
+		$("#leftMenu").css({height:$(window).height()-80});
+	});
+});
+</script>
+<style>
+body{
+    background:#E2E9EA;
+}
+</style>
+</head>
+<body>
+<div id="header">
+    <div class="logo"><font style="font-size:30px;">&lt;?php</font> echo "逸香网管理平台" <font style="font-size:25px;">?&gt;</font></div>
+    <div class="info">欢迎您， <b>{$admin_username}</b> [{$admin_gname}]    [<a href="{:Url('Admin/Login/logout')}">退出登录</a>]</div>
+</div>
+<div id="leftMenu">
+    <div class="sidebar">
+    <div class="title">功能导航</div>
+        
+        
+	<ul id="leftTree" class="filetree">
+        <volist id="menu" name="leftMenu">
+        <in name="menu['link']" value="$acurl">
+		<li><span class="folder">{$menu.name}</span>
+			<ul>
+                <volist id="sub" name="menu['children']">
+                <in name="sub['link']" value="$acurl">
+                <li><span class="file"><a href="{:Url("$sub[link]")}" target="mainBody">{$sub.name}</a></span></li>
+                </in>
+                </volist>
+			</ul>
+            </li>
+        </in>
+		</volist>
+	</ul>
+        
+    </div>
+</div>
+<div id="main">
+	<iframe src="{:Url('init')}" frameborder="false" name="mainBody" id="mainBody" scrolling="auto" allowtransparency="true" width="100%" height="auto"></iframe>
+</div>
+<div id="footer">&copy 2012 wine.cn</div>
+</body>
+</html>

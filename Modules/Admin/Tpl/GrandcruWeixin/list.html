@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>逸香名庄微信版_{$title}</title>
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" type="text/css" media="all" href="http://public.wine.cn/Weixin/css/base.css">
+<link rel="stylesheet" type="text/css" media="all" href="http://public.wine.cn/Weixin/css/style.css">
+</head>
+<body>
+<div id="boxshow">
+    <if condition="$type eq 'item'">
+    <div id="title">
+        <span class="titlesay" id="titlesay">{$title}</span>
+        <div id="titlediv" show-data="none">
+        	<span class="topico"></span>
+            <ul class="titlelist">
+                {$nav}
+            </ul>
+       </div>
+   </div>
+   <else />
+   <div id="title">
+        <span class="titlesay" style="background:none;">{$title}</span>
+   </div>
+   </if>
+    <ul class="ullist">
+        <volist id="vo" name="data">
+        <li><a href="{$vo.url}"><img src="{$vo.picurl}" alt=""><strong>{$vo.title}</strong><span>{$vo.fname}</span></a></li>
+        </volist>
+    </ul>
+</div>
+<script type="text/javascript">
+    var $ = function(id){return document.getElementById(id)}
+    var $$ = function(id, k, v){
+        var o = $(id);
+        if(!v) {
+            return o.getAttribute(k);
+        } else {
+            return o.setAttribute(k, v);
+        }
+    }
+    $('titlesay').onclick = function(){
+        if($$('titlediv', 'show-data') == 'none') {
+            $$('titlediv', 'show-data', 'view');
+            $$('titlediv', 'style', 'display:block;');
+        } else {
+            $$('titlediv', 'show-data', 'none');
+            $$('titlediv', 'style', 'display:none;');
+        }
+    }
+</script>
+</body>
+</html>

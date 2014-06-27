@@ -1,0 +1,85 @@
+<include file="Common:header" />
+    <include file="Common:agentHeader" />
+     <include file="Common:agentTopNav" />
+        <div class="z_main">
+            <div class="z_main_nr">
+                <div class="z_main_nr_l">
+                    <ul class="z_main_nr_l_ul">
+                        <volist name="goodsList['list']" id="vo">
+                            <li>
+                                <h3>
+                                    <a href="{:U('Goods/goodsShow/?goods_id='.$vo['goods_id'].'&agent_id='.$vo['agent_id'])}" >{$vo.cname}{$vo.fname} </a>
+                                </h3>
+                                <div class="clear">
+                                    <p class="pic imgMid">
+                                        <a href="{:U('Goods/goodsShow/?goods_id='.$vo['goods_id'].'&agent_id='.$vo['agent_id'])}">
+                                            <php> $ex= explode(".",$vo['pic_url']); $img = $ex[0].'_400_thumb.'.$ex[1]; </php>
+                                            <img  src="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images{$img}"  height="200"  />
+                                        </a>
+                                    </p>
+                                    <div class="nr">
+                                        <p><i>类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型：</i><span>{$vo.typename}</span></p>
+                                        <p><i>葡萄品种：</i><span>
+                                            <php> if(strpos($vo['variety'],',')){ </php>
+                                                {:strtr($vo['variety'],',','%')}%
+                                            <php> }elseif($vo['variety']){</php>
+                                                {$vo['variety']}%
+                                            <php>}</php>
+                                        </span></p>
+
+                                        <p><i>代理价格：</i><span>
+                                            <if condition="$vo['price_type'] eq 1 ">面议<else/>
+                                                   {$vo.goods_price}<if condition="$vo['currency'] eq 1"> $ <else/> RMB   </if>
+                                            </if>
+                                        </span></p>
+                                        <p><i>产  地： </i><span>{$vo['country_name']}          {$vo['region_name']}</span></p>
+                                        <p><i>奖  项： </i><span>{$vo['awards']} </span></p>
+                                        <p><i>容  量： </i><span>{$vo['volume']} </span></p>
+                                        <p><i>起购数：</i><span> {$vo['minimum']|default="1"}瓶</span></p>
+                                        <p class="tar mt10"><a href="{:U('Goods/goodsShow/?goods_id='.$vo['goods_id'].'&agent_id='.$vo['agent_id'])}" ><img src="__PUBLIC__/Expo/img/z_moreBtn.gif" /></a></p>
+                                    </div>
+                                </div>
+                            </li>
+                        </volist>
+                    </ul>
+                    <p class="pageNum">
+                	    {$goodsList['pageShow']}
+                    </p>
+                </div>
+                <div class="z_main_nr_r">
+                    <h3 class="z_main_nr_r_titH3">{$qy_info['qy_name']}</h3>
+                    <div class="z_main_nr_r_pList bb1d_ccc">
+                        <p>地址：<span>{$qy_info['qy_address']}</span></p>
+                        <p>邮箱：<span>{$qy_info['email']}</span></p>
+                        <p>skype：<span>{$qy_info['qy_skype']}</span></p>
+                        <p>QQ：<span>{$qy_info['qy_qq']}</span></p>
+                        <p>电话：<span>{$qy_info['qy_moblie']}</span></p>
+
+                        <if condition="$qy_info['qy_web_address']">
+                            <p class="bb1d_ccc">官网：
+                                <a target="_blank" style="color:#555555;"  href="http://{:str_replace('http\:\/\/','',$qy_info['qy_web_address'])}">点击查看官网</a>
+                            </p>
+                        </if>
+                        <p>联系供货商：
+                            <span class="contactBox">
+                               <if condition="$qy_info['email']">
+                                   <a href="mailto:{$qy_info['email']}"><img src="__PUBLIC__/Expo/img/z_ico_mail18x15.png" /></a>
+                               </if>
+                               <if condition="$qy_info['qy_skype']">
+                                   <a href="callto://{$qy_info['qy_skype']}"><img src="__PUBLIC__/Expo/img/z_ico_skype20x20.png" border="0"></a>
+                               </if>
+                               <if condition="$qy_info['qy_qq']">
+                                   <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$qy_info['qy_qq']}&site=qq&menu=yes">
+                                       <img border="0" src="http://wpa.qq.com/pa?p=2:272761906:52" alt="点击这里给我发消息" title="点击这里给我发消息"/>
+                                   </a>
+                               </if>
+                            </span>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+         <div class="z_main_nrBotBg"></div>
+     </div>
+
+<include file="Common:footer" />

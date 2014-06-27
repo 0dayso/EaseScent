@@ -1,0 +1,106 @@
+<div class="wine_nav">
+	<h2><a href="/" title="返回酒会首页"><img src="__ROOT__/Common/images/wine_logo.jpg"/></a></h2>
+	<div class="wine_nav_l">
+		<span class="city">
+			<a id="cshow" href="javascript:;" class="city_name" id="city_change">{$c_value}</a>
+			<!-- 城市选择弹出层div -->
+			<div id="c" class="city_list" id="city_list">
+				<div class="wine_san"></div>
+				<div class="city_t">
+					<span>城市列表</span>
+					<a id="chide" href="javascript:;;"></a>
+				</div>
+				<div class="city_m">
+					<div class="hot_city">
+						<a href="/index.php/PartyList/index/c/0/t/{$t}/p/{$p}">全国</a>
+					<if condition="$hot_city">
+						<volist name="hot_city" id="hot_city" key="k">	
+						<a href="/index.php/PartyList/index/c/{$hot_city.cid}/t/{$t}/p/{$p}" <if condition="$hot_city.cid eq $c">class="hot_city_z"</if>>{$hot_city.name}</a>
+						</volist>
+					</if>	
+					</div>
+					<div class="city_select">
+						<div class="city_select_l">
+							<!--<a id="allpe" href="javascript:;" class="city_select_a">按省份</a>-->
+							<a id="allcy" href="javascript:;" class="city_select_a">按城市</a>
+						</div>
+						<div class="city_select_r">
+							<input id="incyname" type="text" class="city_input" value="输入城市名"/>
+							<input id="inbt" type="button" class="city_button" />
+						</div>
+					</div>
+					<div tp="peabc"class="city_select_e">
+					<if condition="$pe_letter">
+						<volist name="pe_letter" id="pe_letter" key="k">
+						<a  href="javascript:s_top('{$pe_letter.fistchar}{$pe_letter.region_id}');">{$pe_letter.fistchar}</a>
+						</volist>
+					</if>	
+					</div>
+					<div tp="cyabc" class="city_select_e">
+					<if condition="$cy_letter">
+						<volist name="cy_letter" id="cy_letter" key="k">
+						<a  href="javascript:javascript:s_top('{$cy_letter.letter}{$cy_letter.id}');">{$cy_letter.letter}</a>
+						</volist>
+					</if>
+					</div>
+				</div>
+				<div class="city_rank">
+				<if condition="$pe_order">
+					<volist name="pe_order" id="pe_order" key="k">
+					<div id="{$pe_order.fistchar}{$pe_order.region_id}" tp="pediv" class="city_rank_mod">
+						<div class="city_rank_mod_l">
+							<b>{$pe_order.fistchar}</b>
+							<span>{$pe_order.region_name}：</span>
+						</div>
+						<div class="city_rank_mod_r">
+						<volist name="pe_order['city']" id="city" key="k" >
+						<a href="/index.php/PartyList/index/c/{$city.id}/t/{$t}/p/{$p}">{$city.cname}</a>
+						</volist>
+						</div>
+					</div>
+					</volist>
+				</if>
+				<if condition="$cy_order">
+					<volist name="cy_order" id="cy_order" key="k">
+					<div id="{$cy_order.letter}{$cy_order.id}" tp="cydiv" class="city_rank_mod">
+						<div class="city_rank_mod_l">
+							<b>{$cy_order.letter}</b>
+							
+						</div>
+						<div class="city_rank_mod_r">
+						<volist name="cy_order['city']" id="citys" key="k">
+						<a href="/index.php/PartyList/index/c/{$citys.id}/t/{$t}/p/{$p}">{$citys.cname}</a>
+						</volist>
+						</div>
+					</div>
+					</volist>
+				</if>	
+				</div>
+			</div>
+		</span>
+		<a href="javascript:;" class="my_wine {$class}" id="goto_my_wine">我的酒会</a>
+		<a href="javascript:;" class="my_wine" id="goto_create">发布酒会</a>
+	</div>
+	<div class="wine_nav_r">
+		<div id="tpt" class="wine_nav_time">
+			<span id="currt">{$t_value}</span>
+			<div id="t" class="wine_nav_time_list"><!-- 日期弹出框 -->
+				<a class="allt" href="/index.php/PartyList/index/t/<php>echo mktime(0, 0, 0, date('d'), date('m'), date('Y'))+172800;</php>/c/{$c}/p/{$p}">明天</a>
+				<a class="allt" href="/index.php/PartyList/index/t/<php>echo time()-604800;</php>/c/{$c}/p/{$p}">最近一周</a>
+				<a class="allt" href="/index.php/PartyList/index/t/all/c/{$c}/p/{$p}">全部时间</a>
+				<a id="wt" onClick="WdatePicker({position:{left:1000,top:185},onpicked:pickedFunc});"  href="javascript:;">指定日期</a>
+			</div>
+		</div>
+		<div id="ppt" class="wine_nav_price">
+			<span>{$p_value}</span>
+			<div id="p" class="wine_nav_time_list"><!-- 价格弹出框 -->
+				<a href="/PartyList/index/t/{$t}/c/{$c}/p/1|1">免费</a>
+				<a href="/index.php/PartyList/index/t/{$t}/c/{$c}/p/1|300">1元-300元</a>
+				<a href="/index.php/PartyList/index/t/{$t}/c/{$c}/p/300|500">300元-500元</a>
+				<a href="/index.php/PartyList/index/t/{$t}/c/{$c}/p/500+">500以上</a>
+				<a href="/index.php/PartyList/index/t/{$t}/c/{$c}/p/all">全部</a>
+			</div>
+		</div>
+		<!-- 提交 -->
+	</div>
+</div>

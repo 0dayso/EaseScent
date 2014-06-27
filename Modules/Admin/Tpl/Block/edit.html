@@ -1,0 +1,96 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/Block/index')}">区块列表</a> > 编辑区块</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">区块列表</a>
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('edit')}" method="post">
+            <input type="hidden" name="bid" value="{$res.bid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑区块</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">区块名称</th>
+                        <td><input type="text" size="80" name="name" value="{$res.name}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">存放位置</th>
+						<td>
+                            <volist name="domainpath" id="vo">
+                                <label for="dir_{$key}" style="display:block;cursor:pointer;"><input type="checkbox" name="dir[]" id="dir_{$key}" value="{$vo.id}" <if condition="in_array($vo['id'],explode(',',$res['dir']))">checked</if> />&nbsp;&nbsp;<b>./{$vo.path}_Block/</b>&nbsp;&nbsp;({$vo.domain}_Block/)</label>
+                            </volist>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">区块类型</th>
+						<td>
+							<select id="type" name="type">
+                                <option <if condition="$res['type'] eq 'static'">selected</if> value="static">静态区块</option>
+                                <option <if condition="$res['type'] eq 'dynamic'">selected</if> value="dynamic">动态区块</option>
+							</select>
+						</td>
+                    </tr>
+                    <tr id="cycle">
+                        <th width="130">更新周期</th>
+                        <td><input type="text" size="20" name="cycle" value="{$res.cycle}" class="measure-input"/> 仅对动态区块起作用,静态区块不会更新</td>
+                    </tr>
+                    <tr id="php">
+                        <th width="130">PHP语句</th>
+                        <td><textarea style="width:60%;height:80px" name="php">{$res.php}</textarea> 仅对动态区块起作用</td>
+                    </tr>
+                    <tr>
+                        <th width="130">模板</th>
+                        <td><textarea style="width:60%;height:120px" name="tpl">{$res.tpl}</textarea> 区块模板HTML（支持TP模板解析）</td>
+                    </tr>
+                    <tr>
+                        <th width="130">动态区块上次更新时间</th>
+                        <td>{$res.updatetime|date='Y-m-d H:i:s', ###}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">动态区块预计下次更新时间</th>
+                        <td><font style="color:#ff0000;font-weight:bold">{$res.nextupdatetime|date='Y-m-d H:i:s', ###}</font></td>
+                    </tr>
+                    <tr>
+                        <th width="130">静态页面引用</th>
+                        <td><empty name="res.htmlpath"> 尚未生成静态区块页面 <a class='btn' href="{:Url('update')}&bid={$res.bid}">点击生成</a> <else /><input type="text" size="60" value='&lt;!--{$res.name}--&gt;&lt;!--#include virtual="{$res.htmlpath}"--&gt;' class="measure-input"/> 静态页面引用</empty></td>
+                    </tr>
+                    <tr>
+                        <th width="130">动态页面引用</th>
+                        <td><empty name="res.htmlpath"> 尚未生成静态区块 <a class='btn' href="{{:Url('update')}&bid={$res.bid}">点击生成</a> <else /><input id="htmlpath" type="text" size="60" value='' class="measure-input"/> 动态页面引用</empty></td>
+
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<script language="javascript">
+$(document).ready(function(){
+    typeChange("{$res.type}");
+    $("#type").change(function(){
+        var type = $(this).val();
+        typeChange(type);
+    });
+    var bid = {$res.bid};
+    var title = "{$res.name}";
+    $("#htmlpath").val('<!--'+ title +'-->{'+':getBlock('+bid+')'+'}');
+});
+function typeChange(type) {
+    var cycle = $("#cycle");
+    var php = $("#php");
+    if(type == 'static') {
+        cycle.hide();
+        php.hide();
+    } else if(type == 'dynamic') {
+        cycle.show();
+        php.show();
+    }
+}
+</script>
+<include file="Common:cpfooter" />

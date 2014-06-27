@@ -1,0 +1,65 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Dzjp/Index/index')}">大众酒评管理</a> >
+        <a href="{:Url('index')}">代理商实体店评论列表</a> >
+        编辑代理商实体店评论
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('edit')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_backpage" value="{$_REQUEST._backpage}">
+			<input type="hidden" name="id" value="{$res.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+            	<table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">用户昵称</th>
+                        <td><if condition="$res['uname']">{$res.uname}<else/>-</if></td>
+                    </tr>
+                    <tr>
+                        <th>评论时间</th>
+                        <td>{$res.time|date="Y-m-d H:i:s",###}</td>
+                    </tr>
+                    <tr>
+                        <th>代理商实体店</th>
+                        <td><if condition="$res['store_sales_name']">{$res.store_sales_name}<else/>-</if></td>
+                    </tr>
+                    <tr>
+                        <th>综合评分(1~10)</th>
+                        <td><input type="text" size="20" name="c_score" value="{$res.c_score}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>环境评分(1~10)</th>
+                        <td><input type="text" size="20" name="e_score" value="{$res.e_score}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>服务评分(1~10)</th>
+                        <td><input type="text" size="20" name="s_score" value="{$res.s_score}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>评论内容</th>
+                        <td><textarea style="width:60%;height:120px" name="comment">{$res.comment}</textarea><span style="color:red;">*至少输入20个字</span></td>
+                    </tr>
+                    </tr>
+                        <th>状态</th>
+                        <td>
+                        	<input id="status_3" name="status" type="radio" value="3" <if condition="$res['status'] eq 3">checked</if> />
+                            <label for="status_3">审核通过</label>
+                            <input id="status_2" name="status" type="radio" value="2" <if condition="$res['status'] eq 2">checked</if> />
+                            <label for="status_2">待审核</label>
+                            <input id="status_1" name="status" type="radio" value="1" <if condition="$res['status'] eq 1">checked</if> />
+                            <label for="status_1">删除</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

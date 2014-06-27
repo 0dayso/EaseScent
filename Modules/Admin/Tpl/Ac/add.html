@@ -1,0 +1,33 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/Ac/index')}">权限管理</a> > 增加权限节点</div>
+    <div class="form">
+		<form name="myform" action="{:Url('Admin/Ac/add')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="pid" value="{$pid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加用户</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">父节点</th>
+                        <td><empty name="pac">根节点<else />{$pac.name}({$pac.url})</empty></td>
+                    </tr>
+                    <tr>
+                        <th width="130">节点名称</th>
+                        <td><input type="text" size="30" name="name" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">节点URL</th>
+                        <td><input type="text" size="30" name="url" value="" class="measure-input"/> 说明：节点URL由APP_NAME/MODULE_NAME/ACTION_NAME,例如： News/Pub/add (注意不要有空格)</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+                <input type="button" onclick="location.href='{:Url("Admin/Ac/index")}'" class="btn" value="返回" />
+            <div>
+        </form>
+    <div>
+</div>
+<include file="Common:cpfooter" />

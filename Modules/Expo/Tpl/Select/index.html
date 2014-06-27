@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/qy/css/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/qy/css/z_register.css" />
+        <script src="__PUBLIC__/Expo/qy/js/jquery-1.7.2.js"></script>
+    </head>
+
+    <body class="bgFFF">
+        <div class="re_headBg">
+            <div class="re_head clear">
+                <h2 class="re_head_h2">Enterprise-users Center</h2>
+                <p class="re_head_r">
+                     <a href="{:C('YM_DOMAIN')}/index.php">Account</a> |
+                     <a href="{:C('YM_DOMAIN')}/index.php/User/loginout">Log out</a>
+                </p>
+            </div>
+        </div>
+        <div class="ht_main">
+            <h3 class="re_main_htH3">Business Identity</h3>
+            <ul class="ht_Box clear">
+                <li class="fl">
+                    <div>
+                        <form action="{:U('Select/index')}" method="post" id="myform" >
+                            <a href="javascript:;" class="ht_liPica">
+                                <p><img src="__PUBLIC__/Expo/qy/images/pic02.jpg" /></p>
+                                <h3><label><input type="radio" name="Identity" value="0" /> Chinese Business</label></h3>
+                                <p>We want to release product and merchant information in China Pavilion in search of distributors and partners.</p>
+                            </a>
+                    </div>
+                    <p class="note">Note：<br /><span>
+                            Chinese Business refers to a wine agent, dealer, merchant or service provider registered in China. </span></p>
+                </li>
+                <li class="fr">
+                    <div>
+                        <a href="javascript:;" class="ht_liPica">
+                            <p><img src="__PUBLIC__/Expo/qy/images/pic03.jpg" /></p>
+
+                            <h3><label><input type="radio" name="Identity" value="1" /> Foreign Business</label></h3>
+                            <p>We want to release product and merchant information in International Hall in search of Chinese wine importers. </p>
+                        </a>
+                    </div>
+                    <p class="note">Note：<br /><span>
+                            Chinese Business refers to a wine agent, dealer, merchant or service provider registered in China. </span></p>
+                </li>
+            </ul>
+            <p class="mt50">
+                <a href="javascript:void(0)" class="pinkBtn" onclick="submit(myform)"><span>Return to Ease Scent Passport Center?</span></a>
+                <span id="prompt"style="display:none">Please select an enterprise identity</span>
+            </p>
+        </div>
+    </body>
+           <script type="text/javascript">
+            $(document).ready(function(){
+                $('.ht_liPica').click(function(){
+                    $(this).find('input').attr('checked','true');
+                });
+            });
+            function submit(myform){
+                if(!check()){
+                    $("#prompt").show();
+                }else{
+                    javascript:document.getElementById('myform').submit();
+                }
+            }
+            function check(){
+                var result=false;
+                var v=document.getElementsByName('Identity');
+                for (var i=0;i<v.length;i++){
+                    if(v.item(i).checked){
+                        result =true;
+                    }
+                }
+                return result;
+            }
+        </script>
+</html>

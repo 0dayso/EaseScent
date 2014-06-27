@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+body{font: 12px/1.5 tahoma,arial,宋体b8b\4f53,sans-serif;}
+div{margin-bottom:10px;}
+#fullmsg p span{width:40px;display:inline-block;text-align:right;}
+#note var{width:12px;height:12px;display:inline-block; margin-right:2px;}
+</style>
+<script src="{:C('DOMAIN.PUBLIC')}/common/js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+function generate_Winerydetail(thisbtn){
+	$("input[type='button']").attr('disabled',true);
+	$("#msg").html('酒庄详情页生成中...完成生成前，请不要离开该页面！');
+	$.ajax({
+		url:"{:Url('winerydetail')}",
+		type:"GET",
+		error:function(XMLHttpRequest, textStatus, errorThrown){
+			$("#msg").html('更新失败，请重新更新！');
+			$("#fullmsg").html('<p>错误代码：</p><p>XMLHttpRequest:'+XMLHttpRequest+'</p><p>textStatus:'+textStatus+'</p><p>errorThrown:'+errorThrown+'</p>');
+			$("input[type='button']").attr('disabled',false);
+		},
+		success:function(msg){
+			console.log(msg);
+			if(msg == ''){
+				$("input[type='button']").attr('disabled',false);
+				$("#msg").html('完成更新！');
+			}else{
+				$("#fullmsg").append('<p>'+msg+'</p>');
+				generate_Winerydetail(thisbtn);
+			}
+		}
+	});
+}
+</script>
+</head>
+
+<body>
+<div><strong>{$res.title}静态页生成：</strong></div>
+<div id="note">
+	<var style="background-color:#666;"></var><span>删除静态文件，没有该条数据</span>
+    <var style="background-color:#F60;"></var><span>删除静态文件，数据已被更改为关闭显示状态。</span>
+    <var style="background-color:#F00;"></var><span>删除静态文件，数据已被更改为删除状态</span>
+    <var style="background-color:#390;"></var><span>生成静态文件。</span>
+    <var style="background-color:#60F;"></var><span>发生异常。</span>
+</div>
+<div>
+	<volist name="res.btn" id="vo">
+	<input type="button" onclick="generate_{$res.parameter}{$vo.parameter}(this);" value="{$vo.value}" />
+    </volist>
+</div>
+<div id="msg"></div>
+<div id="fullmsg"></div>
+</body>
+</html>

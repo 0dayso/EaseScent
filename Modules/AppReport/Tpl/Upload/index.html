@@ -1,0 +1,96 @@
+<include file="Common:cpheader" />
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.iframe-transport.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.fileupload.js"></script>
+<script language="javascript">
+$(function(){
+    $('#upload').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#upload_msg").text(progress + '%');
+            if(progress == 100){
+                get_files();
+            }
+        },
+        done: function (e, data) {
+            var fumsg = data.result.date + '   ' + data.result.filename + '   ' + data.result.msg + "\r\n";
+            $("#msg").text(fumsg + $("#msg").text());
+        }
+    });
+    get_files();
+});
+function get_files(){
+    $("#fileslist").html('<tr><td>获取中...<td></tr>');
+    $.post("{:Url('getfiles')}",function(msg){
+        var html = '';
+        $.each(msg.result,function(i,n){
+            html += '<tr><td><a href="'+n.url+'" target="_blank" title="点击下载">'+n.name+'</a></td><td>'+n.time+'</td></tr>';
+        });
+        $("#fileslist").html(html);
+    },'json');
+}
+function cover_db(){
+    if (confirm("覆盖数据库将与每日0点自动脚本执行，你是否确认立即执行该操作？")){
+        $.post("{:Url('coverDb')}",function(msg){
+            if(msg == 1){
+                alert('覆盖成功');
+            }else{
+                alert('覆盖失败，发生异常');
+            }
+        });
+    }
+}
+</script>
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('AppReport/Index/index')}">终端报表</a> >
+        上传报表
+    </div>
+    <div class="form">
+        <ul class="tabBut cu-li">
+            <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">上传报表</li>
+        </ul>
+        <div class="tab-nav" id="tab_1">
+            <table width="100%" cellspacing="0" class="table-form">
+                <tr>
+                    <th width="130">上传文件</th>
+                    <td>
+                        <input id="upload" name="file" type="file" multiple />
+                        <span id="upload_msg"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>上传记录</th>
+                    <td>
+                        <textarea id="msg" style="width:600px;height:100px;" readonly></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th>文件列表</th>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>文件名</th>
+                                    <th>上传时间</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fileslist">
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>文件操作</th>
+                    <td>
+                        <a href="javascript:cover_db();">覆盖数据库</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

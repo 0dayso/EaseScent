@@ -1,0 +1,121 @@
+<include file="Common:cpheader" />
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<style>
+.selector_msg{color:red;}
+.selector_expand{display:none;}
+.table-form1:hover{background: #fbffe4;}
+#store_sales_list img{height:85px;};
+</style>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#tg').click(function(){
+            var wid = $('input[name=wid]').val();
+            var bid = $('input[name=bid]').val();
+            if (wid == '') {
+                art.dialog({content: '请填写要关联的标准品牌/酒庄的ID,若标准库中无此品牌/酒庄,请移步酒库管理中添加标准酒庄后再进行审核',});
+                return;
+            }else{
+                $.post('?app=Agents&m=Zhuangmethod&a=method', {'wid':wid, 'bid':bid}, function(msg){
+                    if (msg == 1) {
+                        art.dialog({content: '审核成功',});
+                        var l = 'location.href="{:Url('Agents/Zhuangmethod/index')}";';
+                        setTimeout(l, 1000);
+                        return;
+                    }else{
+                        art.dialog({content: '审核失败,请联系技术',}).time(3000);
+                        return;
+                    };
+                });
+            };
+        });
+    });
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">代理商管理</a> > 品牌/酒庄申请列表</div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" type="text" value="{$_GET['keyword']}" class="input-text" placeholder="外文全称、中文全称" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="0">待处理</option>
+                            <option <if condition="1 eq $_GET['status']" >selected</if> value="1">已通过</option>
+                            <option <if condition="2 eq $_GET['status']" >selected</if> value="2">已驳回</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">序号</th>
+                    <th width="250">品牌/酒庄名称</th>
+                    <th>国家/产区</th>
+                    <th>已包含酒款</th>
+                    <th width="100">申请者/申请时间</th>
+                    <th width="50"><font color="red">关联标准ID(必填)</font></th>
+                    <th width="150">管理操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td><span>{$vo.fname}  ╱  {$vo.cname}</span></td>
+                    <td>
+                        <span>
+                            {$vo.country_fname} <if condition="$vo.country_cname neq ''"> ╱ {$vo.country_cname}</if>
+                            <if condition="$vo.region_one_fname neq ''"><br />
+                                {$vo.region_one_fname} <if condition="$vo.region_one_cname neq ''"> ╱ {$vo.region_one_cname}</if>
+                            </if>
+                            <if condition="$vo.region_two_fname neq ''"><br />
+                                {$vo.region_two_fname} <if condition="$vo.region_two_cname neq ''"> ╱ {$vo.region_two_cname}</if>
+                            </if>
+                            <if condition="$vo.region_other neq ''"><br />{$vo.region_other}</if>
+                        </span>
+                    </td>
+                    <td>
+                        <volist id="v" name="vo['wine']">
+                            {$v.fname} ╱ {$v.cname}<br />
+                        </volist>
+                    </td>
+                    <td>{$vo.agent_name}<br />{$vo.add_time|date='Y-m-d h:i:s',###}</td>
+                    <td>
+                        <if condition="$vo.status eq 0">
+                            <input type="text" name="wid" value="" style="width:100px" />
+                        <else />
+                            <font color="red">{$vo.winery_id}</font>
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo.status eq 0">
+                            <a href="javascript:;" id="tg">通过审核</a>
+                            &nbsp;&nbsp;
+                            <a href="?app=Agents&m=Zhuangmethod&a=back&id={$vo.id}" id="bk">审核打回</a>
+                        <else />
+                            <font color="red">此品牌为标准酒库品牌</font>
+                        </if>
+                        
+                    </td>
+                </tr>
+                <input type="hidden" name="bid" value="{$vo.id}">
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

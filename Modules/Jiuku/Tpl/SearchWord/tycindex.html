@@ -1,0 +1,55 @@
+<include file="Common:cpheader2" />
+<script language="javascript">
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库管理</a> >
+        <a href="{:Url('index')}">搜索词管理</a> >
+        同义词组列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('tycadd')}&_backurl={$_listurl}">添加同义词组</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('tycindex')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" class="input-text" type="text" value="{$_GET.keyword}" size="20" />
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="100">GROUP ID</th>
+                    <th>同义词组</th>
+                    <th width="30">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.group_id}</td>
+                    <td>{$vo.names|implode=',',###}</td>
+                    <td>
+                        <a href="{:Url('tycedit')}&group_id={$vo.group_id}&_backurl={$_listurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter2" />

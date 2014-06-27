@@ -1,0 +1,75 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > 区块列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}">增加新区块</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('Admin/Block/index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        名称：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">BID</th>
+                    <th>名称</th>
+                    <th width="80">类型</th>
+                    <th width="130">上次更新时间</th>
+                    <th width="130">下次更新</th>
+                    <th width="130">数据引用</th>
+                    <th width="100">更新区块</th>
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+            <tr>
+                <td>{$vo.bid}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.type}</td>
+                <td>{$vo.updatetime|date='Y-m-d H:i:s', ###}</td>
+                <td><if condition="$vo.type eq 'static'">不更新 <else />{$vo.nextupdatetime|date='Y-m-d H:i:s', ###}</if></td>
+                <td><a href="#" title="{$vo.name}" bid="{$vo.bid}" path="/_Block/{$vo.bid}.html" class='blockdatacall'>显示调用语句</a></td>
+                <td><a href="{:Url('Admin/Block/update')}&bid={$vo.bid}" >更新</a></td>
+                <td><a href="{:Url('Admin/Block/edit?bid='. $vo['bid'])}">编辑</a> <a href="{:Url('Admin/Block/del?bid='.$vo['bid'])}" target="delete" title='确定要删除ID为“{$vo.aid}”的模块吗？'>删除</a></td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<script language="javascript">
+    $(document).ready(function(){
+        $(".blockdatacall").click(function(){
+            var title = $(this).attr('title');
+            var bid = $(this).attr('bid');
+            var path = $(this).attr('path');
+            art.dialog({
+                lock: true,
+                background: _DIALOG_BG_COLOR,
+                opacity: _DIALOG_BG_OPACITY,
+                content: '<b>区块数据调用语句(将以下语句粘贴到所需位置即可)</b><br/><br/>shtml页面调用:<br/><input type="text" class="input-text" size=60 value=\'&lt!--'+title+'--&gt;&lt;!--#include virtual="'+path+'"--&gt;\'><br/><br/>动态页面调用:<br/><input type="text" class="input-text" size=60 value=\'&lt!--'+title+'--&gt;{'+':getBlock('+bid+')'+'}\'>',
+                cancel:function(){
+                    return true;
+                },
+                cancelValue: '关闭'
+            });
+        });
+    });
+</script>
+<include file="Common:cpfooter" />

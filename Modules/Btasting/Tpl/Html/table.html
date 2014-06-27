@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{$wp.name}</title>
+<link rel="stylesheet" type="text/css" href="http://public.wine.cn/btasting/css/z_base.css" />
+<link rel="stylesheet" type="text/css" href="http://public.wine.cn/btasting/css/z_main.css" />
+<script type="text/javascript" src="http://public.wine.cn/btasting/js/jquery1.7.2.js"></script>
+<script type="text/javascript" src="http://public.wine.cn/btasting/js/z_main.js"></script>
+</head>
+<body>
+	<div class="wora2 j_hover">
+    	<table class="j_tab" width="77px" cellpadding="0" cellspacing="0">
+        	<thead>
+            	<tr>
+                	<th colspan="2">编号</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist key="key1" id="gps" name="groups">
+                <volist key="key2" id="wine" name="gps.wines">
+                <tr <if condition="$key1 neq 1 and $key2 eq 1"> class="trbor" </if>>
+                    <td><span style="width:50px; height:28px; display:block; overflow:hidden">{$gps.name}</span></td>
+                    <td><span style="width:50px; height:28px; display:block; overflow:hidden">{$gps.item}{$wine.item}</span></td>
+                </tr>
+                </volist>
+                </volist>
+            </tbody>
+        </table>
+        <div class="z_userTabBox">
+        <table width="" cellpadding="0" cellspacing="0" class="j_tab2">
+        	<thead>
+            	<tr>
+                    <volist id="exp" name="experts">
+                    <th><span style=" display:block;overflow:hidden; <if condition=" count($experts) lt 10">width:100px;<else />padding-left:6px; padding-right:6px;</if>">{$exp.name}</span></th>
+                    </volist>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="gps" key="key1" name="groups">
+                <volist id="wine" key="key2" name="gps.wines">
+                <tr <if condition="$key1 neq 1 and $key2 eq 1"> class="trbor" </if>>
+                    <volist id="scs" name="wine.sc">
+                    <td style="<if condition="$key eq $wine['min_mid']">background:#d6957b;<elseif condition="$key eq $wine['max_mid']" />background:#772b0e</if>">{$scs}</td>
+                    </volist>
+                </tr>
+                </volist>
+                </volist>
+            </tbody>
+        </table>
+        </div>
+        <table width="360" cellpadding="0" cellspacing="0"  class="j_tab3">
+        	<thead>
+            	<tr>
+					<th width="42">结果</th>
+                    <th width="60">分组排名</th>
+                    <th width="46">总排名</th>
+                    <th width="">查看酒名</th>
+                </tr>
+                <tbody>
+                    <volist id="gps" key="key1" name="groups">
+                    <volist id="wine" key="key2" name="gps.wines">
+                    <tr <if condition="$key1 neq 1 and $key2 eq 1"> class="trbor" </if>>
+                        <td><b>{$wine.score}</b></td>
+                        <td>{$wine.gorder}</td>
+                        <td>{$wine.order}</td>
+                        <td><span style="width:150px; display:block;overflow:hidden;height:28px;" class="j_winename" url="http://ajax.wine.cn/?action=UWdyYGd6fXQ8W2d%2Bfzxken12YA%3D%3D" wine-id="{$wine.id}">{$wine.name}</span></td>
+                    </tr>
+                    </volist>
+                    </volist>
+                </tbody>
+            </thead>
+        </table>
+    </div>
+</body>
+</html>

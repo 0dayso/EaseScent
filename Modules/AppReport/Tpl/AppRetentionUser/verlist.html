@@ -1,0 +1,66 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+        <div class="list">
+            <table width="100%" cellspacing="0" class="table-list">
+                <thead>
+                    <tr>
+                        <th>首次使用时间</th>
+                        <th>新增用户</th>
+                        <th>存留率（1天后）</th>
+                        <th>存留率（2天后）</th>
+                        <th>存留率（3天后）</th>
+                        <th>存留率（4天后）</th>
+                        <th>存留率（5天后）</th>
+                        <th>存留率（6天后）</th>
+                        <th>存留率（7天后）</th>
+                        <th>存留率（14天后）</th>
+                        <th>存留率（30天后）</th>
+                    </tr>
+                </thead>
+                <tbody id="rate">
+                <volist name="list" id="vo">
+                    <tr>
+                        <td class="except">{$vo.date_time|date="Y-m-d",###}</td>
+                        <td class="except">{$vo.new_users}</td>
+                        <td>{$vo.a_day_later}%</td>
+                        <td>{$vo.two_days_later}%</td>
+                        <td>{$vo.three_days_later}%</td>
+                        <td>{$vo.four_days_later}%</td>
+                        <td>{$vo.after_five_days}%</td>
+                        <td>{$vo.six_days_later}%</td>
+                        <td>{$vo.after_seven_days}%</td>
+                        <td>{$vo.fourteen_days_after}%</td>
+                        <td>{$vo.thirty_days_after}%</td>
+                    </tr>
+                </volist>
+            </tbody>
+            </table>
+            <div class="pages">{$page}</div>
+        </div>
+    </div>
+<include file="Common:cpfooter" />
+<script>
+$(function(){
+    // 1 ~ 20  #5adfea
+    // 21-40   #45c8d7
+    // >41     #33b2c5
+    $('tbody#rate td[class!="except"]').each(function(){
+        var text = parseInt($(this).text());
+        // alert(text);
+        var color = '';
+        if ((text > 0) && (text < 21)) {
+            color = '#5adfea';
+        } else if ((text > 20) && (text < 41)) {
+            color = '#45c8d7';
+        } else if (text > 40) {
+            color = '#33b2c5';
+        };
+        $(this).css({'backgroundColor':color});
+    });
+});
+</script>

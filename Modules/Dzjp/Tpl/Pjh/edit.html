@@ -1,0 +1,304 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+    $('#updimg').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html = '<div class="selbox"><input name="logo" type="hidden" value="{:C(\'UPLOAD_URL\')}Dzjp/Pjhimg/'+data.result.img+'" /><img src="{:C(\'UPLOAD_URL\')}Dzjp/Pjhimg/'+data.result.img+'" /><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#updimg_box").html(html);
+            }else{
+                art.dialog({
+                    id: 'error',
+                    content: data.result.msg,
+                    lock: true,
+                });
+            }
+        }
+    });
+});
+//h_autocomplete
+function del_h_wine(id){
+    $("#h_wine_tr_"+id).remove();
+}
+$(function(){
+    $("#h_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#h_l").css('z-index',1);
+            $.post("{:Url('Jiuku/OutAcAjax/getHWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.value}
+                    }));
+                }
+                $("#h_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            var id = ui.item.id;
+            var label = ui.item.label;
+            var len = $("#h_wine_table").find("#h_wine_tr_"+id).length;
+            if(len > 0){
+                $("#h_wine_tr_"+id).css('color','blue').focus();
+               setTimeout("$('#h_wine_tr_"+id+"').css('color','')",2000);
+            }else{
+                var html = '<tr id="h_wine_tr_'+id+'"><td>'+id+'</td><td>'+label+'</td><td><input name="h_wine_id[]" type="hidden" value="'+id+'" /><input name="h_queue[]" type="text" size="10" value="0" class="measure-input" /></td><td><a href="javascript:del_h_wine('+id+')">移除</a></td></tr>'
+                $("#h_wine_table").append(html);
+            }
+        },
+        close: function(event, ui){
+            $("#h_text").val('');
+        },
+    });
+});
+function h_s(){
+    $("#h_text").focus();
+    $("#h_text").autocomplete("search", "");
+}
+//h_autocomplete/
+//b_autocomplete
+function del_b_wine(id){
+    $("#b_wine_tr_"+id).remove();
+}
+$(function(){
+    $("#b_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#b_l").css('z-index',1);
+            $.post("{:Url('Jiuku/OutAcAjax/getBWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.value}
+                    }));
+                }
+                $("#b_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            var id = ui.item.id;
+            var label = ui.item.label;
+            var len = $("#b_wine_table").find("#b_wine_tr_"+id).length;
+            if(len > 0){
+                $("#b_wine_tr_"+id).css('color','blue').focus();
+               setTimeout("$('#b_wine_tr_"+id+"').css('color','')",2000);
+            }else{
+                var html = '<tr id="b_wine_tr_'+id+'"><td>'+id+'</td><td>'+label+'</td><td><input name="b_wine_id[]" type="hidden" value="'+id+'" /><input name="b_queue[]" type="text" size="10" value="0" class="measure-input" /></td><td><a href="javascript:del_b_wine('+id+')">移除</a></td></tr>'
+                $("#b_wine_table").append(html);
+            }
+        },
+        close: function(event, ui){
+            $("#b_text").val('');
+        },
+    });
+});
+function b_s(){
+    $("#b_text").focus();
+    $("#b_text").autocomplete("search", "");
+}
+//b_autocomplete/
+//l_autocomplete
+function del_l_wine(id){
+    $("#l_wine_tr_"+id).remove();
+}
+$(function(){
+    $("#l_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#l_l").css('z-index',1);
+            $.post("{:Url('Jiuku/OutAcAjax/getLWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.value}
+                    }));
+                }
+                $("#l_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            var id = ui.item.id;
+            var label = ui.item.label;
+            var len = $("#l_wine_table").find("#l_wine_tr_"+id).length;
+            if(len > 0){
+                $("#l_wine_tr_"+id).css('color','blue').focus();
+               setTimeout("$('#l_wine_tr_"+id+"').css('color','')",2000);
+            }else{
+                var html = '<tr id="l_wine_tr_'+id+'"><td>'+id+'</td><td>'+label+'</td><td><input name="l_wine_id[]" type="hidden" value="'+id+'" /><input name="l_queue[]" type="text" size="10" value="0" class="measure-input" /></td><td><a href="javascript:del_l_wine('+id+')">移除</a></td></tr>'
+                $("#l_wine_table").append(html);
+            }
+        },
+        close: function(event, ui){
+            $("#l_text").val('');
+        },
+    });
+});
+function l_s(){
+    $("#l_text").focus();
+    $("#l_text").autocomplete("search", "");
+}
+//l_autocomplete/
+function chg_type(id){
+    $(".brand_type").hide();
+    $("#type_"+id).show();
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">大众酒评管理</a> >
+        <a href="{:Url('index')}">品酒会列表</a> >
+        修改品酒会
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('edit')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <input name="id" type="hidden" value="{$res.id}">
+            <input name="type" type="hidden" value="1">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">品酒会名称</th>
+                        <td>
+                            <input name="name" type="text" size="80" value="{$res.name}" class="measure-input"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>品酒会类型</th>
+                        <td>
+                            <input name="type" type="radio" value="1" onclick="chg_type(1);" <if condition="$res['type'] eq 1">checked</if> /> 红酒品酒会
+                            <input name="type" type="radio" value="3" onclick="chg_type(2);" <if condition="$res['type'] eq 2">checked</if> /> 白酒品酒会
+                            <input name="type" type="radio" value="2" onclick="chg_type(3);" <if condition="$res['type'] eq 3">checked</if> /> 洋酒品酒会
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>品酒会描述</th>
+                        <td>
+                            <textarea name="description" style="width:700px; height:30px;">{$res.description}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>品酒会logo(296*300)</th>
+                        <td>
+                            <input id="updimg" name="updimg" type="file" />
+                            <div id="updimg_box">
+                                <if condition="$res['logo']">
+                                <div class="selbox">
+                                    <input name="logo" type="hidden" value="{$res.logo}" />
+                                    <img src="{$res.logo}" />
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>排序</th>
+                        <td>
+                            <input name="queue" type="text" size="10" value="{$res.queue}" class="measure-input"/>
+                            *数值越大优先级越高
+                        </td>
+                    </tr>
+                    <tr id="type_1" class="brand_type" <if condition="$res['type'] neq 1">style="display:none;"</if> >
+                        <th>选择红酒</th>
+                        <td> 
+                            <div class="autocomplete-div">
+                                <input id="h_text" type="text" size="100" value="" class="measure-input" />
+                                <span id="h_l" class="autocomplete-loading"></span> 
+                                <span id="h_s" class="autocomplete-sel" onclick="h_s();"></span>
+                            </div>
+                            <br>
+                            <table cellspacing="0" class="table-list"><thead><tr><th>id</th><th>酒款名</th><th>排序(数值越大优先级越高)</th><th>操作</th></tr></thead><tbody id="h_wine_table">
+                                <volist name="res.h_wine_res" id="vo">
+                                <tr id="h_wine_tr_{$vo.id}"><td>{$vo.id}</td><td>{$vo.label}</td><td><input name="h_wine_id[]" type="hidden" value="{$vo.id}" /><input name="h_queue[]" type="text" size="10" value="{$vo.queue}" class="measure-input" /></td><td><a href="javascript:del_h_wine({$vo.id})">移除</a></td></tr>
+                                </volist>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr id="type_2" class="brand_type" <if condition="$res['type'] neq 2">style="display:none;"</if> >
+                        <th>选择白酒</th>
+                        <td> 
+                            <div class="autocomplete-div">
+                                <input id="b_text" type="text" size="100" value="" class="measure-input" />
+                                <span id="b_l" class="autocomplete-loading"></span> 
+                                <span id="b_s" class="autocomplete-sel" onclick="b_s();"></span>
+                            </div>
+                            <br>
+                            <table cellspacing="0" class="table-list"><thead><tr><th>id</th><th>酒款名</th><th>排序(数值越大优先级越高)</th><th>操作</th></tr></thead><tbody id="b_wine_table">
+                                <volist name="res.b_wine_res" id="vo">
+                                <tr id="b_wine_tr_{$vo.id}"><td>{$vo.id}</td><td>{$vo.label}</td><td><input name="b_wine_id[]" type="hidden" value="{$vo.id}" /><input name="b_queue[]" type="text" size="10" value="{$vo.queue}" class="measure-input" /></td><td><a href="javascript:del_b_wine({$vo.id})">移除</a></td></tr>
+                                </volist>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr id="type_3" class="brand_type" <if condition="$res['type'] neq 3">style="display:none;"</if> >
+                        <th>选择洋酒</th>
+                        <td> 
+                            <div class="autocomplete-div">
+                                <input id="l_text" type="text" size="100" value="" class="measure-input" />
+                                <span id="l_l" class="autocomplete-loading"></span> 
+                                <span id="l_s" class="autocomplete-sel" onclick="l_s();"></span>
+                            </div>
+                            <br>
+                            <table cellspacing="0" class="table-list"><thead><tr><th>id</th><th>酒款名</th><th>排序(数值越大优先级越高)</th><th>操作</th></tr></thead><tbody id="l_wine_table">
+                                <volist name="res.l_wine_res" id="vo">
+                                <tr id="l_wine_tr_{$vo.id}"><td>{$vo.id}</td><td>{$vo.label}</td><td><input name="l_wine_id[]" type="hidden" value="{$vo.id}" /><input name="l_queue[]" type="text" size="10" value="{$vo.queue}" class="measure-input" /></td><td><a href="javascript:del_l_wine({$vo.id})">移除</a></td></tr>
+                                </volist>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" <if condition="$res['status'] eq 3">checked</if> />开启</label>
+                <label><input type="radio" name="status" value="2" <if condition="$res['status'] eq 2">checked</if> />关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

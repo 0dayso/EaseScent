@@ -1,0 +1,110 @@
+<include file="Common:cpheader2" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'继续修改'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭窗口'}
+                );
+            }
+        }
+    });
+});
+function add_name(){
+    var name = $("#name").val();
+    if(name == ''){
+        art.dialog({
+            content: '<span style="color:#c00;">增加失败！“同义词”不可为空。</span>',
+            button: [{name: '关闭窗口'}],
+            time: 2,
+        });
+        return false;
+    }
+    if($("#name_box").find("input[value='"+name+"']").length != 0){
+        art.dialog({
+            content: '<span style="color:#c00;">增加失败！“同义词”已被添加。</span>',
+            button: [{name: '关闭窗口'}],
+            time: 2,
+        });
+        return false;
+    }
+    $.post("{:Url('tycedit')}",{'_ini':1,'name':name,'group_id':$("input[name='group_id']").val()},function(msg){
+        if(msg.error != 0){
+            art.dialog({
+                content: '<span style="color:#c00;">'+msg.msg+'</span>',
+                button: [{name: '关闭窗口'}],
+                time: 2,
+            });
+        }else{
+            var html = '<div class="selbox"><input name="names[]" type="hidden" value="'+name+'" /><div><span>'+name+'</span></div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+            $("#name_box").append(html);
+        }
+    },'json'); 
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库管理</a> >
+        <a href="{:Url('index')}">搜索词管理</a> >
+        <a href="{:Url('tycindex')}">同义词组列表</a> >
+        修改同义词组
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('tycedit')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <input name="group_id" type="hidden" value="{$_GET.group_id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">同义词组</th>
+                        <td>
+                            <input id="name" type="text" size="80" value="" class="measure-input" />
+                            <input type="button" value="增加" onclick="add_name();" />
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                            <div id="name_box">
+                                <volist name="res" id="vo">
+                                <div class="selbox">
+                                    <input name="names[]" type="hidden" value="{$vo.name}" />
+                                    <div><span>{$vo.name}</span></div>
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                                </volist>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter2" />

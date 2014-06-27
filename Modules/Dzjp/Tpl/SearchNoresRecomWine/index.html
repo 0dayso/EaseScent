@@ -1,0 +1,135 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+        console.log(data);
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'刷新页面',callback:function(){window.location.href = window.location.href;}},
+                    {name:'关闭'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'刷新页面',callback:function(){window.location.href = window.location.href;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+});
+<for start="1" end="7" name="key">
+
+$(function(){
+    $("#wine_cname_text_{$key}").autocomplete({
+        minLength: 0,
+        message: {
+            noResults: '',
+            results: function(){}
+        },
+        source: function(request, response){
+            $.post("{:Url('getData')}",{'type':'search','kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.cname}        
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            console.log(ui);
+            $(this).attr('readonly', true);
+            $("#wine_cname_id_{$key}").val(ui.item.id);
+            $("#wine_cname_s_{$key}").css('z-index',-1);
+            $("#wine_cname_x_{$key}").css('z-index',1);
+        },
+    });  
+});
+function wine_cname_s_{$key}(){
+    $("#wine_cname_text_{$key}").focus().autocomplete("search","");
+}
+function wine_cname_x_{$key}(){
+    $("#wine_cname_id_{$key}").val(0);
+    $("#wine_cname_text_{$key}").val('').attr('readonly',false);
+    $("#wine_cname_s_{$key}").css('z-index',1);
+    $("#wine_cname_x_{$key}").css('z-index',-1);
+}
+
+</for>
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">大众酒评管理</a> >
+        搜索无结果推荐酒款管理
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="120">推荐位置（ID）</th>
+                    <th>酒款中文名ID</th>
+                    <th>酒款中文名称</th>
+                    <th width="30">状态</th>
+                    <th width="60">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <for start="1" end="7" name="key">
+                <form name="myform_{$key}" action="{:Url('index')}" method="post" enctype="multipart/form-data">
+                <tr>
+                    <td>
+                        {$key}
+                        <input name="id" type="hidden" value="{$key}" />
+                        <input name="_backurl" type="hidden" value="{$_GET._backurl}" />
+                    </td>
+                    <td>
+                        <input id="wine_cname_id_{$key}" name="wine_cname_id" class="input-text" type="text" value="{$list.$key.wine_cname_id}" size="10" readonly />
+                    </td>
+                    <td>
+                        <div class="autocomplete-div">
+                            <if condition="$list[$key]">
+                            <input id="wine_cname_text_{$key}" class="measure-input" type="text" size="100" value="{$list.$key.cname}" readonly />
+                            <span id="wine_cname_s_{$key}" class="autocomplete-sel" onclick="wine_cname_s_{$key}();" style="z-index:-1;"></span>
+                            <span id="wine_cname_x_{$key}" class="autocomplete-del" onclick="wine_cname_x_{$key}();" style="z-index:1;"></span>
+                            <else/>
+                            <input id="wine_cname_text_{$key}" class="measure-input" type="text" size="100" value=""  />
+                            <span id="wine_cname_s_{$key}" class="autocomplete-sel" onclick="wine_cname_s_{$key}();"></span>
+                            <span id="wine_cname_x_{$key}" class="autocomplete-del" onclick="wine_cname_x_{$key}();"></span>
+                            </if>
+                        </div>
+                    </td>
+                    <td>
+                        <select name="status">
+                            <option value="3" <if condition="$list[$key]['status'] eq 3">selected</if>>开启</option>
+                            <option value="2" <if condition="$list[$key]['status'] eq 2">selected</if>>关闭</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input class="btn" type="submit" value="保存" />
+                    </td>
+                </tr>
+                </form>
+                </for>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

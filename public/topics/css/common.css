@@ -1,0 +1,49 @@
+html,body,div,ul,li,ol,table,th,tr,td,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,a,img,span,input,form,pre
+	{
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	color: #3C3C3C;
+	font-size:12px;
+	position: relative;
+}
+
+li,ol {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+table {
+}
+
+tr,td,th {
+}
+
+th {
+	background-color:#90C140;	
+}
+
+.clearB {
+	clear: both;
+}
+
+.clearL {
+	clear: left;
+}
+
+.clearR {
+	clear: right;
+}
+
+.floatL {
+	float: left;
+}
+
+.floatR {
+	float: right;
+}

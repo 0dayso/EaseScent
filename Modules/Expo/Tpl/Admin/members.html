@@ -1,0 +1,104 @@
+
+<include file="Admin:header"/>
+    <include file="Admin:theme_change"/>
+        <include file="Admin:header_nav" />
+        <!-- content -->
+        <div id="content">
+           <include file="Admin:left" />
+           <!-- content / right -->
+            <div id="right">
+                <!-- table -->
+                <div class="box">
+                    <!-- box / title -->
+                    <div class="title">
+                        <h5>产品列表</h5>
+                        <div class="search">
+                            <form action="{:U('AdminUser/member')}" method="post">
+                                <div class="select input">
+                                    <select id="select" name="member_grade" style="display: none;">
+                                        <option value="">会员类型</option>
+                                        <volist name="members['member_type']" id="m">
+                                            <option value="{$key}">{$m}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+
+
+                                <div class="input">
+                                    <input type="text" id="search" name="keyword" value="{$keyword}" style="padding: 9px 7px 4px 7px;"/>
+                                </div>
+
+                                <div class="button">
+                                    <input type="submit" name="submit" value="Search"  style="padding: 7px 10px 6px 10px;"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- end box / title -->
+                    <div class="table">
+                        <form id="managess"  action="{:U('AdminProduct/manage')}" method="post">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="left">会员名称</th>
+                                    <th>会员类型</th>
+                                    <th>开通时间</th>
+                                    <th>到期时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                               <php>Load('extend');</php>
+                               <volist name="members['list']" id="vo">
+                                <tr>
+                                    <td class="qy_name">
+                                        <a href="{:U('Inland/index')}&agent_id={$vo['id']}" target="_blank">{$vo['qy_name']}</a>
+                                    </td>
+                                    <td>{$members['member_type'][$vo['grade']]}</td>
+                                    <td> <font color="green">{:date('Y-m-d',$vo['serve_open_time'])}</font> </td>
+                                    <td>
+                                       <php>
+                                           if($vo['serve_end_time']-time() <= 60*24*30){
+                                               echo '<font color="red">';
+                                           }else{
+                                               echo '<font color="green">';
+                                           }
+                                      </php>
+                                      {:date('Y-m-d',$vo['serve_end_time'])}</font>
+                                    </td>
+                                    <td>
+                                     <a href="{:U('Inland/index')}&agent_id={$vo['id']}" target="_blank">查看</a> |
+                                         <a href="{:U('AdminUser/open_service')}&agent_id={$vo['id']}">开通</a> |
+                                         <a href="{:U('AdminUser/open_service')}&agent_id={$vo['id']}">续费</a>
+                                        <!--|<a href="#" id="dialog-confirm-open">冻结</a>-->
+                                    </td>
+                                </tr>
+                               </volist>
+                            </tbody>
+                        </table>
+
+                        <!-- pagination -->
+                        <div class="pagination pagination-left">
+                            <ul class="pager">
+                            {$Page}
+                            </ul>
+                        </div>
+
+                        </form>
+                    </div>
+                </div>
+                <!-- end table -->
+
+
+            </div>
+            <!-- end content / right -->
+        </div>
+
+
+        <style type="text/css">
+            #content div.box table td {text-align: center;}
+            .qy_name{width:300px;}
+        </style>
+
+<include file="Admin:footer"/>

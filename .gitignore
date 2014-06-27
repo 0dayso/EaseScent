@@ -1,0 +1,12 @@
+Modules/Btasting/Runtime/*
+Modules/Expo/Runtime/*
+Modules/Guide/Runtime/*
+Modules/Jiuku/Runtime/*
+Modules/News/Runtime/*
+Modules/Sms/Runtime/*
+Modules/Topics/Runtime/*
+Modules/Ym/Runtime/*
+Modules/AppReport/Runtime/*
+Modules/Admin/Runtime/*
+Html/*
+Upload/*

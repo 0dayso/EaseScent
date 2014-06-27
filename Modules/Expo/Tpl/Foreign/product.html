@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>product</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_mainStyle.css" />
+    </head>
+
+    <body>
+       <include file="Foreign:header" /> 
+    <div class="z_nav">
+        <ul class="z_nav_nr clear">
+            <li><a href="{:U('Foreign/index?winery_id='.$winery_id)}">Home</a></li>
+            <li><a href="{:U('Foreign/product?winery_id='.$winery_id)}" class="active">Wine Supplies</a></li>
+            <li><a href="{:U('Foreign/honor?winery_id='.$winery_id)}">File Integrity</a></li>
+            <li><a href="{:U('Foreign/info?winery_id='.$winery_id)}">Chateau Introduction</a></li>
+            <li><a href="{:U('Foreign/contact?winery_id='.$winery_id)}">Contact</a></li>
+        </ul>
+    </div>
+    <div class="z_main">
+        <div class="z_main_nr">
+            <div class="z_main_nr_l">
+                <ul class="z_main_nr_l_ul">
+                    <volist name="wine_list" id="vo">
+                        <li>
+                            <h3><a href="{:U('Foreign/wine?wine_id='.$vo['id'].'&winery_id='.$vo['winery_id'])}">{$vo.cname}{$vo.fname}</a></h3>
+                            <div class="clear">
+                                <p class="pic"><a href="{:U('Foreign/wine?wine_id='.$vo['id'].'&winery_id='.$vo['winery_id'])}"><img src="{$vo['pic_url']}"width="200" height="150" /></a></p>
+                                <div class="nr">
+                                    <p><i>Style:</i><span>{:$allType[$vo[type_id]][fname]}</span></p>
+                                    <p><i>GrapeVarieties: </i><span class="w325">{$vo.variety}</span></p>
+                                    <if condition="$vo['price'] eq -1 && $vo['inital_price'] eq -1">
+                                        <p><i>Price:</i><span>face</span></p>
+                                        <else/>
+                                        <if condition="$vo['money_type'] eq '$'">
+                                            <p><i>Price:</i><span>{$vo['inital_price']}$</span></p>
+                                            <else/>
+                                            <p><i>Price:</i><span>{$vo['price']}RMB</span></p>
+                                        </if>
+                                    </if>
+                                    <p><i>Introduction:</i><em class="col555">{$vo.description}</em></p>
+                                    <p class="tar mt10"><a href="{:U('Foreign/wine?wine_id='.$vo['id'].'&winery_id='.$vo['winery_id'])}"><img src="__PUBLIC__/Expo/img/z_moreBtn_E.gif" /></a></p>
+                                </div>
+                            </div>
+                        </li>
+                    </volist>
+                </ul>
+                <p class="pageNum">
+                	{$page}
+                </p>
+            </div>
+            <div class="z_main_nr_r">
+                <h3 class="z_main_nr_r_titH3 bb1d_ccc">{$qy_info['qy_name']}</h3>
+                <div class="z_main_nr_r_pList bb1d_ccc">
+                    <p>Nation：<span>{$qy_info['qy_country']}</span></p>
+                    <p>Add：<span>{$qy_info['qy_address']}</span></p>
+                    <p>skype：<span>{$qy_info['qy_skype']}</span></p>
+                    <p>E-mail：<span>{$winery_info['email']}</span></p>
+                    <p>Tel：<span>{$qy_info['qy_moblie']}</span></p>
+                    <p class="bb1d_ccc pb26">Website：<span>{$qy_info['qy_web_address']}</span></p>
+                    <p>Contact Supplier：
+                      <span class="contactBox">
+                          <if condition="$winery_info['email'] neq ''">
+                                <a href="mailto:{$winery_info['email']}"><img src="__PUBLIC__/Expo/img/z_ico_mail18x15.png" /></a>
+                                  </if>
+                                <if condition="$qy_info['qy_skype'] neq ''">
+                                    <a href="skype:{$qy_info['qy_skype']}?call" onclick="return skypeCheck();"><img src="__PUBLIC__/Expo/img/z_ico_skype20x20.png" /></a>
+                                    <else/>
+                                </if>
+                                <if condition="$qy_info['qy_qq'] neq ''">
+                                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$qy_info['qy_qq']}&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:{$qy_info['qy_qq']}:45" alt="点击这里给我发消息" title="点击这里给我发消息"></a>
+                                    <else/>
+                                </if>
+                            </span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <div class="z_main_nrBotBg"></div>
+    </div>
+   <include file="Foreign:foot" /> 
+</body>
+</html>
+

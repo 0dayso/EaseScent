@@ -1,0 +1,72 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__My97DatePicker/WdatePicker.js"></script>
+<script language="javascript">
+function checkSubmit(){
+    $("form[name='myform']").submit();
+    return;
+}
+</script>
+<style>
+</style>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">投票管理</a> > <a href="{:Url('index')}">投票主题列表</a> > 编辑投票主题</div>
+    <div class="form">
+		<form name="myform" action="{:Url('edit')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_backpage" value="{$_REQUEST._backpage}">
+            <input type="hidden" name="id" value="{$res.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑投票主题</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">主题</th>
+                        <td><input type="text" size="80" name="title" class="measure-input" value="{$res.title}" /></td>
+                    </tr>
+                    <tr>
+                        <th>描述</th>
+						<td><textarea style="width:70%;height:40px" name="description">{$res.description}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th width="130">投票置放页面</th>
+                        <td><input type="text" size="100" name="url" class="measure-input" value="{$res.url}" /></td>
+                    </tr>
+                    <tr>
+                        <th>有效时间</th>
+                        <td>
+                            <input id="btime" name="btime" class="Wdate" type="text" size="20" value="{$res.etime|date='Y-m-d H:i:s', ###}" readonly onfocus="WdatePicker({lang:'zh-cn', dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+                            -&nbsp;
+                            <input id="etime" name="etime" class="Wdate" type="text" size="20" value="{$res.etime|date='Y-m-d H:i:s', ###}" readonly onfocus="WdatePicker({lang:'zh-cn', dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>不可更改限制规则</th>
+                        <td>
+                            <div style="padding:5px;">
+                                1.防范恶意刷票规则：单一ip地址1分钟内投票行为超出60次或10分钟内超过300次或1小时内超过1000次。即判断为恶意刷票。惩罚给予该ip以恶意刷票次数为基数*30分钟的投票权利冻结。此基数无限累计
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="other_rules">
+                        <th>附加限制规则(ip限制)</th>
+                        <td>
+                            <div style="padding:5px;">
+                                1.单一ip（每日<input name="theme_reset" value="1" type="checkbox" title="勾选后可于每日0时重置该限制" <if condition="$res['theme_reset'] eq 1">checked</if> />）可对本次主题最多投票<input name="theme_caps" type="text" size="5" class="measure-input" value="<if condition="$res['theme_caps'] neq 0">{$res.theme_caps}</if>" />次
+                            </div>
+                            <div style="padding:5px;">
+                                2.单一ip（每日<input name="option_reset" value="1" type="checkbox" title="勾选后可于每日0时重置该限制" <if condition="$res['option_reset'] eq 1">checked</if> />）可对单一选项最多投票<input name="option_caps" type="text" size="5" class="measure-input" value="<if condition="$res['option_caps'] neq 0">{$res.option_caps}</if>" />次
+                            </div>
+                            <div style="padding:5px;">
+                                3.单一ip（每日<input name="option_num_reset" value="1" type="checkbox" title="勾选后可于每日0时重置该限制" <if condition="$res['option_num_reset'] eq 1">checked</if> />）最多可对<input name="option_num_caps" type="text" size="5" class="measure-input" value="<if condition="$res['option_num_caps'] neq 0">{$res.option_num_caps}</if>" />个选项进行投票
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="button" class="btn" value="提交" onclick="checkSubmit();" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

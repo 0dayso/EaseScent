@@ -1,0 +1,39 @@
+<include file="Common:header" />
+<div class="re_main clear">
+        <include file="Common:menu" />
+        <div class="re_main_r">
+        	<h3 class="re_main_r_h3">Image</h3>
+            <div class="bb1cccccc"></div>
+            <p class="col959595">Picture should be at most 1MB，the format（jpg,gif,png）better!</p>
+            <p class="re_main_r_p01 uploadImg">
+				<input type="button" id="file_avatar_upload" name="Filedata" value="Upload Image" class="login-e">
+            </p>
+            <div id="queue" class="img-schedule">
+				
+			</div>
+			<input type="hidden" id="faceid" value="{$uid}">
+            <div class="avatar-img-box">
+                <div class="big-img">
+					<if condition="$userinfo.face_type neq ''"><img id="big-img" src="__UPLOAD__/face/u_{$userinfo.id}/myface_upload.{$userinfo.face_type}" /><else/><img src="__IMG__/big-img.jpg" class="big-img" id="big-img" /></if>
+				</div>
+				<div class="middle-img" >
+					<if condition="$userinfo.face_type neq ''"><img id="preview"  src="__UPLOAD__/face/u_{$userinfo.id}/d_myface.{$userinfo.face_type}" /><else/><img src="__IMG__/middle-img.jpg" class="middle-img" style="margin:0px;"  id="preview" /></if>
+				</div>
+				<div class="small-img" >
+					<if condition="$userinfo.face_type neq ''"><img id="small" src="__UPLOAD__/face/u_{$userinfo.id}/s_myface.{$userinfo.face_type}" /><else/><img src="__IMG__/small-img.jpg" class="small-img" id="small" /></if>
+				</div>
+            </div>
+			<input type="hidden" id="usersign" value="{$usign}">
+            <div class="upImgBtn">
+				<input type="button" id="post-avatar" value="提 交" class="login-sub">
+          </div>
+        </div>
+    </div>
+</body>
+<link rel="stylesheet" type="text/css" href="__CSS__/jquery.Jcrop.css"/>
+<script src="__JS__/common.js" type="text/javascript"></script>
+<script src="__JS__/jquery.Jcrop.js" type="text/javascript"></script>
+<script src="__JS__/jquery.uploadify-3.1.js" type="text/javascript"></script>
+<script src="__JS__/avatar.control.dev_en.js" type="text/javascript"></script>
+
+</html>

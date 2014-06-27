@@ -1,0 +1,104 @@
+<include file="Common:cpheader2" />
+<script language="javascript">
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库管理</a> >
+        洋酒酒款列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}&_backurl={$_listurl}">添加洋酒酒款</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        所属产地：
+                        <select name="region_id">
+                            <option value="0">不限制</option>
+                            <volist name="region_list" id="vo">
+                            <option value="{$vo.id}" <if condition="$_GET['region_id'] eq $vo['id']">selected</if>>{$vo.cname}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        所属类型：
+                        <select name="type_id">
+                            <option value="0">不限制</option>
+                            <volist name="type_list" id="vo">
+                            <option value="{$vo.id}" <if condition="$_GET['type_id'] eq $vo['id']">selected</if>>{$vo.cname}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        关键字：
+                        <input name="id" class="input-text" type="text" value="{$_GET.id}" size="10" placeholder="id" />
+                        <input name="barcode" class="input-text" type="text" value="{$_GET.barcode}" size="10" placeholder="条形码" />
+                        <input name="kw" class="input-text" type="text" value="{$_GET.kw}" size="20" placeholder="中文名、英文名" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="0">全部</option>
+                            <option value="3" <if condition="$_GET['status'] eq 3">selected</if>>开启</option>
+                            <option value="2" <if condition="$_GET['status'] eq 2">selected</if>>关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>中文名</th>
+                    <th>英文名</th>
+                    <th>酒精度（°C）</th>
+                    <th>所属产地</th>
+                    <th>所属类型</th>
+                    <th width="30">状态</th>
+                    <th width="30">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.cname}</td>
+                    <td>{$vo.ename}</td>
+                    <td>{$vo.alcohol_degree}</td>
+                    <td>
+                        <if condition="$vo['region_res']">
+                        {$vo.region_res.cname}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['type_res']">
+                        {$vo.type_res.cname}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 3"><span style="color:green;">开启</span></if>
+                        <if condition="$vo['status'] eq 2"><span style="color:orange;">关闭</span></if>
+                    </td>
+                    <td>
+                        <a href="{:Url('edit')}&id={$vo.id}&_backurl={$_listurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter2" />

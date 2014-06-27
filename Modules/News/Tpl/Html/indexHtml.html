@@ -1,0 +1,726 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="葡萄酒最新资讯,中国葡萄酒资讯,葡萄酒品牌,葡萄酒,葡萄酒行业新闻,进口葡萄酒新闻,葡萄酒品牌,红酒进口新闻,红酒,红酒新闻,红酒资讯,葡萄酒国际新闻" /> 
+<meta name="description" content="逸香网[http://news.wine.cn]新闻频道专心致力于为您收集及时全面的葡萄酒行业资讯，产业动态。包括国际资讯、国内资讯等。这里有最专业的国际国内最新葡萄行业热点解读，新闻主要摘选最精辟的文章，用独到的评论，紧紧把握葡萄酒行业动态，同时注重葡萄酒产业发展，以及葡萄酒行业商业领袖的各方面资讯，并设立了高端访谈、行业聚焦等栏目，提供最新的企业采访、热点评论，是一个全方位的葡萄酒行业门户频道。" />
+<title>新闻资讯 – 逸香网</title>
+<link href="__PUBLIC__/news/css/header20130507.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/news/css/global.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/news/css/bottom.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/news/css/layout.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/news/css/news_i.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/news/js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/news/js/header20130312.js"></script>
+<script type="text/javascript">
+var _tdn = window.location.host.replace(/(\w+).(\w+).(\w+)/,'http://www.$2.$3');
+//判断是否登录
+check=0;
+function init(){
+    $.post("/Uc/checklogin",function(data){
+        if(data!="null"){
+            var userinfo = eval("(" + data + ")");
+            if(userinfo.online==1){
+                $("#loginDiv").html('<a href="http://user.wine.cn/member/home">'+userinfo.nickname+'</a>    <a href="http://user.wine.cn/member/logout?continue='+window.location.href+'">退出</a>  <a href="http://user.wine.cn/member/home">我的逸香通行证</a>    <a href="#">设为首页</a><iframe style="display:none" src="http://user.wine.cn/api/auth?sid='+userinfo.sid+'"></iframe>');
+                return ;
+            }else{
+                if(check==0){
+                    var url = $("#checkUc").attr("src");
+                    var thisUrl = url+"http://"+window.location.host+"/ucUrlSend.php"
+                    $("#checkUc").attr("src",thisUrl);
+                    check =1;
+                }
+            }
+        }
+    });
+}
+init();
+//跳转登录
+function jumplogin(){
+    var url='http://user.wine.cn/member/auth?continue=http://'+window.location.host+'/ucUrlSend.php?goto='+window.location.href.replace('http://','').replace(/\//g,'-');
+    window.location.href = url;
+}
+//跳转注册
+function jumpregistration(){
+    var url ='http://user.wine.cn/member/signup?continue='+window.location.href;
+    window.location.href = url;
+}
+//弹出框登录
+function popuplogin(){
+    $(".z_userLiongeBoxBg").height($(document).height()).show();
+    $(".z_userLiongeBoxBg").after('<div id="pop-box" class="jump-box">  <div class="lump-title">        <var>登录逸香通行证</var>        <em id="lg-close">关闭</em>    </div>    <div class="login-index">     <div class="login-index-left" id="login-panel">         <ul class="login-index-ul">             <li><span>邮箱/手机：</span><input type="text" id="user" name="user" value=""><var></var></li>                <li><span>密码：</span><input type="password" id="pass" name="pass" value=""><var></var></li>            </ul>            <a href="http://user.wine.cn/member/remember" class="login-index-a" hidefocus="">忘记密码？</a>            <p><label class="login-label"><input type="checkbox"><var>两周内自动登录</var></label></p>            <input type="button" class="login-index-but" id="login" name="login" value="立即登录" hidefocus="">        </div>        <div class="login-index-right">            <h2>您还没有逸香通行证？</h2>            <input class="login-index-but" type="button" value="马上注册" hidefocus="">            <a href=http://user.wine.cn/oauth/qq?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="/news/Common/images/poplogin/login-j7.jpg"><em>用QQ账号登录</em></a>            <a href="http://user.wine.cn/oauth/sina?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="/news/Common/images/poplogin/login-j8.jpg"><em>用新浪微博账号登录</em></a>            <a href="http://user.wine.cn/oauth/douban?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="/news/Common/images/poplogin/login-j10.jpg"><em>用豆瓣帐号登录</em></a>            <a href="http://user.wine.cn/oauth/tianya?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="/news/Common/images/poplogin/login-j11.jpg"><em>用天涯帐号登录</em></a>            <a href="http://user.wine.cn/oauth/renren?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="/news/Common/images/poplogin/login-j9.jpg"><em>用人人帐号登录</em></a>        </div>    </div></div>');   
+    $("#lg-close").click(function(){
+        $("#pop-box").remove();
+        $(".z_userLiongeBoxBg").hide();
+    });
+    $("#user").focus(function(){
+        $(this).next().html('请输入您的邮箱或手机号');
+    });
+    $("#pass").focus(function(){
+        $(this).next().html('请输入您的密码');
+    });
+    $("#user").blur(function(){
+        if(!(/^([a-z0-9+_]|\-|\.)+@(([a-z0-9_]|\-)+\.)+[a-z]{2,6}$/.test(this.value)) && !(/^(13|15|18)\d{9}$/i.test(this.value))){
+            $(this).next().html('请输入正确的手机或邮箱地址').css({"color":"#B10304"});
+        }else{
+            $(this).next().html('')
+        }
+    });
+    $("#pass").blur(function(){
+        $(this).next().html('');
+    });
+    $("#login").click(function(){
+        if($("#user").val() == ''){
+            return false;
+        }
+        if($("pass").val() == ''){
+            return false;
+        }
+        this.value = "登录中...";
+        $.post("/Uc/login",{ username:$("#user").val(), password:$("#pass").val()},function(data){
+            if(data){
+                var userinfo = eval("("+data+")");
+                if(userinfo.online == 1){
+                    this.value = '登录成功';
+                    setTimeout(function(){window.location.reload();}, 3000);
+                }else{
+                    $("#user").next().html('用户名或密码错误').css({"color":"#B10304"});
+                    this.value = '立即登录';
+                    return false;
+                }
+            }
+        });
+    });
+}
+</script>
+</head>
+
+<body>
+        <div class="z_head_top">
+        <div class="z_head_topnav clear">
+            <p class="z_head_topnav_l" id="loginDiv">
+                <a href="javascript:jumplogin();">登录</a>
+                <a href="javascript:jumpregistration();">注册</a>
+                <a href="javascript:setHomepage();">设为首页</a>
+                
+                <!--登录后
+                <a href="#">ChinaX</a>
+                <a href="#">退出</a>
+                <a href="#">我的逸香通行证</a>
+                <a href="#">设为首页</a>
+                -->
+            </p>
+            <div class="z_head_topnav_r">
+                <a href="http://weibo.com/eswinesino" title="逸香网新浪官方微博" target="_blank">逸香网新浪官方微博</a> |
+                <a href="javascript:addFavorites();" title="收藏">收藏</a> |
+                <a href="/Rss/feed" target="_blank" title="订阅RSS">订阅RSS</a> |
+                <a href="http://www.eswine.com" target="_blank">逸香教育</a> |
+                <a href="http://en.wine.cn" target="_blank">English</a>
+            </div>
+        </div>
+    </div>
+    <iframe id="checkUc" style="display:none;" onload="init()" src="http://user.wine.cn/api/auth?continue="></iframe>
+    <div class="z_head">
+        <div class="z_head_search clear">
+            <h1><a href=""><img src="__PUBLIC__/news/images/logo.png" /></a></h1>
+            <div class="z_head_gg">
+                <!-- 广告位：首页顶部广告位 -->
+                <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614297";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+            <div class="z_head_searchbox">
+                <div class="z_head_searchbox_inp">
+                    <form name="myform" id="myform" method="post" action="/Search/show" target="_blank">
+                    <div class="z_head_searchbox_select">
+                        <p class="j_pbox">资讯</p>
+                        <ul class="j_ulbox">
+                            <li><a href="#" val="1">资讯</a></li>
+                            <li><a href="#" val="2">产区</a></li>
+                            <li><a href="#" val="3">酒庄</a></li>
+                            <li><a href="#" val="4">展会</a></li>
+                            <li><a href="#" val="5">酒会</a></li>
+                            <li><a href="#" val="6">视频</a></li>
+                            <!--<li><a href="#">商机</a></li>
+                            <li><a href="#">导购</a></li>-->
+                        </ul>
+                    </div>
+                    <input type="text" name="searchkey" class="inp_txt" />
+                    <input type="submit" class="inp_sub" value=" "  />
+                    <input type="hidden" name="type" />
+                </div>
+                <p class="z_head_searchbox_p">
+                    <a href="/Tags/getHotTagsList/tagId/1385" target="_blank">香槟</a>
+                    <a href="/Tags/getHotTagsList/tagId/1312" target="_blank">波尔多</a>
+                    <a href="/Tags/getHotTagsList/tagId/1470" target="_blank">起泡酒</a>
+                    <a href="/Tags/getHotTagsList/tagId/663" target="_blank">精品葡萄酒</a>
+                    <a href="/Tags/getHotTagsList/tagId/661" target="_blank">美乐</a>
+                </p>
+            </div>
+            
+        </div>
+        <ul class="z_headnav">
+            <li>
+                <h2><img src="__PUBLIC__/news/images/z_headNavTit01.gif" /></h2>
+                <p>
+                    <a href="http://news.wine.cn" target="_blank" class="colared">新闻</a>
+                    <a href="/liejiu" target="_blank">烈酒</a>
+                    <a href="http://news.wine.cn/showList/id/192" target="_blank">访谈</a>
+                    <a href="http://column.wine.cn" target="_blank">专家</a>
+                    <br />
+                    <a href="http://news.wine.cn/depth" target="_blank">深度</a>
+                    <a href="/Topics" target="_blank">专题</a>
+                    <a href="http://expo.wine.cn/ent" target="_blank">娱乐</a>
+                    <a href="http://expo.wine.cn/marketing" target="_blank">营销</a>
+                </p>
+            </li>
+            <li>
+                <h2><img src="__PUBLIC__/news/images/z_headNavTit02.gif" /></h2>
+                <p>
+                    <a href="http://58.wine.cn" target="_blank" class="colared">商机</a>
+                    <br />
+                    <a href="http://job.wine.cn" target="_blank">人才</a>
+                </p>
+            </li>
+            <li>
+                <h2><img src="__PUBLIC__/news/images/z_headNavTit03.gif" /></h2>
+                <p style="position:relative;">
+                    <a href="http://buy.wine.cn" target="_blank" class="colared">导购</a>
+                    <a href="http://tuan.wine.cn" target="_blank" class="colared">闪购</a><span style="position:absolute;height:9px;width:15px;top:1px;left:64px;background:url(__PUBLIC__/news/images/hot.gif) 0 0 no-repeat;"></span>
+                    <br />
+                    <a href="http://i.wine.cn" target="_blank">酒评</a>
+                    <a href="http://jiuhui.wine.cn" target="_blank">酒会</a>
+                </p>
+            </li>
+            <li>
+                <h2><img src="__PUBLIC__/news/images/z_headNavTit04.gif" /></h2>
+                <p>
+                    <a href="/Topics/tasting" target="_blank" class="colared">逸香评分</a>
+                    <br />
+                    <a href="http://wineshow.wine.cn" target="_blank">赛事展览</a>
+                </p>
+            </li>
+            <li class="nbr">
+                <h2><img src="__PUBLIC__/news/images/z_headNavTit05.gif" /></h2>
+                <p>
+                    <a href="http://mingzhuang.wine.cn" target="_blank" class="colared">名庄</a>
+                    <a href="http://region.wine.cn" target="_blank">产区</a>
+                    <a href="http://book.wine.cn" target="_blank">读书</a>
+                    <br />
+                    <a href="http://d.wine.cn" target="_blank">词典</a>
+                    <a href="http://bbs.wine.cn" target="_blank">论坛</a>
+                    <a href="/pinzhong" target="_blank">葡萄品种</a>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div class="z_userLiongeBoxBg" style="display:none;" ></div>
+    <a href="javascript:popuplogin()" style="display:none;">弹出登录</a>
+
+<!--引入头部文件-->
+<!-- 请置于所有广告位代码之前 -->
+<script type="text/javascript" src="http://cbjs.baidu.com/js/m.js"></script>
+<script type="text/javascript">
+BAIDU_CLB_preloadSlots("435174","435178","435182","445147","445148","445158","445162","445168","445170");
+</script>
+<div class="n-adv1">
+    <!-- 广告位：新闻频道顶部通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("435174");</script>
+</div>
+<div class="n-main">
+    <div class="n-lef">
+        <div class="n-con1">
+            <div class="img_tab">
+                <div class="big_img">
+                    <a href="/html/201306/20677.html" target="_blank" title="中国已成欧盟葡萄酒最大出口市场" style="display:block;"><img src="/images/slideshow/51b9433cabbf2.jpg" alt="中国已成欧盟葡萄酒最大出口市场"/>
+                    <span class="img_shadow">中国已成欧盟葡萄酒最大出口市场</span>
+                    </a><a href="/html/201306/20661.html" target="_blank" title="美国葡萄酒酒标新创举：轻品种重产区" ><img src="/images/slideshow/51b91e2386c4c.jpg" alt="美国葡萄酒酒标新创举：轻品种重产区"/>
+                    <span class="img_shadow">美国葡萄酒酒标新创举：轻品种重产区</span>
+                    </a><a href="/html/201303/18401.html" target="_blank" title="欧洲葡萄酒巨头CASTEL投身中国市场" ><img src="/images/slideshow/515157b8845a3.jpg" alt="欧洲葡萄酒巨头CASTEL投身中国市场"/>
+                    <span class="img_shadow">欧洲葡萄酒巨头CASTEL投身中国市场</span>
+                    </a>                </div>
+                <div class="img_num">
+                    <span class="img_num_red"></span><span ></span><span ></span>               </div>
+            </div>
+            <div class="n-con1-right">
+                <dl class="n-con1-dl">
+                    <dt><a href="/html/201306/20725.html" target="_blank" title="华尔街银行贷款，1.5万瓶名酒做“担保”">华尔街银行贷款，1.5万瓶名酒做“担</a></dt>
+                    <dd>据《金融时报》报道，自2007年金融危机以来，抵押贷款数额急剧上涨，一些大银行开始接受各种各样的资产...</dd>
+                </dl><dl class="n-con1-dl">
+                    <dt><a href="/html/201306/20702.html" target="_blank" title="葡萄酒投资热潮推动法国葡萄园价格上涨">葡萄酒投资热潮推动法国葡萄园价格上</a></dt>
+                    <dd>据勃艮第一家酒庄负责人Thierry Brouin表示，很多投资者都以高出平均水平的价格购买葡萄园，这是葡萄园...</dd>
+                </dl><dl class="n-con1-dl">
+                    <dt><a href="/html/201306/20718.html" target="_blank" title="假冒葡萄酒频现   “望闻问切”四步辨真假">假冒葡萄酒频现   “望闻问切”四步</a></dt>
+                    <dd>为了防止造假，一些中国酿酒师通常会把空瓶砸碎，不给造假者留下“旧瓶装新酒”的机会。另一种防造假方...</dd>
+                </dl>           </div>
+        </div>
+        <div class="n-con2">
+            <h3 class="n-h3">
+                <strong><a href="http://news.wine.cn/china" target="_blank">国内 . 资讯</a></strong>
+                <a href="http://news.wine.cn/china" target="_blank">更多&gt;</a>
+            </h3>
+            <div class="n-con2-l">
+                <div class="n-con2-img">
+                    <a href="/html/201306/20671.html" target="_blank" title="国内首次引入“葡萄酒公主”大赛"><img src="/images/51b932dfd7673.jpg" alt="国内首次引入“葡萄酒公主”大赛"/></a>
+                    <em></em>
+                    <span><a href="/html/201306/20671.html" target="_blank" title="国内首次引入“葡萄酒公主”大赛">国内首次引入“葡萄酒公主”大赛</a></span>
+                </div>
+                <div class="n-con2-news">
+                    <h4>热点关注</h4>
+                    <dl class="n-con2-dl">
+                        <dt><a href="/html/201306/20668.html" target="_blank" title="6月9日宁波保税区举办国际葡萄酒文化节"><img src="/images/51b92a4c6a3f2.jpg" alt="6月9日宁波保税区举办国际葡萄酒文化节"/></a></dt>
+                        <dd>
+                            <strong><a href="/html/201306/20668.html" target="_blank" title="6月9日宁波保税区举办国际葡萄酒文化节">6月9日宁波保税区举办国际葡萄酒文</a></strong>
+                            <span>6月9日宁波保税区进口商品市场二期开业，展厅面积扩大到...<a href="/html/201306/20668.html" target="_blank">[详情]</a></span>
+                        </dd>
+                    </dl><dl class="n-con2-dl">
+                        <dt><a href="/html/201306/20638.html" target="_blank" title="探究：“双反”调查启动  假葡萄酒市场更“繁荣”"><img src="/images/51b3f3ac18e3b.jpg" alt="探究：“双反”调查启动  假葡萄酒市场更“繁荣”"/></a></dt>
+                        <dd>
+                            <strong><a href="/html/201306/20638.html" target="_blank" title="探究：“双反”调查启动  假葡萄酒市场更“繁荣”">探究：“双反”调查启动  假葡萄酒</a></strong>
+                            <span>分析人士认为，如果中国针对欧盟葡萄酒征收反倾销税，最...<a href="/html/201306/20638.html" target="_blank">[详情]</a></span>
+                        </dd>
+                    </dl>               </div>
+            </div>
+            <div class="n-con2-r">
+                <div class="n-con2-tit"><a href="/html/201306/20691.html" target="_blank" title="蓬莱“国际葡萄酒烈酒品评赛”7月举行">蓬莱“国际葡萄酒烈酒品评赛”7月举行</a></div>
+                <ul class="n-ul-mod">
+                    <li><a href="/html/201306/20723.html" target="_blank" title="网上投资过亿   锁定高端葡萄酒“客制化”">网上投资过亿   锁定高端葡萄酒“客制化”</a><img src="__PUBLIC__/news/images/attention.gif"/></li><li><a href="/html/201306/20721.html" target="_blank" title="长城葡萄酒荣膺布鲁塞尔金奖">长城葡萄酒荣膺布鲁塞尔金奖</a></li><li><a href="/html/201306/20716.html" target="_blank" title="葡萄酒成“喜酒”入驻婚宴市场">葡萄酒成“喜酒”入驻婚宴市场</a><img src="__PUBLIC__/news/images/attention.gif"/></li><li><a href="/html/201306/20690.html" target="_blank" title="进口葡萄酒在华发展低端路线  短期内不会涨价">进口葡萄酒在华发展低端路线  短期内不会涨价</a><img src="__PUBLIC__/news/images/attention.gif"/></li><li><a href="/html/201306/20688.html" target="_blank" title="醉翁之意不在酒  为什么是葡萄酒？">醉翁之意不在酒  为什么是葡萄酒？</a><img src="__PUBLIC__/news/images/attention.gif"/></li><li><a href="/html/201306/20715.html" target="_blank" title="上海关区：前4个月自欧盟进口葡萄酒2883.9万升">上海关区：前4个月自欧盟进口葡萄酒2883.9万升</a></li><li><a href="/html/201306/20708.html" target="_blank" title="全国首个葡萄酒酒花节宁夏巴格斯葡萄酒庄举办">全国首个葡萄酒酒花节宁夏巴格斯葡萄酒庄举办</a></li><li><a href="/html/201306/20706.html" target="_blank" title="阿尔法单一麦芽威士忌神秘珍酿引发探索体验">阿尔法单一麦芽威士忌神秘珍酿引发探索体验</a></li><li><a href="/html/201306/20704.html" target="_blank" title="白酒巨头泸州老窖多元化突围   “试水”葡萄酒">白酒巨头泸州老窖多元化突围   “试水”葡萄酒</a></li><li><a href="/html/201306/20701.html" target="_blank" title="“双反”利好论背后   国产葡萄酒遭遇利润增长压力">“双反”利好论背后   国产葡萄酒遭遇利润增长</a><img src="__PUBLIC__/news/images/attention.gif"/></li><li><a href="/html/201306/20720.html" target="_blank" title="中信国安葡萄酒业：第五届董事会第十九次会议决议公告">中信国安葡萄酒业：第五届董事会第十九次会议决</a></li><li><a href="/html/201306/20693.html" target="_blank" title="葡萄酒“双反”调查引发的反应">葡萄酒“双反”调查引发的反应</a></li><li><a href="/html/201306/20692.html" target="_blank" title="厦门中高端葡萄酒影响不大  小酒商面临“被洗牌”">厦门中高端葡萄酒影响不大  小酒商面临“被洗牌</a><img src="__PUBLIC__/news/images/attention.gif"/></li><li><a href="/html/201306/20685.html" target="_blank" title="逸香评分系列主题盲品会 - 智利葡萄酒专场">逸香评分系列主题盲品会 - 智利葡萄酒专场</a><img src="__PUBLIC__/news/images/exclusive.gif"/></li>               </ul>
+            </div>
+        </div>
+    </div>
+    <div class="n-rig">
+        <div class="n-adv2">
+            <!-- 广告位：新闻频道 首屏右侧（上）banner --><script type="text/javascript">BAIDU_CLB_fillSlot("435178");</script>
+        </div>
+        <div class="n-adv2">
+            <!-- 广告位：新闻频道 首屏右侧（下）banner --><script type="text/javascript">BAIDU_CLB_fillSlot("435182");</script>
+        </div>
+        <div class="n-mod-c">
+            <div class="n-white1">
+                <h3 class="n-h-mod">
+                    <strong>政策法规</strong>
+                    <a href="http://news.wine.cn/zcfg" target="_blank"></a>
+                </h3>
+                <ul class="n-ul-mod2">
+                    <li><a href="/html/201306/20717.html" target="_blank" title="《中国葡萄酿酒技术规范》">《中国葡萄酿酒技术规范》</a></li><li><a href="/html/201303/17973.html" target="_blank" title="西班牙葡萄酒分级">西班牙葡萄酒分级</a></li><li><a href="/html/201303/17969.html" target="_blank" title="意大利葡萄酒法规和等级">意大利葡萄酒法规和等级</a></li><li><a href="/html/201212/16399.html" target="_blank" title="宁夏回族自治区贺兰山东麓葡萄酒产区保护条例（全文）">宁夏回族自治区贺兰山东麓葡萄酒产区保</a></li><li><a href="/html/201207/11837.html" target="_blank" title="中华人民共和国工业和信息化部公告《葡萄酒行业准入条件》">中华人民共和国工业和信息化部公告《葡</a></li><li><a href="/html/201011/1615.html" target="_blank" title="葡萄酒厂卫生规范">葡萄酒厂卫生规范</a></li>                </ul>
+            </div>
+        </div>
+        <div class="n-mod-c">
+            <div class="n-white2">
+                <h3 class="n-h-mod">
+                    <strong>国内排行榜</strong>
+                </h3>
+                <ul class="n-ul-mod3">
+                    <li><a href="/html/201306/20716.html" target="_blank" title="葡萄酒成“喜酒”入驻婚宴市场">葡萄酒成“喜酒”入驻婚宴市场</a></li><li><a href="/html/201306/20718.html" target="_blank" title="假冒葡萄酒频现   “望闻问切”四步辨真假">假冒葡萄酒频现   “望闻问切”四步辨</a></li><li><a href="/html/201306/20723.html" target="_blank" title="网上投资过亿   锁定高端葡萄酒“客制化”">网上投资过亿   锁定高端葡萄酒“客制</a></li><li><a href="/html/201306/20721.html" target="_blank" title="长城葡萄酒荣膺布鲁塞尔金奖">长城葡萄酒荣膺布鲁塞尔金奖</a></li><li><a href="/html/201306/20685.html" target="_blank" title="逸香评分系列主题盲品会 - 智利葡萄酒专场">逸香评分系列主题盲品会 - 智利葡萄酒</a></li><li><a href="/html/201306/20688.html" target="_blank" title="醉翁之意不在酒  为什么是葡萄酒？">醉翁之意不在酒  为什么是葡萄酒？</a></li><li><a href="/html/201306/20691.html" target="_blank" title="蓬莱“国际葡萄酒烈酒品评赛”7月举行">蓬莱“国际葡萄酒烈酒品评赛”7月举行</a></li>                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="n-adv4">
+    <div class="n-adv4-l">
+        <!-- 广告位：新闻频道 第二屏左上半通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("445147");</script>
+    </div>
+    <div class="n-adv4-r">
+        <!-- 广告位：新闻频道 第二屏右上banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445158");</script>
+    </div>
+</div>
+<div class="n-middle">
+    <div class="n-lef">
+        <div class="n-con2">
+            <h3 class="n-h3">
+                <strong><a href="http://news.wine.cn/world" target="_blank">国际 . 资讯</a></strong>
+                <a href="http://news.wine.cn/world" target="_blank">更多&gt;</a>
+            </h3>
+            <div class="n-con2-l">
+                <div class="n-con2-img">
+                    <a href="/html/201306/20637.html" target="_blank" title="澳大利亚布诺萨山谷最古老的葡萄藤"><img src="/images/51b921362054a.jpg" alt="澳大利亚布诺萨山谷最古老的葡萄藤"/></a>
+                    <em></em>
+                    <span><a href="/html/201306/20637.html" target="_blank" title="澳大利亚布诺萨山谷最古老的葡萄藤">澳大利亚布诺萨山谷最古老的葡萄藤</a></span>
+                </div>
+                <div class="n-con2-news">
+                    <h4>热点关注</h4>
+                    <dl class="n-con2-dl">
+                        <dt><a href="/html/201306/20515.html" target="_blank" title="新西兰Ascension酒庄对外出售"><img src="/images/51b005e1d0d64.jpg" alt="新西兰Ascension酒庄对外出售"/></a></dt>
+                        <dd>
+                            <strong><a href="/html/201306/20515.html" target="_blank" title="新西兰Ascension酒庄对外出售">新西兰Ascension酒庄对外出售</a></strong>
+                            <span>Ascension酒庄位于新西兰马塔卡纳海岸(Matakana Coast)...<a href="/html/201306/20515.html" target="_blank">[详情]</a></span>
+                        </dd>
+                    </dl><dl class="n-con2-dl">
+                        <dt><a href="/html/201304/19045.html" target="_blank" title="葡萄酒价格上涨将限制葡萄酒消费量"><img src="/images/516bb87fb740f.jpg" alt="葡萄酒价格上涨将限制葡萄酒消费量"/></a></dt>
+                        <dd>
+                            <strong><a href="/html/201304/19045.html" target="_blank" title="葡萄酒价格上涨将限制葡萄酒消费量">葡萄酒价格上涨将限制葡萄酒消费量</a></strong>
+                            <span>荷兰合作国际银行2013年葡萄酒第一季度报告( Rabobank W...<a href="/html/201304/19045.html" target="_blank">[详情]</a></span>
+                        </dd>
+                    </dl>               </div>
+            </div>
+            <div class="n-con2-r">
+                <div class="n-con2-tit"><a href="/html/201306/20658.html" target="_blank" title="第五届世界原酒展览会将于11月份在荷兰举行">第五届世界原酒展览会将于11月份在荷兰举行</a></div>
+                <ul class="n-ul-mod">
+                    <li><a href="/html/201306/20729.html" target="_blank" title="波尔多2012年期酒降价幅度低，市场需求小">波尔多2012年期酒降价幅度低，市场需求小</a></li><li><a href="/html/201306/20727.html" target="_blank" title="勃艮第夜圣乔治产区有望拥有首个特级葡萄园">勃艮第夜圣乔治产区有望拥有首个特级葡萄园</a></li><li><a href="/html/201306/20726.html" target="_blank" title="凯特王妃和酩悦香槟齐聚“皇家公主号”参加掷瓶典礼">凯特王妃和酩悦香槟齐聚“皇家公主号”参加掷瓶</a></li><li><a href="/html/201306/20712.html" target="_blank" title="加拿大与欧盟有望达成葡萄酒与烈酒自由贸易协议">加拿大与欧盟有望达成葡萄酒与烈酒自由贸易协议</a></li><li><a href="/html/201306/20698.html" target="_blank" title="苏玳产区滴金庄佳酿被盗 名庄酒魔力几许">苏玳产区滴金庄佳酿被盗 名庄酒魔力几许</a></li><li><a href="/html/201306/20697.html" target="_blank" title="南非葡萄酒协会杯侍酒师挑战赛正在举行">南非葡萄酒协会杯侍酒师挑战赛正在举行</a></li><li><a href="/html/201306/20696.html" target="_blank" title="新西兰2013年葡萄收成：量增质高">新西兰2013年葡萄收成：量增质高</a></li><li><a href="/html/201306/20695.html" target="_blank" title="香槟酒在美市场销量增长">香槟酒在美市场销量增长</a></li><li><a href="/html/201306/20661.html" target="_blank" title="美国葡萄酒酒标新创举：轻品种重产区">美国葡萄酒酒标新创举：轻品种重产区</a></li><li><a href="/html/201306/20659.html" target="_blank" title="保乐力加集团推出F1赛车限量版玛姆香槟">保乐力加集团推出F1赛车限量版玛姆香槟</a></li><li><a href="/html/201306/20625.html" target="_blank" title="意大利葡萄酒产业新增3%的就业机会">意大利葡萄酒产业新增3%的就业机会</a></li><li><a href="/html/201306/20624.html" target="_blank" title="西班牙起泡酒对美出口悄然激增">西班牙起泡酒对美出口悄然激增</a></li><li><a href="/html/201306/20622.html" target="_blank" title="世界上最奢华的香槟：酒瓶耗资120万英镑">世界上最奢华的香槟：酒瓶耗资120万英镑</a></li><li><a href="/html/201306/20621.html" target="_blank" title="法国堡林爵香槟酿酒师跳槽">法国堡林爵香槟酿酒师跳槽</a></li><li><a href="/html/201306/20576.html" target="_blank" title="历史生动再现：好莱坞将再次上演巴黎盲品会">历史生动再现：好莱坞将再次上演巴黎盲品会</a></li>                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="n-rig">
+        <div class="n-mod-c">
+            <div class="n-white3">
+                <h3 class="n-h-mod">
+                    <strong>专家专栏</strong>
+                    <a href="http://column.wine.cn" target="_blank"></a>
+                </h3>
+                <ul class="n-bo-con">
+                    <li>
+                        <a href="/html/201306/20651.html" target="_blank" title="法国周日新闻发表《宁夏，中国的顶级风土》"><img src="/images/51b918905784b.jpg" alt="法国周日新闻发表《宁夏，中国的顶级风土》"/></a>
+                        <span><a href="/html/201306/20651.html" target="_blank" title="法国周日新闻发表《宁夏，中国的顶级风土》">法国周日新闻发表《</a></span>
+                    </li><li>
+                        <a href="/html/201306/20599.html" target="_blank" title="阿尔萨斯Domain Marcel Deiss"><img src="/images/51b3ce7270221.jpg" alt="阿尔萨斯Domain Marcel Deiss"/></a>
+                        <span><a href="/html/201306/20599.html" target="_blank" title="阿尔萨斯Domain Marcel Deiss">阿尔萨斯Domain Mar</a></span>
+                    </li><li>
+                        <a href="/html/201306/20553.html" target="_blank" title="乘着时光机逛里奥哈"><img src="/images/51b275b3e56e3.jpg" alt="乘着时光机逛里奥哈"/></a>
+                        <span><a href="/html/201306/20553.html" target="_blank" title="乘着时光机逛里奥哈">乘着时光机逛里奥哈</a></span>
+                    </li><li>
+                        <a href="/html/201306/20528.html" target="_blank" title="品味德国黑皮诺"><img src="/images/51b12ac5a97c5.jpg" alt="品味德国黑皮诺"/></a>
+                        <span><a href="/html/201306/20528.html" target="_blank" title="品味德国黑皮诺">品味德国黑皮诺</a></span>
+                    </li>               </ul>
+            </div>
+        </div>
+        <div class="n-mod-c">
+            <div class="n-white4">
+                <h3 class="n-h-mod">
+                    <strong>国际排行榜</strong>
+                </h3>
+                <ul class="n-ul-mod3">
+                    <li><a href="/html/201306/20724.html" target="_blank" title="世界首家恋爱主题的葡萄酒网站上线">世界首家恋爱主题的葡萄酒网站上线</a></li><li><a href="/html/201306/20725.html" target="_blank" title="华尔街银行贷款，1.5万瓶名酒做“担保”">华尔街银行贷款，1.5万瓶名酒做“担保</a></li><li><a href="/html/201306/20548.html" target="_blank" title="阿尔萨斯土地上的“天、地、人和”">阿尔萨斯土地上的“天、地、人和”</a></li><li><a href="/html/201306/20702.html" target="_blank" title="葡萄酒投资热潮推动法国葡萄园价格上涨">葡萄酒投资热潮推动法国葡萄园价格上涨</a></li><li><a href="/html/201306/20726.html" target="_blank" title="凯特王妃和酩悦香槟齐聚“皇家公主号”参加掷瓶典礼">凯特王妃和酩悦香槟齐聚“皇家公主号”</a></li>             </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="n-adv4">
+    <div class="n-adv4-l">
+        <!-- 广告位：新闻频道 第二屏左下半通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("445148");</script>
+    </div>
+    <div class="n-adv4-r">
+        <!-- 广告位：新闻频道 第二屏右下banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445162");</script>
+    </div>
+</div>
+<div class="n-bottom">
+    <div class="n-lef">
+        <div class="n-con2">
+            <h3 class="n-h3">
+                <strong><a href=http://news.wine.cn/depth target="_blank">深度 . 报道</a></strong>
+                <a href=http://news.wine.cn/depth target="_blank">更多&gt;</a>
+            </h3>
+            <div class="n-con2-l">
+                <div class="n-div-mod">
+                    <h4><a href="http://news.wine.cn/showList/id/192" target="_blank">访  谈</a></h4>
+                    <div class="n-div-mod-t"><a href="/html/201304/18898.html" target="_blank" title="澳大利亚葡萄酒如何取胜中国市场">澳大利亚葡萄酒如何取胜中国市场</a></div>
+                    <dl class="n-con2-dl">
+                        <dt><a href="/html/201304/18898.html" target="_blank" title="澳大利亚葡萄酒如何取胜中国市场"><img src="/images/516bb6cf9f87c.jpg" alt="澳大利亚葡萄酒如何取胜中国市场"/></a></dt>
+                        <dd>
+                            <span>在刚刚结束的成都春季糖酒会上，澳大利亚葡萄酒声势浩大，组团参加了这次盛会，并为业...<a href="/html/201304/18898.html" target="_blank">[详情]</a></span>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="n-div-mod">
+                    <h4><a href="http://news.wine.cn/showList/id/193" target="_blank">聚  焦</a></h4>
+                    <div class="n-div-mod-t"><a href="/html/201304/18968.html" target="_blank" title="零关税刺激，中国将跻身智利五大葡萄酒市场">零关税刺激，中国将跻身智利五大葡萄酒</a></div>
+                    <dl class="n-con2-dl">
+                        <dt><a href="/html/201304/18968.html" target="_blank" title="零关税刺激，中国将跻身智利五大葡萄酒市场"><img src="/images/516bb94f5d68c.jpg" alt="零关税刺激，中国将跻身智利五大葡萄酒市场"/></a></dt>
+                        <dd>
+                            <span>2012年中国进口智利葡萄酒数量猛增，达6096万千升，同比增幅达40%。2011年中国进口智...<a href="/html/201304/18968.html" target="_blank">[详情]</a></span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="n-con2-r">
+                <div class="n-con2-tit"><a href="/html/201306/20472.html" target="_blank" title="阿尔卑斯山脚下的芬芳">阿尔卑斯山脚下的芬芳</a><img src="/news/Common/images/index/original.gif"/></div>
+                <ul class="n-ul-mod">
+                    <li><a href="/html/201305/19855.html" target="_blank" title="Tom Hinde：我们都爱2012年！">Tom Hinde：我们都爱2012年！</a><img src="/news/Common/images/index/original.gif"/></li><li><a href="/html/201305/19684.html" target="_blank" title="中国市场的波尔多热潮结束?">中国市场的波尔多热潮结束?</a><img src="/news/Common/images/index/exclusive.gif"/></li><li><a href="/html/201304/19560.html" target="_blank" title="不可不知的禾富酒庄">不可不知的禾富酒庄</a><img src="/news/Common/images/index/exclusive.gif"/></li><li><a href="/html/201304/19221.html" target="_blank" title="陆江：用旅程为你讲述美国葡萄酒的风情">陆江：用旅程为你讲述美国葡萄酒的风情</a><img src="/news/Common/images/index/original.gif"/></li><li><a href="/html/201304/19177.html" target="_blank" title="马尔贝克世界日的中国之行">马尔贝克世界日的中国之行</a><img src="/news/Common/images/index/exclusive.gif"/></li><li><a href="/html/201304/19052.html" target="_blank" title="中国大学里走出的罗讷河谷葡萄酒大使罗易">中国大学里走出的罗讷河谷葡萄酒大使罗易</a><img src="/news/Common/images/index/original.gif"/></li><li><a href="/html/201304/19031.html" target="_blank" title="这是一场艰难的战役(下)">这是一场艰难的战役(下)</a><img src="/news/Common/images/index/original.gif"/></li><li><a href="/html/201304/18927.html" target="_blank" title="意大利传奇葡萄酒家族Biondi Santi">意大利传奇葡萄酒家族Biondi Santi</a><img src="/news/Common/images/index/exclusive.gif"/></li><li><a href="/html/201304/18897.html" target="_blank" title="我查查被疑有违商业道德，敲诈红酒供应商遭质问">我查查被疑有违商业道德，敲诈红酒供应商遭质问</a><img src="/news/Common/images/index/attention.gif"/></li><li><a href="/html/201304/18844.html" target="_blank" title="这是一场艰难的战役(上)">这是一场艰难的战役(上)</a><img src="/news/Common/images/index/original.gif"/></li><li><a href="/html/201304/18744.html" target="_blank" title="人人都爱里奥哈 专访里奥哈管委会Mr Jose Manuel Chicot">人人都爱里奥哈 专访里奥哈管委会Mr Jose Manue</a><img src="/news/Common/images/index/original.gif"/></li><li><a href="/html/201303/18611.html" target="_blank" title="从西班牙里奥哈透视进口葡萄酒在中国的推广">从西班牙里奥哈透视进口葡萄酒在中国的推广</a><img src="/news/Common/images/index/original.gif"/></li>               </ul>
+            </div>
+        </div>
+    </div>
+    <div class="n-rig">
+        <div class="n-mod-c">
+            <div class="n-white3">
+                <h3 class="n-h-mod">
+                    <strong>葡萄酒博览</strong>
+                    <a href="http://expo.wine.cn" target="_blank"></a>
+                </h3>
+                <ul class="n-bo-con">
+                    <li>
+                        <a href="/html/201303/18172.html" target="_blank" title="赵薇：青春不是高贵香槟 王菲或将演唱电影主题曲"><img src="/images/51413a51adf8e.jpg" alt="赵薇：青春不是高贵香槟 王菲或将演唱电影主题曲"/></a>
+                        <span><a href="/html/201303/18172.html" target="_blank" title="赵薇：青春不是高贵香槟 王菲或将演唱电影主题曲">赵薇：青春不是高贵</a></span>
+                    </li><li>
+                        <a href="/html/201303/18112.html" target="_blank" title="佟丽娅送赵薇香槟杯 韩庚与赵又廷玩对瓶吹"><img src="/images/513fd7f38794b.jpg" alt="佟丽娅送赵薇香槟杯 韩庚与赵又廷玩对瓶吹"/></a>
+                        <span><a href="/html/201303/18112.html" target="_blank" title="佟丽娅送赵薇香槟杯 韩庚与赵又廷玩对瓶吹">佟丽娅送赵薇香槟杯</a></span>
+                    </li><li>
+                        <a href="/html/201303/18064.html" target="_blank" title="《鲁豫有约》赵薇庆生 黄晓明曾送顶级红酒Petrus"><img src="/images/513e874098485.jpg" alt="《鲁豫有约》赵薇庆生 黄晓明曾送顶级红酒Petrus"/></a>
+                        <span><a href="/html/201303/18064.html" target="_blank" title="《鲁豫有约》赵薇庆生 黄晓明曾送顶级红酒Petrus">《鲁豫有约》赵薇庆</a></span>
+                    </li><li>
+                        <a href="/html/201303/18023.html" target="_blank" title="唱功排行榜杨幂垫底 自曝靠红酒丰胸"><img src="/images/513d3c2c8e9ac.jpg" alt="唱功排行榜杨幂垫底 自曝靠红酒丰胸"/></a>
+                        <span><a href="/html/201303/18023.html" target="_blank" title="唱功排行榜杨幂垫底 自曝靠红酒丰胸">唱功排行榜杨幂垫底</a></span>
+                    </li>               </ul>
+            </div>
+        </div>
+        <div class="n-mod-c">
+            <div class="n-white5">
+                <h3 class="n-h-mod">
+                    <strong>深度报道排行榜</strong>
+                </h3>
+                <ul class="n-ul-mod3">
+                    <li><a href="/html/201304/18897.html" target="_blank" title="我查查被疑有违商业道德，敲诈红酒供应商遭质问">我查查被疑有违商业道德，敲诈红酒供应</a></li><li><a href="/html/201205/9724.html" target="_blank" title="案例分析：投资千万的酒庄能赚多少钱？">案例分析：投资千万的酒庄能赚多少钱？</a></li><li><a href="/html/201304/19177.html" target="_blank" title="马尔贝克世界日的中国之行">马尔贝克世界日的中国之行</a></li>               </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="n-adv4">
+    <div class="n-adv4-l">
+        <!-- 广告位：新闻频道 第三屏左侧半通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("445168");</script>
+    </div>
+    <div class="n-adv4-r">
+        <!-- 广告位：新闻频道 第三屏右侧banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445170");</script>
+    </div>
+</div>
+<div class="n-bottom2">
+    <div class="n-lef">
+        <div class="n-con4">
+            <ul class="n-con4-nav">
+                <li class="n-con4-nav-sp">酒会</li>
+                <li>展会</li>
+                <li>培训及讲座</li>
+            </ul>
+            <div class="c-con4-box">
+                <div class="c-con4-list c-con4-show">
+                    <ul class="n-ul-mod">
+                        <li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/866" target="_blank" title="2013上海第七届高端葡萄酒及烈酒展">2013上海第七届高端葡萄酒及烈酒</a></span>
+                            <em>11-29</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/886" target="_blank" title="深圳国际名酒饮品博览会暨国际竞赛(IBEC)">深圳国际名酒饮品博览会暨国际竞</a></span>
+                            <em>08-29</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/901" target="_blank" title="2013郑州红酒展">2013郑州红酒展</a></span>
+                            <em>08-16</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/1018" target="_blank" title="8 Lakes加拿大冰酒加州纳帕谷葡萄酒品尝会 ">8 Lakes加拿大冰酒加州纳帕谷葡</a></span>
+                            <em>07-06</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/1000" target="_blank" title="法国产区联合葡萄酒展">法国产区联合葡萄酒展</a></span>
+                            <em>07-02</em>
+                        </li>                       <li>
+                    </ul>
+                    <ul class="n-ul-mod" style="float:right;">                  
+                        <li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/1017" target="_blank" title="逸香评分系列主题盲品会-智利葡萄酒专场">逸香评分系列主题盲品会-智利葡</a></span>
+                            <em>06-27</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/1011" target="_blank" title="德国VDP联盟顶级酒庄葡萄酒品尝展会 上海站">德国VDP联盟顶级酒庄葡萄酒品尝</a></span>
+                            <em>06-25</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/1015" target="_blank" title="Gattavecchi嘉塔维奇酒庄全国巡回品酒会">Gattavecchi嘉塔维奇酒庄全国巡</a></span>
+                            <em>06-25</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/1009" target="_blank" title="“圣爱美容骑士团-右岸的魅力”自带酒盲品分享酒会">“圣爱美容骑士团-右岸的魅力”</a></span>
+                            <em>06-23</em>
+                        </li><li>
+                            <span><a href="http://jiuhui.wine.cn/Detail/index/id/1004" target="_blank" title="“圣艾米丽翁骑士团-右岸的魅力”——自带酒盲品酒会 ">“圣艾米丽翁骑士团-右岸的魅力</a></span>
+                            <em>06-23</em>
+                        </li>                   </ul>
+                </div>
+                <div class="c-con4-list">
+                    <ul class="n-ul-mod">
+                        <li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/99" target="_blank" title="2013第七届中国绿色有机食品展览会暨上海葡萄酒及烈酒展">2013第七届中国绿色有机食品展览会</a></span>
+                            <em>11-29</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/102" target="_blank" title="2013中国(浙江)国际葡萄酒与烈酒展览会">2013中国(浙江)国际葡萄酒与烈酒展</a></span>
+                            <em>09-26</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/101" target="_blank" title="第六届中国（北京）国际葡萄酒及烈酒展览会">第六届中国（北京）国际葡萄酒及烈</a></span>
+                            <em>09-23</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/83" target="_blank" title="2013第二届中国（杭州）国际葡萄酒及烈酒展览会">2013第二届中国（杭州）国际葡萄酒</a></span>
+                            <em>07-11</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/103" target="_blank" title="第七届烟台国际葡萄酒博览会">第七届烟台国际葡萄酒博览会</a></span>
+                            <em>07-05</em>
+                        </li>                   </ul>
+                    <ul class="n-ul-mod" style="float:right;">
+                        <li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/100" target="_blank" title="Topwine China 2013第四届中国北京国际葡萄酒博览会">Topwine China 2013第四届中国北京</a></span>
+                            <em>06-04</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/87" target="_blank" title="2013 中国（广州）国际名酒展-春季展">2013 中国（广州）国际名酒展-春季</a></span>
+                            <em>05-30</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/82" target="_blank" title="第十四届中食展酒世界专馆 暨 第三届SIAL美酒世界">第十四届中食展酒世界专馆 暨 第三</a></span>
+                            <em>05-07</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/98" target="_blank" title="VINISUD Asia 2013地中海葡萄酒与烈酒国际展览会亚洲站">VINISUD Asia 2013地中海葡萄酒与</a></span>
+                            <em>02-26</em>
+                        </li><li>
+                            <span><a href="http://wineshow.wine.cn/showDetail/ws_id/79" target="_blank" title="2012第三届中国（重庆）国际葡萄酒及烈酒展览会">2012第三届中国（重庆）国际葡萄酒</a></span>
+                            <em>12-21</em>
+                        </li>                   </ul>
+                </div>
+                <div class="c-con4-list">
+                    <ul class="n-ul-mod">                   
+                        <li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/962" target="_blank" title="美国ISG侍酒师中级课程 ">美国ISG侍酒师中级课程</a></span>
+                            <em>07-20</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/807" target="_blank" title="ESW品酒师初级课程">ESW品酒师初级课程</a></span>
+                            <em>06-29</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/946" target="_blank" title="ESW品酒师中级课程">ESW品酒师中级课程</a></span>
+                            <em>06-28</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/941" target="_blank" title="WSET品酒师中级课程">WSET品酒师中级课程</a></span>
+                            <em>06-28</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/781" target="_blank" title="ESW品酒师中级课程">ESW品酒师中级课程</a></span>
+                            <em>06-28</em>
+                        </li>                   </ul>
+                    <ul class="n-ul-mod" style="float:right;">
+                        <li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/763" target="_blank" title="ESW品酒师初级课程">ESW品酒师初级课程</a></span>
+                            <em>06-22</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/940" target="_blank" title="ESW品酒师初级课程">ESW品酒师初级课程</a></span>
+                            <em>06-22</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/783" target="_blank" title="WSET品酒师中级课程">WSET品酒师中级课程</a></span>
+                            <em>06-21</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/961" target="_blank" title="ESW品酒师中级课程">ESW品酒师中级课程</a></span>
+                            <em>06-21</em>
+                        </li><li>
+                            <span><a href="http://peixun.wine.cn/Detail/index/id/806" target="_blank" title="WSET品酒师中级课程">WSET品酒师中级课程</a></span>
+                            <em>06-21</em>
+                        </li>                   </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="n-rig">
+        <div class="n-mod-c">
+            <div class="n-white6">
+                <h3 class="n-h-mod">
+                    <strong>专题</strong>
+                    <a href="/Topics" target="_blank"></a>
+                </h3>
+                <div class="n-img-tab">
+                    <div class="n-img-big-box">
+                        <ul class="n-img-big">
+                            <li><a href="/DragonBoatFest2013" target="_blank" title="端午节：葡萄酒与粽子巧搭配"><img src="/images/51b2a04e0b4d5.jpg" alt="端午节：葡萄酒与粽子巧搭配"/></a></li><li><a href="/Rate" target="_blank" title="芳香型葡萄酒盲品会榜单"><img src="/images/5194a5992929f.jpg" alt="芳香型葡萄酒盲品会榜单"/></a></li><li><a href="/Topics/mpagt" target="_blank" title="逸香网阿根廷葡萄酒专场盲品会"><img src="/images/51709f001d084.jpg" alt="逸香网阿根廷葡萄酒专场盲品会"/></a></li><li><a href="/Wine100" target="_blank" title="2013年WINE100葡萄酒大赛"><img src="/images/5170a6996baa1.jpg" alt="2013年WINE100葡萄酒大赛"/></a></li><li><a href="/Lizhiyan2013" target="_blank" title="李志延-2013年波尔多期酒之旅"><img src="/images/515bedc6074af.jpg" alt="李志延-2013年波尔多期酒之旅"/></a></li><li><a href="/Logistics" target="_blank" title="进口酒类分销与冷链物流管理沙龙"><img src="/images/515555f837339.jpg" alt="进口酒类分销与冷链物流管理沙龙"/></a></li><li><a href="/TopicsArgentina" target="_blank" title="阿根廷葡萄酒产区"><img src="/images/514670746fa2d.jpg" alt="阿根廷葡萄酒产区"/></a></li><li><a href="/Topics/sichuan" target="_blank" title="2013年春季成都糖酒会"><img src="/images/514fb864cf456.jpg" alt="2013年春季成都糖酒会"/></a></li>                        </ul>
+                    </div>
+                    <div class="n-img-num">                     
+                        <span class="n-img-num-red">1</span><span >2</span><span >3</span><span >4</span><span >5</span><span >6</span><span >7</span><span >8</span>                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(function(){
+    var n=1;
+    var nn=$(".img_num>span").length;
+    var t=setInterval(change,4000);
+    function change(){
+        if(n>=nn) n=0;
+        $(".img_num>span").removeClass("img_num_red");
+        $(".img_num>span").eq(n).addClass("img_num_red");
+        $(".big_img>a").fadeOut(1000);
+        $(".big_img>a").eq(n).fadeIn(1000);
+        $(".img_shadow").find("a").text($('.big_img>a').eq(n).attr('title'));
+        n++;
+    };
+    $(".img_num>span").each(function(i){
+        $(this).hover(
+            function(){
+                clearInterval(t);
+                $(".big_img>a").stop(true,true);
+                if(i==n-1) return;
+                n=i;
+                change();
+        },function(){
+            clearInterval(t);
+          }
+        )
+    });
+    $(".img_tab").hover(
+        function(){
+            clearInterval(t);
+        },
+        function(){
+            t=setInterval(change,4000);
+        }
+    );
+    /*-- 酒会讲座切换 --*/
+    $(".n-con4-nav>li").each(function(i){
+        $(this).mouseover(function(){
+            $(".n-con4-nav>li").removeClass("n-con4-nav-sp");
+            $(this).addClass("n-con4-nav-sp");
+            $(".c-con4-box>div").removeClass("c-con4-show");
+            $(".c-con4-box>div").eq(i).addClass("c-con4-show");
+        })
+    });
+    /*-- 专题图片切换 --*/
+    var num=$(".n-img-big>li").length;
+    $(".n-img-big").width(num*248);
+    var n3=0;
+    var tt=setInterval(function(){n3++;if(n3>=8) n3=0;img_change(n3);},3800);
+    $(".n-img-tab").hover(
+        function(){clearInterval(tt)},
+        function(){tt=setInterval(function(){n3++;if(n3>=8) n3=0;img_change(n3);},3800);}
+    );
+    $(".n-img-num>span").each(function(i){
+        $(this).mouseover(function(){
+            n3=i;
+            img_change(n3);
+        })
+    });
+    function img_change(n3){
+        $(".n-img-num>span").removeClass("n-img-num-red");
+        $(".n-img-num>span").eq(n3).addClass("n-img-num-red");
+        $(".n-img-big").stop(true,false);
+        $(".n-img-big").animate({marginLeft:-248*n3+"px"},800);
+    };
+})
+</script>
+<!--引入尾部文件-->
+    <div class="firendbox z_main_column linel">
+        <h2><a href="#"><img src="/news/Common/images/index20130312/index_tit12.gif" /></a></h2>
+        <ul class="firend">
+            <li><a href="/Topics/mpagt" target="_blank" title="阿根廷葡萄酒">阿根廷葡萄酒</a></li><li><a href="http://www.vikiblog.com" target="_blank" title="博客导航">博客导航</a></li><li><a href="http://xiazai.zol.com.cn/" target="_blank" title="zol应用下载">zol应用下载</a></li><li><a href="http://d.wine.cn" target="_blank" title="逸香葡萄酒词典">逸香葡萄酒词典</a></li><li><a href="http://buy.wine.cn" target="_blank" title="葡萄酒网购">葡萄酒网购</a></li>        </ul>
+    </div>    <p class="foot">
+        <a href="/Emarketing/aboutUs" target="_blank">关于我们</a> |
+        <a href="/Emarketing/aboutUs/id/6" target="_blank">联系我们</a> |
+        <a href="http://eswine.hirede.com/CareerSite/Index" target="_blank">加入我们</a> |
+        <a href="/Emarketing/aboutUs/id/7" target="_blank">版权信息</a> |
+        <a href="/sitemap.html" target="_blank">网站地图</a> |
+        <a href="/Emarketing/aboutUs/id/8" target="_blank">About US</a> |
+        <a href="/Emarketing" target="_blank">网络营销</a> |
+        <a href="/Emarketing/advertise" target="_blank">广告服务</a> |
+        <a href="/Emarketing/cooperate" target="_blank">商务合作</a> |
+        <a href="/Emarketing/aboutUs/id/9" target="_blank">约稿启事</a> |
+        <a href="/Emarketing/Links" target="_blank">友情链接</a> |
+        <a href="/Emarketing/partners" target="_blank">合作伙伴</a> |
+        <a href="/Rss" target="_blank">Rss订阅</a>
+    </p>
+<div style="display:none">
+<script src="http://s15.cnzz.com/stat.php?id=4155064&web_id=4155064" language="JavaScript"></script>
+</div>
+<!--google analytics 分析代码-->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33994609-1']);
+  _gaq.push(['_setDomainName', 'wine.cn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[
+0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

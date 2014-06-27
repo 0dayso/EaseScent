@@ -1,0 +1,54 @@
+<include file="Common:header" />
+<div class="login-mian">
+	<div class="login-reg">
+		没有逸香企业账号？<a href="/index.php/User/register" hidefocus>请直接注册</a>
+	</div>
+	<div class="login-box">
+		<div class="login-img">
+			<img src="__PUBLIC__/Ym/images/p1.jpg" />
+		</div>
+		
+		<div class="login-con">
+			<h2 class="login-tit">
+				<img src="__PUBLIC__/Ym/images/p2.jpg" />
+			</h2>
+			<form id="login" action="/index.php/User/doLogin" method="POST">
+			<div id="l_message" class="login-prompt" >
+				&nbsp;
+			</div>
+			<div class="login-div">
+				<span class="l-span">邮箱/手机:</span>
+				<input type="text" id="l_username" name="l_username" maxlength="50" value="{$username}" class="login-ipt1"/>
+				<img src="__PUBLIC__/Ym/images/i1.jpg" class="login-i"/>
+				<em></em>
+			</div>
+			<div class="login-div">
+				<span class="l-span">登录密码:</span>
+				<input type="password" id="l_password" name="l_password" maxlength="50" class="login-ipt1"/>
+				<img src="__PUBLIC__/Ym/images/i2.jpg" class="login-i"/>
+				<em></em>
+			</div>
+			<div class="login-div" id="login-verify" style="display:none;">
+				<span class="l-span">验证码:</span>
+				<input type="text" id="l_verify" name="l_verify" class="login-ipt2"/>
+				<!--<img src="__PUBLIC__/Ym/images/p3.jpg" class="ver-code"/>
+				
+                -->
+				<img src="__HOST__/index.php/User/verify"  class="ver-code" onclick="this.src='__HOST__/index.php/User/verify/'+Math.random()"/>
+				<img src="__PUBLIC__/Ym/images/i2.jpg" class="login-i"/>
+               
+                <em></em>
+			</div>
+			<div class="login-div2">
+				<input type="checkbox" name="remb" value="1" id="remb" />
+				<label for="remb"  hidefocus>记住密码</label>
+			</div>
+			<div class="login-div2">
+				<input type="submit" value="登录" class="login-sub" hidefocus/>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script src="__JS__/user.js" type="text/javascript"></script>
+<include file="Common:footer" />

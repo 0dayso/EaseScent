@@ -1,0 +1,35 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('News/Index/index')}">资讯管理</a> > <a href="{:Url('News/Block/index')}">推荐位管理</a> > <a href="{:Url('BlockData/index?bid='. $block['bid'])}">"{$block.name}"数据管理</a> > 增加推荐数据</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index?bid='.$block['bid'])}">返回推荐位数据列表</a>
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('News/BlockData/add')}" method="post">
+            <input type="hidden" name="bid" value="{$block['bid']}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加推荐数据</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标题</th>
+                        <td><input type="text" size="80" name="title" value="{$vo.title}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">排序</th>
+                        <td><input type="text" size="20" name="display" value="{$vo.display}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">URL</th>
+                        <td><input type="text" size="40" name="url" value="{$vo.url}" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

@@ -1,0 +1,11 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="menu">
+        <a class='btn' href="{:Url('regionStruct')}" onclick="$(this).parent().html('请稍等...');">快速刷新</a>
+        <a class='btn' href="{:Url('regionStruct', array('type' => 1))}" onclick="$(this).parent().html('请稍等...');">完全刷新</a>
+    </div>
+    <div class="list">
+    	{$html}
+    </div>
+</div>
+<include file="Common:cpfooter" />

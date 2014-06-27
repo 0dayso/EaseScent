@@ -1,0 +1,127 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+//country_autocomplete
+$(function(){
+    $("#country_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getCountryForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('readonly',true);
+            $("#country_id").val(ui.item.id);
+            $("#country_s").css('z-index',-1);
+            $("#country_x").css('z-index',1);
+        },
+    });
+});
+function country_s(){
+    $("#country_text").focus();
+    $("#country_text").autocomplete("search", "");
+}
+function country_x(){
+    $("#country_id").val(0);
+    $("#country_text").val('').attr('readonly',false);
+    $("#country_x").css('z-index',-1);
+    $("#country_s").css('z-index',1);
+}
+//country_autocomplete/
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库源数据管理</a> >
+        酒庄列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}&_backurl={$_listurl}">添加酒庄</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td>
+                        所属国家：
+                        <div class="autocomplete-div">
+                            <if condition="$_GET['country_id']">
+                            <input id="country_text" name="country_text" type="text" size="40" value="{$_GET.country_text}" class="measure-input" readonly />
+                            <input id="country_id" name="country_id" type="hidden" value="{$_GET.country_id}"/>
+                            <span id="country_s" class="autocomplete-sel" onclick="country_s();" style="z-index:-1;"></span>
+                            <span id="country_x" class="autocomplete-del" onclick="country_x();" style="z-index:1;"></span>
+                            <else/>
+                            <input id="country_text" name="country_text" type="text" size="40" value="" class="measure-input" />
+                            <input id="country_id" name="country_id" type="hidden" value="0"/>
+                            <span id="country_s" class="autocomplete-sel" onclick="country_s();"></span>
+                            <span id="country_x" class="autocomplete-del" onclick="country_x();"></span>
+                            </if>
+                        </div>
+                        &nbsp;&nbsp;
+                        关键字：
+                        <input name="keyword" class="input-text" type="text" value="{$_GET.keyword}" size="20" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option value="3" <if condition="$_GET['status'] eq 3">selected</if>>开启</option>
+                            <option value="2" <if condition="$_GET['status'] eq 2">selected</if>>关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>外文名</th>
+                    <th>中文名</th>
+                    <th>所属国家</th>
+                    <th width="30">状态</th>
+                    <th width="30">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.fname}</td>
+                    <td>{$vo.cname}</td>
+                    <td>
+                        <if condition="$vo['country_res']">
+                        {$vo.country_res.fname} {$vo.country_res.cname}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 3"><span style="color:green;">开启</span></if>
+                        <if condition="$vo['status'] eq 2"><span style="color:orange;">关闭</span></if>
+                    </td>
+                    <td>
+                        <a href="{:Url('edit')}&id={$vo.id}&_backurl={$_listurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

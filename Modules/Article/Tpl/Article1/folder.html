@@ -1,0 +1,80 @@
+<include file="Common:cpheader" />
+<script>
+var pid = {$_GET.pid};
+var subpath = '{$_GET.subpath}';
+function create_folder(type){
+    if(type == 'ini'){
+        art.dialog({
+            title:      '新建文件夹',
+            content:    '<div>新建文件夹&nbsp;<input id="create_folder_name" type="text" />&nbsp;<input type="button" value="确定" onclick="create_folder();" /></div><span style="color:red;">*文件夹名只能使用英文或数字！</span>',
+            lock:       true,
+        });
+    }else{
+        var name = $("#create_folder_name").val();
+        var reg = new RegExp("^[A-Za-z0-9]+$");
+        if(name == '' || !reg.test(name)){
+            alert('文件夹名为空或不符合标准');
+            return;
+        }
+        $.post("{:Url('folder')}",{'type':'create_folder','pid':pid,'subpath':subpath,'name':name},function(msg){
+            var msg = eval("("+msg+")");
+            if(msg.errorCode == 0){
+                alert('创建成功');
+                location.reload();
+            }else{
+                alert(msg.errorStr);
+            }
+        });
+    }
+}
+function select_folder(){
+    parent.select_folder(subpath);
+}
+</script>
+<style>
+.file{
+    margin: 0 2px;
+    padding: 0 2px;}
+.folder{
+    margin: 0 2px;
+    padding: 0 2px 0 16px;
+    background: url(__PUBLIC__treeview/images/folder-closed.gif) 0 0 no-repeat;}
+.folder:hover{
+    /*background: #ccc;*/}
+input{padding: 2px 3px;}
+</style>
+<div id="table">
+    <div class="search">
+        路径：
+        <b><a href="{:Url('folder')}&pid={$_GET.pid}&type={$_GET.type}">./{$spath}</a></b>
+        <volist name="subwz" id="vo">
+            <a href="{:Url('folder')}&pid={$_GET.pid}&subpath={$vo.1}&type={$_GET.type}" class="folder">{$vo.0} / </a>
+        </volist>
+        <span style="float:right;">
+            <volist name="button" id="vo">{$vo}</volist>
+        </span>
+        <br>
+        ({$surl}<volist name="subwz" id="vo">{$vo.0}/</volist>)
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>修改时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="filearr" id="vo">
+                <tr>
+                    <td>
+                        <a href="{:Url('folder')}&pid={$_GET.pid}&subpath={$vo.subpath}&type={$_GET.type}" class="folder">{$vo.name}</a>
+                    </td>
+                    <td>{$vo.time}</td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter" />

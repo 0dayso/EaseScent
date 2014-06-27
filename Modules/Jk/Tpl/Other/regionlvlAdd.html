@@ -1,0 +1,133 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'再次添加',callback:function(){window.location.href = window.location.href;}},
+                    {name:'复制添加'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+});
+//country_autocomplete
+$(function(){
+    $("#country_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getCountryForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#country_id").val(ui.item.id);
+            $("#country_s").css('z-index',-1);
+            $("#country_x").css('z-index',1);
+        },
+    });
+});
+function country_s(){
+    $("#country_text").focus();
+    $("#country_text").autocomplete("search", "");
+}
+function country_x(){
+    $("#country_id").val(0);
+    $("#country_text").val('').attr('disabled',false);
+    $("#country_x").css('z-index',-1);
+    $("#country_s").css('z-index',1);
+}
+//country_autocomplete/
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Jk/Index/index')}">酒库源数据管理</a> >
+        <a href="{:Url('index')}">其他信息</a> >
+        <a href="{:Url('regionlvlIndex')}">产区分级列表</a> >
+        添加产区分级
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('regionlvlAdd')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">缩写名</th>
+                        <td>
+                            <input name="sname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>外文名</th>
+                        <td>
+                            <input name="fname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>中文名</th>
+                        <td>
+                            <input name="cname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属国家</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="country_text" type="text" size="80" value="" class="measure-input" />
+                                <input id="country_id" name="country_id" type="hidden" value="0"/>
+                                <span id="country_s" class="autocomplete-sel" onclick="country_s();"></span>
+                                <span id="country_x" class="autocomplete-del" onclick="country_x();"></span>
+                            </div>
+                            <span class="msg_span">[必选]</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" />开启</label>
+                <label><input type="radio" name="status" value="2" checked/>关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

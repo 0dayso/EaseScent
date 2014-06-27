@@ -1,0 +1,48 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Cover/index')}">封面管理</a> > 修改数据信息</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">返回封面页列表</a>
+        <a class='btn' href="{:Url('blockitem?cid='.$cid)}">返回区块列表</a>
+        <a class='btn' href="{:Url('blockdata?op=list&cid='.$cid.'&blockid='.$blockid)}">返回区块数据列表</a>
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('News/Cover/blockdata?op=edit&blockid='.$blockid.'&cid='.$cid.'&id='.$data['id'])}" method="post" enctype="multipart/form-data">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑"{$block.name}"区块数据</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标题</th>
+                        <td><input type="text" size="40" name="title" value="{$data.title}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">描述</th>
+                        <td>
+                            <textarea name="description" style="width:90%;height:40px">{$data.description}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">链接</th>
+                        <td><input type="text" size="40" name="url" value="{$data.url}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">图片</th>
+                        <td>
+                            <img style="border:1px solid #dedede; padding:1px; margin:2px;" width="120" height="120" src="<if condition="$data.image eq ''">__PUBLIC__/common/images/news/nopic.png<else />__UPLOAD__/News/{$data.image}</if>">&nbsp;是否删除该图: <input type="radio" name="delpic" value=1>删除&nbsp;&nbsp;<input type="radio" name="delpic" checked value=0>不删除 <br/> 
+                            <input type="file" name="image"></td>
+                    </tr>
+                    <tr>
+                        <th width="130">排序</th>
+                        <td><input type="text" size="10" name="display" value="{$data.display}" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

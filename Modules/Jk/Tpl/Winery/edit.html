@@ -1,0 +1,423 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+KindEditor.ready(function(K) {
+    var editor = K.create("#content", {
+        uploadJson:         "{:Url('upload')}",
+        allowFileManager:   false,
+        afterBlur:          function(){this.sync()}
+    });
+});
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+    $('#updimg').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#updimg_msg").text(progress + '%');
+        },
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html = '<div class="selbox"><input name="imgs[]" type="hidden" value="'+data.result.img+'" /><img src="{:C(\'UPLOAD_URL\')}Winery/images/'+data.result.img+'" /><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#updimg_box").append(html);
+            }
+            //拖拽排序
+            $( "#updimg_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+            $( "#updimg_box" ).disableSelection();
+            //拖拽排序end
+        }
+    });
+    //拖拽排序
+    $( "#updimg_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+    $( "#updimg_box" ).disableSelection();
+    //拖拽排序end
+});
+
+//country_autocomplete
+$(function(){
+    $("#country_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getCountryForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#country_id").val(ui.item.id);
+            $("#country_s").css('z-index',-1);
+            $("#country_x").css('z-index',1);
+        },
+    });
+});
+function country_s(){
+    $("#country_text").focus();
+    $("#country_text").autocomplete("search", "");
+}
+function country_x(){
+    $("#country_id").val(0);
+    $("#country_text").val('').attr('disabled',false);
+    $("#country_x").css('z-index',-1);
+    $("#country_s").css('z-index',1);
+}
+//country_autocomplete/
+//grape_autocomplete
+$(function(){
+    $("#grape_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getGrapeForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            if($("#grape_box").find("input[value='"+ui.item.id+"']").length == 0){
+                var html = '<div class="selbox"><input name="grapes[]" type="hidden" value="'+ui.item.id+'" /><div><span>'+ui.item.label+'</span>&nbsp;<input name="grapes_percent[]" type="text" size="2" class="measure-input"/>%</div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#grape_box").append(html);
+            }
+        },
+        close: function(event, ui){
+            $(this).val('');
+        }
+    });
+});
+function grape_s(){
+    $("#grape_text").focus();
+    $("#grape_text").autocomplete("search", "");
+}
+//grape_autocomplete/
+//wineryhnr_autocomplete
+function sel_wineryhnr(this1){
+    var id = $(this1).val();
+    if((id != 0) && ($("#wineryhnr_box").find("input[value='"+id+"']").length == 0)){
+        var text = $(this1).find("option:selected").attr('text');
+        var html = '<div class="selbox"><input name="wineryhnrs[]" type="hidden" value="'+id+'" /><div><span>'+text+'</span></div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+        $("#wineryhnr_box").append(html);
+    }
+    $(this1).val(0);
+}
+//wineryhnr_autocomplete/
+//baidumap
+function open_baidu_map(){
+    var iframe_src = "{:Url('Common/baiduMap')}";
+    art.dialog({
+        id: 'baidu_map',
+        content: '<iframe src="'+iframe_src+'" width="600px" height="500px"></iframe>',
+        lock: true,
+    });
+}
+function close_baidu_map(lng,lat){
+    art.dialog({id:'baidu_map'}).close();
+    $("input[name='baidu_longitude']").val(lng);
+    $("input[name='baidu_latitude']").val(lat);
+    $("#baidu_maps").html('<img src="http://api.map.baidu.com/staticimage?width=300&height=200&markers='+lng+','+lat+'&zoom=15" />&nbsp;&nbsp;<img src="http://api.map.baidu.com/staticimage?width=300&height=200&markers='+lng+','+lat+'&zoom=12" />&nbsp;&nbsp;<img src="http://api.map.baidu.com/staticimage?width=300&height=200&markers='+lng+','+lat+'&zoom=9" />');
+}
+//baidumap/
+//googlemap
+function open_google_map(){
+    var iframe_src = "{:Url('Common/googleMap')}";
+    art.dialog({
+        id: 'google_map',
+        content: '<iframe src="'+iframe_src+'" width="600px" height="500px"></iframe>',
+        lock: true,
+    });
+}
+function close_google_map(lng,lat){
+    art.dialog({id:'google_map'}).close();
+    $("input[name='google_longitude']").val(lng);
+    $("input[name='google_latitude']").val(lat);
+    $("#google_maps").html('<img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=300x200&markers='+lat+','+lng+'&zoom=15" />&nbsp;&nbsp;<img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=300x200&markers='+lat+','+lng+'&zoom=12" />&nbsp;&nbsp;<img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=300x200&markers='+lat+','+lng+'&zoom=9" />');
+}
+//googlemap/
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Jk/Index/index')}">酒库源数据管理</a> >
+        <a href="{:Url('index')}">酒庄列表</a> >
+        修改酒庄
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('edit')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <input name="id" type="hidden" value="{$res.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">关联属性</li>
+                <li id="tab_setting_3" onclick="SwapTab('tab_setting_3','tab_3');">seo相关</li>
+                <li id="tab_setting_4" onclick="SwapTab('tab_setting_4','tab_4');">相关图片</li>
+                <li id="tab_setting_5" onclick="SwapTab('tab_setting_5','tab_5');">位置信息</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">外文名</th>
+                        <td>
+                            <input name="fname" type="text" size="80" value="{$res.fname}" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>英文名</th>
+                        <td>
+                            <input name="ename" type="text" size="80" value="{$res.ename}" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>中文名</th>
+                        <td>
+                            <input name="cname" type="text" size="80" value="{$res.cname}" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>别名</th>
+                        <td><textarea name="aname" style="width:500px; height:20px;">{$res.aname}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>面积</th>
+                        <td><input name="acreage" type="text" size="80" value="{$res.acreage}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>平均树龄</th>
+                        <td><input name="tree_age" type="text" size="80" value="{$res.tree_age}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>年产量</th>
+                        <td><input name="yield" type="text" size="80" value="{$res.yield}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>橡木桶贮藏时间</th>
+                        <td><input name="oak_storage_duration" type="text" size="80" value="{$res.oak_storage_duration}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>联系方式</th>
+                        <td><input name="tel" type="text" size="80" value="{$res.tel}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>官方网址</th>
+                        <td><input name="web_url" type="text" size="80" value="{$res.web_url}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>博客/微博网址</th>
+                        <td><input name="blog_url" type="text" size="80" value="{$res.blog_url}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>地址</th>
+                        <td><input name="address" type="text" size="80" value="{$res.address}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>简介</th>
+                        <td><textarea name="description" style="width:500px; height:50px;">{$res.description}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>内容</th>
+                        <td><textarea id="content" name="content" style="width:700px; height:400px;">{$res.content}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">所属国家</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <if condition="$res['country_res']">
+                                <input id="country_text" type="text" size="80" value="{$res.country_res.fname} {$res.country_res.cname}" class="measure-input" disabled />
+                                <input id="country_id" name="country_id" type="hidden" value="{$res.country_id}"/>
+                                <span id="country_s" class="autocomplete-sel" onclick="country_s();" style="z-index:-1;"></span>
+                                <span id="country_x" class="autocomplete-del" onclick="country_x();" style="z-index:1;"></span>
+                                <else/>
+                                <input id="country_text" type="text" size="80" value="" class="measure-input" />
+                                <input id="country_id" name="country_id" type="hidden" value="0"/>
+                                <span id="country_s" class="autocomplete-sel" onclick="country_s();"></span>
+                                <span id="country_x" class="autocomplete-del" onclick="country_x();"></span>
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>相关葡萄品种（多选）</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="grape_text" type="text" size="80" value="" class="measure-input" />
+                                <span id="grape_s" class="autocomplete-sel" onclick="grape_s();"></span>
+                            </div>
+                            <div id="grape_box">
+                                <volist name="res.grape_res" id="vo">
+                                <div class="selbox">
+                                    <input name="grapes[]" type="hidden" value="{$vo.id}" />
+                                    <div><span>{$vo.fname} {$vo.cname}</span>&nbsp;<input name="grapes_percent[]" type="text" size="2" value="{$vo.percent}" class="measure-input"/>%</div>
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                                </volist>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>相关荣誉（多选）</th>
+                        <td>
+                            <select onchange="sel_wineryhnr(this)">
+                                <option value="0"></volist>
+                                <volist name="wineryhnr_treelist" id="vo">
+                                <option value="{$vo.id}" text="{$vo.value}">{$vo.prefix}{$vo.value}</option>
+                                </volist>
+                            </select>
+                            <div id="wineryhnr_box">
+                                <volist name="res.wineryhnr_res" id="vo">
+                                <div class="selbox">
+                                    <input name="wineryhnrs[]" type="hidden" value="{$vo.id}" />
+                                    <div><span>{$vo.fname} {$vo.cname}</span></div>
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                                </volist>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_3" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">seo 标题</th>
+                        <td><input name="seo_t" type="text" size="80" value="{$res.seo_t}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>seo 关键字</th>
+                        <td><textarea name="seo_k" style="width:500px; height:50px;">{$res.seo_k}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>seo 描述</th>
+                        <td><textarea name="seo_d" style="width:500px; height:50px;">{$res.seo_d}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_4" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">相关图片（多选）</th>
+                        <td>
+                            <input id="updimg" name="updimg" type="file" multiple />
+                            <span id="updimg_msg"></span>
+                            <div id="updimg_box">
+                                <volist name="res.img_res" id="vo">
+                                <div class="selbox">
+                                    <input name="imgs[]" type="hidden" value="{$vo.img}" />
+                                    <img src="{:C('UPLOAD_URL')}Winery/images/{$vo.img}" />
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                                </volist>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_5" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">百度地图</th>
+                        <td>
+                            <a href="javascript:open_baidu_map();">标记地图</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">百度地图经纬度</th>
+                        <td>
+                            <input name="baidu_longitude" type="text" value="{$res.baidu_longitude}" class="measure-input" readonly />,
+                            <input name="baidu_latitude" type="text" value="{$res.baidu_latitude}" class="measure-input" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">百度地图示例</th>
+                        <td>
+                            <div id="baidu_maps">
+                                <if condition="($res['baidu_longitude'] neq 0) AND ($res['baidu_latitude'] neq 0)">
+                                <img src="http://api.map.baidu.com/staticimage?width=300&height=200&markers={$res.baidu_longitude},{$res.baidu_latitude}&zoom=15" />&nbsp;&nbsp;
+                                <img src="http://api.map.baidu.com/staticimage?width=300&height=200&markers={$res.baidu_longitude},{$res.baidu_latitude}&zoom=12" />&nbsp;&nbsp;
+                                <img src="http://api.map.baidu.com/staticimage?width=300&height=200&markers={$res.baidu_longitude},{$res.baidu_latitude}&zoom=9" />
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>谷歌地图</th>
+                        <td>
+                            <a href="javascript:open_google_map();">标记地图</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">谷歌地图经纬度</th>
+                        <td>
+                            <input name="google_longitude" type="text" value="{$res.google_longitude}" class="measure-input" readonly />,
+                            <input name="google_latitude" type="text" value="{$res.google_latitude}" class="measure-input" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">谷歌地图示例</th>
+                        <td>
+                            <div id="google_maps">
+                                <if condition="($res['google_longitude'] neq 0) AND ($res['google_latitude'] neq 0)">
+                                <img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=300x200&markers={$res.google_latitude},{$res.google_longitude}&zoom=15" />&nbsp;&nbsp;
+                                <img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=300x200&markers={$res.google_latitude},{$res.google_longitude}&zoom=12" />&nbsp;&nbsp;
+                                <img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=300x200&markers={$res.google_latitude},{$res.google_longitude}&zoom=9" />
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" <if condition="$res['status'] eq 3">checked</if> />开启</label>
+                <label><input type="radio" name="status" value="2" <if condition="$res['status'] eq 2">checked</if> />关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

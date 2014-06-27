@@ -1,0 +1,67 @@
+<include file="Common:header" />
+<include file="Common:wine_city" />
+<div class="wine_main">
+	<div class="m_main_l">
+		<div class="m_preson">
+			<img src="{$myface}"/>
+			<span>{$userinfo.nick_name}</span>
+		</div>
+	</div>
+	<div class="m_main_r">
+		<div class="m_main_r_t">
+			<a href="/index.php?m=User&a=myInsert">我关注过的活动（<var>{$joincount}</var>次）</a>
+			<a href="index.php?m=User&a=my" class="m_r_t_a">我发布过的活动（<var>{$myPartyCount}</var>次）</a>
+		</div>
+		<div class="m_party_box">
+            <volist name="myParty" id="my">
+			<div class="m_party_mod" id="party_{$my.id}">
+				<div class="party_list_img">
+                     
+                    <if condition="$my.is_show neq 0">
+					<a href="/index.php?m=Detail&a=index&id={$my.id}"><img src="__UPLOAD__/party/images/{$my.id}/s_.{$my.pictype}"/></a>
+                    <else />
+                    <img src="__ROOT__/Common/images/partycreate/{$my.id}/s_.{$my.pictype}"/>
+                    </if>
+                    <if condition="$my.is_bar eq 1">
+                    <span></span>
+                    </if>
+				</div>
+				<dl class="party_list_con">
+					<dt>{$my.weigui}
+                    <if condition="$my.stop eq 1">
+						<var>已结束</var>
+                    </if>
+                    <if condition="$my.is_show eq 0">
+						<a href="__ROOT__/Detail/index/id/{$my.id}">{$my.title}</a>
+                    <else />
+                        {$my.title}
+                    </if>
+					</dt>
+					<dd>时间：<var>{$my.start.data} {$my.start.hour} - {$my.end.data} {$my.end.hour}</var></dd>
+					<dd>地点：<span>{$my.address_info}</span></dd>
+                    <if condition="$ismoney eq 1">
+					<dd>价格：<b>免费</b></dd>
+                    <else/>
+                    <dd>价格: <b>{$my.markprice}</b></dd>
+                    </if>
+					<dd><span>{$my.insertUser}</span>人关注</dd>
+				</dl>
+				<div class="party_manag"><!-- 当切换到参加过的时候这块没有 -->
+                    <if condition="($my.insertUser eq 0) or ($my.is_show eq 0)">
+					<a href="javascript:;" onclick="close_wine({$my.id})">删除活动</a>
+					<a href="/index.php/Create/edit/id/{$my.id}" class="party_manag_a">编辑活动</a>
+                    </if>
+                    <if condition="$my.stop eq 1">
+					<a href="/index.php/Img/index/id/{$my.id}">上传活动照片</a>
+                    </if>
+				</div>
+			</div>
+            </volist>
+
+		</div>
+        <div style="width:800px;text-align:center;">{$myPage}</div>
+	</div>
+</div>
+<include file="Common:footer" />
+
+

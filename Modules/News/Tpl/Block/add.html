@@ -1,0 +1,33 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Block/index')}">推荐位列表</a> > 增加新推荐位</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">推荐位列表</a>
+    </div>
+    <div class="list-menu">
+        推荐位由编辑在发布或修改文章时推送数据，不会自动更新；
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('News/Block/add')}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加推荐位</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">推荐位名称</th>
+                        <td><input type="text" size="80" name="name" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">模板</th>
+                        <td><textarea style="width:60%;height:120px" name="tpl"></textarea> <br/>推荐位模板HTML（支持TP模板解析）<br/>数据数组为 $blockdata</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

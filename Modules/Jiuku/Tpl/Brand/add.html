@@ -1,0 +1,248 @@
+<include file="Common:cpheader2" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'再次添加',callback:function(){window.location.href = window.location.href;}},
+                    {name:'复制添加'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭窗口'}
+                );
+            }
+        }
+    });
+    $('#updimg').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#updimg_msg").text(progress + '%');
+        },
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html = '<div class="selbox"><input name="imgs[]" type="hidden" value="'+data.result.img+'" /><img src="{:C(\'DOMAIN.UPLOAD\')}Jiuku/Brand/images/'+data.result.img+'" /><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#updimg_box").append(html);
+            }
+            //拖拽排序
+            $( "#updimg_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+            $( "#updimg_box" ).disableSelection();
+            //拖拽排序end
+        }
+    });
+});
+//relation1_autocomplete
+$(function(){
+    $("#relation1_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#relation1_l").css('z-index',1);
+            $.post("{:Url('OutAcAjax/getHWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.value}
+                    }));
+                }
+                $("#relation1_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            if($("#relation1_box").find("div[key='1_"+ui.item.id+"']").length == 0){
+                var html = '<div class="selbox" key="1_'+ui.item.id+'" ><input name="relation_id[]" type="hidden" value="'+ui.item.id+'" /><div><span>'+ui.item.label+'</span></div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#relation1_box").append(html);
+            }
+        },
+        close: function(event, ui){
+            $(this).val('');
+        }
+    });
+});
+function relation1_s(){
+    $("#relation1_text").focus().autocomplete("search", "");
+}
+//relation1_autocomplete/
+//relation2_autocomplete
+$(function(){
+    $("#relation2_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#relation2_l").css('z-index',1);
+            $.post("{:Url('OutAcAjax/getBWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.value}
+                    }));
+                }
+                $("#relation2_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            if($("#relation2_box").find("div[key='2_"+ui.item.id+"']").length == 0){
+                var html = '<div class="selbox" key="2_'+ui.item.id+'" ><input name="relation_id[]" type="hidden" value="'+ui.item.id+'" /><div><span>'+ui.item.label+'</span></div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#relation2_box").append(html);
+            }
+        },
+        close: function(event, ui){
+            $(this).val('');
+        }
+    });
+});
+function relation2_s(){
+    $("#relation2_text").focus().autocomplete("search", "");
+}
+//relation2_autocomplete/
+//relation3_autocomplete
+$(function(){
+    $("#relation3_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#relation3_l").css('z-index',1);
+            $.post("{:Url('OutAcAjax/getLWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.value}
+                    }));
+                }
+                $("#relation3_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            if($("#relation3_box").find("div[key='3_"+ui.item.id+"']").length == 0){
+                var html = '<div class="selbox" key="3_'+ui.item.id+'" ><input name="relation_id[]" type="hidden" value="'+ui.item.id+'" /><div><span>'+ui.item.label+'</span></div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#relation3_box").append(html);
+            }
+        },
+        close: function(event, ui){
+            $(this).val('');
+        }
+    });
+});
+function relation3_s(){
+    $("#relation3_text").focus().autocomplete("search", "");
+}
+//relation2_autocomplete/
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库管理</a> >
+        <a href="{:Url('index')}">品牌列表</a> >
+        添加品牌
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('add')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">关联数据</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">外文名</th>
+                        <td>
+                            <input name="fname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>中文名</th>
+                        <td>
+                            <input name="cname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>简介</th>
+                        <td><textarea name="description" style="width:500px; height:50px;"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th width="130">相关图片（多选）</th>
+                        <td>
+                            <input id="updimg" name="updimg" type="file" multiple />
+                            <span id="updimg_msg">可拖拽排序</span>
+                            <div id="updimg_box"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none;">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th>关联红酒</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="relation1_text" type="text" size="80" value="" class="measure-input" />
+                                <span id="relation1_l" class="autocomplete-loading"></span> 
+                                <span id="relation1_s" class="autocomplete-sel" onclick="relation1_s();"></span>
+                            </div>
+                            <div id="relation1_box"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>关联白酒</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="relation2_text" type="text" size="80" value="" class="measure-input" />
+                                <span id="relation2_l" class="autocomplete-loading"></span> 
+                                <span id="relation2_s" class="autocomplete-sel" onclick="relation2_s();"></span>
+                            </div>
+                            <div id="relation2_box"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>关联洋酒</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="relation3_text" type="text" size="80" value="" class="measure-input" />
+                                <span id="relation3_l" class="autocomplete-loading"></span> 
+                                <span id="relation3_s" class="autocomplete-sel" onclick="relation3_s();"></span>
+                            </div>
+                            <div id="relation3_box"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" />开启</label>
+                <label><input type="radio" name="status" value="2" checked/>关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter2" />

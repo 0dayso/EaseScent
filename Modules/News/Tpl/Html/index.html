@@ -1,0 +1,86 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('News/Index/index')}">资讯管理</a> > 更新静态</div>
+    <div class="list-menu">
+        <a class='btn' id="showListsNav" href="#">更新资讯栏目列表页</a>
+        <a class='btn' id="showLists2Nav" href="#">更新资讯内容页</a>
+    </div>
+    <div class="form" id="showListsNav-show" style="display:none">
+        <form name="myform" action="{:Url('News/Html/listsHtml')}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">更新资讯频道列表页</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">选择栏目</th>
+                        <td>
+                            <select multiple="true" name="catid[]">
+                                <volist name="cate" id="cat">
+                                <option value="{$cat['catid']}">{$cat['name']}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>生成深度</th>
+                        <td><input type="text" size="10" name="pages" value="10" class="measure-input"/> 页 </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+    <div class="form" id="showLists2Nav-show" style="display:none">
+		<form name="myform" action="{:Url('News/Html/pubHtml?op=run')}" method="post">
+            <ul class="tabBut cu-li">
+                <li class="on">生成选项</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">栏目</th>
+						<td>
+                            <select name="catid">
+                                <option value="0">更新所有</option>
+                                <volist name="cate" id="cat">
+                                <option value="{$cat['catid']}">{$cat['name']}</option>
+                                </volist>
+							</select>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">起始时间</th>
+                        <td><input type="text" size="30" name="btime" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">结束时间</th>
+                        <td><input type="text" size="30" name="etime" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">每次生成文章数</th>
+                        <td><input type="text" size="30" name="limit" value="10" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    (function($){
+        $('#showListsNav').click(function(){
+            $('#showListsNav-show').show();
+            $('#showLists2Nav-show').hide();
+        });
+        $('#showLists2Nav').click(function(){
+            $('#showLists2Nav-show').show();
+            $('#showListsNav-show').hide();
+        });
+    })($);
+</script>
+<include file="Common:cpfooter" />

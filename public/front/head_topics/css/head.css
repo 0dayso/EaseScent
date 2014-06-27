@@ -1,0 +1,47 @@
+
+@charset "utf-8";
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, pic, section, span {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "宋体";
+    font-size: 14px;
+}
+ul {
+    list-style: none outside none;
+}
+a {
+    text-decoration: none;
+    color:black;
+}
+img {
+    border: 0 none;
+}
+h3 {
+    color: #000000;
+    font-size: 14px;
+    line-height: 28px;
+}
+var,em {font-style:normal;}
+.clear {
+}
+.clear:after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.TONG{width:1000px;margin:0 auto;background-color:#fff;padding-bottom:5px;}
+.head-box{width:100%; padding-top:2px;}
+.head-index{line-height:15px;overflow:hidden;}
+.head-index h1{float:left;width:85px;margin-right:14px;display:inline;}
+.head-index a{float:left;color:#1C1C1C;font-size:12px;display:inline;}
+.head-index var{float:left;color:#B7B7B7;padding:0 13px;}
+.head-index #loginDiv a{font-size:12px;color:#6C6C6C;}
+
+
+.foot{ height:36px; line-height:36px; text-align:center; background:#333333; color:#616161; font-size:12px; font-family:"宋体";}
+.foot a{ color:#FFF;}
+.foot a:hover{ text-decoration:underline;}

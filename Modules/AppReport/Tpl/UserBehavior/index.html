@@ -1,0 +1,131 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('AppReport/Index/index')}">终端报表</a> >
+        用户-用户行为</div>
+        <!-- <a href="/index.php?app=AppReport&m=UserBehavior&a=test">展示</a> -->
+   <!--  <div class="list-menu">
+        <a class='btn' href="{:Url('add')}">发布新文章</a>
+    </div> -->
+    <div class="div-box-default">
+        <select>
+            <volist name="_applist" id="vo">
+            <option value="{$vo.id}">{$vo.name}</option>
+            </volist>
+        </select>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tbody>
+                <tr height="20pz";>
+                    <td width="">                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <!-- 标题：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" /> -->
+                        &nbsp;&nbsp;
+                        <a href="#" class="choose" value='1'>昨天</a>&nbsp;
+                        <a href="#" class="choose" value='7'>近7日</a>&nbsp;
+                        <a href="#" class="choose" value='30'>近30日</a>&nbsp;
+                        &nbsp;&nbsp;
+                        
+                        <input name="btime" id="btime" size="20" type="text" value="{$_REQUEST['btime']}" class="input-text" />
+                        -&nbsp;
+                        <input name="etime" id="etime" size="20" type="text" value="{$_REQUEST['etime']}" class="input-text" />
+                            <script type="text/javascript">
+                                Calendar.setup({
+                                    inputField : "btime",
+                                    trigger    : "btime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d"
+                                });
+                                Calendar.setup({
+                                    inputField : "etime",
+                                    trigger    : "etime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d"
+                                });
+                            </script>
+                        &nbsp;&nbsp;
+                        <!-- 状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">通过审核</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">待审核</option>
+                        </select>
+                        &nbsp;&nbsp; -->
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="list"> 
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>触发事件</th>
+                    <th>发生次数</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+               <foreach name='data' item='vo'>
+                <tr>
+                    <td>{$vo.id} {$vo.acitve}</td>
+                    <td>{$vo.times}</td>
+                </tr>
+                </foreach>
+            </volist>
+        </tbody>
+        </table>
+     <div class="pages">{$page}</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".div-box-default").change(function(){
+            var val=$(".div-box-default option:selected").val();     
+           
+           str="<iframe src='/index.php?app=AppReport&m=UserBehavior&a=ios_userbeh&type="+val+"' width='1024' height='500px'></iframe>";
+           
+           $(".list").empty();
+           $(".list").html(str);
+        });
+       
+        $(".choose").click(function(){
+            var val=$(this).attr('value');
+            var type=$(".div-box-default option:selected").val();
+       str="<iframe src='/index.php?app=AppReport&m=UserBehavior&a=near_data&type="+type+"&time="+val+"' width='1024' height='500px'></iframe>";
+           $(".list").empty();
+           $(".list").html(str);
+           //alert(str);
+            
+        });
+
+        $(".btn").click(function(){
+            var type=$(".div-box-default option:selected").val();
+             var stime=$("#btime").val();
+             var etime=$("#etime").val();
+                 // var stime_u=stime.replace(/-/g,'/');
+                 // var etime_u=etime.replace(/-/g,'/');
+                 // var date_s = new Date(stime_u);
+                 // var date_e = new Date(stime_u);
+                 // alert(date_e);
+            if(stime =='' || etime==''){
+                return false;
+            }else{
+                $(".list").empty();
+            var str_fream="<iframe src='/index.php?app=AppReport&m=UserBehavior&a=get_record&type="+type+"&stime="+stime+"&etime="+etime+"' width='1024px' height='500px'></iframe>";
+           $(".list").html(str_fream);
+            }  
+        });
+    });
+</script>
+<include file="Common:cpfooter" />

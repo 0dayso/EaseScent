@@ -1,0 +1,146 @@
+<include file="Common:cpheader" />
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/kindeditor-min.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/zh_CN.js"></script>
+<script language="javascript">
+var editor;
+var imgbtn;
+KindEditor.ready(function(K) {
+	editor = K.create("#content", {
+		uploadJson:			"{:Url('upload')}&type=Agents/uploads",
+		allowFileManager:	false,
+		afterBlur:			function(){this.sync()}
+	});
+
+	imgbtn = K.uploadbutton({
+		button : K('#imgbtn')[0],
+		fieldName : 'imgFile',
+		url : "{:Url('upload')}&type=Agents/images",
+		afterUpload : function(data) {
+			if (data.error === 0) {
+				var html ='<div class="selected_box"><input name="img_filename[]" type="hidden" value="'+data.filename+'" /><img src="'+data.url+'" /><div><p><var>描述</var><input name="img_description[]" type="text" /></p><p><var>ALT</var><input name="img_alt[]" type="text" /></p><p><var>排序</var><input name="img_queue[]" type="text" /></p></div><span class="del_selected" onclick="imgbox_del(this);"></span></div>';
+				$("#img_list_box").append(html);
+			}
+		}
+	});
+	$(":input[name='imgFile']").css('width','72px');
+	imgbtn.fileBox.change(function(e) {
+		imgbtn.submit();
+	});
+});
+function imgbox_del(this1){
+	$(this1).parent().remove();
+}
+</script>
+
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<style>
+.selector_msg{
+	color:red;
+}
+.selector_expand{
+	display:none;
+}
+.table-form1:hover{
+	background: #fbffe4;
+}
+#store_sales_list img{
+	height:85px;
+};
+</style>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/checkSubmit.js"></script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">总代理申请列表</a> > 总代理申请详情</div>
+    <div class="form">
+		<form name="myform" action="{:Url('method_do')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="rpp" value="{$rpp}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">企业外文名称</th>
+                        <td>{$list.fname}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">企业中文名称</th>
+                        <td>{$list.cname}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">企业地址</th>
+                        <td>{$list.address}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">登录账号</th>
+                        <td>{$list.zhanghao}|待解决</td>
+                    </tr>
+                    <tr>
+                        <th width="130">企业电话</th>
+                        <td>{$list.tel}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">认证资料</th>
+                        <td>{$list.method_data}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">申请类型</th>
+                        <td><if condition="$list.auth_method eq 1" ><font color="red">资质图片</font><elseif condition="$list.auth_method eq 2" /><font color="red">电子邮件验证</font><else /><font color="red">酒庄官网信息验证</font></if></td>
+                    </tr>
+                    <tr>
+                        <th width="130">申请类型</th>
+                        <td>
+                            <if condition="$list.type eq 1">按品牌申请总代理<else />按酒款申请总代理</if>&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">申请的品牌/酒款</th>
+                        <if condition="$list.type eq 1">
+                        <td>{$list.winery_fname}<if condition="$list.winery_cname neq ''"> / {$list.winery_cname}</if></td>
+                        <else />
+                        <td>{$list.wine_fname}<if condition="$list.winery_cname neq ''"> / {$list.wine_cname}</if></td>
+                        </if>
+                    </tr>
+                    <if condition="$abne neq ''">
+                    <tr>
+                        <th width="130">认证异常</th>
+                        <td>
+                            <table width="100%" cellspacing="0" border="1">
+                                <tr>
+                                    <th width="30">选择</th>
+                                    <th width="400" text-align="center">已存在总代理的酒款</th>
+                                    <th text-align="center">总代理资格所属企业</th>
+                                </tr>
+                                <volist name="abn" id="abn">
+                                <tr>
+                                    <td><input type="checkbox" checked="checked" value="" id="check_box" onclick="selectAll('ids[]');"></td>
+                                    <td><font color="red">{$abn.wine_fname} <if condition="$abn.wine_cname neq ''">/ {$abn.wine_cname}</if></font></td>
+                                    <td><font color="red"></font>{$abn.fname} <if condition="$abn.cname neq ''">/ {$abn.cname}</if></td>
+                                </tr>
+                                </volist>
+                            </table>
+                        </td>
+                    </tr>
+                    </if>
+                </table>
+            </div>
+            <input type="hidden" name="abn" value="{$abn}" />
+            <input type="hidden" name="aid" value="{$list.agent_id}" />
+            <input type="hidden" name="type" value="{$list.type}" />
+            <input type="hidden" name="type_id" value="{$list.type_id}" />
+            <input type="hidden" name="wine_id" value="{$list.wine_id}" />
+            <input type="hidden" name="winery_id" value="{$list.winery_id}" />
+            <div class="bottom">
+                <if condition="$abn eq ''">
+                <input type="button" class="btn" value="审核通过" onclick="checkSubmit('Method_do');" />
+                <input type="button" class="btn" value="驳回申请" onclick="checkSubmit('Back');" />
+                <else />
+                <input type="button" class="btn" value="更新选择酒款关系并通过审核" onclick="checkSubmit('Method_do');" />
+                <input type="button" class="btn" value="驳回申请" onclick="checkSubmit('Back');" />
+                </if>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

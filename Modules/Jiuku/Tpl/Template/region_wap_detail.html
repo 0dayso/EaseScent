@@ -1,0 +1,135 @@
+<!doctype html>
+<html class="bg" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>产区</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	<link rel="stylesheet" type="text/css" href="{:C('DOMAIN.PUBLIC')}Jiuku/css/region/wap_detail.css">
+	<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}common/js/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}common/js/jquery.touchSwipe.min.js"></script>
+</head>
+<body class="bg">
+<div id="wapwarp">
+	<div id="cqbanner" class="banner">
+		<img src="{$res.img_res.0.url}" alt="">
+	</div>
+	<div class="saycontent">
+		<h3 class="cqtitle">{$res.cname}</h3>
+		<div class="cqmcontent" id="content">
+			{$res.content}
+		</div>
+		<p class="morep"><a id="more" href="#">全文</a></p>
+	</div>
+	<ul id="imgshow">
+		<volist name="res.img_res" id="vo" offset="1" length='3'>
+		<li <if condition="$i eq 3">style="margin-right:0"</if>><img src="{$vo.url}" alt=""></li>
+		</volist>
+	</ul>
+	<div id="opbg"></div>
+	<div id="bigimgshow">
+		<a id="goblack" href="javascript:"></a>
+		<div id="over">
+			<ul id="imgs">
+				<volist name="res.img_res" id="vo" offset="1">
+				<li><img src="{$vo.url}" alt=""></li>
+				</volist>
+			</ul>
+		</div>
+		<p id="imgpages"></p>
+		<a id="downloadbtn" href=""></a>
+	</div>
+</div>
+	<script type="text/javascript">
+	window.onload=function(){
+		var inm=0;
+		var oContent=document.getElementById("content");
+		var oMore=document.getElementById("more");
+		var num=1;
+		var aDownurl = [];
+		<volist name="res.img_res" id="vo" offset="1">
+		aDownurl.push("{$vo.url}");
+		</volist>
+		oMore.onclick=function(){
+			if(num==1){
+				oContent.style.height="auto";
+				this.innerHTML="收起";
+				num=2;
+			}
+			else
+			{
+				oContent.style.height=124+'px';
+				this.innerHTML="全文";
+				num=1;
+			}
+
+		};
+
+
+		var oimgshow=document.getElementById("imgshow").getElementsByTagName("li");
+		var obigimgshow=document.getElementById("bigimgshow");
+		var opbg=document.getElementById("opbg");
+		var bigimgLi=$("#imgs li");
+		var pImgbox=$("#bigimgshow");
+		var aBigImages=$("#imgs img");
+		var oWidth=pImgbox.width();
+		var oLength=aBigImages.length;
+		var oImg=$("#imgs");
+		bigimgLi.width(pImgbox.width()+'px');
+		var oPages=$("#imgpages");
+		var oDownloadbtn=$("#downloadbtn");
+		oPages.text((inm+1)+'/'+oLength);
+		oImg.width(oLength*oWidth+'px');
+	      oImg.swipe( {
+	        swipe:function(event, direction, distance, duration, fingerCount) {
+	       		if(direction=="left")
+	       		{
+	       			if(inm<oLength-1){
+						inm++;
+		       			oImg.animate({"left": -oWidth*inm+'px'}, 200);
+		       			oPages.text((inm+1)+'/'+oLength);
+		       			oDownloadbtn.attr({"href":aDownurl[inm]});
+	       			}
+	       			else
+	       			{
+	       				alert("已经是最后一张了")
+	       			}
+	       		}
+	       		if(direction=="right"){
+	       			if(inm!=0){
+	       				inm--;
+		       			oImg.animate({"left": -oWidth*inm+'px'}, 200);
+		       			oPages.text((inm+1)+'/'+oLength);
+		       			oDownloadbtn.attr({"href":aDownurl[inm]});
+	       			}
+	       			else
+	       			{
+	       				alert("已经是第一张了")
+	       			}
+	       		}
+	        },
+	        threshold:0,
+	        fingers:'all'
+	      });
+   		for(var i=0;i<oimgshow.length;i++)
+		{
+			oimgshow[i].onclick=function(){
+				opbg.style.display="block";
+				obigimgshow.style.display="block";
+				inm=$(this).index();
+				oDownloadbtn.attr({"href":aDownurl[inm]});
+				oImg.animate({"left": -oWidth*inm+'px'}, 10);
+				oPages.text((inm+1)+'/'+oLength);
+
+			}
+		};
+		$("#goblack").click(function(){
+			opbg.style.display="none";
+			obigimgshow.style.display="none";
+		})
+		function documentHeight(){
+	    return Math.max(document.documentElement.scrollHeight || document.body.scrollHeight,document.documentElement.clientHeight);
+	}
+	}
+	</script>
+</body>
+</html>

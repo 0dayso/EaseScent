@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="keywords" content="{$seo_k}" />
+<meta name="description" content="{$seo_d}" />
+<title>{$seo_t}</title>
+<!--逸香网头部引用文件--><!--#include virtual="/_Block/6.html"-->
+<script type="text/javascript">
+var __upload_domain = "{:C('DOMAIN.UPLOAD')}";
+var __region_domain = "{:C('DOMAIN.REGION')}";
+</script>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}Jiuku/js/region/index.js"></script>
+<link href="{:C('DOMAIN.PUBLIC')}Jiuku/css/region/index.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<!--逸香网头部html--><!--#include virtual="/_Block/7.html"-->
+<div class="w_adv">
+<!-- 广告位：产区首页 顶部通栏 -->
+<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "445225";</script>
+<script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+</div>
+<div class="w_main2">
+	<div class="w_part1">
+		<div class="w_con1">
+			<!--<div class="w_search">
+				<form id="myform2" target="_blank" action="__REGION__/RegionList" name="myform2" method="post">
+            	<input type="image" src="{:C('DOMAIN.PUBLIC')}Jiuku/images/region/pic_5.jpg" style="float:right;height:26px;width:54px;margin-right:0;padding:0;" onclick="return check_submit()"/>
+				<input name="region_name" id="region_name" type="text" style="padding-left:10px;height:24px;border:1px #C7C9C8 solid;"/>
+            </form>
+			</div>-->
+			<div class="w_select1">
+            	<em>快速进入：</em>
+                <a href="javascript:jumpr();">&nbsp;</a>
+                <select id="region_2" name="region_2" style="width:200px;" disabled="disabled"></select>
+                <select id="region_1" name="region_1" style="width:200px;" disabled="disabled" onchange="getnr(this.value,2)"></select>
+                <select style="width:160px;" onchange="getr(this.value)" type="c">
+                  <option value="0">请选择</option>
+                  <volist name="res" id="vo">
+                  <option value="{$vo.id}">{$vo.cname}({$vo.fname})</option>
+                  </volist>
+                </select>
+			</div>
+		</div>
+	</div>
+	<div class="w_nav" id="title_list">
+      <div class="w_list">
+        <ul class="w_list_ul" id="w_li">
+          <volist name="res" id="vo" key="k">
+          <li ids="tit_li" id="tit_li_{$vo.id}" <if condition="$k eq 1">class="w_lisp"</if>><a href="javascript:changec({$vo.id});">{$vo.cname}</a><textarea id="data{$vo.id}" fname="{$vo.fname}" cname="{$vo.cname}" desc="{$vo.description}" img="{$vo.img}" style="display:none;">{$vo.json_region}</textarea></li>
+          </volist>
+        </ul>
+      </div>
+      <if condition="count($res) gt 10">
+      <div class="w_click" id="w_cli">
+        <volist name="res" id="vo" key="k" mod="10">
+        <if condition="$mod eq 0"><span <if condition="$k eq 1">class="w_ssp"</if>>&nbsp;</span></if>
+        </volist>
+      </div>
+      </if>
+	</div>
+</div>
+<div class="ww_main">
+	<div class="w_listm">
+    	<div class="w_lef">
+        	<div class="w_rig">
+            	<div class="w_img">
+                	<span><b>&nbsp;</b><var><strong>{$res.0.cname}</strong>&nbsp;&nbsp;{$res.0.fname}</var><em>&nbsp;</em></span>
+                    <img src="{:C('DOMAIN.UPLOAD')}Jiuku/Country/images/{$res.0.img}" alt="{$res.0.cname}({$res.0.fname})" onerror="imgError(this);" />
+                </div>
+            </div>
+        </div>
+        <div class="w_imgcon">
+        	<div class="w_title4">子产区（<?php echo count($res[0]['region']); ?>个）</div>
+            <div class="w_divmod">
+            	<ul class="w_ulmod" id="w_ulshow">
+                    <volist name="res.0.region" id="vo" key="k">
+                    <if condition="$k%2 eq 1"><li></if>
+                        <div><a href="{:C('DOMAIN.REGION')}{$vo.id}.shtml" target="_blank" title="{$vo.cname}({$vo.fname})"><img src="{:C('DOMAIN.UPLOAD')}Jiuku/Region/images/{$vo.img}.80.60" alt="{$vo.cname}({$vo.fname})" onerror="imgError(this);" /><span>{$vo.cname}</span></a></div>
+                    <if condition="($k%2 eq 0) OR ($k eq count($res[0]['region']))"></li></if>
+                    </volist>
+                </ul>
+            </div>
+            <if condition="count($res[0]['region']) gt 10">
+            <div class="w_imgshow" id="w_imgshow">
+            	<volist name="res.0.region" id="vo" key="k">
+                <if condition="$k%10 eq 1"><span <if condition="$k eq 1">class="w_spspan"</if>>&nbsp;</span></if>
+                </volist>
+            </div>
+            </if>
+            <div class="w_exp"><p>{$res.0.description}</p><div><a href="{:C('DOMAIN.REGION')}c{$res.0.id}.shtml" target="_blank">查看详细</a></div></div>
+        </div>
+	</div>
+</div>
+<div class="level-bottom">
+	<div class="level-bottom-left">
+		<h2 class="level-bottom-h2">我们一直在努力</h2>
+		<ul class="bottom-left-ul">
+        	<li><a href="###">9月1日，产区栏目升级至2.0版</a></li>
+            <li><a href="###">8月26日，产区内容页面加入产区年份评级</a></li>
+            <li><a href="###">7月22日，产区栏目首页从新策划</a></li>
+            <li><a href="###">6月20日，产区栏目页面进行再调整</a></li>
+		</ul>
+	</div>
+	<div class="level-bottom-center">
+		<h2 class="level-bottom-h2">意见反馈</h2>
+		<p>为了葡萄酒产区栏目进一步发展，给大家提供更好的服务，欢迎大家来这里反馈您的建议和意见！我们将随时收集大家的建议，及时进行升级改进。</p>
+		<a href="mailto:editor@wine.cn">editor@wine.cn</a>
+	</div>
+	<div class="level-bottom-right">
+		<h2 class="level-bottom-h2">关注微博</h2>
+		<p>关注逸香葡萄酒产区的官方微博，为您推送产区相关知识，与大家互动，给我们反馈关于名庄产品的意见，可及时了解产区更新进程。</p>
+		<a href="http://weibo.com/graperegion" target="_blank"><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/region/index/try-follow.jpg"/></a>
+	</div>
+</div>
+<!--逸香网尾部html--><!--#include virtual="/_Block/8.html"-->
+</body>
+</html>

@@ -1,0 +1,214 @@
+<include file="Common:cpheader" />
+<style type="text/css">
+.notice{
+    width:200px;
+    color:#3A6EA5;
+}
+.red{
+    color:red;
+}
+</style>
+<script type="text/javascript">
+    var t = 0;//初始化计时器
+    var k = 0;
+    $(function(){
+        $("#sms_text").focus(function(){
+            if(t==0){
+                t = setInterval("notice()",500);
+           }
+        });
+       $("#tel_list").focus(function(){
+           if(k==0){
+                k = setInterval("tel_notice()",500);
+          }
+       })
+       /*
+       $("#sendForm").submit(function(){
+             var total = 70;
+             if($.trim($("#client").find("option:selected").text())!="请选择"){
+                var l=parseInt($('#sms_text').val())+parseInt($.trim($("#client").find("option:selected").text()));
+             }else{
+                var l=parseInt($('#sms_text').val());
+             }
+             if(total-l<0){
+                alert("短信的实际长度是加上后缀名称的长度，已经超出"+(l-total)+"个字符!");
+                return false;
+             }
+                return true;
+            })
+    */
+    })
+    function tel_notice(){
+            var chinamobileCount = 0;
+            var chinaUnicomCount = 0;
+            var chinaUnionCount = 0;
+            var chinaPhsCount = 0;
+            var mobileArr = $("#tel_list").val().split("\n");
+            $("#tel_list_notice").text("移动号码【" + chinamobileCount + "】 联通号码【" + chinaUnionCount + "】 电信号码【" + chinaUnicomCount + "】");
+            for (i = 0; i < mobileArr.length; i++) {
+               if (isChinaMobile(mobileArr[i])) {
+                           chinamobileCount++;
+                           $("#tel_list_notice").text("移动号码【" + chinamobileCount + "】 联通号码【" + chinaUnionCount + "】 电信号码【" + chinaUnicomCount + "】");
+                       }
+                       else if (isChinaUnicom(mobileArr[i])) {
+                           chinaUnicomCount++;
+                           var strValue = "电信手机号:" + String(chinaUnicomCount) + "个";
+                           $("#tel_list_notice").text("移动号码【" + chinamobileCount + "】 联通号码【" + chinaUnionCount + "】 电信号码【" + chinaUnicomCount + "】");
+                       }
+                       else if (isChinaUnion(mobileArr[i])) {
+                           chinaUnionCount++;
+                           $("#tel_list_notice").text("移动号码【" + chinamobileCount + "】 联通号码【" + chinaUnionCount + "】 电信号码【" + chinaUnicomCount + "】");
+
+                       }
+                       else if (isChinaPhs(mobileArr[i])) {
+                           chinaPhsCount++;
+                           $("#tel_list_notice").text("移动号码【" + chinamobileCount + "】 联通号码【" + chinaUnionCount + "】 电信号码【" + chinaUnicomCount + "】");
+                       } 
+            }
+        $("#tel_list_notice").css("color","red");
+        $("input[name=tel_count]").val("{\"mobile\":"+chinamobileCount+",\"union\":"+chinaUnionCount+",\"unicom\":"+chinaUnicomCount+"}");
+       }
+    function notice(){
+        /*var total = 70; 
+         var l=parseInt($('#sms_text').val());
+         if(total-l>=0){
+            zh=parseInt((total-l)/2);
+            en=total-l;
+            document.getElementById('shuru').innerHTML='<span class="grey">您还可以输入'+zh+'汉字或'+en+"个英文字符<span>";
+         }else{
+            zh=parseInt((l-total)/2);
+            en=l-total;
+            document.getElementById('shuru').innerHTML='<span class="red">您已经超出'+zh+'汉字或'+en+"个英文字符<span>";
+        }*/
+        var chinamobileLen = 66;
+        var chinaunionLen = chinatelecomLen = 67;
+        var text = $('#sms_text').val();
+        var chinamobileMsgCount = 1;
+        var chinaunionMsgCount = 1;
+        var chinatelecomMsgCount = 1;
+        var chinamobileMsgCount = Math.floor(text.length / chinamobileLen) + ((text.length % chinamobileLen) > 0 ? 1 : 0);
+        var chinaunionMsgCount = Math.floor(text.length / chinaunionLen) + ((text.length % chinaunionLen) > 0 ? 1 : 0);
+        var chinatelecomMsgCount = Math.floor(text.length / chinatelecomLen) + ((text.length % chinatelecomLen) > 0 ? 1 : 0);
+        var textDesc = "输入了【" + String(text.length) + "】个字符 ,移动通道为" + String(chinamobileLen) + "字/条,内容被分割成" + String(chinamobileMsgCount) + "条短信;";
+            textDesc = textDesc + "联通通道为" + String(chinaunionLen) + "字/条,内容被分割成" + String(chinaunionMsgCount) + "条短信;"
+            textDesc = textDesc + "电信通道为" + String(chinatelecomLen) + "字/条,内容被分割成" + String(chinatelecomMsgCount) + "条短信;"
+        $("#shuru").css("color","red");
+        $("#shuru").text(textDesc); 
+        $("input[name=tel_type]").val("{\"mobile\":"+chinamobileMsgCount+",\"union\":"+chinaunionMsgCount+",\"unicom\":"+chinatelecomMsgCount+"}")
+    }
+    function charlen(s)
+    {
+       var w = 0;   
+       for (var i=0; i<s.length; i++)
+       {   
+          var c = s.charCodeAt(i);   
+          //单字节加1   
+           if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f))
+           {   
+                w++;   
+           }   
+           else
+           {   
+                w+=2;   
+           }   
+       }
+       return w;
+    }
+           function isChinaPhs(mobile) {
+               var re = /^0(([1-9]\d)|([3-9]\d{2}))\d{8}$/;
+               if (re.exec(mobile)) {
+                   return true;
+               }
+               return false;
+           }
+           function isChinaMobile(mobile) {
+               var re = /^1((34)|(35)|(36)|(37)|(38)|(39)|(50)|(51)|(52)|(57)|(58)|(59)|(87)|(88)|(47)|(82)|(83))\d{8}$/;
+               var len = mobile.length;
+               if (re.exec(mobile)) {
+                   return true;
+               }
+               return false;
+           }
+           function isChinaUnicom(mobile) {
+               var re = /^1((33)|(53)|(80)|(89)|(81))\d{8}$/;
+               if (re.exec(mobile)) {
+                   return true;
+               }
+               return false;
+           } 
+           function isChinaUnion(mobile) {
+               var re = /^1((30)|(31)|(32)|(55)|(56)|(85)|(86))\d{8}$/;
+               if (re.exec(mobile)) {
+                   return true;
+               }
+               return false;
+           }
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> >  批量发送短信</div>
+    <div class="list">
+        <div class="form">
+             <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on">短信发送</li>
+            </ul>
+
+        <div class="tab-nav" id="tab_1">
+        <form action="/index.php?app=Sms&m=Batch&a=send" method="post" id="sendForm"> 
+            <table class="table-form">
+                <tr>
+                    <td>电话列表:</td>
+                    <td>
+                        <textarea rows="10" cols="40" id="tel_list" name="tel_list"></textarea>
+                    </td>
+                    <td id="tel_list_notice" class="notice">
+                        此内容必须每行一个电话，每输入一行，请回车换行，继续添加电话。
+                    </td>
+                </tr>
+                <tr>
+                    <td>短信内容:</td>
+                    <td>
+                        <textarea rows="10" id="sms_text" cols="40" name="sms_text"></textarea>
+                    </td>
+                    <td class="notice" id="shuru">
+                        短信内容最好保证在70字以内，可确保用户收到单条短信。
+                    </td>
+                </tr>
+                <tr>
+                    <td>选择后缀:</td>
+                    <td>
+                        <select id="client" name="client">
+                            <volist name="list" id="row">
+                                <option value="{$row.id}" 
+                                <if condition="$row.text_suffix eq '请选择'"> selected  </if>>
+                                    {$row.text_suffix}
+                                </option>
+                            </volist>
+                        </select>
+                    </td>
+                    <td class="notice">
+                        如果没有您想要的后缀名，<a href="{:Url('Sms/Client/index')}">点击这里进行添加!</a>
+                    <td>
+                <tr>
+                <tr>
+                    <td>需求人:</td>
+                    <td><input type="text" name="from_user"></td>
+                </tr>
+                <tr>
+                    <td>备注:</td>
+                    <td>
+                        <textarea rows="10" cols="40" name="log"></textarea>
+                    </td>
+                </tr>
+                <tr> 
+                    <input type="hidden" name="tel_count">
+                    <input type="hidden" name="tel_type">   
+                    <td><input type="submit" value="提交"></td>
+                </tr>
+            </table>
+        </form>
+        </div>
+        </div>
+    </div>
+</div>
+
+<include file="Common:cpfooter"/>

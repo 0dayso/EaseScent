@@ -1,0 +1,174 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+function generate_html(how){
+	if($("#stop_generate").attr("val") == 0){
+		$("#msg").html('<span>中止生成</span>');
+		$("#stop_generate").attr("val",1);
+		return false;
+	}
+	if($("#stop_generate").css("display") == 'none'){
+		$("#stop_generate").show();
+	}
+	if(how === 'ini'){
+		$("#msg").html('<span>初始化中...</span>');
+		$.post('?app=Jiuku&m=Region&a=html',{'how':how},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				$("#schedule").html('<span title="待生成国家静态详情页"><var>0</var>/'+msg.result.cyc+'</span>&nbsp;&nbsp;&nbsp;<span title="待生成产区静态详情页"><var>0</var>/'+msg.result.ryc+'</span>&nbsp;&nbsp;&nbsp;<span title="待生成静态首页"><var>0</var>/1</span>&nbsp;&nbsp;&nbsp;<span title="检查清理不需生成的国家静态详情页"><var>0</var>/'+msg.result.cnc+'</span>&nbsp;&nbsp;&nbsp;<span title="检查清理不需生成的产区静态详情页"><var>0</var>/'+msg.result.rnc+'</span>');
+				$("#cyid").val(msg.result.cyid);
+				$("#cnid").val(msg.result.cnid);
+				$("#ryid").val(msg.result.ryid);
+				$("#rnid").val(msg.result.rnid);
+				$("#msg").html('<span>开始生成国家静态详情页...</span>');
+				generate_html('cyid');
+			}else{
+				$("#msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how === 'cyid'){
+		var cyid = $("#cyid").val().split(',',5).join(',');
+		$.post('?app=Jiuku&m=Region&a=html',{'how':how,'id':cyid},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.fcount > 0){
+					$("#msg").html('<span>终止生成!国家静态详情页生成错误。</span>'); return false;
+				}
+				$("#schedule var:eq(0)").text(parseInt($("#schedule var:eq(0)").text())+parseInt(msg.result.scount))
+				$("#cyid").val($("#cyid").val().substr(msg.result.sid.length+1))
+				if($("#cyid").val() == ''){
+					$("#msg").html('<span>开始生成产区静态详情页...</span>');
+					generate_html('ryid');
+				}else{
+					generate_html('cyid');
+				}
+			}else{
+				$("#msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how === 'ryid'){
+		var ryid = $("#ryid").val().split(',',5).join(',');
+		$.post('?app=Jiuku&m=Region&a=html',{'how':how,'id':ryid},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.fcount > 0){
+					$("#msg").html('<span>终止生成!产区静态详情页生成错误。</span>'); return false;
+				}
+				$("#schedule var:eq(1)").text(parseInt($("#schedule var:eq(1)").text())+parseInt(msg.result.scount))
+				$("#ryid").val($("#ryid").val().substr(msg.result.sid.length+1))
+				if($("#ryid").val() == ''){
+					$("#msg").html('<span>开始生成静态首页...</span>');
+					generate_html('index');
+				}else{
+					generate_html('ryid');
+				}
+			}else{
+				$("#msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how === 'index'){
+		$.post('?app=Jiuku&m=Region&a=html',{'how':how},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.is_exist == 0){
+					$("#msg").html('<span>终止生成!静态首页生成错误。</span>'); return false;
+				}
+				$("#schedule var:eq(2)").text('1')
+				$("#msg").html('<span>开始检查清理不需生成的国家静态详情页...</span>');
+				generate_html('cnid');
+
+			}else{
+				$("#msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how === 'cnid'){
+		var cnid = $("#cnid").val().split(',',100).join(',');
+		$.post('?app=Jiuku&m=Region&a=html',{'how':how,'id':cnid},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.fcount > 0){
+					$("#msg").html('<span>终止清理!国家静态详情页清理错误。</span>'); return false;
+				}
+				$("#schedule var:eq(3)").text(parseInt($("#schedule var:eq(3)").text())+parseInt(msg.result.scount))
+				$("#cnid").val($("#cnid").val().substr(msg.result.sid.length+1))
+				if($("#cnid").val() == ''){
+					$("#msg").html('<span>国家静态详情页清理完成。</span>');
+					generate_html('rnid');
+				}else{
+					generate_html('cnid');
+				}
+			}else{
+				$("#msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how === 'rnid'){
+		var rnid = $("#rnid").val().split(',',100).join(',');
+		$.post('?app=Jiuku&m=Region&a=html',{'how':how,'id':rnid},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.fcount > 0){
+					$("#msg").html('<span>终止清理!产区静态详情页清理错误。</span>'); return false;
+				}
+				$("#schedule var:eq(4)").text(parseInt($("#schedule var:eq(4)").text())+parseInt(msg.result.scount))
+				$("#rnid").val($("#rnid").val().substr(msg.result.sid.length+1))
+				if($("#rnid").val() == ''){
+					$("#msg").html('<span>产区静态详情页生成完成。</span>'); return false;
+				}else{
+					generate_html('rnid');
+				}
+			}else{
+				$("#msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else{
+		$("#msg").html('<span>error</span>'); return false;
+	}
+}
+</script>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/checkSubmit.js"></script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">产区列表</a> > 批量生成静态页</div>
+    <div class="form">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">批量生成静态页</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="220"><a href="javascript:;;" class="btn" onclick="generate_html('ini')">开始生成产区及国家静态页</a><a href="javascript:;;" id="stop_generate" class="btn" onclick="$(this).attr('val',0)" val="1" style="display:none; color:red;" title="中止生成">●</a></th>
+                        <td><p id="msg"></p><p id="schedule"></p><textarea id="cyid" style="display:none"></textarea><textarea id="cnid" style="display:none"></textarea><textarea id="ryid" style="display:none"></textarea><textarea id="rnid" style="display:none"></textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+            </div>
+        </form>
+    </div>
+    <div class="search">
+    	<a href="{:Url('Jiuku/Template/region_map_detail_ini')}" class="btn" >生成产区地图详情页</a>
+    	<a href="{:Url('Jiuku/Template/region_map_index')}" class="btn" >生成产区地图首页</a>
+    	<br/>
+    	<a href="{:Url('Jiuku/Template/region_wap_detail_ini')}" class="btn" >生成产区WAP详情页</a>
+    	<a href="{:Url('Jiuku/Template/region_wap_index')}" class="btn" >生成产区WAP首页</a>
+    	<br/><br/>
+    	<a href="{:Url('Jiuku/Template/grape_wap_detail_ini')}" class="btn" >生成葡萄品种WAP详情页</a>
+    	<a href="{:Url('Jiuku/Template/grape_wap_index')}" class="btn" >生成葡萄品种WAP首页</a>
+    </div>
+</div>
+<script language="javascript">
+$("#gmap").click(function(){
+	var iframe_src = "{:Url('Jiuku/Common/gmap')}";
+	var gmapdialog = art.dialog({
+								id : 'google_map',
+								lock: true,
+								background: _DIALOG_BG_COLOR,
+								OPACITY: _DIALOG_BG_OPACITY,
+								content: '<iframe src="'+iframe_src+'" width="600px" height="400px"></iframe>',
+								});
+})
+function closegmap(){
+	art.dialog({id:'google_map'}).close();
+}
+</script>
+<include file="Common:cpfooter" />

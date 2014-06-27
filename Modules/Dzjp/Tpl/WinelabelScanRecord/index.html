@@ -1,0 +1,111 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Dzjp/Index/index')}">大众酒评管理</a> > 酒标扫描记录列表</div>
+    <div class="list-menu"></div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        扫描时间：
+                        <input name="btime" id="btime" type="text" size="20" value="<?php echo $_REQUEST['btime']; ?>" class="input-text" readonly="readonly" />
+                        -&nbsp;
+                        <input name="etime" id="etime" type="text" size="20" value="<?php echo $_REQUEST['etime']; ?>" class="input-text" readonly="readonly" />
+                        <script type="text/javascript">
+                            Calendar.setup({
+                                inputField : "btime",
+                                trigger    : "btime",
+                                onSelect   : function() { this.hide() },
+                                showTime   : 24,
+                                dateFormat : "%Y-%m-%d %H:%M:%S"
+                            });
+                            Calendar.setup({
+                                inputField : "etime",
+                                trigger    : "etime",
+                                onSelect   : function() { this.hide() },
+                                showTime   : 24,
+                                dateFormat : "%Y-%m-%d %H:%M:%S"
+                            });
+                        </script>
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="0">全部</option>
+                            <option <if condition="4 eq $_REQUEST['status']" >selected</if> value="4">已自动识别</option>
+                            <option <if condition="3 eq $_REQUEST['status']" >selected</if> value="3">已人工识别</option>
+                            <option <if condition="2 eq $_REQUEST['status']" >selected</if> value="2">尚未识别</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">非酒标</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <form action="{:Url('del')}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>酒标</th>
+                    <th>扫描用户</th>
+                    <th>扫描时间</th>
+                    <th>扫描状态</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td width="200"><img src="{:C('SCAN_WINE_LABEL_URL_PATH')}{$vo.filename}" style="max-height:100px;max-width:150px;" onmouseover="showing(this,'{:C('SCAN_WINE_LABEL_URL_PATH')}{$vo.filename}');" onmouseout="clearing();" /></td>
+                    <td>{$vo.uname}</td>
+                    <td><?php echo date('Y-m-d H:i:s',$vo['cteate_time']); ?></span></td>
+                    <td>
+                        <if condition="$vo['status'] eq 4"><span style="color:blue;">已自动识别</span>
+                        <elseif condition="$vo['status'] eq 3" /><span style="color:green;">已人工识别</span>
+                        <elseif condition="$vo['status'] eq 2" /><span style="color:#F60;">尚未识别</span>
+                        <elseif condition="$vo['status'] eq 1" /><span style="color:red;">非酒标</span>
+                        <else /><span style="color:red;">异常状态</span>
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 2">
+                        <a href="{:Url('linkWine')}&backpage={$backpage}&scan_record_id={$vo.id}">关联酒款</a>
+                        <a href="{:Url('Jiuku/Wine/add')}&backpage={$backpage}&into_dzjp_winelabel_scan_record_id={$vo.id}">录入酒款</a>
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=1&backpage={$backpage}" style="color:red;">非酒标</a>
+                        </if>
+                        <if condition="$vo['status'] eq 1">
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=2&backpage={$backpage}" style="color:#F60;">恢复为尚未识别</a>
+                        </if>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </form>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<div style="position:absolute;border:solid 1px red;z-index:2;visibility:hidden;top:10%;left:200px;" id="popup"></div>
+<script type="text/javascript">
+function showing(this1,imgpath){
+    /*var top = $(this1).offset().top;
+    var left = $(this1).offset().left;*/
+    $("#popup").html('<img src="'+imgpath+'" width=400 height=70% />');
+    document.getElementById("popup").style.visibility="visible";
+}
+function clearing(){
+    document.getElementById("popup").style.visibility="hidden";
+}
+</script>
+<include file="Common:cpfooter" />

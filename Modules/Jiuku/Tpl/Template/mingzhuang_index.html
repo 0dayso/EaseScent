@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="keywords" content="{$seo_k}" />
+<meta name="description" content="{$seo_d}" />
+<title>{$seo_t}</title>
+<!--逸香网头部引用文件--><!--#include virtual="/_Block/6.html"-->
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}Jiuku/js/mingzhuang/index.js"></script>
+<link href="{:C('DOMAIN.PUBLIC')}Jiuku/css/mingzhuang/index.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<!--逸香网头部html--><!--#include virtual="/_Block/7.html"-->
+<div class="v-mian">
+	<div class="v-part-l">
+        <volist name="left_list" id="vo">
+        <div class="v-con-1" style="margin-bottom:10px;">
+            <h2>{$vo.cname}</h2>
+            <ul class="v-france clear">
+                <volist name="vo.son" id="vo1">
+                <li>
+                    <a href="###" class="v-list1"><span>{$vo1.cname}</span><var>{$vo1.fname}</var></a>
+                    <div class="v-list2 v-list2-sp">
+                        <a href="###" class="v-del-1"></a>
+                        <div class="v-list2-box">
+                            <volist name="vo1.son" id="vo2">
+                                <div class="v-model-1-title">{$vo2.cname}</div>
+                                <ul class="v-model-1-con">
+                                    <volist name="vo2.son" id="vo3">
+                                    <li>
+                                        <span><a href="{:C('DOMAIN.MINGZHUANG')}{$vo3.id}.shtml" target="_blank">{$vo3.cname}</a></span>
+                                        <span><a href="{:C('DOMAIN.MINGZHUANG')}{$vo3.id}.shtml" target="_blank" class="v-model-1-con-a">{$vo3.fname}</a></span>
+                                    </li>
+                                    </volist>
+                                </ul>
+                            </volist>
+                        </div>
+                    </div>
+                </li>
+                </volist>
+            </ul>
+        </div>
+        </volist>
+		<div class="v-con-2">
+			<h3>热门名庄</h3>
+			<ul class="v-model-2">
+            	<volist name="hot_list" id="vo">
+                <li>
+					<a href="{:C('DOMAIN.MINGZHUANG')}{$vo.id}.shtml" target="_blank"><img src="{:C('DOMAIN.UPLOAD')}Jiuku/Winery/images/{$vo.img}.300.225" alt="{$vo.cname}({$vo.fname})"/></a>
+					<span class="v-img-tit-1"><a href="{:C('DOMAIN.MINGZHUANG')}{$vo.id}.shtml" target="_blank">{$vo.cname}</a></span>
+					<span><a href="{:C('DOMAIN.MINGZHUANG')}{$vo.id}.shtml" target="_blank">{$vo.fname}</a></span>
+				</li>
+                </volist>
+            </ul>
+		</div>
+	</div>
+	<!--<div class="v-part-m">
+        <div class="wxh-comment"></div>
+        <div class="v-comment-page"></div>
+	</div>-->
+	<div class="z_wineInfo_l">
+        <div class="screening-box">
+            <span>全部发言</span>
+            <em onclick="get_comment();"><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/mingzhuang/detail/d-bg12.jpg" />刷新酒评</em>
+        </div>
+        <!-- 动态列表-->
+        <ul class="z_wineInfoList">
+        </ul>
+        <!-- 动态列表-->
+        <!--分页-->
+        <ul class="z_page clear"></ul>
+        <!--分页-->
+    </div>
+	<div class="v-part-r">
+    	<div class="old">
+        <a href="{:C('DOMAIN.WWW')}Grandcru" target="_blank"><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/mingzhuang/index/old.jpg"/></a>
+        </div>
+    	<div class="v-app">
+			<img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/mingzhuang/index/v-pic3.jpg"/>
+			<a href="http://itunes.apple.com/cn/app/id476278384?mt=8" target="_blank"><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/mingzhuang/index/v-iPhone.jpg"/></a>
+			<a href="http://www.wine.cn/az.php" target="_blank"><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/mingzhuang/index/v-Android.jpg"/></a>
+		</div>
+		<div class="v-intro">
+			<dl><dt>1.查询名庄酒年份评分</dt><dd>拥有一瓶好酒，想知道酒的名庄历史？想知道酒的年份评分？现在，从逸香名庄开始！</dd></dl>
+			<dl><dt>2.记录和分享你的品酒体验</dt><dd>这里可以留下你人生不同阶段的品酒体验，通过分享结交兴趣相同的酒友，品价不同名庄酒的神奇之旅。</dd></dl>
+		</div>
+        <div class="v-today-top">
+			<h3 class="v-h3">今日名庄</h3>
+			<ul class="v-news1">
+            	<li><a href="http://www.wine.cn/html/201110/5970.html" target="_blank" title="香奈儿首席设计师描绘鲁臣世家酒标">香奈儿首席设计师描绘鲁臣世家酒标</a></li>
+                <li><a href="http://www.wine.cn/html/201107/4247.html" target="_blank" title="知名设计师拉格菲尔德的鲁臣世家酒标亮相">知名设计师拉格菲尔德的鲁臣世家酒标亮相</a></li>                <li><a href="http://www.wine.cn/html/201203/8137.html" target="_blank" title="与鲁臣世家庄园同归一主的玛塔庄园">与鲁臣世家庄园同归一主的玛塔庄园</a></li>
+                <li><a href="http://www.wine.cn/html/201203/8136.html" target="_blank" title="鲁臣世家庄园正牌酒侍酒建议参考">鲁臣世家庄园正牌酒侍酒建议参考</a></li>
+            </ul>
+		</div>
+    </div>
+</div>
+<!--图片放大JS-->
+<script src="{:C('DOMAIN.PUBLIC')}fancyzoom/FancyZoom.js" language="JavaScript" type="text/javascript"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fancyzoom/FancyZoomHTML.js" language="JavaScript" type="text/javascript"></script>
+<script>
+function zoomIni(){
+	zoomImagesURI="{:C('DOMAIN.PUBLIC')}fancyzoom/images/";
+	setupZoom();
+}
+$(function(){
+	zoomIni();
+});
+</script>
+<!--图片放大end-->
+<!--逸香网尾部html--><!--#include virtual="/_Block/8.html"-->
+</body>
+</html>

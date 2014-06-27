@@ -1,0 +1,51 @@
+<include file="Common:header" />
+<div class="main">
+	<include file="Common:menu" />
+	<div class="confirm-box">
+		<h3 class="confirm-h3">身份认证</h3>
+		<div class="basic-con">
+			<div class="basic-con-t">
+				请上传你的营业执照
+			</div>
+			<form target="iframe"  action="/index.php/Confirm/bupload" method="POST" enctype="multipart/form-data">
+				<div class="login-div">
+					<span class="l-span">营业执照：</span>
+					<input type="file" id="upfile" name="upfile" class="login-ipt2" style="width:250px;"/>
+					<!--<a href="###" class="basci-read"></a>-->
+				</div>
+                    <div style="margin:-8px 74px;">
+                    <if condition="($front_ym_user.b_type neq '') AND ($front_ym_user.comany_valid eq 2)">
+                        <img style="width:187px;height:238px;" id="show_upload" src="__UPLOAD__/bfiles/b_{$front_ym_user.id}/m_pic.{$front_ym_user.b_type}" />
+                    <else/>
+                	    <img style="width:187px;height:238px;display:none;" id="show_upload" src="__IMG__/english/pic_06.jpg" />
+                    </if>
+
+                    </div>
+			</form>
+			<iframe name="iframe" style="display:none;"></iframe>
+            <input type="hidden" id="show_upload">
+			<p style="color:#7F7979;padding-left:74px;margin:15px 0 15px 0;">图片格式：GIF、JPG、JPEG、PNG、</p>
+			<div class="email-change-sub" style="padding-left:74px;">
+				<input type="button" value="下一步" id="myfile_upload_btn" class="login-sub-h">
+				<input type="button" value="返 回" onclick="window.history.go(-1);" class="login-sub2">
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#upfile").change(function(){
+        $("#myfile_upload_btn").attr("disabled",true);
+		$(this).parent().parent().submit();
+	});
+	$("#myfile_upload_btn").click(function(){
+		var myfile = $.trim($("#upfile").val());
+		if(myfile==""){
+			alert("请上传营业执照!");
+			return false;
+		}
+		window.location.href='/index.php/Company/apply';
+	})
+})
+</script>
+<include file="Common:footer" />

@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   
+ 
+         <div class="z_headTop">
+            <p class="z_headTop_p">
+            <if condition="$qySessionInfo neq '' ">
+                <!--<a href="{:U('Foreign/index?winery_id='.$winery_id)}" class="col_9b2521">{$qySessionInfo['nick']}</a> |-->
+                <a href="{:U('Foreign/index?winery_id='.$winery_id)}" class="col_9b2521">{$qySessionInfo['qy_name']}</a> |
+                <a href="{:C('YM_DOMAIN')}/index.php">Account</a> |
+                <a href="{:U('Winery/info')}">My Expo</a> |
+                <a href="{:C('YM_DOMAIN')}/index.php/User/loginout">Log out</a> |
+                <else/>
+                <a href="{:C('YM_DOMAIN')}/index.php/User/register/t/english/l/ym-en">Join Free </a> |
+                <a href="{:C('YM_DOMAIN')}/index.php/User/login/t/english/l/ym-en"> Sign In</a>
+            </if>
+        </p>
+    </div>
+        <div class="z_headMiddle">
+        <div class="z_headMain">
+            <div class="z_headMain_nr clear">
+                <h2 class="fl"><a href="{:U('Index/inland')}"><img src="__PUBLIC__/Expo/img/logo_5.png" alt="永不落幕的品酒会" /></a></h2>
+                <div class="z_headMain_nr_searchBox">
+                    <form action="{:U('Search/index')}" method="post" id="myform" >
+                        <p class="z_headMain_nr_searchBox_p clear"><input type="text" class="z_headMain_nr_searchBox_inp" name="keyword"/><input type="button"  class="z_headMain_nr_searchBox_btn" onclick="document.getElementById('myform').submit()"/></p>
+                    </form>
+                 <!--   <p class="z_headMain_nr_searchBox_hotWords"><span class="col555">Key words:</span><a href="{:U('Search/index?hotkeyword='.France)}">France </a> | <a href="{:U('Search/index?hotkeyword='.Chile)}">Chile</a><a href="{:U('Search/index?hotkeyword='.Portugal)}">Portugal </a> | <a href="{:U('Search/index?hotkeyword='.America)}">America</a><a href="{:U('Search/index?hotkeyword='.Canada)}">Canada</a> | <a href="{:U('Search/index?hotkeyword='.Bordeaux)}">Bordeaux </a> | <a href="{:U('Search/index?hotkeyword='.Chile)}">Chile</a><a href="{:U('Search/index?hotkeyword='.Portugal)}">Portugal </a> | <a href="{:U('Search/index?hotkeyword='.America)}">America</a><a href="{:U('Search/index?hotkeyword='.Canada)}">Canada</a> | <a href="{:U('Search/index?hotkeyword='.Canada)}">Canada</a> | <a href="{:U('Search/index?hotkeyword='.Bordeaux)}">Bordeaux </a></p> -->
+                </div>
+            </div>
+            <div class="z_headMain_gg">
+                <p class="z_headMain_gg_p">{$qy_info['qy_name']}</p>
+            </div>
+        </div>
+    </div>
+   
+   
+

@@ -1,0 +1,53 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    <for start="1" end="4">
+    $('#updimg_{$i}').fileupload({
+        url : "{:Url('index')}&i={$i}",
+        dataType : 'json',
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var url = "{:C(\'UPLOAD_URL\')}Dzjp/HomeImg/{$i}.jpg";
+                $("#img_{$i}").html('');
+                $("#img_{$i}").html('<img src="'+url+'" height="120" />');
+            }else{
+                art.dialog({
+                    id: 'error',
+                    content: data.result.msg,
+                    lock: true,
+                });
+            }
+        }
+    });
+    </for>
+});
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">大众酒评管理</a> >
+        首页图片管理
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <tbody>
+                <tr height="150">
+                    <td>闪购</td>
+                    <td id="img_1"><img  src="{:C('DOMAIN.UPLOAD')}Dzjp/HomeImg/1.jpg" height="120" /></td>
+                    <td><input id="updimg_1" name="updimg" type="file" /></td>
+                </tr>
+                <tr height="150">
+                    <td>导购</td>
+                    <td id="img_2"><img  src="{:C('DOMAIN.UPLOAD')}Dzjp/HomeImg/2.jpg" height="120" /></td>
+                    <td><input id="updimg_2" name="updimg" type="file" /></td>
+                </tr>
+                <tr height="150">
+                    <td>活动</td>
+                    <td id="img_3"><img  src="{:C('DOMAIN.UPLOAD')}Dzjp/HomeImg/3.jpg" height="120" /></td>
+                    <td><input id="updimg_3" name="updimg" type="file" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter" />

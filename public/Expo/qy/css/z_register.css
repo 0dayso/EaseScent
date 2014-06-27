@@ -1,0 +1,142 @@
+/*zhibao 2012-12-06  */
+
+/*head and foot*/
+body{ background:#F3F3F3;}
+
+
+/*注册*/
+.col959595{ color:#959595;}
+.pt30{ padding-top:30px;}
+.pt20{ padding-top:16px;}
+.w110{ width:110px !important;}
+.pinkBtn{ height:35px; line-height:35px; color:#FFF; background:url(../img/z_aWrap_pinkBtnLBg200x35.gif) no-repeat 0 0; display:inline-block; padding:0 0 0 16px;}
+.pinkBtn span{ background:url(../img/z_aWrap_pinkBtnRBg7x35.gif) no-repeat right 0; display:inline-block; padding-right:16px;}
+.checkBox{ width:auto !important; position:relative; top:2px;}
+
+.re_head{ width:980px; margin:0 auto;}
+.re_head_h2{ font-weight:bold; font-size:18px; color:#b73434; margin-top:10px; float:left; display:inline;}
+.re_head_r{ float:right; margin-top:16px; display:inline;}
+.re_head_r a{ color:#555555;}
+.re_nr1{ background:#333333; margin-top:14px; padding-top:15px; font-size:14px;}
+.re_nr1Box{ width:980px; margin:0 auto; color:#FFF; padding:20px 0;}
+.re_nr1Box input{ width:350px; padding:6px 10px;}
+.re_nr1Box td,.re_nr2Box td{ padding-bottom:15px;}
+.notice{ color:#f5793d; height:20px; background:url(../img/notice.png) no-repeat 0 0; display:inline-block; padding-left:26px;}
+
+.re_nr2{ color:#555; margin-top:20px;}
+.re_nr2Box{ width:980px; height:198px; background:url(../img/nr_nr2Bg.png) no-repeat 0 0; margin:0 auto;}
+.re_nr2Box_h3{ margin-left:74px; padding-top:4px; color:#b73434; margin-bottom:16px;}
+.re_nr2Box input{width:350px; padding:8px 10px; border:1px solid #e0e0e0;}
+.authCode{ overflow:hidden;}
+.authCode img{ padding-left:10px; float:left;}
+.authCode span{ padding-left:10px; float:left; width:120px;}
+.authCode a{ color:#b73434;}
+
+/*注册成功提示*/
+.re_headBg{ background:url(../img/re_headBg2x50.gif) repeat-x 0 0; height:50px;}
+.re_nr01{ background:#e7e7e7; font-size:14px;}
+.re_nr01Box{ width:550px; margin:0 auto; padding:20px 0;}
+.succeedP{ background:url(../img/right_greenIco.png) no-repeat 0 0; height:18px; line-height:18px; color:#55ae30; font-weight:bold; padding-left:26px; width:550px; margin:20px auto 0;}
+.failP{ background:url(../img/notice.png) no-repeat 0 0; height:20px; line-height:20px; color:#f5793d; font-weight:bold; padding-left:26px; width:550px; margin:20px auto 0;}
+.failA{ color:#df4343; padding-right:12px;}
+.re_nr01Box_p{ color:#575757; margin-top:20px; margin-left:26px;}
+.re_nr01Box_div{ margin:20px 0 20px 26px;}
+.re_nr01Box_div .tip{ color:#df4343; padding-left:10px;}
+.re_nr02{ width:980px; margin:0 auto;}
+.re_nr02Box{ margin-left:240px; margin-top:20px; font-size:14px; color:#575757;}
+.re_nr02Box a{ color:#df4343;}
+
+/*登录页*/
+.w104{ width:104px !important;}
+.registerBox{ width:820px; margin:0 auto;}
+.registerBox .pic{ float:left; margin-top:135px; display:inline;}
+.registerBox .nr{ width:405px; float:left; margin-left:40px; margin-top:120px; display:inline;}
+.registerBoxNr_h3{ color:#df4343; font-size:28px; font-weight:bold;}
+.registerBox .txt{ width:356px; padding:6px 10px; border:1px solid #e0e0e0; color:#959595; font-size:14px;}
+.registerBox .tip{ color:#f5793d; padding-left:14px; background:url(../img/no.png) no-repeat 0 4px; margin:4px 10px;}
+.authCodeImg{ position:relative; top:14px; left:4px;}
+.authCodeSpan{ display:inline-block; position:relative; top:8px; left:10px; color:#555555;}
+.authCodeSpan a{ color:#b73434;}
+.mt-12{ margin-top:-12px;}
+.registerBox .agree{ color:#555; padding-left:2px;}
+.registerBox .agree input{ position:relative;  top:2px;}
+.submitBox{ margin-top:24px;}
+.submitBox .a{ color:#555555; display:inline-block; margin-left:10px;}
+
+/*企业主业*/
+.re_main{ width:980px; margin:30px auto;}
+.re_main_l{ width:220px; float:left;}
+.re_main_r{ width:724px; float:right;}
+.re_main_lBox{ margin-bottom:10px;}
+.re_main_lBox h3{ height:35px; line-height:35px; color:#FFF; font-size:14px; font-weight:bold; background:#333333; padding-left:18px;}
+.re_main_lBox ul{ overflow:hidden; border:1px solid #ebebeb;}
+.re_main_lBox ul li{ height:36px; float:left; line-height:36px; width:100%;  border-bottom:1px solid #ebebeb;}
+.re_main_lBox ul li a{ display:block; height:36px; padding-left:16px; color:#555;}
+.re_main_lBox ul li a:hover,.re_main_lBox ul .active a { color:#b73434; font-weight:bold; text-decoration:none; background:url(../img/lNavIco.png) no-repeat 200px 12px;}
+.re_main_r_nr01 .nr{ width:546px; float:right;}
+.re_main_r_nr01 h3{ font-size:21px; font-weight:bold; color:#555; font-weight:bold; line-height:21px;}
+.re_main_r_nr01 .nr p{ font-size:14px; color:#555; margin-top:20px;}
+.mail_verified{ padding-left:14px; background:url(../img/mail_verified.gif) no-repeat 0 3px; color:#55ae30;}
+.name_verified{ padding-left:14px; background:url(../img/name_verified.gif) no-repeat 0 5px; color:#55ae30;}
+.mail_verified_no{ padding-left:14px; background:url(../img/mail_verified_no.gif) no-repeat 0 3px; color:#55ae30;}
+.name_verified_no{ padding-left:14px; background:url(../img/name_verified_no.gif) no-repeat 0 5px; color:#55ae30;}
+.colbebebe{ color:#bebebe;}
+.re_main_r_nr02{ margin-top:40px;}
+.re_main_r_nr02 h3{ font-size:14px; font-weight:bold; color:#555555; line-height:14px;}
+.re_main_r_nr02 .nr{ margin-top:6px;}
+.re_main_r_nr02 .nr li{ float:left; width:310px; display:inline; margin-right:14px; border:1px solid #ededed; background:#f6f6f6; padding:10px 18px 8px;}
+.re_main_r_nr02 .li_nr{ float:right; width:190px;}
+.re_main_r_nr02 p{ color:#959595;}
+.re_main_r_nr02 .p2{ color:#555; margin-top:8px;}
+.re_main_r_nr02 a{ color:#b73434; font-weight:bold;}
+
+/*企业主业后台*/
+.ht_main{ width:920px; margin:30px auto;}
+.re_main_htH3{ color:#555555; font-size:18px;}
+.ht_Box{ margin-top:40px;}
+.ht_Box li{ width:435px;}
+.ht_Box li a{ display:block; height:206px; padding:15px 19px; background:url(../img/htBg2x236.gif) repeat-x 0 0;}
+.ht_Box li a:hover{ border:1px solid #e6baba; text-decoration:none; padding:14px 18px;}
+.ht_liPica h3{ font-size:17px; font-weight:600; color:#555; margin-top:8px;}
+.ht_liPica p{ color:#555; font-size:14px;}
+.ht_Box li .note{ color:#959595; font-size:14px; margin-top:4px;}
+
+/*Profile*/
+.re_main_r_h3{ font-size:14px; font-weight:bold; color:#555;}
+.bb1cccccc{ border-bottom:1px solid #cccccc; height:10px;  margin-bottom:4px;}
+.col959595{ color:#959595;}
+.re_main_r_p01{ font-size:14px; margin-top:18px; color:#555555;}
+.re_main_r_p01 a{ color:#b73434; padding-right:12px; background:url(../img/red_jt.gif) no-repeat right 6px;}
+.w578inp{ width:578px; padding:6px 10px; border:1px solid #e0e0e0; color:#555;}
+.re_main_r_tab01{ color:#555; margin-top:26px; font-size:14px;}
+.re_main_r_tab01 td{ padding-bottom:10px;}
+.re_main_r_tab01 .select{ width:224px; color:#555; padding: 6px; border:1px solid #e0e0e0;}
+.re_main_r_tab01 .txta{ height:186px; width:578px; border:1px solid #e0e0e0; padding:10px; color:#555; resize:none;}
+.w217{ width:217px !important;}
+
+/*Image*/
+.uploadImg a{ font-weight:bold; background:url(../img/imageIco.png) no-repeat right 3px; padding-right:20px;}
+.upImgBox{ margin-top:14px;}
+.upImgBtn{ margin-top:14px;}
+/*change password*/
+.changePassword{ margin-top:20px;}
+.w358Inp{ width:358px; padding:6px 10px; border:1px solid #e0e0e0; font-size:14px; color:#959595;}
+.changePassword .tip{ height:20px; background:url(../img/tip20x20.png) no-repeat 0 0; padding-left:26px; font-size:14px; color:#f5793d;}
+.changePassword td{ padding-bottom:14px;}
+.changePassword .pinkBtn{ margin-right:10px;}
+.okBox{ min-height:20px; background:url(../img/right_greenIco.png) no-repeat 0 2px; padding-left:26px; color:#55ae30; font-weight:bold; font-size:14px;}
+
+/*id_ver*/
+.id_ver { margin-top:26px;}
+.id_ver td{ font-size:14px; color:#555; padding-bottom:14px;}
+.timeTipBox{ margin-top:20px; height:22px; color:#ff7c08; font-size:14px; font-weight:bold; background:url(../img/tip_time20x20.png) no-repeat 0 0; padding-left:26px;}
+.colf5793d{ color:#f5793d;}
+.fs14{ font-size:14px; font-weight:bold;}
+.nbg{ background:none;}
+
+
+/*uploadPic*/
+.upLoadPic { margin-top:20px; overflow:hidden;}
+.upLoadPic li{ position:relative; float:left; margin-right:20px; display:inline;}
+.upLoadPic li .closeBtn{ width:17px; height:17px; background:url(../img/close17x17.gif) no-repeat 0 0; position:absolute; right:0; top:0;}
+.redImporBox{ margin-top:20px; height:22px; color:#c11414; font-size:14px; font-weight:bold; background:url(../img/red_imporIco.png) no-repeat 0 0; padding-left:26px;}

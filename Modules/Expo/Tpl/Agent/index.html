@@ -1,0 +1,63 @@
+
+<include file="Common:header" />
+      <include file="Agent:header" />
+        <div class="z_aWrap clear">
+            <include file="Common:godos_leftSide" />
+
+            <div class="z_aWrap_r">
+                <div class="z_qy_infobox">
+                    <h3>
+                        <a href="{:U('Inland/index','agent_id='.$Expo_userInfo['agent_id'])}"> {$Expo_userInfo['qy_name']}</a>
+                        <if condition="$Expo_userInfo['grade']==C('user_grade_month')">
+                            <a href="{:U('Index/user_grade')}" class="z_qy_infobox_ico1 state_month"></a>
+                        </if>
+                        <if condition="$Expo_userInfo['grade']==C('user_grade_season')">
+                            <a href="{:U('Index/user_grade')}" class="z_qy_infobox_ico1 state_qtfoyear"></a>
+                        </if>
+                        <if condition="$Expo_userInfo['grade']==C('user_grade_year')">
+                            <a href="{:U('Index/user_grade')}" class="z_qy_infobox_ico1 state_year"></a>
+                        </if>
+                        <if condition="$Expo_userInfo['comany_valid']==2">
+                            <a href="javascript:void(0);" class="z_qy_infobox_ico2 state_rz"></a>
+                        <else />
+                            <a href="{:C('YM_DOMAIN')}/index.php/Confirm/bphoto" class="z_qy_infobox_ico2 state_wrz"></a>
+                        </if>
+                    </h3>
+                    <p class="mt14">会员类型：
+                    <if condition="!$Expo_userInfo['grade']">
+                         <a href="{:U('Index/user_grade')}">
+                             未付费 <img title="会员拥有上传不限制 搜索结果靠前等特权" class="z_qy_infobox_ico3" src="__PUBLIC__/Expo/img/z_usertypeIco3.gif" />
+                         </a>
+                    <else/>
+                         <a href="{:U('Index/user_grade')}">
+                             <img title="会员拥有上传不限制 搜索结果靠前等特权" class="z_qy_infobox_ico3" src="__PUBLIC__/Expo/img/agent_grade_{$Expo_userInfo['grade']}.gif" />
+                         </a>
+                    </if>
+                    </p>
+
+                    <if condition="$Expo_userInfo['serve_open_time'] && $Expo_userInfo['grade']">
+                        <br/><p class="mt2">会员有效期限：
+                            <font color="red">
+                                {:date('Y-m-d',$Expo_userInfo['serve_open_time'])}  至  {:date('Y-m-d',$Expo_userInfo['serve_end_time'])}
+                            </font>
+                        </p>
+                    </if>
+
+                        <p  class="z_qy_infobox_gh">
+                        已发布酒款：  <a href="{:U('Agent/goodsManage')}">{$agent_init['goods_num']} </a>个 |
+                        已经上架：    <a href="{:U('Agent/goodsManage')}">{$agent_init['goodsUp_num']}  </a>个
+                        <if condition="!$Expo_userInfo['grade']">
+                         |最多还能上架：<a href="{:U('Agent/goodsManage')}">{:C('goodsUp_num') - $agent_init['goodsUp_num']} </a>个
+                        </if>
+                        </p>
+
+                    <p class="z_qy_infobox_btnbox">
+                        <a href="{:U('Agent/info')}">完善基本信息</a>
+                        <a href="{:U('Agent/release')}">发布酒款</a>
+                       <!--  <a href="#">发布酒具</a>
+                        <a href="#">自定义导航</a> -->
+                    </p>
+                </div>
+            </div>
+        </div>
+<include file="Common:footer" />

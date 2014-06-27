@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	<title>热门产区</title>
+	<link rel="stylesheet" type="text/css" href="{:C('DOMAIN.PUBLIC')}Jiuku/css/region/wap_index.css">
+</head>
+<body>
+<div class="cqlist">
+	<volist name="res" id="vo">
+	<a href="{$vo.id}.shtml">
+		<div class="cqimg">
+			<img src="{$vo.img}" alt="" style="width:93px;height:64px;">
+		</div>
+		<div class="rightsay">
+			<p class="name">{$vo.cname} <span class="ename">{$vo.fname}</span></p>
+			<p>国家：{$vo.country_cname}</p>
+			<p>分级：<if condition="$vo['lvl_sname']">{$vo.lvl_cname}（{$vo.lvl_sname})<else/>暂无</if></p>
+		</div>
+	</a>
+	</volist>
+</div>
+</body>
+</html>

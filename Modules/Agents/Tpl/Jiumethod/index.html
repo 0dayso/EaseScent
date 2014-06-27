@@ -1,0 +1,100 @@
+<include file="Common:cpheader" />
+<script type="text/javascript">
+    $(function(){
+        $('#del').click(function(){
+            var id = $("input[name='id']").val();
+            $.post('?app=Agents&m=Jiumethod&a=del', {'id':id}, function(msg){
+                var msg = eval("("+msg+")");
+                if(msg == 1){
+                    art.dialog({content: '删除成功',});
+                    var l = 'location.href="{:Url('Agents/Jiumethod/index')}";';
+                    setTimeout(l, 1000);
+                    return;
+                }else{
+                    art.dialog({content: '删除失败,请联系技术',}).time(3000);
+                    return;
+                }
+            });
+        });
+    });
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">代理商管理</a> > 新建酒款审核列表</div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" type="text" value="{$_GET['keyword']}" class="input-text" placeholder="外文全称、中文全称" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="0">待处理</option>
+                            <option <if condition="3 eq $_GET['status']" >selected</if> value="3">已通过</option>
+                            <option <if condition="2 eq $_GET['status']" >selected</if> value="2">已驳回</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th width="250">酒款名</th>
+                    <th>酒庄</th>
+                    <th>国家/产区</th>
+                    <th width="180">葡萄品种</th>
+                    <th width="100">年份/价格</th>
+                    <th width="200">管理操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td><span>{$vo.fname}<if condition="$vo.cname neq ''"> ╱ {$vo.cname}</if></span></td>
+                    <td>{$vo.brand_fname}<if condition="$vo.brand_cname neq ''"> ╱ {$vo.brand_cname}</if></td>
+                    <td>
+                        <span>
+                            {$vo.country_fname} <if condition="$vo.country_cname neq ''"> ╱ {$vo.country_cname}</if><br />
+                            {$vo.region_fname_one} <if condition="$vo.region_cname_one neq ''"> ╱ {$vo.region_cname_one}</if>
+                            {$vo.region_fname_two} <if condition="$vo.region_cname_two neq ''"> ╱ {$vo.region_cname_two}</if>
+                        </span>
+                    </td>
+                    <td>
+                        <volist id="gv" name="vo['grape']">
+                            {$gv.grape_fname} ╱ {$gv.grape_cname}<br/>
+                        </volist>
+                    <td>
+                        <volist id="v" name="vo['price_arr']">
+                            {$v.year}年 ╱ ￥{$v.price}
+                        </volist>
+                    </td>
+                    <td>
+                        <if condition="$vo.au_status eq 0">
+                        <a href="?app=Agents&m=Jiumethod&a=method&id={$vo.id}" id="tg">审核</a>
+                        &nbsp;&nbsp;
+                        <a href="?app=Agents&m=Jiumethod&a=back&id={$vo.id}" id="bk">驳回</a>
+                        &nbsp;&nbsp;
+                        <a href="javascript:;" id="del">删除</a>
+                        <else />
+                        <font color="red">此酒款为标准酒库酒款</font>
+                        </if>
+                    </td>
+                </tr>
+                <input type="hidden" name="id" value="{$vo.id}">
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

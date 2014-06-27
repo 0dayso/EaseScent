@@ -1,0 +1,91 @@
+<include file="Common:header" />
+<div class="common-mian">
+	<div class="c-tit">
+		手机认证
+	</div>
+	<div class="email-r">
+		<div class="email-img">
+			<img src="__IMG__/yes-r.jpg" />
+		</div>
+		<div class="email-con">
+			<div class="email-con-t">
+				<if condition="$type eq 'register'">恭喜您，注册成功！请完成手机认证<else/>已经发手机验证码，请查收！</if>
+			</div>
+			<div class="email-con-c">
+				<div>您要认证手机号码：<span>{$userinfo.moblie}</span>输入有误？ <a href="###">返回重新输入</a></div>
+				<dl class="auth-code">
+					<dt>
+						<!-- <a href="###">免费获取验证码</a> -->
+						<p class="auth-code-p">
+							<a id="timeout" href="###"><if condition="$timeout neq ''"><var>{$timeout}</var>秒后</if>重新获取</a>
+							<!-- <a href="###" class="auth-code-angin">重新获取验证码</a> -->
+							<em>验证码已发送，请查收！</em>
+						</p>
+					</dt>
+					<dd class="auth-code-num">
+						<em>验证码：</em>
+						<input type="text" id="code" class="login-ipt2"/>
+					</dd>
+					<dd>
+						<input type="button" value="提 交" id="send_code_btn" class="login-sub" hidefocus="">
+                        <a href="/index.php" style="background:none;color:#C0024C;">暂不认证>></a>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="t-model">
+		<p class="t-model-t">没有收到验证码？您可以：</p>
+		<p><span>▪</span>网络繁忙，请您稍等几分钟</p>
+		<p><span>▪</span>您还可以<a href="###">使用邮箱注册企业通行证</a></p>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#timeout").click(function(){
+		var text =  $.trim($("#timeout").text());
+		if(text=="重新获取"){
+			$.post("/index.php/Confirm/smcode",{},function(data){
+				var data = eval("("+ data +")");
+				if(data.status==1){
+					$("#timeout").next().text("验证码已发送，请查收");
+					$("#timeout").html("<var>120</var>秒后重新发送");
+					init();
+				}else{
+					$("#timeout").next().text(data.message);
+				}
+			})
+		}
+	})
+	$("#send_code_btn").click(function(){
+		var code = $.trim($("#code").val());
+		if(code==""){
+			alert("验证码不能为空!");
+			return;
+		}
+		$.post("/index.php/Confirm/mobileValid",{code:code},function(data){
+			var data = eval("("+ data +")");
+			if(data.status==1){
+				window.location.href="/index.php";
+			}else{
+				alert(data.message);
+			}
+		})
+	})
+	function init(){
+		var time =  $.trim($("#timeout").find("var").text());
+		if(time){
+			var tao = setInterval(function(){
+				if(time>0){
+					$("#timeout").find("var").text(time--);
+				}else{
+					$("#timeout").text("重新获取");
+					clearInterval(tao);
+				}
+			},1000);
+		}
+	}
+	init();
+})
+</script>
+<include file="Common:footer" />

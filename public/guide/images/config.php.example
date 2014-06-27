@@ -1,0 +1,6 @@
+<?php
+
+define('CODE_RUNTIME_PATH', ""); 
+define('UPLOAD_DOMAIN', 'http://upload.wien.cn');
+
+?>

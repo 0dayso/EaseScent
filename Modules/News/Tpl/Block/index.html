@@ -1,0 +1,50 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：管理首页 > 新闻管理 > 推荐位管理</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}">增加新推荐位</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('News/Block/index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        名称：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">BID</th>
+                    <th>名称</th>
+                    <th width="150">更新</th>
+                    <th width="150">数据管理</th>
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+            <tr>
+                <td>{$vo.bid}</td>
+                <td>{$vo.name}</td>
+                <td><a href="{:Url('News/Block/update?bid='.$vo['bid'])}">更新</a></td>
+                <td><a href="{:Url('News/BlockData/index?bid='.$vo['bid'])}">数据管理</a></td>
+                <td><a href="{:Url('News/Block/edit?bid='. $vo['bid'])}">编辑</a> <a href="{:Url('News/Block/del?bid='.$vo['bid'])}" target="delete" title='确定要删除ID为“{$vo.aid}”的模块吗？'>删除</a></td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+        
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

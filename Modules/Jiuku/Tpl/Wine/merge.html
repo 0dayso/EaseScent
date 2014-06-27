@@ -1,0 +1,532 @@
+<include file="Common:cpheader" />
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/ht_wine.js"></script>
+<script language="javascript">
+$(function(){
+	$(".wine_radio_input").autocomplete({
+		minLength: 1,
+		source: function(request,response){
+			$.post('?app=Jiuku&m=OAC_getAjaxData&a=searchWine',{'kw':request.term,'type':1},function(msg){
+				var msg = eval("("+msg+")");
+				if(msg.errorCode != 0){msg.result ={};}
+				response($.map(msg.result,function(item){
+					return{id:item.id,value:item.fname+' ╱ '+item.cname,value2:'&nbsp;&nbsp;&nbsp;'+item.fname+'&nbsp;&nbsp;'+item.cname}
+				}));
+			});
+		},
+		select: function(event,ui){
+			selected_select(ui.item.id,ui.item.value2);
+			return;
+		},
+		close: function(){
+			$(this).val('');
+			return;
+		}
+	});
+});
+function change_country_range(){
+	$("select[name='region_range']").html('').attr('disabled',true);
+	$("input[name='winery_range_show']").attr('disabled',true).val('');
+	$("input[name='winery_range']").val(0);
+	$("#wine_count").text('检测中');
+	$.post("{:Url('Jiuku/OutAcWine/ajaxChangeCountryRange')}",{'id':$("select[name='country_range']").val()},function(msg){
+		var	msg = eval("(" + msg + ")");
+		if(msg.errorCode == 0){
+			$("#wine_count").text(msg.result.wine_count);
+			if(msg.result.region !== null){
+				var html = '<option value="0">请选择</option>';
+				$.each(msg.result.region,function(i,n){
+					html += '<option value="'+n.id+'">'+n.fname+' '+n.cname+'</option>';
+				});
+				$("select[name='region_range']").html(html).attr('disabled',false);
+			}else{
+				$("select[name='region_range']").html('<option value="0">没有产区数据</option>');
+			}
+		}else{
+			$("select[name='region_range']").html('<option value="0">获取异常</option>');
+		}
+		$("input[name='winery_range_show']").attr('disabled',false)
+		if($("select[name='region_range']").val() != 0){
+			$("input[id='region_same']").attr('checked',false).parent("span").hide();
+		}else{
+			$("input[id='region_same']").parent("span").show();
+		}
+		if($("input[name='winery_range']").val() != 0){
+			$("input[id='winery_same']").attr('checked',false).parent("span").hide();
+		}else{
+			$("input[id='winery_same']").parent("span").show();
+		}
+	});
+}
+function change_region_or_winery_range(){
+	if($("select[name='region_range']").val() != 0){
+		$("input[id='region_same']").attr('checked',false).parent("span").hide();
+	}else{
+		$("input[id='region_same']").parent("span").show();
+	}
+	if($("input[name='winery_range']").val() != 0){
+		$("input[id='winery_same']").attr('checked',false).parent("span").hide();
+	}else{
+		$("input[id='winery_same']").parent("span").show();
+	}
+	$("#wine_count").text('检测中');
+	$.post("{:Url('Jiuku/OutAcWine/ajaxChangeRegionOrWineryRange')}",{'cid':$("select[name='country_range']").val(),'rid':$("select[name='region_range']").val(),'wid':$("input[name='winery_range']").val()},function(msg){
+		var msg = eval("(" + msg + ")");
+		if(msg.errorCode == 0){
+			$("#wine_count").text(msg.result.wine_count);
+		}
+	});
+}
+function clear_winery_range(){
+	$("input[name='winery_range_show']").val('').attr("disabled",false);
+	$("input[name='winery_range']").val(0);
+	$("input[name='winery_range']").parent("p").children("img").hide();
+	change_region_or_winery_range();
+}
+$(function(){
+	$("input[name='winery_range_show']").autocomplete({
+		minLength: 1,
+		source: function(request,response){
+			$.post("{:Url('Jiuku/OutAcWine/ajaxAutocompleteWineryRangeShow')}",{'kw':request.term,'cid':$("select[name='country_range']").val()},function(msg){
+				var msg = eval("("+msg+")");
+				if(msg.errorCode != 0){msg.result.res = [];}
+				if(msg.result.res == null){msg.result.res = [];}
+				$("input[name='winery_range']").parent("p").children("em").text('共找到'+msg.result.count+'条酒庄数据，当前列表仅显示10条');
+				response($.map(msg.result.res,function(item){
+					return{id:item.id,value:item.fname+' ╱ '+item.cname}
+				}));
+			});
+		},
+		select: function( event, ui) {
+			$(this).attr("disabled",true);
+			$(this).parent("p").children("img").show();
+			$(this).parent("p").children("em").text('');
+			$(this).val( ui.item.value );
+			$("input[name='winery_range']").val( ui.item.id );
+			change_region_or_winery_range();
+			return;
+		}
+	});
+	$("input[name='just_winery_show']").autocomplete({
+		minLength: 1,
+		source: function(request,response){
+			$.post("{:Url('Jiuku/OutAcWine/ajaxIndexAutocompleteWinery')}",{'kw':request.term},function(msg){
+				var msg = eval("("+msg+")");
+				if(msg.errorCode != 0){msg.result.res = [];}
+				if(msg.result.res == null){msg.result.res = [];}
+				$("input[name='just_winery']").parent("p").children("em").text('共找到'+msg.result.count+'条酒庄数据，当前列表仅显示10条');
+				response($.map(msg.result.res,function(item){
+					return{id:item.id,value:item.fname+' ╱ '+item.cname}
+				}));
+			});
+		},
+		select: function( event, ui) {
+			$(this).attr("disabled",true);
+			$(this).parent("p").children("img").show();
+			$(this).parent("p").children("em").text('');
+			$(this).val( ui.item.value );
+			$("input[name='just_winery']").val( ui.item.id );
+			return;
+		}
+	});
+});
+function filter_start(){
+	$("#filter_button").hide();
+	if($("#wine_count").text() < 2){
+		$("#filter_msg").text("筛选失败！选取范围少于两款酒款数据，无法对比筛选。");
+		setTimeout(function(){
+			$("#filter_msg").text('');
+			$("#filter_button").show();
+		},2000);
+		return;
+	}
+	if(
+	   $("select[name='country_range']").val() == 0 &&
+	   $("select[name='region_range']").val() == 0 &&
+	   $("input[name='winery_range']").val() == 0 &&
+	   !$("#region_same").is(":checked") &&
+	   !$("#winery_same").is(":checked") &&
+	   !$("#winefname_same").is(":checked") &&
+	   !$("#winecname_same").is(":checked")
+	   ){
+		$("#filter_msg").text("筛选失败！没有选择筛选范围或规则。");
+		setTimeout(function(){
+			$("#filter_msg").text('');
+			$("#filter_button").show();
+		},2000);
+		return;
+	}
+	$("#filter_msg").text("筛选中...请稍后");
+	$.post("{:Url('Jiuku/OutAcWine/ajaxFilter')}",{'cid':$("select[name='country_range']").val(),'rid':$("select[name='region_range']").val(),'wid':$("input[name='winery_range']").val(),'region_same':$("#region_same").is(":checked"),'winery_same':$("#winery_same").is(":checked"),'winefname_same':$("#winefname_same").is(":checked")},function(msg){
+		var msg = eval("(" + msg + ")");
+		if(msg.errorCode != 0){
+			$("#filter_msg").text("数据异常，请联系管理员");
+			return;
+		}else{
+			if(msg.result.count <= 0){
+				$("#filter_msg").text("没有符合条件的数据，请重新调整筛选范围或筛选规则后进行筛选。");
+				setTimeout(function(){
+					$("#filter_msg").text('');
+					$("#filter_button").show().text("重新筛选");
+				},2000);
+				return;
+			}else{
+				$("#filter_msg").text('获取成功');
+				setTimeout(function(){
+					$("#filter_msg").text('');
+					$("#filter_button").show().text("重新筛选");
+				},2000);
+				$("#list_msg").show().children("span").text(msg.result.count);
+				var html = '';
+				$.each(msg.result.res,function(i,n){
+					html += '<table width="100%" cellspacing="0" class="table-list fh_wine" id="list_table_'+i+'">';
+					html += '<thead><tr><th colspan="2" title="展开" style="cursor:pointer;" oc="1" onclick="l_oc('+i+',1);"><img src="{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/list-open.png" style="margin-right:15px;" />相同  ╱  ';
+					if(n.country_id){
+						html += '国家:'+n.country_fname+' '+n.country_cname+'<input type="hidden" name="country_id" value="'+n.country_id+'" />  ╱  ';
+					}
+					if(n.region_id){
+						html += '产区:'+n.region_fname+' '+n.region_cname+'<input type="hidden" name="region_id" value="'+n.region_id+'" />  ╱  ';
+					}
+					if(n.winery_id){
+						html += '酒庄:'+n.winery_fname+' '+n.winery_cname+'<input type="hidden" name="winery_id" value="'+n.winery_id+'" />  ╱  ';
+					}
+					if(n.fname){
+						html += '酒款外文名:'+n.fname+'<input type="hidden" name="fname" value="'+n.fname+'" />  ╱  ';
+					}
+					html += '筛选下共'+n.count+'条酒款数据</th></tr></thead><tbody></tbody>';
+					html += '</table>';
+				});
+				$(".list").html(html);
+			}
+		}
+	});
+}
+function l_oc(key,page,type){
+	var th = $("#list_table_"+key).find("th");
+	var img = $("#list_table_"+key).find("img");
+	var tbody = $("#list_table_"+key).find("tbody");
+	if(th.attr('oc') == '0' && type !== 'jp'){
+		$("#list_table_"+key).find("tbody").html('');
+		th.attr('title','开启').attr('oc','1')/*.css("background-color","#fff")*/;
+		img.attr('src','{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/list-open.png');
+		return;
+	}
+	tbody.html('<tr><td colspan="2" style="text-align:center;"><img src="{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/loading.gif" /></td></tr>');
+	var country_id = $("#list_table_"+key).find("input[name='country_id']").val() ? $("#list_table_"+key).find("input[name='country_id']").val() : null;
+	var region_id = $("#list_table_"+key).find("input[name='region_id']").val() ? $("#list_table_"+key).find("input[name='region_id']").val() : null;
+	var winery_id = $("#list_table_"+key).find("input[name='winery_id']").val() ? $("#list_table_"+key).find("input[name='winery_id']").val() : null;
+	var fname = $("#list_table_"+key).find("input[name='fname']").val() ? $("#list_table_"+key).find("input[name='fname']").val() : null;
+	$.post("{:Url('Jiuku/OutAcWine/ajaxListOC')}",{'country_id':country_id,'region_id':region_id,'winery_id':winery_id,'fname':fname,'page':page},function(msg){
+		var msg = eval("(" + msg + ")");
+		if(msg.errorCode != 0){
+			img.attr('src','{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/list-open.png');
+			return;
+		}else{
+			var html = '';
+			$.each(msg.result.res,function(i,n){
+				/////
+				if($("#selected_"+n.id).length == 0){
+					html += '<tr><td width="25"><input type="checkbox" class="checkbox_'+n.id+'" onclick="checkbox_selected_ini(this,'+n.id+');"><span>&nbsp;&nbsp;&nbsp;'+n.fname+'&nbsp;&nbsp;'+n.cname+'</span></td></tr>'
+				}else{
+					html += '<tr><td width="25"><input type="checkbox" class="checkbox_'+n.id+'" onclick="checkbox_selected_ini(this,'+n.id+');" checked="checked"><span>&nbsp;&nbsp;&nbsp;'+n.fname+'&nbsp;&nbsp;'+n.cname+'</span></td></tr>'
+				}
+				//////
+				/*html += '<tr id="option_wine_'+n.id+'"><td width="25"><img src="{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/add';
+				if($.inArray(n.id.toString(),$("#selected_wine_idstr").val().split(",")) < 0){
+					html += '-blue.png" mark="0"';
+				}else{
+					html += '.png" mark="1"';
+				}
+				html += ' title="选择" style="cursor:pointer;" onclick="select_wine('+n.id+');" /></td><td title="'+n.fname+' '+n.cname+'">'+n.id+' '+n.fname+' '+n.cname+'</td></tr>';*/
+			});
+			html += '<tr><td colspan="2" style="text-align:center;"><div>';
+			if(page == 1){
+				html += '<span>首页</span> <span>上一页</span> ';
+			}else{
+				html += '<a href="javascript:l_oc('+key+',1,\'jp\');">首页</a> <a href="javascript:l_oc('+key+','+(parseInt(page)-1)+',\'jp\');">上一页</a> ';
+			}
+			if(page == msg.result.page_count){
+				html += '<span>下一页</span> <span>尾页</span> ';
+			}else{
+				html += '<a href="javascript:l_oc('+key+','+(parseInt(page)+1)+',\'jp\');">下一页</a> <a href="javascript:l_oc('+key+','+msg.result.page_count+',\'jp\');">尾页</a> ';
+			}
+			html += '<select onchange="l_oc('+key+',this.value,\'jp\')">';
+			for(var pagei=1;pagei<=msg.result.page_count;pagei++){
+				html += '<option value="'+pagei+'"';
+				if(pagei == page) html += 'selected';
+				html += '>'+pagei+'</option>';
+			}
+			html += '</select>/<em>'+msg.result.page_count+'</em>';
+			html += '</div></td></tr>';
+			$(".fh_wine").find("tbody").html('');
+			$(".fh_wine").find("th").attr('title','开启').attr('oc','1')/*.css("background-color","#fff")*/;
+			th.attr('title','关闭').attr('oc','0')/*.css("background-color","#84acf5")*/;
+			tbody.html(html);
+			img.attr('src','{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/list-close.png');
+		}
+	});
+}
+/*function select_wine(id){
+	if($("#option_wine_"+id).find("img").attr('mark') == '1') return;
+	if($.inArray(id.toString(),$("#selected_wine_idstr").val().split(",")) >= 0) return;
+	var new_idstr = ($("#selected_wine_idstr").val() == '') ? id : $("#selected_wine_idstr").val()+','+id;
+	$("#selected_wine_idstr").val(new_idstr);
+	$("#selected_wine_idstr_count").text($("#selected_wine_idstr").val().split(",").length);
+	$("#option_wine_"+id).find("img").attr('src','{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/add.png').attr('mark','1');
+	$("#selected_wine_list").append('<p id="selected_wine_'+id+'"><label for="RadioGroup1_'+id+'" style="cursor:pointer;"><input type="radio" name="RadioGroup1" id="RadioGroup1_'+id+'" value="'+id+'" />&nbsp;'+ $("#option_wine_"+id).find('td:eq(1)').attr('title')+'</label>&nbsp;<a href="javascript:delete_wine('+id+');" style="color:red;">删除</a></p>');
+	$("#selected_wine_box").show();
+	if($("#selected_wine_idstr_count").text() >= 2 && $("#selected_wine_list").find("input[type='button']").length == 0){
+		$("#selected_wine_list").prepend('<input type="button" value="选择主参考并进行合并" style="padding:2px;" onclick="open_merge_pgae();" />');
+	}
+}*/
+/*function delete_wine(id){
+	var idarr = $("#selected_wine_idstr").val().split(",");
+	for(var i = 0; i < idarr.length; i++){
+		if(idarr[i] == id){
+			idarr.splice(i,1);break;
+		}
+	}
+	$("#selected_wine_idstr").val(idarr.join(","));
+	$("#selected_wine_idstr_count").text(idarr.length);
+	$("#option_wine_"+id).find("img").attr('src','{:C(\'DOMAIN.PUBLIC\')}Jiuku/images/common/add-blue.png').attr('mark','0');
+	$("#selected_wine_"+id).remove();
+	if($("#selected_wine_idstr_count").text() < 2 && $("#selected_wine_list").find("input[type='button']").length > 0){
+		$("#selected_wine_list").find("input[type='button']").remove();
+	}
+}*/
+/*function select_wine2(id,val){
+	if($.inArray(id.toString(),$("#selected_wine_idstr").val().split(",")) >= 0) return;
+	var new_idstr = ($("#selected_wine_idstr").val() == '') ? id : $("#selected_wine_idstr").val()+','+id;
+	$("#selected_wine_idstr").val(new_idstr);
+	$("#selected_wine_idstr_count").text($("#selected_wine_idstr").val().split(",").length);
+	$("#selected_wine_list").append('<p id="selected_wine_'+id+'"><label for="RadioGroup1_'+id+'" style="cursor:pointer;"><input type="radio" name="RadioGroup1" id="RadioGroup1_'+id+'" value="'+id+'" />&nbsp;'+ val +'</label>&nbsp;<a href="javascript:delete_wine2('+id+');" style="color:red;">删除</a></p>');
+	$("#selected_wine_box").show();
+	if($("#selected_wine_idstr_count").text() >= 2 && $("#selected_wine_list").find("input[type='button']").length == 0){
+		$("#selected_wine_list").prepend('<input type="button" value="选择主参考并进行合并" style="padding:2px;" onclick="open_merge_pgae();" />');
+	}
+}
+function delete_wine2(id){
+	var idarr = $("#selected_wine_idstr").val().split(",");
+	for(var i = 0; i < idarr.length; i++){
+		if(idarr[i] == id){
+			idarr.splice(i,1);break;
+		}
+	}
+	$("#selected_wine_idstr").val(idarr.join(","));
+	$("#selected_wine_idstr_count").text(idarr.length);
+	$("#selected_wine_"+id).remove();
+	if($("#selected_wine_idstr_count").text() < 2 && $("#selected_wine_list").find("input[type='button']").length > 0){
+		$("#selected_wine_list").find("input[type='button']").remove();
+	}
+}*/
+</script>
+<script language="javascript">
+/*function open_merge_pgae(){
+	var main_id = $("input[type='radio'][name='RadioGroup1']:checked").val();
+	var aux_idarr = $("#selected_wine_idstr").val().split(",");
+	for(var i = 0; i < aux_idarr.length; i++){
+		if(aux_idarr[i] == main_id){
+			aux_idarr.splice(i,1);break;
+		}
+	}
+	var aux_id = aux_idarr.join(",");
+	if(!main_id || aux_id == '') return;
+	$("#selected_wine_list").html('').hide();
+	$("#selected_wine_idstr").val('');
+	$("#selected_wine_idstr_count").html('0');
+	window.open("{:Url('merge2')}&idstr="+main_id+","+aux_id,'merge_start','_blan…no，fullscreen=1');
+	//window.open("{:Url('merge2')}&idstr="+main_id+","+aux_id,'merge_start','_blan…no,fullscreen=1,status=no,resizable=yes,location=no');
+	//window.location("{:Url('merge2')}&idstr="+main_id+","+aux_id,'_blank');
+}*/
+
+//------------just winery
+function just_winery_x(this1){
+	$("#just_winery_show").val('').attr("disabled",false);
+	$("#just_winery").val(0);
+	$("#just_winery_msg").text('');
+	$(this1).hide();
+	$("#just_winery_list").html('').hide();
+}
+$(function(){
+	$("#just_winery_show").autocomplete({
+		minLength: 1,
+		source: function(request,response){
+			$.post("{:Url('Jiuku/OutAcWine/ajaxIndexAutocompleteWinery')}",{'kw':request.term},function(msg){
+				var msg = eval("("+msg+")");
+				if(msg.errorCode != 0){msg.result.res = [];}
+				if(msg.result.res == null){msg.result.res = [];}
+				$("#just_winery_msg").text('共找到'+msg.result.count+'条酒庄数据，当前列表仅显示10条');
+				response($.map(msg.result.res,function(item){
+					return{id:item.id,value:item.fname+' ╱ '+item.cname}
+				}));
+			});
+		},
+		select: function( event, ui) {
+			$(this).attr("disabled",true);
+			$(this).parent("p").children("img").show();
+			$(this).parent("p").children("em").text('');
+			$(this).val( ui.item.value );
+			$("#just_winery").val( ui.item.id );
+			just_winery_wine(ui.item.id,1);
+			$("#just_winery_msg").text('获取酒款中...');
+			return;
+		}
+	});
+});
+function just_winery_wine(id,page){
+	$.post("{:Url('Jiuku/OutAcWine/ajaxMergeJustWineryGetWine')}",{'id':id,'page':page},function(msg){
+		var msg = eval("(" + msg + ")");
+		if(msg.count == 0){
+			$("#just_winery_msg").text('该酒庄下没有酒款');
+		}else{
+			$("#just_winery_msg").text('共找到'+msg.count+'款酒');
+			var html ='';
+			$.each(msg.res,function(i,n){
+				if($("#selected_"+n.id).length == 0){
+					html += '<tr><td width="25"><input type="checkbox" class="checkbox_'+n.id+'" onclick="checkbox_selected_ini(this,'+n.id+');"><span>&nbsp;&nbsp;&nbsp;'+n.fname+'&nbsp;&nbsp;'+n.cname+'</span></td></tr>'
+				}else{
+					html += '<tr><td width="25"><input type="checkbox" class="checkbox_'+n.id+'" onclick="checkbox_selected_ini(this,'+n.id+');" checked="checked"><span>&nbsp;&nbsp;&nbsp;'+n.fname+'&nbsp;&nbsp;'+n.cname+'</span></td></tr>'
+				}
+			});
+			html += '<tr><td>';
+			html += (page == 1) ? '<span>首页</span> <span>上一页</span> ' : '<a href="javascript:just_winery_wine('+id+',1);">首页</a> <a href="javascript:just_winery_wine('+id+','+(parseInt(page)-1)+');">上一页</a> ';
+			html += (page == msg.page_count) ? '<span>下一页</span> <span>尾页</span> ' : '<a href="javascript:just_winery_wine('+id+','+(parseInt(page)+1)+');">下一页</a> <a href="javascript:just_winery_wine('+id+','+msg.page_count+',\'jp\');">尾页</a> '
+			html += '<select onchange="just_winery_wine('+id+',this.value)">';
+			for(var i=1;i<=msg.page_count;i++){
+				html += '<option value="'+i+'"';
+				if(i == page) html += 'selected';
+				html += '>'+i+'</option>';
+			}
+			html += '</select>/<em>'+msg.page_count+'</em>';
+			html += '</td></tr>';
+			$("#just_winery_list").html(html).show();
+		}
+	});
+}
+function checkbox_selected_ini(this1,id){
+    if($(this1).attr("checked") == "checked"){
+    	var val = $(this1).next("span").text();
+    	selected_select(id,val);
+    }else{
+    	selected_delete(id);
+    }
+
+}
+///////
+function selected_select(id,val){
+	$("#selected_list").append('<p id="selected_'+id+'"><label for="selected_radio_'+id+'" style="cursor:pointer;"><input type="radio" name="selected_radio" id="selected_radio_'+id+'" value="'+id+'" />&nbsp;'+ val+'</label>&nbsp;<a href="javascript:selected_delete('+id+');" style="color:red;">删除</a></p>')
+	$(".checkbox_"+id).attr("checked",true);
+    var count = $("#selected_list").find("p").length;
+    $("#selected_count").text(count);
+    if(count > 0) $("#selected_box").show();
+    if(count > 1) $("#selected_btn").show();
+}
+function selected_delete(id){
+	$("#selected_"+id).remove();
+	$(".checkbox_"+id).attr("checked",false);
+    var count = $("#selected_list").find("p").length;
+    $("#selected_count").text(count);
+    if(count < 2) $("#selected_btn").hide();
+}
+function selected_merge(){
+	//$("input:checkbox").not("input:checked")
+	var id = new Array();
+	if($("input[type='radio'][name='selected_radio']:checked").length > 0){
+		id.push($("input[type='radio'][name='selected_radio']:checked").val());
+	}
+	$.each($("input[type='radio'][name='selected_radio']:not(:checked)"),function(i,n){
+		id.push($(n).val());
+	})
+    var iframe_src = "{:Url('merge2')}&idstr="+id.join(",");
+    var dialog = art.dialog({
+    	id : 'merge2',
+    	lock: true,
+    	content: '<iframe src="'+iframe_src+'" width="1100px" height="650px" scroll="auto"></iframe>',
+    	cancel: function(){
+		    art.dialog({
+		        content: '页面数据可能以发生修改，是否刷新页面',
+		        ok: function(){window.location.reload();},
+		        cancel: true,
+		    });
+    	},
+    });
+}
+function selected_merge_close(){
+    art.dialog({id:'merge2'}).close();
+    art.dialog({
+        content: '页面数据已经发生修改，是否刷新页面',
+        ok: function(){window.location.reload();},
+        cancel: true,
+    });
+}
+</script>
+<style>
+.list table{margin:5px 0;}
+.list thead{border:1px solid;border-color:#6495ED #fff #fff #6495ED;}
+</style>
+
+<div id="selected_box" style="position:fixed;right:200px;top:0;z-index:103;border:1px solid #ee9a9a;background-color:#fff;display:none;">
+    <p title="点击显示" style="cursor:pointer;padding:3px;" onclick="$('#selected_div').toggle()">已选中 <em style="color:red;" id="selected_count">0</em> 款酒</p>
+    <div id="selected_div" style="display:none;">
+    	<div id="selected_list"></div>
+    	<input id="selected_btn" type="button" value="选择主参考并进行合并" style="padding:2px;display:none;" onclick="selected_merge();" />
+    </div>
+</div>
+
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">酒款列表</a> > 合并酒款</div>
+    <div class="list-menu"></div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form"><tbody><tr><td>
+            <strong>只以酒庄为筛选条件：</strong>
+            <div style="margin-left:20px;">
+                <p>选择酒庄&nbsp;<input id="just_winery_show" class="input-text" style="border-color: #666666 #CCCCCC #CCCCCC #666666;width:393px;" type="text" size="80" /><input id="just_winery" type="hidden" value="0" /><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-22px;display:none;cursor:pointer;" onclick="just_winery_x(this);" /><em id="just_winery_msg"></em></p>
+            </div>
+        </td></tr></tbody></table>
+        <table width="100%" cellspacing="0" class="table-list" id="just_winery_list" style="margin:10px;display:none;"></table>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form"><tbody><tr><td>
+            <strong>直接选择酒款：</strong>
+            <div style="margin-left:20px;">
+                <p>选择酒款&nbsp;<input class="measure-input wine_radio_input" type="text" size="60" /></p>
+            </div>
+        </td></tr></tbody></table>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tbody>
+                <tr>
+                    <td width="">
+                    	<strong>选取筛选范围：</strong>
+                        <div style="margin-left:20px;">
+                            <p>国家&nbsp;<select name="country_range" style="margin: 1px 0;width:200px;" onchange="change_country_range();"><option value="0">请选择</option><volist name="country_list" id="vo"><option value="{$vo.id}">{$vo.fname} {$vo.cname}</option></volist></select><em title="国家选择的更改会影响到产区和酒庄选项的预选项以及已选结果">[?]</em></p>
+                            <p>产区&nbsp;<select name="region_range" style="margin: 1px 0;width:400px;" onchange="change_region_or_winery_range();"><option value="0">请选择</option><volist name="region_list" id="vo"><option value="{$vo.id}">{$vo.fname} {$vo.cname}</option></volist></select></p>
+                            <p>酒庄&nbsp;<input name="winery_range_show" class="input-text" style="border-color: #666666 #CCCCCC #CCCCCC #666666;width:393px;" type="text" size="80" /><input name="winery_range" type="hidden" value="0" /><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-22px;display:none;cursor:pointer;" onclick="clear_winery_range();" /><em></em></p>
+                        	<p>范围内共<em style="color:#F63;margin:0 2px;" id="wine_count">{$wine_count}</em>条酒款数据</p>
+                        </div>
+                    	<strong>选取筛选规则：</strong>
+                        <div style="margin-left:20px;">
+                        	<span style="margin-right:30px;"><input id="region_same" type="checkbox" value="" />&nbsp;产区相同</span>
+                        	<span style="margin-right:30px;"><input id="winery_same" type="checkbox" value="" />&nbsp;酒庄相同</span>
+                        	<span style="margin-right:30px;"><input id="winefname_same" type="checkbox" value="" />&nbsp;酒款外文名相同</span>
+                        	<span style="margin-right:30px; display:none;"><input id="grape_same" type="checkbox" value="" disabled/>&nbsp;葡萄品种相同（<input type="checkbox" checked disabled />忽略百分比）</span>
+                        </div>
+                        <div style="margin:10px;"><a id="filter_button" class='btn' href="javascript:filter_start();" style="padding:6px 12px;">开始筛选</a><em id="filter_msg" style="color:red;"></em></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="list_msg" style="float:right;margin:10px;display:none;">共获取到 <span>"+msg.result.count+"</span> 组符合条件的数据。当前仅显示组内酒款数最多的前20条</div>
+    <div class="list">
+    </div>
+    <!-- <div id="selected_wine_box" style="position:fixed;right:200px;top:0;z-index:103;border:1px solid #ee9a9a;background-color:#fff;display:none;">
+        <input id="selected_wine_idstr" type="hidden" value="" />
+        <p title="点击显示" style="cursor:pointer;padding:3px;" onclick="$('#selected_wine_list').toggle()">已选中 <em style="color:red;" id="selected_wine_idstr_count">0</em> 款酒</p>
+        <div id="selected_wine_list" style="display:none;"></div>
+    </div> -->
+</div>
+<include file="Common:cpfooter" />

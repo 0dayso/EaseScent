@@ -1,0 +1,91 @@
+<include file="Common:cpheader" />
+<script src="{:C('DOMAIN.PUBLIC')}jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.iframe-transport.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.fileupload.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}editor/kindeditor-min.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}editor/zh_CN.js"></script>
+<script language="javascript">
+$(function(){
+    $('#upd_img').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#upd_progress").text(progress + '%');
+        },
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html ='<div class="selected_box" title="可进行拖拽排序"><input name="img_filename[]" type="hidden" value="'+data.result.filename+'" /><img src="'+data.result.url+'" width="100" height="100" /><div></div><span class="del_selected" onclick="imgbox_del(this);"></span></div>';
+                $("#img_box").append(html);
+            }else{
+                alert(data.result.message);
+            }
+            //拖拽排序
+            $( "#img_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+            $( "#img_box" ).disableSelection();
+            //拖拽排序end
+        }
+    });
+});
+function imgbox_del(this1){
+    $(this1).parent().remove();
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Agents/Index/index')}">代理商管理</a> >
+        <a href="{:Url('index')}">网络渠道列表</a> >
+        添加网络渠道</div>
+    <div class="form">
+		<form name="myform" action="{:Url('add')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="_backpage" value="{$_REQUEST._backpage}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">添加网络渠道</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">所属代理商</th>
+                        <td>
+                            <select name="agents_id">
+                                <option value="0">请选择</option>
+                                <volist name="agents_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$_REQUEST['agents_id'] eq $vo['id']">selected="selected"</if>>{$vo.fname}&nbsp;/&nbsp;{$vo.cname}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">网站（网店）名称</th>
+                        <td><input type="text" size="80" name="name" class="measure-input" value="" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">网络销售logo</th>
+                        <td>
+                            <input id="upd_img" type="file" name="upd_img" multiple /><span id="upd_progress"></span>
+                            <div id="img_box">
+                                <if condition="$res.logo neq ''">
+                                    <div class="selected_box" title="可进行拖拽排序">
+                                        <input name="img_filename[]" type="hidden" value="{$res.logo}" />
+                                        <img src="" />
+                                    </div>
+                                    <span class="del_selected" onclick="imgbox_del(this);"></span>
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">URL链接</th>
+                        <td><input type="text" size="80" name="url" class="measure-input" value="http://" /></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

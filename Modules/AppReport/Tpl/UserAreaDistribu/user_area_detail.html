@@ -1,0 +1,95 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+   <!--  <div class="panel">当前位置：<a href="{:Url('News/Index/index')}">资讯管理</a> > 资讯列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}">发布新文章</a>
+    </div> 
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('News/Pub/index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">栏目：
+                        <select name="catid">
+                            <option value='' selected>全部</option>
+                            <volist id="cate" name="cateList">
+                            <option value="{$cate.catid}" <if condition="$cate['catid'] eq $_REQUEST['catid']" >selected</if>  >{$cate.name}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        标题：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        发布时间：
+                        <input name="btime" id="btime" size="20" type="text" value="{$_REQUEST['btime']}" class="input-text" />
+                        -&nbsp;
+                        <input name="etime" id="etime" size="20" type="text" value="{$_REQUEST['etime']}" class="input-text" />
+                            <script type="text/javascript">
+                                Calendar.setup({
+                                    inputField : "btime",
+                                    trigger    : "btime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d %H:%M:%S"
+                                });
+                                Calendar.setup({
+                                    inputField : "etime",
+                                    trigger    : "etime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d %H:%M:%S"
+                                });
+                            </script>
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">通过审核</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">待审核</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>-->
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>省市</th>
+                    <th>新增用户</th>
+                    <th>新增用户占比</th>
+                    <th>启动次数</th>
+                    <th>启动次数占比</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <foreach name="data_list" item="vo">
+                  <td>{$vo.area}</td>
+                  <td>{$vo.new_users}</td>
+                  <td>{$vo.new_user_ratio}</td>
+                  <td>{$vo.starts}</td>
+                  <td>{$vo.start_ratio}</td>
+              </tr> 
+              </foreach>
+            </tbody>
+            <!-- <{$page}> -->
+        </table>
+
+        <!-- <div class="footer"><label for="check_box">全选/取消</label> <input type="submit" class="btn" name="dosubmit" value="删除" onclick="return confirm('您确定要删除吗？')"></div> -->
+    
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+
+<include file="Common:cpfooter" />

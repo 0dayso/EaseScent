@@ -1,0 +1,27 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="list">
+        <table border="1" width="1200px">
+        	<volist name="res" id="vo">
+            <tr>
+            	<td width="200px" style="color:#F00;"><strong>{$vo.fname}<br />{$vo.cname}</strong></td>
+                <td>
+                	<table border="1">
+                    	<volist name="vo.son_res" id="vos">
+                        <tr>
+                            <td width="600px">
+                                	<p>简称：<span style="color:#00F;">{$vos.sname}</span></p>
+                                	<p>原文名：<span style="color:#00F;">{$vos.oname}</span></p>
+                                	<p>中文名：<span style="color:#00F;">{$vos.cname}</span></p>
+                                	<p>备注：<span style="color:#00F;">{$vos.remark}</span></p>
+                            </td>
+                        </tr>
+                    	</volist>
+                    </table>
+                </td>
+            </tr>
+            </volist>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter" />

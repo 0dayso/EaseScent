@@ -1,0 +1,112 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tr><td colspan="2"><strong>标准酒款名：{$wine_res.fname}&nbsp;{$wine_res.cname}</strong></td></tr>
+            <form name="myform1" action="{:Url('caname')}" method="post" enctype="multipart/form-data">
+            <tr>
+                <td>添加别名：</td>
+                <td>
+                    <input name="fromtype" type="hidden" value="add" />
+                    <input name="wine_id" type="hidden" value="{$wine_res.id}" />
+                    <input name="cname" type="text" value="" class="input-text" />
+                    <input type="submit" class="btn" value="提交" />
+                </td>
+            </tr>
+            </form>
+            <form name="myform2" action="{:Url('caname')}" method="post" enctype="multipart/form-data">
+            <tr>
+                <td>修改别名：</td>
+                <td>
+                    <input name="fromtype" type="hidden" value="edit" />
+                    <input name="wine_id" type="hidden" value="{$wine_res.id}" />
+                    <select name="id">
+                        <option value="0">请选择要修改的别名</option>
+                        <volist name="list" id="vo">
+                        <option value="{$vo.id}">{$vo.cname}</option>
+                        </volist>
+                    </select>
+                    <input name="cname" type="text" value="" class="input-text" />
+                    <input type="submit" class="btn" value="提交" />
+                </td>
+            </tr>
+            </form>
+            <form name="myform3" action="{:Url('caname')}" method="post" enctype="multipart/form-data">
+            <tr>
+                <td>删除别名：</td>
+                <td>
+                    <input name="fromtype" type="hidden" value="del" />
+                    <input name="wine_id" type="hidden" value="{$wine_res.id}" />
+                    <select name="id">
+                        <option value="0">请选择要删除的别名</option>
+                        <volist name="list" id="vo">
+                        <if condition="$vo['wine_hid'] eq 0">
+                        <option value="{$vo.id}">{$vo.cname}</option>
+                        </if>
+                        </volist>
+                    </select>
+                    <select name="tid">
+                        <option value="0">请选择一个别名替换将要删除的别名的代理酒款关系</option>
+                        <volist name="list" id="vo">
+                        <option value="{$vo.id}">{$vo.cname}</option>
+                        </volist>
+                    </select>
+                    <input type="submit" class="btn" value="提交" />
+                </td>
+            </tr>
+            </form>
+            <form name="myform3" action="{:Url('caname')}" method="post" enctype="multipart/form-data">
+            <tr>
+                <td>设置主别名：</td>
+                <td>
+                    <input name="fromtype" type="hidden" value="key" />
+                    <input name="wine_id" type="hidden" value="{$wine_res.id}" />
+                    <select name="id">
+                        <option value="0">请选择一个别名作为主别名</option>
+                        <volist name="list" id="vo">
+                        <option value="{$vo.id}">{$vo.cname}</option>
+                        </volist>
+                    </select>
+                    <input type="submit" class="btn" value="提交" />
+                </td>
+            </tr>
+            </form>
+            <tr><td colspan="2"><span style="color:red;">*此页面功能操作执行立即生效</span></td></tr>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="50">ID</th>
+                    <th width="400">中文别名</th>
+                    <th>主</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="list" id="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.cname}</td>
+                    <td><if condition="$vo['wine_hid'] eq 0">否<else/>是</if></td>
+                    <td>
+                        <form name="myform4" action="{:Url('caname')}" method="post" enctype="multipart/form-data">
+                        <input name="fromtype" type="hidden" value="status" />
+                        <input name="wine_id" type="hidden" value="{$wine_res.id}" />
+                        <input name="id" type="hidden" value="{$vo.id}" />
+                        <if condition="$vo['status'] eq '1'">
+                        <span style="color:green;">开启</span><input name="status" type="hidden" value="-1" />
+                        <else/>
+                        <span style="color:red;">关闭</span><input name="status" type="hidden" value="1" />
+                        </if>
+                        <input type="submit" class="btn" value="更改" />
+                        </form>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter" />

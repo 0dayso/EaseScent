@@ -1,0 +1,18 @@
+/* 头尾样式表 志宝 2012/7/5*/
+
+/*头部*/
+body{ background:url(../images/header/top_bg.jpg) repeat-x 0 0;}
+.head{ height:79px; width:1003px; margin:0 auto;}
+.head h1{ float:left;}
+.head_r{ float:right; margin-top:24px;}
+
+/*主导航*/
+.nav{ width:1003px; margin:0 auto;}
+.nav li{ float:left; width:140px; height:52px; line-height:52px; font-size:14px; font-weight:bold; font-family:Verdana, Geneva, sans-serif '微软雅黑'; position:relative; z-index:1;}
+.nav li h3 a{ display:block; float:left; color:#7c7153; text-align:center; width:100%; text-decoration:none;}
+.nav li h3 a:hover{ background:url(../images/header/nav_hover_bg.png) repeat-x 0 0;}
+.nav li ol{background:url(../images/header/nav_ol_botBg.gif) no-repeat 0  bottom; padding-bottom:4px; z-index:1; position:absolute; top:42px; width:243px; left:0;}
+.nav li ol li{ font-size:12px; font-weight:normal; text-align:center; padding-top:8px; height:25px; line-height:25px; background:#fbf2d3;}
+.nav li ol li a{ color:#666666; text-decoration:none; display:block; height:25px; line-height:25px;}
+.nav li ol li a:hover,.nav li ol li .active{ background:url(../images/header/nav_ol_a_hoverBg.gif) no-repeat 10px 0; color:#FFF;}
+

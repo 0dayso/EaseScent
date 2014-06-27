@@ -1,0 +1,59 @@
+@charset "utf-8";
+/* CSS Document */
+body { background:#fff; font-family:"微软雅黑";}
+a { text-decoration:none;}
+body,ul,li,p{ margin:0;}
+ul { padding:0; list-style:none;}
+img { border:none}
+.ullist {  padding-left:9px; margin:0 auto;  overflow:hidden; width:312px;  }
+.ullist li { background:#fff; margin-right:9px; margin-bottom:9px; float:left; width:84px; padding:4px; border:1px solid #e7e7e7;}
+.ullist li img { display:block; margin-bottom:5px; width:100%;}
+.ullist a span { display:block; line-height:17px;color:#666666;height:34px; overflow:hidden; font-size:12px;}
+.ullist a strong { display:block; line-height:17px;color:#666666; font-weight:normal; height:17px; overflow:hidden;font-size:12px;}
+#title { background:url(../images/titlebg.gif) repeat-x; height:40px; margin-bottom:10px; text-align:center; position:relative;}
+#title .titlesay{ line-height:40px; color:#f9d6b4; font-size:14px; text-align:center; padding-right:20px; background:url(../images/clickbtn.gif) no-repeat right center;width:202px; height:40px; overflow:hidden; display:block; margin:0 auto;text-overflow:ellipsis; 
+white-space: nowrap; }
+#titlediv {  position:absolute; top:37px; background:#fff; display:block; left:50%; margin-left:-111px; width:222px; display:none;}
+.titlelist { border:1px solid #d2d2d2;}
+.titlelist li { height:29px; line-height:29px; padding-left:20px; text-align:left; font-size:14px; color:#666666;}
+#titlediv .topico { position:absolute; background:url(../images/topico.gif) no-repeat; width:7px; height:8px; top:-7px; right:0; overflow:hidden;}
+
+#title .fanhui { width:40px; height:40px; background:url(../images/fanhui.gif) no-repeat; display:block;}
+#content{ padding:10px; color:#333; padding-top:0;}
+.imagessay { font-size:12px; line-height:20px; padding-top:6px; overflow:hidden; position:relative; margin-bottom:10px; padding:0 2px; text-align:left; padding-top:8px;}
+.imagessay .zhankai{ color:#940d20; height:20px; line-height:20px; position:absolute; right:0; bottom:0; background:#fff;}
+
+
+#tab1 {font-size:12px; line-height:20px; text-align:left; margin-bottom:12px;}
+#tab1 a { color:#333; text-decoration:none;}
+#tab1 a:hover{ color:red; text-decoration:underline;}
+.chuanshow { text-align:center;}
+.chuanshow .img img { width:300px; height:200px;}
+
+.jiutitle { height:40px; color:#f0cb9a; font-size:12px; background:#940d20; line-height:20px; text-align:left; padding-left:10px;}
+.jiutitle span { padding-left:20px;}
+
+.tab2 thead { background:#d8d5d5;}
+.tab2 td { line-height:23px; font-size:12px; width:25%;}
+.tab2 thead td { line-height:29px;}
+.j_list { position:relative; padding-bottom:25px; overflow:hidden; }
+.j_btn { width:32px; height:25px; background:url(../images/zkbtn.gif) no-repeat; position:absolute; bottom:0; left:50%; margin-left:-16px; cursor:pointer;}
+.j_btn2 { width:32px; height:25px; background:url(../images/zkbtn2.gif) no-repeat; position:absolute; bottom:0; left:50%; margin-left:-16px; cursor:pointer;}
+.h199 { height:auto; overflow:hidden;}
+
+.xunhuan { padding-bottom:12px;}
+#yybox { border:1px solid #d8d5d5; border-top:3px solid #ffb525; padding-left:6px; text-align:left; padding-bottom:10px;}
+#yybox  h2 { line-height:24px; font-size:14px; font-family:"微软雅黑"; margin:0; font-weight:normal; padding-bottom:13px;}
+#yybox a { display:inline-block; margin:8px;}
+#gotop { background:url(../images/gotop.png) no-repeat; width:33px; height:53px; position:fixed; right:5px; bottom:10px; z-index:20;}
+
+.s_listul {   width:304px; margin:0 auto;}
+.s_listul li { float:left;margin-bottom:10px;border:1px solid #ddd; width:298px; padding:2px;}
+.s_listul li .list_left { width:196px; float:left; padding-left:4px; }
+.list_right { width:80px; height:80px; float:right;}
+.pf .li { width:63px; height:16px; overflow:hidden; float:left; margin-right:2px; font-size:12px;font-family:Arial;}
+.pf .li .name { width:31px; height:16px; background:#b2060f; float:left;  text-align:center; color:#fff; line-height:16px;}
+.pf .li .fs { width:31px; height:14px; line-height:14px; overflow:hidden; border:1px solid #f1454e; border-left:none; float:left; text-align:center;}
+.s_listul li  .p1 { font-size:12px; font-family:"微软雅黑"; line-height:18px; height:36px; overflow:hidden;}
+.s_listul li  .p1 a { color:#333;}
+.s_listul li .p2 { line-height:18px; padding-bottom:6px;}

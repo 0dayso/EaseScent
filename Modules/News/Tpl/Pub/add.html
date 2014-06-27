@@ -1,0 +1,164 @@
+<include file="Common:cpheader" />
+<script language="javascript" src="__PUBLIC__/editor/kindeditor-min.js"></script>
+<script language="javascript" src="__PUBLIC__/editor/zh_CN.js"></script>
+<script language="javascript">
+$(document).ready(function(){
+    //标题分词
+    $("input[name='title']").blur(function(){
+        var keywords = $("input[name='title']").val();
+        $.post("/index.php?app=News&m=Pub&a=get_split_words",{words:keywords},function(data){
+            $("input[name='keywords']").val(data);
+        });
+    });
+
+
+    //缩略图上传
+    $("#pic_dom").change(function(){
+        var type = $("input[name='water']:checked").val();
+        var _form = $("form");
+        _form.attr("action","{:Url('News/Pub/uploads?w=')}"+type);
+        _form.attr("method","post");
+        _form.attr("target","iframe");
+        _form.attr("enctype","multipart/form-data");
+        _form.submit();
+        var form_url = "{:Url('News/Pub/add')}";
+        _form.attr("action",form_url);
+        _form.removeAttr("target");
+        $("#upload_dom").hide();
+    })
+});
+
+//  删除缩略图
+function delPic() {
+    $('#picval').val('');
+    $('#imglist').html('');
+    $("#upload_dom").show();
+}
+
+//编辑器图片上传
+var editor;
+KindEditor.ready(function(K) {
+    editor = K.create('#content', {
+        uploadJson : '{:Url('News/Pub/uploads?PHPSESSID='.$_COOKIE['PHPSESSID'])}',
+        allowFileManager : false,
+    });
+});
+
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Pub/index')}">新闻列表</a> > 增加新闻</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">文章列表</a>
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('News/Pub/add')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="createtime" value="{:time()}">
+            <input type="hidden" name="createuser" value="{$admin_username}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">发布文章</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">高级属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标题</th>
+                        <td><input type="text" size="80" name="title" value="" class="measure-input"/> (必填)</td>
+                    </tr>
+                    <tr>
+                        <th width="130">短标题</th>
+                        <td><input type="text" size="40" name="stitle" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">栏目分类</th>
+						<td>
+							<select name="catid">
+								<volist id="cate" name="cateList">
+                                <option <if condition="$_REQUEST['catid'] eq $cate['catid']">selected</if> value="{$cate.catid}">{$cate.name}</option>
+								</volist>
+							</select>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">关键词</th>
+                        <td><input type="text" size="50" name="keywords" value="" class="measure-input"/> 多关键词之间用空格或者“,”隔开</td>
+                    </tr>
+                    <tr>
+                        <th width="130">来源</th>
+                        <td><input type="text" size="30" name="article_from" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">原创</th>
+                        <td>
+                            <label><input type="radio" name="type" value="1"> 原创</label>
+                            <label><input type="radio" name="type" value="2"> 独家</label>
+                            <label><input type="radio" name="type" value="3"> 关注</label>
+                            <label><input type="radio" name="type" value="0"> 都不是</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">上传缩略图</th>
+                        <td>
+                            <div class="imageslist" id="imglist"></div>
+
+                            <div  id="upload_dom">
+                                <input type="hidden" size="30" name="pic" id="picval" class="measure-input"/>
+                                <font color="red"> * 请选择是否添加水印：</font>
+                                <label><input type="radio" name="water" checked value="1"> 是</label>
+                                <label><input type="radio" name="water" value="2"> 否</label>&nbsp;&nbsp;&nbsp;
+                                <input type="file" id="pic_dom" name="imgFile2" value="上传缩略图" />
+                                <iframe style="display:none;" name="iframe"></iframe>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">描述</th>
+						<td><textarea style="width:70%;height:40px" name="description"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th width="130">内容</th>
+						<td><textarea style="width:90%; height:400px;" name="content" id="content"></textarea></td>
+                    </tr>
+                    </tr>
+                        <th width="130">内容图片是否添加水印</th>
+                        <td>
+                            <label><input type="radio" name="contentwater" checked value="1"> 是，加上水印吧</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label><input type="radio" name="contentwater" value="2"> 否，不要加水印</label>
+                        </td>
+                    </tr>
+                    </tr>
+                        <th width="130">状态</th>
+                        <td> <input type="radio" checked name="status" value="1">正常发布 <input type="radio" name="status" value="-1">待审核 </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">跳转Url</th>
+                        <td><input type="text" size="60" name="url" value="" class="measure-input"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="130">作者</th>
+                        <td><input type="text" size="20" name="author" value="" class="measure-input"/> </td>
+                    </tr>
+                        <th width="130">点击量</th>
+						<td><input type="text" size="20" name="views" value="{:rand(1,999)}" class="measure-input"/> </td>
+                    </tr>
+                    </tr>
+                        <th width="130">是否允许评论</th>
+						<td> <input type="radio" name="allow_comment" checked value="1">允许 <input type="radio" name="allow_comment" value="0">禁止 </td>
+                    </tr>
+                    <tr>
+                        <th width="130">发布时间</th>
+						<td><input type="text" size="30" onclick="" name="dateline" value="{:date('Y-m-d H:i:s', time())}" class="measure-input"/> </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

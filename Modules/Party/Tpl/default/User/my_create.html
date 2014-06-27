@@ -1,0 +1,72 @@
+<include file="Common:header" />
+<link href="__ROOT__/Common/css/wine_con.css" rel="stylesheet" type="text/css" />
+<include file="Common:wine_city" />
+<div class="Y-Cocktail-box">
+	<div class="Y-Cocktail-left">
+		<div class="Cocktail-left-img"><img src="http://user.wine.cn/member/avatar?u={$userinfo.user_name}"/></div>
+		<ul class="Cocktail-left-ul">
+			<li>
+				<span>账号：</span>
+				<var>{$userinfo.user_name}</var>
+			</li>
+			<li><span>昵称：{$userinfo.nick_name}</span></li>
+			<li><span>性别：<if condition="$userinfo.sex eq 0">男<else/>女</if></span></li>
+			<li><span>城市：{$userinfo.city}</span></li>
+			<li>
+				<span>邮箱认证：</span>
+				<if condition="$email_valid eq 1"><a href="###" class="Cocktail-left-a"><img src="__ROOT__/Common/images/co-2.jpg"/></a>
+				<else/>
+				<!-- 未认证按钮 -->
+				<a href="http://user.wine.cn/member/email?continue=http://jiuhui.wine.cn/User/My" class="Cocktail-left-a"><img src="__ROOT__/Common/images/co-3.jpg"/></a>
+				<a href="http://user.wine.cn/member/email?continue=http://jiuhui.wine.cn/User/My" class="Cocktail-left-a2">立即认证>></a>
+				</if>
+			</li>
+			<li><span>共发布过<em>{$userInCount.create}</em>次活动信息</span></li>
+			<li><span>共关注过<em>{$userInCount.insert}</em>次活动</span></li>
+		</ul>
+	</div>
+	<div class="Y-Cocktail-right-box">
+	<!-- 开始循环 -->
+		<div class="Y-Cocktail-right">
+			<div class="Y-Cocktail-index-box">
+				<h2 class="Y-release">发布过的活动（{$myPartyCount}次）</h2>
+							
+				<!-- 开始循环 -->
+               <volist name="myParty" id="party">
+
+				<div class="Y-release-index">
+					<h2>
+                        <a href="__ROOT__/Detail/index/id/{$party.id}">{$party.title}</a></h2>
+					<div class="Y-release-img">
+					<a href="__ROOT__/Detail/index/id/{$party.id}">
+                    <img src="__ROOT__/images/{$party.party_pic}"/>
+                    </a>
+					</div>
+					<div class="Y-release-right">
+						<ul class="Y-release-ul">
+							<li>开始时间：{$party.start.data}（{$party.start.weak}）{$party.start.hour}</li>
+							<li>结束时间：{$party.end.data}（{$party.end.weak}）{$party.end.hour}</li>
+						</ul>
+						<p class="Y-release-p">地点：{$party.address_info}</p>
+						<div class="Y-release-price">
+							<span><small>{$party.lowerprice}元/位</small></span>
+							<var>市场价：{$party.markprice}元/位</var>
+							<span>已有<small>{$party.insertUser}</small>人关注</span>
+							<em>人数上限：<small>{$party.person_sum}</small>人</em>
+						</div>
+					</div>
+					<!-- 修改活动框 -->
+					<div class="Y-check-act">
+						<a href="__ROOT__/Create/edit/id/{$party.id}">修改</a>
+						<a href="javascript:;" onclick="javascript:close_wine({$party.id})"> 关闭</a>
+					</div>
+				</div>
+                </volist>
+				<!-- 循环结束 -->
+			</div>
+			
+		</div>
+
+	</div>
+</div>
+<include file="Common:footer" />

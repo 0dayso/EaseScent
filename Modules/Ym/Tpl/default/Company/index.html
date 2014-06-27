@@ -1,0 +1,213 @@
+<include file="Common:header" />
+
+<div class="main">
+	<include file="Common:menu" />
+	<div class="confirm-box" >
+			<h3 class="confirm-h3">	
+            <if condition="$type eq 'index'">
+                基本资料
+            <else/>
+                身份认证
+            </if>
+            </h3>
+			<div class="basic-con" id="company_box">
+				<div class="basic-con-t">	
+                <if condition="$type eq 'index'">
+                     完善资料可以提升品牌的知名度
+                <else/>
+				    请完善的企业信息，有助于通过企业身份认证
+                </if>
+				</div>
+	            <if condition="$type neq 'index'">
+				    <if condition="$userinfo.email neq ''">
+				    <div class="login-div" style="margin-bottom:0;">
+					    <span class="l-span">邮箱账号:</span>
+                        <span class="reg-prmt">
+                            {$userinfo.email}
+                        </span>
+				    </div>
+                    </if>
+				    <if condition="$userinfo.moblie neq ''">
+				    <div class="login-div" style="margin-bottom:10px;">
+					    <span class="l-span">手机账号:</span>
+                        <span class="reg-prmt">{$userinfo.moblie}
+                        </span>
+				    </div>
+                    </if>
+                <else/>
+                    <!--企业认证--->
+				    <div class="login-div" style="margin-bottom:0;">
+					    <span class="l-span">邮箱账号:</span>
+                        <span class="reg-prmt">
+                    <if condition="$userinfo.email neq ''">
+                            {$userinfo.email}
+                        <else/>
+                            未设置邮箱帐号
+                    </if>
+                        </span>
+				        <a href="/index.php/Confirm/update_email">
+						    <if condition="$userinfo.email eq ''">
+							    输入并认证>>
+						    <else/>
+							    更换邮箱>>
+						    </if>
+					    </a>
+				    </div>
+				    <div class="login-div" style="margin-bottom:10px;">
+					    <span class="l-span">手机账号:</span>
+                        <span class="reg-prmt">
+				        <if condition="$userinfo.moblie neq ''">
+                            {$userinfo.moblie}
+                            <else/>
+                            未设置手机帐号
+                        </if>
+                        </span>
+					    <a href="/index.php/Confirm/update_moblie">
+						    <if condition="$userinfo.moblie eq ''">
+							    输入并认证>>
+						    <else/>
+							更换手机
+						    </if>
+					    </a>
+				    </div>
+                </if>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业简称:</span>
+					<input type="text"  name="nick_name" value="{$userinfo.nick}" class="login-ipt1"/>
+					<em></em>
+				</div>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业全称:</span>
+					<input type="text"  name="company_name" value="{$userinfo.qy_name}" class="login-ipt1"/>
+					<em></em>
+				</div>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    从事行业:
+                    </span>
+					<select name="hangye" class="login-div-slct">
+						<option value="-1">-请选择-</option>
+						{$hy_option}
+					</select>
+					<em></em>
+				</div>
+		
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业性质:
+                    </span>
+					<select name="xingzhi" class="login-div-slct">
+						<option value="-1">-请选择-</option>
+						{$xz_option}
+					</select>
+					<em></em>
+				</div>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业规模:
+                    </span>
+					<select name="guimo" class="login-div-slct">
+						<option value="-1">-请选择-</option>
+						{$gm_option}
+					</select>
+					<em></em>
+				</div>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业网址:
+                    </span>
+					<input name="web_address" type="text" value="{$userinfo.qy_web_address}" class="login-ipt1"/>
+					<em></em>
+				</div>
+                <div class="login-div" <if condition="$type neq 'index'"> style="display:none;"</if>>
+                    <span class="l-span">skype:</span>
+                    <input name="skype" type="text" value="{$userinfo.qy_skype}"  class="login-ipt1">
+                </div>
+                <div class="login-div" <if condition="$type neq 'index'"> style="display:none;"</if>>
+                    <span class="l-span">QQ:</span>
+                    <input name="qq" value="{$userinfo.qy_qq}" type="text" class="login-ipt1">
+                </div>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业地址:
+                    </span>
+					<select id="province" onchange="TwoSelectInit(area,this.value)" class="login-div-slct2">
+					</select>
+					<select id="city" class="login-div-slct2">
+					</select>
+					
+					<input type="text" name="address_info" value="{$userinfo.qy_address}" class="login-ipt1" style="float:none;"/>
+					<em></em>
+				</div>
+                <div class="login-div">
+                    <span class="l-span">
+                    <span style="color:red;">*</span>
+                    注册地址:
+                    </span>
+					<select id="reg_province" value="{$userinfo.qy_reg_province}"  onchange="TwoSelectInit(area_reg,this.value)" class="login-div-slct2">
+                    </select>
+					<select id="reg_city" value="{$userinfo.qy_reg_city}"  class="login-div-slct2">
+                    </select>
+					<input type="text" name="reg_address_info" value="{$userinfo.qy_reg_address}" class="login-ipt1" style="float:none;"/>
+					<em></em>
+                </div>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业电话:
+                    </span>
+					<input type="text" name="company_tel" value="{$userinfo.qy_moblie}" class="login-ipt1"/>
+					<em></em>
+				</div>
+				<div class="login-div">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    联 系 人:
+                    </span>
+					<input type="text" name="contacts" value="{$userinfo.qy_contacts}" class="login-ipt1"/>
+					<em></em>
+				</div>	
+                <div class="login-div" style="height:85px;">
+					<span class="l-span">
+                    <span style="color:red;">*</span>
+                    企业简介:
+                    </span>
+					<textarea name="introduction">{$userinfo.qy_introduction}</textarea>
+					<em></em>
+				</div>
+
+				<div class="email-change-sub" style="padding-left:74px;">
+					<if condition="$type eq 'index'">
+						<input type="button" value="提交" id="company_btn" class="login-sub">
+					<else/>
+						<input type="button" value="下一步" id="company_btn" class="login-sub">
+					</if>
+					<input type="button" onclick="window.history.go(-1)" value="返 回" class="login-sub2">
+				</div>
+				<!--<div class="basic-seven">
+					个人信息保存成功
+				</div>-->
+			</div>
+	</div>
+</div>
+ <script type="text/javascript">
+ var cfg = {
+     province:   '{$userinfo.qy_province}',
+     city    :   '{$userinfo.qy_city}',
+     reg_province : '{$userinfo.qy_reg_province}',
+     reg_city : '{$userinfo.qy_reg_city}'
+ };
+ </script>
+
+<script src="__JS__/region.select.js" type="text/javascript"></script>
+<script src="__JS__/company.js" type="text/javascript"></script>
+<include file="Common:footer" />

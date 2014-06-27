@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="keywords" content="{$keywords}"/>
+<meta name="description" content="{$description}"/>
+<title>{$title}</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/guide/css/shoppers.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/guide/css/main.layout.css"/>
+<link rel="shortcut icon" href="">
+<script type="text/javascript" src="__PUBLIC__/guide/js/jquery1.7.2.js "></script>
+<script type="text/javascript" src="__PUBLIC__/guide/js/z_main.js "></script>
+<script src="http://l.tbcdn.cn/apps/top/x/sdk.js?appkey=21403739"></script>
+<script type="text/javascript">
+	function check_search()
+	{
+		var keyword=$("#keyword").val();
+		if(keyword=='' || keyword=='请输入您要搜索的关键词')
+		{
+			$("#keyword").val("请输入您要搜索的关键词");
+			$("#keyword").css("color","#333");
+			$("#keyword").blur();
+			return false;
+		}
+		return true;
+	}
+</script>
+</head>
+<body>
+<div class="shoppers-head-box">
+	<div class="shoppers-head">
+		<h1><a href="/"><img src="__PUBLIC__/guide/images/logo.jpg" alt="逸香导购 - 中国最大的葡萄酒导购平台"/></a></h1>
+		<div class="shoppers-head-search">
+			<p>
+				<a href="http://www.wine.cn" target="_blank">逸香网</a>|
+				<a href="http://58.wine.cn" target="_blank">逸香商机</a>|
+				<a href="http://i.wine.cn" target="_blank" style="margin-right:0;">大众酒评</a>
+			</p>
+			<!--
+			<div class="shoppers-search">
+            	<form action="{:Url('Index/search')}" onsubmit="return check_search();" target="_blank" method="post">
+                    <div>
+                        <input type="text" value="贝托纳酒庄马尔贝克酒园干红葡萄酒" id="keyword" name="keyword" onfocus="if(this.value=='贝托纳酒庄马尔贝克酒园干红葡萄酒' || this.value=='请输入您要搜索的关键词'){this.value='';this.focus();this.style.color='#333';}" onblur="if(this.value==''){this.value='贝托纳酒庄马尔贝克酒园干红葡萄酒';this.style.color='#B4B4B4';}" class="shoppers-search-text"/>
+                        <input type="submit" value=" " class="shoppers-search-button" style="cursor:pointer"/>
+                    </div>
+                </form>
+			</div>
+			<div class="shoppers-search-related">
+				<a href="{:Url('Index/search?keyword=拉菲')}" target="_blank">拉菲</a>
+				<a href="{:Url('Index/search?keyword=奥利弗')}" target="_blank">奥利弗</a>
+				<a href="{:Url('Index/search?keyword=卡本尼苏')}" target="_blank">卡本尼苏</a>
+				<a href="{:Url('Index/search?keyword=薄若莱')}" target="_blank">薄若莱</a>
+				<a href="{:Url('Index/search?keyword=矮墩城堡')}" target="_blank">矮墩城堡</a>
+				<a href="{:Url('Index/search?keyword=施密特世家')}" target="_blank">施密特世家</a>
+				<a href="{:Url('Index/search?keyword=意大利之花')}" target="_blank">意大利之花</a>
+			</div>
+		  -->
+		</div>
+	</div>
+</div>

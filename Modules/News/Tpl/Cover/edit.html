@@ -1,0 +1,49 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Cover/index')}">封面管理</a> > 编辑封面</div>
+    <div class="form">
+        <form name="myform" action="{:Url('News/Cover/edit?id='.$cover['id'])}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑封面</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标题</th>
+                        <td><input type="text" size="20" name="title" value="{$cover.title}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">Keywords</th>
+                        <td>
+                            <textarea name="keywords" style="width:70%;height:40px">{$cover.keywords}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">Description</th>
+                        <td>
+                            <textarea name="description" style="width:70%;height:40px">{$cover.description}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">附加HEAD代码</th>
+                        <td>
+                            <textarea name="head" style="width:70%;height:30px" <if condition="$_SESSION['admin_adminer'] eq 1">readonly="readonly"</if>>{$cover.head}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">模板文件</th>
+                        <td><input type="text" size="20" name="template" value="{$cover.template}" class="measure-input" <if condition="$_SESSION['admin_adminer'] eq 1">readonly="readonly"</if>/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">物理目录</th>
+                        <td>./Html/<input type="text" size="20" name="path" value="{$cover.path}" class="measure-input" <if condition="$_SESSION['admin_adminer'] eq 1">readonly="readonly"</if>/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

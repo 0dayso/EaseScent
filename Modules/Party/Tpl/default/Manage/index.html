@@ -1,0 +1,69 @@
+<html>
+<head>
+<script type="text/javascript" src="__PUBLIC__/party/common/js/jquery-1.7.1.js"></script>
+<script language="javascript" type="text/javascript" src="__PUBLIC__/party/common/js/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+
+td{
+		border: solid 1px;
+		font-size: 14px;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		$(".seachdetial").hide();
+		$('.seachbtn').click(function(){
+			var $data= $(".start").val();
+			$(".seachdetial").empty();
+			$.post("index.php?app=Party&m=Manage&a=seach", {time:$data},function(msg){ 
+			  if(msg.length<1){
+			  $(".seachdetial").html('请检查日期，');
+			  } else{
+		        var num=msg.length;
+		        var $str='<table style="border:solid 1px;"><tr><td>酒会主题</td><td>开始时间</td><td>结束时间</td><td>市场价格</td><td>详细地址</td><td>联系电话</td><td>操作</td></tr>';
+		         for(var i = 0;i < num; i++){
+		         	$str+='<tr><td>'+msg[i].title+'</td><td>'+getDate(msg[i].party_start)+'</td><td>'+getDate(msg[i].party_end)+'</td><td>'+msg[i].markprice+'元</td><td>'+msg[i].address_info+'</td><td>'+msg[i].contactphone+'</td><td><a href="index.php?app=Party&m=Manage&a=select&aid='+msg[i].id+'">详细</a>|<a href="index.php?app=Party&m=Manage&a=del&aid='+msg[i].id+'">删除</a>|<a href="index.php?app=Party&m=Manage&a=modify&aid='+msg[i].id+'">编辑</a></td></tr>';
+		           
+		         }
+		         $str=$str+'</table><br/><a href="index.php?app=Party&m=Manage&a=index"><input type="button" value="返回列表"></a>'
+		         $(".detial").hide();
+		         $(".seachdetial").show();
+		         //$(".partyinfoshow").empty();
+		         
+		       $(".seachdetial").html($str);
+		   }
+		     },"JSON"); 
+			//alert(data);
+		});
+
+	});
+ function getDate(tm){
+var tt=new Date(parseInt(tm) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ")
+return tt;
+}         
+	
+</script>
+</head>
+<body>
+	<div class="seach">
+		开始时间：<input type="text" name='party_start' class="start" onClick="WdatePicker()"/>
+		<input type="button" name="btn" value='搜索' class="seachbtn" />
+	</div>
+	<div class="detial">
+		<div>
+			<table style="border:solid 1px;">
+		<tr><td>酒会主题</td><td>开始时间</td><td>结束时间</td><td>市场价格</td><td>详细地址</td><td>联系电话</td><td>操作</td></tr>
+		<volist name='list' id='vo'>
+			<tr ><td>{$vo.title}</td><td>{$vo.party_start|date="Y-m-d",###}
+</td><td>{$vo.party_end|date="m-d",###}</td><td>{$vo.markprice}/元</td><td>{$vo.address_info}</td><td>{$vo.contactphone}</td><td><a href="/index.php?app=Party&m=Manage&a=select&aid={$vo.id}">详细</a>|<a href="/index.php?app=Party&m=Manage&a=del&aid={$vo.id}">删除</a>|<a href="/index.php?app=Party&m=Manage&a=modify&aid={$vo.id}">编辑</a></td></tr>
+		</volist>
+			</table>
+		</div>	
+		{$page}
+	</div>
+	<div class="seachdetial">
+	
+	</div>
+
+</body>
+</html>

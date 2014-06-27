@@ -1,0 +1,170 @@
+<include file="Common:cpheader" />
+<script>
+function get_detail(id){
+    art.dialog({id:'preview_detail'}).close();
+    var content_html = '';
+    $.post('?app=Jiuku&m=OutAcAgents&a=ajaxStoreGetDetail',{'id':id},function(msg){
+        var msg = eval("("+msg+")");
+        if(msg.result){
+            content_html += '<table width="100%" cellspacing="0" class="table-form">';
+            content_html += '<tr><td width="150">ID</td><td>'+msg.result.id+'</td></tr>';
+            content_html += '<tr><td>外文名</td><td>'+msg.result.fname+'</td></tr>';
+            content_html += '<tr><td>中文名</td><td>'+msg.result.cname+'</td></tr>';
+            content_html += '<tr><td>年份</td><td>'+msg.result.year+'</td></tr>';
+            var price_title = '';
+            if(msg.result.price_res){
+                $.each(msg.result.price_res,function(i,n){
+                    price_title += n.date+' 更新 '+n.price+'&#10;';
+                });
+            }
+            content_html += '<tr><td>当前价格</td><td><span title="'+price_title+'">'+msg.result.price+'</span></td></tr>';
+            if(msg.result.agents_res)    content_html += '<tr><td>所属代理商信息</td><td>'+msg.result.agents_res.fname+'&nbsp;'+msg.result.agents_res.cname+'</td></tr>';
+            if(msg.result.store_sales_res)    content_html += '<tr><td>所属代理商实体销售信息</td><td>'+msg.result.store_sales_res.name+'</td></tr>';
+            if(msg.result.wine_res)    content_html += '<tr><td>所关联的标准酒款</td><td>'+msg.result.wine_res.fname+'&nbsp;'+msg.result.wine_res.cname+'</td></tr>';
+            if(msg.result.wine_caname_res)    content_html += '<tr><td>所关联的标准酒款中文名</td><td>'+msg.result.wine_caname_res.cname+'</td></tr>';
+            if(msg.result.img_res){
+                content_html += '<tr><td>图片</td><td>'
+                $.each(msg.result.img_res,function(i,n){
+                    content_html += '<img style="max-height:150px;" src="{:C(\'DOMAIN.UPLOAD\')}/Jiuku/Wine/images/'+n.filename+'">';
+                });
+                content_html += '</td><tr>'
+            }
+            content_html += '</table>';
+        }else{
+            content_html = '<div style="color:red;text-align:center;">获取异常</div>';
+        }
+        art.dialog({
+            //follow :  document.getElementById('detail_a_'+id),
+            id : 'preview_detail',
+            content: content_html,
+        });
+    });
+}
+function change_agents_select(){
+    $("#store_sales_id_span").html('');
+    if($("select[name='agents_id']").val() != 0){
+        $.post('?app=Jiuku&m=OutAcAgents&a=ajaxGetStoreSales',{'id':$("select[name='agents_id']").val()},function(msg){
+            var msg = eval("("+msg+")");
+            if(msg.errorCode != 0){
+                art.dialog({
+                    content: msg.errorStr,
+                });
+            }else{
+                var html = '所属实体销售：<select name="store_sales_id"><option value="0">请选择</option>';
+                $.each(msg.result,function(i,n){
+                    html += '<option value="'+n.id+'">'+n.name+'</option>';
+                })
+                html += '</select>&nbsp;&nbsp;';
+                $("#store_sales_id_span").html(html);
+            }
+        });
+    }
+}
+</script>
+<style>
+</style>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('Jiuku/Agents/index')}">代理商列表</a> > 代理商实体销售酒款列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('store_sales_wine_add')}<if condition="$agents_res">&agents_id={$agents_res.id}</if><if condition="$store_sales_res">&store_sales_id={$store_sales_res.id}</if>&_backpage={$_pageurl}">添加实体销售酒款</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('store_sales_wine_list')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        所属代理商：
+                        <select name="agents_id" onchange="change_agents_select();">
+                            <option value="0">请选择</option>
+                            <volist name="agents_list" id="vo">
+                            <option value="{$vo.id}" <if condition="$agents_res['id'] eq $vo['id']">selected="selected"</if>>{$vo.cname}&nbsp;╱&nbsp;{$vo.fname}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        <span id="store_sales_id_span">
+                            <if condition="$store_sales_list">
+                            所属实体销售：
+                            <select name="store_sales_id">
+                                <option value="0">请选择</option>
+                                <volist name="store_sales_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$store_sales_res['id'] eq $vo['id']">selected="selected"</if>>{$vo.name}</option>
+                                </volist>
+                            </select>
+                            &nbsp;&nbsp;
+                            </if>
+                        </span>
+                        关键字：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" title="外文名、中文名或URL链接" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="0">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">开启</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <form action="{:Url('store_sales_wine_del')}&_backpage={$_pageurl}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="20"><input type="checkbox" value="" id="check_box" onclick="selectAll('ids[]');"></th>
+                    <th width="30">ID</th>
+                    <th width="250">酒款名</th>
+                    <th width="35">年份</th>
+                    <th width="50">价格</th>
+                    <th width="120">代理商</th>
+                    <th width="80">实体销售</th>
+                    <th width="250">关联酒款</th>
+                    <th width="60">状态</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td><input type="checkbox" value="{$vo.id}" name="ids[]"></td>
+                    <td>{$vo.id}</td>
+                    <td><span title="{$vo.cname}&#10;{$vo.fname}">{$vo.cname}</span></td>
+                    <td>{$vo.year}</td>
+                    <td id="price_{$vo.id}">{$vo.price}</td>
+                    <td style="color:#06F;">
+                        <if condition="$vo['agents_res']">{$vo.agents_res.fname}&nbsp;{$vo.agents_res.cname}<else/>无</if>
+                    </td>
+                    <td style="color:#06F;">
+                        <if condition="$vo['store_sales_res']">{$vo.store_sales_res.name}<else/>无</if>
+                    </td>
+                    <td style="color:#900;">
+                        <if condition="$vo['wine_res']">{$vo.wine_res.fname}<else/>无</if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 1">
+                        <a href="{:Url('store_sales_wine_chgStatus')}&id={$vo.id}&status=-1&caname_id={$vo.wine_caname_id}&_backpage={$_pageurl}" title="将状态改为关闭" style="color:#00cc00">开启</a>
+                        <else/>
+                        <a href="{:Url('store_sales_wine_chgStatus')}&id={$vo.id}&status=1&caname_id={$vo.wine_caname_id}&_backpage={$_pageurl}" title="将状态改为开启" style="color:#cc0000">关闭</a>
+                        </if>
+                    </td>
+                    <td>
+                        <a id="detail_a_{$vo.id}" href="javascript:get_detail({$vo.id});">预览</a>
+                        <a href="{:Url('store_sales_wine_edit')}&id={$vo.id}&_backpage={$_pageurl}">编辑</a>
+                        <a href="{:Url('store_sales_wine_del')}&id={$vo.id}&_backpage={$_pageurl}" target="delete" title='确定要删除ID为“{$vo.id}”的实体销售酒款吗？' style="color:red;">删除</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+
+        <div class="footer"><label for="check_box" style="margin-right:10px;cursor:pointer;">全选/取消</label> <input type="submit" class="btn" name="dosubmit" value="删除" onclick="return confirm('您确定要删除吗？')"></div>
+    </form>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

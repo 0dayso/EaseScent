@@ -1,0 +1,142 @@
+<include file="Common:cpheader2" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'再次添加',callback:function(){window.location.href = window.location.href;}},
+                    {name:'复制添加'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭窗口'}
+                );
+            }
+        }
+    });
+});
+var relation_type = 0;
+//relation_autocomplete
+$(function(){
+    $("#relation_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#relation_l").css('z-index',1);
+            $.post("{:Url('getRealtionForKw')}",{'type':relation_type,'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.name}
+                    }));
+                }
+                $("#relation_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#relation_id").val(ui.item.id);
+            $("#relation_s").css('z-index',-1);
+            $("#relation_x").css('z-index',1);
+        },
+    });
+});
+function relation_s(){
+    $("#relation_text").focus();
+    $("#relation_text").autocomplete("search", "");
+}
+function relation_x(){
+    $("#relation_id").val(0);
+    $("#relation_text").val('').attr('disabled',false);
+    $("#relation_x").css('z-index',-1);
+    $("#relation_s").css('z-index',1);
+}
+function relation_type_chg(this1){
+    relation_type = $(this1).val();
+    console.log(relation_type);
+    relation_x();
+    if(relation_type == 0){
+        $(".autocomplete-div").hide();
+    }else{
+        $(".autocomplete-div").show();
+    }
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Jk/Index/index')}">酒库管理</a> >
+        <a href="{:Url('index')}">搜索词管理</a> >
+        <a href="{:Url('jzcindex')}">精准词列表</a> >
+        添加精准词
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('jzcadd')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">精准词</th>
+                        <td>
+                            <input name="name" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[唯一] [必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>精准词所属</th>
+                        <td>
+                            <select name="relation_type" onchange="relation_type_chg(this);">
+                                <option value="0">请选择</option>
+                                <option value="1">红酒</option>
+                                <option value="2">白酒</option>
+                            </select>
+                            <span class="msg_span">[必选]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>精准词所关联</th>
+                        <td>
+                            <div class="autocomplete-div" style="display:none;">
+                                <input id="relation_text" type="text" size="80" value="" class="measure-input" />
+                                <input id="relation_id" name="relation_id" type="hidden" value="0"/>
+                                <span id="relation_l" class="autocomplete-loading"></span> 
+                                <span id="relation_s" class="autocomplete-sel" onclick="relation_s();"></span>
+                                <span id="relation_x" class="autocomplete-del" onclick="relation_x();"></span>
+                            </div>
+                            <span class="msg_span">[必选] [先选择所属]</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" checked />开启</label>
+                <label><input type="radio" name="status" value="2" />关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter2" />

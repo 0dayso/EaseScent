@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>{$winery.cname}</title>
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" type="text/css" media="all" href="http://public.wine.cn/Weixin/css/base.css">
+<link rel="stylesheet" type="text/css" media="all" href="http://public.wine.cn/Weixin/css/style.css">
+<script type="text/javascript" src="http://public.wine.cn/Weixin/js/jquery.js"></script>
+<style>
+    #yybox a{color:#000}
+    #yybox{ text-align:center}
+    #yybox li{list-style:none; width:100px; overflow:hidden; text-align:center; display:inline; margin:5px 3px 2px;}
+</style>
+</head>
+<body>
+<div id="boxshow">
+	<div id="content">
+        <div class="chuanshow">
+            <if condition = "$pic neq ''">
+            <div class="img" style="margin-top:10px;"><img src="{$pic}" alt="{$winery.cname}"></div>
+            </if>
+            <div class="imagessay">{$winery.description}</div><div style="display:none" view="none" class="imagessay" id="content-text">{$winery.content}</div><div><a class="zhankai" id="content-switch" href="javascript:;" style="color:#B11B26">展开详细</a></div>
+            <table id="tab1" cellpadding="0" cellspacing="0" border="0" width="100%">
+            	<tr>
+                	<td style="white-space:nowrap" width="60">分　　级：</td>
+                    <td><if condition="$class.fname neq ''">{$class.fname} > </if><if condition="$class.sname neq ''">{$class.sname}</if></td>
+                </tr>
+                <tr>
+                	<td>所属国家：</td>
+                    <td>{$country.cname}({$country.fname})</td>
+                </tr>
+                <tr>
+                	<td>面　　积：</td>
+                    <td>{$winery.acreage}</td>
+                </tr>
+                <tr>
+                	<td>树　　龄：</td>
+                    <td>{$winery.plant_age}</td>
+                </tr>
+                <tr>
+                	<td>葡萄品种：</td>
+                    <td>{$grape}</td>
+                </tr>
+                <tr>
+                	<td>地　　址： </td>
+                    <td>{$winery.address}</td>
+                </tr>
+                <tr>
+                	<td>电　　话：</td>
+                    <td>{$winery.tel}</td>
+                </tr>
+                <tr>
+                	<td>官　　网：</td>
+                    <td><a href="{$winery.url}">{$winery.url}</a></td>
+                </tr>
+            </table>
+            <volist id="wine" name="wines">
+            <div class="xunhuan">
+                <div class="jiutitle">
+                    <p>{$wine.cname}<span>{$wine.fname}</span></p>
+                </div>
+                <div class="j_list">
+                    <div class="h199">
+                    <table class="tab2" cellpadding="0" cellspacing="0" border="1" width="100%" bordercolor="#d8d5d5">
+                        <thead>
+                            <tr>
+                                <td>年份</td>
+                                <td><font style="color:#B11B26">RP</font></td>
+                                <td><font style="color:#B11B26">WS</font></td>
+                                <td><font style="color:#B11B26">JR</font></td>
+                            </tr>
+                        </thead>
+                        <volist id="score" name="wine['score']">
+                        <tr>
+                            <td>{$score.year}</td>
+                            <td><font style="font-weight:bold">{$score.rp}</font></td>
+                            <td><font style="font-weight:bold">{$score.ws}</font></td>
+                            <td><font style="font-weight:bold">{$score.jr}</font></td>
+                        </tr>
+                        </volist>
+                    </table>
+                    </div>
+                    <span class="j_btn"></span> 
+                </div>
+            </div>
+            </volist>
+            <div id="yybox">
+            	<h2>更多相关应用</h2>
+                <li><a href="http://www.wine.cn/TastingNote/downpage"><img src="http://public.wine.cn/Weixin/images/note_icon.png" alt=""><br/>逸香品酒笔记</a></li>
+                <li><a href="http://www.wine.cn/Grandcru/adpage"><img src="http://public.wine.cn/Weixin/images/mingzhuang_icon.png" alt=""><br/>逸香名庄</a></li>
+                <li><a href="https://itunes.apple.com/cn/app/yi-xiang-jiu-ping/id563445883?mt=8"><img src="http://public.wine.cn/Weixin/images/iwine_icon.png" alt=""><br/>逸香酒评</a></li>
+            </div>
+        </div>
+    </div>
+    <a id="gotop" href="#"></a>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+$(function(){
+    $("#content-switch").click(function(){
+        if($("#content-text").attr('view') == 'none') {
+            $("#content-text").attr('view', 'show');
+            $("#content-text").show();
+            $(this).html('隐藏详细');
+        } else {
+            $("#content-text").attr('view', 'none');
+            $("#content-text").hide();
+            $(this).html('展开详细');
+        }
+    })
+	$('.j_btn').toggle(function(){
+		$(this).addClass('j_btn2');
+		$(this).parent().find('.h199').css('height','auto');
+		},function(){
+			$(this).removeClass('j_btn2');
+			$(this).parent().find('.h199').css('height','199');
+            })
+    $(".h199").each(function(){
+        if(parseInt($(this).css('height')) > 199) {
+            $(this).css({'height':'199px'});
+        } else {
+            $(this).parent().find(".j_btn").remove();
+        }
+    })
+})
+</script>

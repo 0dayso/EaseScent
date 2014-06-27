@@ -1,0 +1,42 @@
+/* 2013-4-2 zhibao  */
+.wora{ width:940px; margin:10px auto 0;}
+.wora_1_l{ float:left; overflow:hidden; height:342px; width:678px;}
+.wora_1_l ul{ position:relative; top:0; left:0;}
+.wora_1_l li{ position:absolute; top:0; left:0; display:none;}
+.wora_1_r{ float:right; background:url(../img/index_rBg.jpg) no-repeat right 0; width:260px; height:342px;}
+.wora_1_r .tit{ font-size:26px; font-family:'微软雅黑'; font-weight:bold; margin-top:20px; margin-left:20px;}
+.wora_1_r .time{ font-family:"Times New Roman", Times, serif; font-size:24px; color:#b49d86; margin-left:20px; margin-top:20px; border-bottom:1px dotted #b2b2b2;}
+.wora_1_r .btn{ margin:80px 0 0 60px;}
+.wora_2{ margin-top:6px;}
+.wora_2_nrBox{ width:868px; overflow:hidden; float:left; margin-left:5px; display:inline; position:relative; height:174px;}
+.wora_2_lBtn{ float:left; cursor:pointer;}
+.wora_2_rBtn{ float:right; cursor:pointer;}
+.wora_2_nrBox ul{ position:absolute; top:0; left:0;}
+.wora_2_nrBox li{ width:405px; height:160px; background:#d8d8d8; margin-right:5px; display:inline; float:left; padding:12px;}
+.wora_2_nrBox .pic{ float:left;}
+.wora_2_nrBox .nr{ float:left; margin-left:10px; display:inline; width:240px; line-height:24px;}
+.wora_2_nrBox .nr h4{ font-size:14px; color:#000; font-weight:bold;}
+.wora_2_nrBox .nr a{ color:#a48f79;}
+
+
+.wora2{width:960px; margin:10px auto 0; overflow:hidden;}
+.wora2 table{ background:#a75c3f; float:left; color:#FFF;}
+.wora2 th,.wora td{ border:1px solid #FFF;}
+.wora2 table td{ height:28px; line-height:28px; text-align:center; border:1px solid #FFF; overflow:hidden;}
+.wora2 table thead{ height:48px; line-height:48px; text-align:center; background:#000; color:#fff;}
+.wora2 table th{ text-align:center;}
+.z_userTabBox{ width:492px; overflow:hidden; float:left; overflow-x:auto;}
+.z_userTabBox table{}
+.z_userTabBox th{ text-align:center; border-right:1px solid #FFF; overflow:hidden;  white-space:nowrap; width:38px;}
+.j_winename{ cursor:pointer;}
+.alert_showBox{ width:560px; height:270px; position:absolute; top:50%; left:50%; background:#FFF; z-index:10; margin:0 0 0 -280px; display:none;}
+.alert_botP{ line-height:18px; color:#333; background:#b8b8b8; padding:8px 10px;}
+.alert_main{ padding:10px;}
+.alert_main .pic{ float:left;}
+.alert_main .pic img{ border:1px solid #e7e7e7;}
+.alert_main .nr{ float:left; margin-left:10px; display:inline;}
+.alert_main .nr h3{ font-size:14px; color:#990000; line-height:24px;}
+.alert_main .nr h4{ font-size:14px; color:#797979; line-height:24px;}
+.alert_main .nr ul{ margin-top:12px; color:#777777; line-height:24px;}
+.alert_main .nr ul span{ color:#333333;}
+.alerty_closeBtn{ position:absolute; top:2px; right:2px; cursor:pointer;}

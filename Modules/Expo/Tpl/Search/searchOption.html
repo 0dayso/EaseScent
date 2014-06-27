@@ -1,0 +1,180 @@
+<div class="z_searchList_main1">
+    <div class="btodfdfdf">
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="tabTit">Countries/Regions：<br />（国家/产区） </td>
+                    <td>
+                        <!--国家循环-->
+                        <p class="tabLevel_1">
+                            <span>
+                                <php>
+                                    $_GET['keyword']=$_REQUEST['keyword']; $all_country = $_GET;
+                                    unset($all_country['cid'],$all_country['country_name'],$all_country['rid'],$all_country['region_name'])
+                                </php>
+                                <em> <i><a href="{:U('index')}{$all_country|createSearchUrl}">全部  </a></i> </em>
+                            </span>
+
+                            <volist name="countryList" id="vo" >
+                                <span>
+                                   <if condition="$_GET['cid']== $vo['jk_id']"> <em class="active" ></if>
+                                     <php> $linkurl = array('cid'=>$vo['jk_id'],'country_name'=>$vo['cname']); </php>
+                                     <a  href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}"  title="{$vo.fname}">{$vo.cname}</a>
+                                   <if condition="$_GET['cid']==$vo['jk_id']"></em></if>
+                                </span>
+                            </volist>
+                        </p>
+
+
+
+
+                        <!--产区循环-->
+                        <!--<volist name="regionList" id="vo" key="k" >
+                            <php>  $style='style="display:none;"';   if($_GET['cid']==$k) $style='style=""'; </php>
+                            <p class="tabLevel_2 tablevel_2_showhide"  id="{$k}" {$style}  >
+                                <span >
+                                      <volist name="vo" id="rows">
+                                          <if condition="$_GET['rid']==$rows['jk_id']"> <em class="active" ></if>
+                                              <php> $linkurl = array('rid'=>$rows['jk_id'],'region_name'=>$rows['cname']); </php>
+                                              <a  href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}"   title="{$rows['fname']}" >{$rows['cname']}</a>
+                                          <if condition="$_GET['rid']== $rows['jk_id']"> </em></if>
+                                      </volist>
+                                </span>
+                            </p>
+                       </volist>-->
+
+
+
+                       <if condition="$regionList">
+                           <p class="tabLevel_2 tablevel_2_showhide">
+                             <volist name="regionList" id="vo" key="k" >
+                                <span >
+                                      <if condition="$_GET['rid']==$vo['jk_id']"> <em class="active" ></if>
+                                          <php> $linkurl = array('rid'=>$vo['jk_id'],'region_name'=>$vo['cname']); </php>
+                                          <a  href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}"   title="{$vo['fname']}" >{$vo['cname']}</a>
+                                      <if condition="$_GET['rid']== $vo['jk_id']"> </em></if>
+                                </span>
+                             </volist>
+                           </p>
+                       </if>
+
+
+
+
+
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tabTit">Type of Wine：<br />（类型）</td>
+                    <td>
+                        <!--一级类型循环-->
+                        <p class="p14">
+                            <span>
+                                <php>
+                                    $all_type = $_GET;  unset($all_type['tid'],$all_type['typename'],$all_type['s_tid'],$all_type['s_typename']);
+                                </php>
+                                <em ><i><a href="{:U('index')}{$all_type|createSearchUrl}"> &nbsp;全部</a></i></em>
+                            </span>
+                            <volist name="winesType[1][0]" id="vo" >
+                                <span>
+                                    <if condition="$_GET['tid']==$vo['jk_id']"> <em class="active" ></if>
+                                       <php> $linkurl = array(typeid=>$vo['id'],'tid'=>$vo['jk_id'],'typename'=>$vo['cname']); </php>
+                                       <a title="{$vo.fname}" href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}" title="{$vo.fname}" > {$vo.cname}</a>
+                                    <if condition="$_GET['tid']==$vo['jk_id']"> </em></if>
+                                </span>
+                            </volist>
+                        </p>
+
+
+                        <!--二级类型循环-->
+                        <php>$style='style="display:none;padding:0px;"';   if($_GET['tid']) $style='style="padding:0px;"';</php>
+                        <p class="tabLevel_3 type3_hide" {$style} ><!--选中将其展开-->
+                            <volist name="winesType[2]" id="typeList" >
+                                <volist name="typeList" id="vo"  key="k">
+                                    <if condition="$vo['fid'] eq $_GET['typeid']">
+                                        <span style="padding:5px;">
+                                          <if condition="$_GET['s_tid']==$vo['jk_id']"> <em class="active" ></if>
+                                                <php> $linkurl = array('s_tid'=>$vo['jk_id'],'s_typename'=>$vo['cname']); </php>
+                                                <i><a href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}" title="{$vo.fname}">{$vo.cname}</a></i>
+                                            </em>
+                                          <if condition="$_GET['s_tid']==$vo['jk_id']"> </em></if>
+                                        </span>
+                                    </if>
+                                </volist>
+                            </volist>
+                        </p>
+
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td class="tabTit">Price Range：<br />（价格） </td>
+                    <td>
+                        <form action="" id="priceform" method="post">
+                               <p class="pl4">
+                                <php> $all_mon = $_GET; unset($all_mon['i']); unset($all_mon['mon']); unset($all_mon['mon_t']);</php>
+                                <em ><i><a href="{:U('index')}{$all_mon|createSearchUrl}">全部</a></i></em>
+                                <php>  for($i=0;$i<7;$i++){     $m +=(50*$i); $mt +=50*($i+1); </php>
+                                    <span>
+                                        <if condition="$_GET['i']==$i && isset($_GET['i'])"> <em class="active" ></if>
+                                            <php> $linkurl = array('i'=>$i,'mon'=>$m,'mon_t'=>$mt); </php>
+                                            <a href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}">￥{$m}-{$mt}</a>
+                                        <if condition="$_GET['i']==$i"> </em></if>
+                                    </span>
+
+                                <php> } </php>
+
+                                <span class="pl4">
+                                    <input type="text" class="priceInp" value="{$_GET['mon']}" id="price_low" name="price_low"/> -
+                                    <input type="text" class="priceInp" value="{$_GET['mon_t']}" id="price_high" name="price_high"/>
+                                    <a href="javascript:void(0);" onclick="header_price()"  class="priceBtn"><img src="__PUBLIC__/Expo/img/priceSearchBtn.gif"  /></a>
+                                </span>
+
+                            </p>
+                        </form>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+
+
+        <div class="z_searchList_main1_bot clear">
+            <div class="z_searchList_main1_bot_lTit">Advanced Search：<br />（高级搜索）</div>
+            <div class="z_searchList_main1_bot_nr">
+                    <label >
+                        <php> if($_GET['company_agent']!=1){  $linkurl = array('company_agent'=>1); }else{ $linkurl =array('company_agent'=>0);}</php>
+                        <if condition="$_GET['company_agent']==1" > <em class="active" ></if>
+                            <a href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}" > Agent（代理商）</a>
+                        <if condition="$_GET['company_agent']==1"> </em></if>
+                    </label>
+
+                    <label>
+                        <php> if($_GET['company_winery']!=1){  $linkurl = array('company_winery'=>1); }else{ $linkurl=array('company_winery'=>0); } </php>
+                        <if condition="$_GET['company_winery']==1"> <em class="active" ></if>
+                            <a href="{:U('index')}{$_GET|createSearchUrl=###,$linkurl}" > Direct from Winery（酒厂直供）</a>
+                        <if condition="$_GET['company_winery']==1"></em></if>
+                    </label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function header_price(){
+        var price_low  = $('#price_low').val();
+        var price_high = $('#price_high').val();
+        if(price_low && price_high){
+            window.location.href='{:U('index')}{$all_mon|createSearchUrl}&mon='+price_low+'&mon_t='+price_high;
+        }
+    }
+</script>

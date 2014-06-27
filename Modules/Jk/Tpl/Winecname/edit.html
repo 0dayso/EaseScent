@@ -1,0 +1,131 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+});
+//wine_autocomplete
+$(function(){
+    $("#wine_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#wine_id").val(ui.item.id);
+            $("#wine_s").css('z-index',-1);
+            $("#wine_x").css('z-index',1);
+        },
+    });
+});
+function wine_s(){
+    $("#wine_text").focus();
+    $("#wine_text").autocomplete("search", "");
+}
+function wine_x(){
+    $("#wine_id").val(0);
+    $("#wine_text").val('').attr('disabled',false);
+    $("#wine_x").css('z-index',-1);
+    $("#wine_s").css('z-index',1);
+}
+//wine_autocomplete/
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Jk/Index/index')}">酒库源数据管理</a> >
+        <a href="{:Url('index')}">酒款中文别名列表</a> >
+        修改酒款中文别名
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('edit')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <input name="id" type="hidden" value="{$res.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">中文别名</th>
+                        <td>
+                            <input name="cname" type="text" size="80" value="{$res.cname}" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属酒款</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <if condition="$res['wine_res']">
+                                <input id="wine_text" type="text" size="80" value="{$res.wine_res.fname} {$res.wine_res.cname}" class="measure-input" disabled />
+                                <input id="wine_id" name="wine_id" type="hidden" value="{$res.wine_id}"/>
+                                <span id="wine_s" class="autocomplete-sel" onclick="wine_s();" style="z-index:-1;"></span>
+                                <span id="wine_x" class="autocomplete-del" onclick="wine_x();" style="z-index:1;"></span>
+                                <else/>
+                                <input id="wine_text" type="text" size="80" value="" class="measure-input" />
+                                <input id="wine_id" name="wine_id" type="hidden" value="0"/>
+                                <span id="wine_s" class="autocomplete-sel" onclick="wine_s();"></span>
+                                <span id="wine_x" class="autocomplete-del" onclick="wine_x();"></span>
+                                </if>
+                            </div>
+                            <span class="msg_span">[必选]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>是否为主别名</th>
+                        <td>
+                            <label><input name="iskey" type="radio" value="1" <if condition="$res['iskey'] eq 1">checked</if> />是</label>
+                            <label><input name="iskey" type="radio" value="0" <if condition="$res['iskey'] eq 1">disabled<else/>checked</if> />否</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input name="status" type="radio" value="3" <if condition="$res['status'] eq 3">checked</if> />开启</label>
+                <label><input name="status" type="radio" value="2" <if condition="$res['status'] eq 2">checked</if> />关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

@@ -1,0 +1,40 @@
+<if condition="$mark">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<title></title>
+<style type="text/css">
+div{width: 300px;padding: 2px 3px;border: 1px solid #FFBE7A;}
+.top{height:20px;line-height: 20px; margin-bottom: 2px;}
+.top a{color:000;}
+.list{float:left;}
+.list a{margin: 2px;
+border: 2px #333 solid;
+background: #ccc;
+line-height: 25px;
+padding: 0 2px;
+display:inline-block;
+color:000;}
+</style>
+</head>
+<body>
+    <div class="top">
+        <volist name="sort" id="vo">
+            <a href="{:Url('Jiuku/Common/arealevelCn')}&mark={$mark}&id={$vo.id}">{$vo.name}</a>>
+        </volist>
+        <input type="button" value="确定" onclick="submit({$res.id})" />
+    </div>
+    <div class="list">
+        <volist name="list" id="vo">
+            <a href="{:Url('Jiuku/Common/arealevelCn')}&mark={$mark}&id={$vo.id}">{$vo.name}</a>
+        </volist>
+    </div>
+</body>
+<script type="text/javascript">
+function submit(id){
+    parent.close_arealevel_cn('{$mark}',id,'<volist name="sort" id="vo">{$vo.name}></volist>');
+}
+</script>
+</html>
+</if>

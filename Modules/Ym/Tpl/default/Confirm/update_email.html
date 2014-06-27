@@ -1,0 +1,69 @@
+<include file="Common:header" />
+<div class="common-mian">
+	<div class="c-tit">
+		<if condition="$userinfo.email neq ''">更换邮箱账号<else/>邮箱认证</if>
+	</div>
+	<div class="email-r">
+		<div class="email-con">
+			<div class="email-con-c">
+				<p class="change-email-inf">
+				<if condition="$userinfo.email neq ''">
+				<em>原邮箱账号：</em>
+					{$userinfo.email}  
+					<if condition="$userinfo.email_valid eq 1">已认证<else/>未认证</if>
+				</if>	
+				</p>
+
+				<p class="change-email-inf">
+					<em>新邮箱账号：</em>
+					<input type="text" id="change_email" class="login-ipt2"/>
+					<var>请输入您要更换的邮箱账号</var>
+				</p>
+			</div>
+			<div class="email-change-sub">
+				<input type="button" value="下一步" id="update_email_btn" class="login-sub"/>
+				<input type="button" value="返 回" onclick="window.history.go(-1);" class="login-sub2"/>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#change_email").focusout(function(){
+		var email = $.trim($("#change_email").val());
+		if(email==""){
+			$(this).next().text("邮箱不能为空");
+			$(this).next().css({color:"red"});
+		}else{
+			$.post("/index.php/User/check_email",{email:email},function(result){
+				if(result.status==1){
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"#555"});
+				}else{
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"red"});
+				}
+			},"json");
+		}
+	});
+	$("#update_email_btn").click(function(){
+		var email = $.trim($("#change_email").val());
+		if(email==""){
+			$("#change_email").next().text("邮箱不能为空");
+			$("#change_email").next().css({color:"red"});
+		}else{
+			$.post("/index.php/Confirm/update_email_do",{email:email},function(result){
+				if(result.status==1){
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"#555"});
+					window.location.href = result.jumpUrl;
+				}else{
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"red"});
+				}
+			},"json")
+		}
+	})
+})
+</script>
+<include file="Common:footer" />

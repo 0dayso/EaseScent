@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=163a80ecb70f430a8cf1f2d6cc71dea4"></script>
+<title>百度地图的Hello, World</title>
+<style type="text/css">
+*{color: #838383}
+ body{font-size:12px;width:100%;height:100%;overflow:hidden;margin:0px;padding:0px;}
+.content{padding:10px;height:100%;}
+.contenttable{padding:0px;margin:0px;width:100%}
+.contenttabletr{padding:0px;margin:0px;list-style:none;height:30px;line-height:30px;}
+#address{width:260px;height:21px;background:#FFF;border:1pxsolid#d7d7d7;padding:0px;margin:0px;line-height:21px;}
+a{display:block;text-align:center;line-height:24px;text-decoration:none;height:24px;width:55px;border:0px;margin:0px;padding:0px;background:url(icons-all.gif)no-repeat;}
+a:hover{background-position:0-30px;}
+</style>
+</head>
+<body>
+<div class="content">
+    <table>
+        <tr>
+            <td><label for="address">地址:</label></td>
+            <td><input id="address" type="text" value="北京" /></td>
+            <td><a href="javascript:locate()">搜索</a></td>
+            <td><a href="javascript:submit()">确定选择</a></td>
+        </tr>
+    </table>
+    <div id="allmap" style="width: 560px; height: 430px; border: 1px solid gray;"></div>
+    <table>
+        <tr>
+            <!-- <td width="10%">鼠标坐标</td>
+            <td width="38%"><span>x</span> / <span>x</span></td> -->
+            <td>选取坐标:&nbsp;&nbsp;</td>
+            <td id="marker_point"><span>x</span> / <span>x</span></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+var map = new BMap.Map("allmap");            // 创建Map实例
+var myGeo = new BMap.Geocoder();
+map.enableScrollWheelZoom();    //启用滚轮放大缩小
+var marker;
+var lng;
+var lat;
+
+map.centerAndZoom(new BMap.Point(116.404, 39.915),12);    // 创建默认点坐标（北京）
+
+function marker_op(point){
+    map.removeOverlay(marker);
+    marker = new BMap.Marker(point);
+    marker.enableDragging();    //可拖拽
+    map.addOverlay(marker);
+    lng = point.lng;
+    lat = point.lat;
+    document.getElementById('marker_point').innerHTML = '<span>'+point.lng+'</span> / <span>'+point.lat+'</span>';
+    //监听覆盖物拖动事件
+    marker.addEventListener("dragend",function(e){
+        lng = e.point.lng;
+        lat = e.point.lat;
+        document.getElementById('marker_point').innerHTML = '<span>'+e.point.lng+'</span> / <span>'+e.point.lat+'</span>';
+    });
+}
+
+function locate(){
+    var address = document.getElementById('address').value;
+    if(!address){
+        alert('请输入搜索地址');
+    }
+    myGeo.getPoint(address,function(point){
+        if(point){
+            map.centerAndZoom(point, 13);
+            marker_op(point);
+        }
+    });
+}
+locate();
+//监听地图点击事件
+map.addEventListener("click", function(e){
+    marker_op(e.point);
+});
+
+function submit(){
+    if(!lng || !lat){
+        alert('尚未标记坐标点');
+    }else{
+        parent.close_baidumap({$id},lng,lat);
+    }
+}
+</script>
+
+
+
+
+
+
+
+

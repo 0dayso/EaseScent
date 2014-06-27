@@ -1,0 +1,50 @@
+<include file="Common:header" />
+    <h1>专题列表</h1>
+    <div id="container">
+        <div id="search"><input id="" name="searchVal" type="text" value="Ctrl+F 快速搜索" /></div>
+        <div id="list">
+            <ul id="folderTree" class="filetree">
+            	<?php
+            		foreach($treeShow as $dir => $files){
+            	?>
+            	<li>
+            		<span class="folder"><?php echo $dir; ?></span>
+            		<ul>
+            			<?php
+            				foreach($files as $subDir => $file){
+                                if($subDir != ('js' || 'css' || 'images')){
+            			?>
+            			<li><span class="file" style="cursor:pointer;"><?php echo $file; ?></span><a href="__TOPIC__/<?php echo $dir;?>/<?php echo $file;?>" target="_blank" title="点击编辑">访问</a></li>
+            			<?php
+                                }
+                            }
+						?>
+            		</ul>
+            	</li>
+            	<?php
+            		}
+				?>
+            </ul>
+        </div>
+    </div>
+<script type="text/javascript">
+$(document).ready(function(){
+    //载入专题目录树
+    $("#folderTree").treeview({
+		animated: "fast",
+		collapsed: true,
+		unique: true,
+		persist: "cookie"
+	});
+    
+    $('#folderTree').find('ul').find('.file').click(function(){
+    	var text = this.innerHTML;
+    	var o = text.split('.');
+    	var dirName = $(this).parent().parent().prev('span.folder').html();
+    	var fileName = o[0];
+    	if(!dirName)	return;
+    	location.href="{:Url('Topics/Index/edit')}"+"&dr="+dirName+"&fn="+fileName;
+    });
+});
+</script>
+<include file="Common:footer" />

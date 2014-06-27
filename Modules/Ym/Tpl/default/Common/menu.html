@@ -1,0 +1,43 @@
+	<div class="main-nav">
+		<dl class="nav-dl">
+			<dt>账号管理</dt>
+			<dd>
+                <a href="/index.php/Company" class="{$c_home}" hidefocus>
+                    <img src="__IMG__/t<if condition='$c_home eq false'>1<else/>1_2</if>.jpg" />
+                    <span>基本资料</span></a>
+            </dd>
+			<dd>
+                <a href="/index.php/Setface" class="{$c_face}" hidefocus>
+                <img src="__IMG__/t<if condition='$c_face eq false'>2<else/>2_2</if>.jpg" /><span>头像照片</span></a>
+            </dd>
+			<dd>
+                <a href="/index.php/Index/editpass" class="{$c_editpass}">
+                <img src="__IMG__/t<if condition='$c_editpass eq false'>3<else/>3_2</if>.jpg" />
+                <span>修改密码</span>
+                </a>
+            </dd>
+			<dt>安全中心</dt>
+			<dd>
+                <a href="/index.php/Confirm/sssing" class="{$c_shenfen}" hidefocus>
+                <img src="__IMG__/t<if condition='$c_shenfen eq false'>4<else/>4_2</if>.jpg" />
+                <span>身份认证</span>
+                </a>
+            </dd>
+			<dd>
+                <a href="/index.php/Confirm/emailing" class="{$c_email}"  hidefocus>
+                <img src="__IMG__/t<if condition='$c_email eq false'>5<else/>5_2</if>.jpg" />
+                <span>邮箱认证</span>
+                </a>
+            </dd>
+			<dd>
+                <a href="/index.php/Confirm/mobliing" class="{$c_moblie}"  hidefocus>
+                <img src="__IMG__/t<if condition='$c_moblie eq false'>6<else/>6_2</if>.jpg" style="margin-top:5px;"/>
+                <span>手机认证</span>
+                </a>
+            </dd>
+			<dt>逸香服务</dt>
+			<dd><a href="__EXPO_HOST__/index.php?m=Select&a=index" hidefocus><img src="__IMG__/t7.jpg" /><span>逸香商机</span></a></dd>
+			<!--<dd><a href="###" hidefocus><img src="__IMG__/t8.jpg" /><span>逸香人才</span></a></dd>-->
+			<dd><a href="__BIZ__" hidefocus><img src="__IMG__/t7.jpg" /><span>代理商管理后台</span></a></dd>
+		</dl>
+	</div>

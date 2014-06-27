@@ -1,0 +1,172 @@
+<include file="Common:cpheader" />
+<script language="javascript" src="__PUBLIC__/editor/kindeditor-min.js"></script>
+<script language="javascript" src="__PUBLIC__/editor/zh_CN.js"></script>
+<script language="javascript">
+	var editor;
+	KindEditor.ready(function(K) {
+		editor = K.create('#content', {
+			uploadJson : '{:Url('News/Pub/uploads?PHPSESSID='.$_COOKIE['PHPSESSID'])}',
+			allowFileManager : false,
+		});
+        var uploadbutton = K.uploadbutton({
+            button : K('#uploadButton')[0],
+            fieldName : 'imgFile2',
+            url : '{:Url('News/Pub/uploads')}',
+            afterUpload : function(data) {
+                if (data.error === 0) {
+                    $("#imglist").html('<img src="' + data.url + '" width="80" height="80"/><a href="###" onclick="delPic()">删除缩略图</a>');
+                    K('#picval').val(data.filename);
+                } else {
+                    alert(data.message);
+                }
+            },
+            afterError : function(str) {
+                alert('自定义错误信息: ' + str);
+            }
+        });
+        uploadbutton.fileBox.change(function(e) {
+            uploadbutton.submit();
+        });
+	});
+
+    function delPic() {
+        $('#picval').val('');
+        $('#imglist').html('');
+    }
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Pub/index')}">新闻列表</a> > 编辑新闻</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">文章列表</a>
+        <a class='btn' href="{:Url('add')}">发布新文章</a>
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('News/Pub/edit')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="updateuser" value="{$admin_username}">
+            <input type="hidden" name="updatetime" value="{:time()}">
+            <input type="hidden" name="aid" value="{$vo.aid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑文章</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">高级属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标题</th>
+                        <td><input type="text" size="80" name="title" value="{$vo.title}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">短标题</th>
+                        <td><input type="text" size="40" name="stitle" value="{$vo.stitle}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">栏目分类</th>
+						<td>
+							<select name="catid">
+								<volist id="cate" name="cateList">
+								<option  <if condition="$cate['catid'] eq $vo['catid']" >selected</if> value="{$cate.catid}">{$cate.name}</option>
+								</volist>
+							</select>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">关键词</th>
+                        <td><input type="text" size="50" name="keywords" value="{$vo.keywords}" class="measure-input"/> 多关键词之间用空格或者“,”隔开</td>
+                    </tr>
+                    <tr>
+                        <th width="130">来源</th>
+                        <td><input type="text" size="30" name="article_from" value="{$vo.article_from}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">原创</th>
+                        <td>
+                            <label><input type="radio" <if condition="$vo.type eq 1">checked</if> name="type" value="1"> 原创</label>
+                            <label><input type="radio"  <if condition="$vo.type eq 2">checked</if> name="type" value="2"> 独家</label>
+                            <label><input type="radio"  <if condition="$vo.type eq 3">checked</if> name="type" value="3"> 关注</label>
+                            <label><input type="radio" name="type" value="0"> 都不是</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">上传缩略图</th>
+                        <td><div class="imageslist" id="imglist">
+                                <notempty name="vo.pic">
+                                    <img src="{:C('UPLOAD_WWWPATH')}{$vo.pic}" width="80" height="80">
+                                    <a href="###" onclick="delPic()">删除缩略图</a>
+                                </notempty>
+                            </div>
+                            <input type="hidden" size="30" name="pic" id="picval" class="measure-input"/>
+                            <input type="button" id="uploadButton" value="上传缩略图" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">描述</th>
+                        <td><textarea style="width:70%;height:40px" name="description">{$vo.description}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th width="130">内容</th>
+                        <td><textarea style="width:90%; height:400px;" name="content" id="content">{$vo.content}</textarea></td>
+                    </tr>
+                    </tr>
+                        <th width="130">状态</th>
+                        <td> <input type="radio" name="status" <if condition="$vo['status'] eq 1">checked</if> value="1">正常发布 <input type="radio" <if condition="$vo['status'] eq -1">checked</if> name="status" value="-1">待审核 </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">发布到推荐位</th>
+                        <td>
+                            <volist name="block" id="b">
+                            <label><input type="checkbox" <php> if(in_array($b['bid'], $blockitem)) { echo "checked"; }</php> name="block[]" value="{$b.bid}"> {$b.name}</label>&nbsp;&nbsp;
+                            </volist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">跳转Url</th>
+                        <td><input type="text" size="60" name="url" value="{$vo.url}" class="measure-input"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="130">作者</th>
+                        <td><input type="text" size="20" name="author" value="{$vo.author}" class="measure-input"/> </td>
+                    </tr>
+                        <th width="130">点击量</th>
+                        <td><input type="text" size="20" name="views" value="{$vo.views}" class="measure-input"/> </td>
+                    </tr>
+                    </tr>
+                        <th width="130">是否允许评论</th>
+                        <td> <input type="radio" name="allow_comment" <if condition="$vo['allow_comment'] eq 1">checked</if> value="1">允许 <input type="radio" <if condition="$vo['allow_comment'] eq 0">checked</if> name="allow_comment" value="0">禁止 </td>
+                    </tr>
+                    <tr>
+                        <th width="130">发布时间</th>
+						<td><input type="text" size="30" name="dateline" value="{:date('Y-m-d H:i:s', $vo['dateline'])}" class="measure-input"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="130">页面静态URL地址</th>
+						<td>{$vo['htmlpath']} </td>
+                    </tr>
+                    <tr>
+                        <th width="130">创建时间</th>
+						<td>{:date('Y-m-d H:i:s', $vo['createtime'])} </td>
+                    </tr>
+                    <tr>
+                        <th width="130">创建用户</th>
+						<td>{$vo.createuser} </td>
+                    </tr>
+                    <tr>
+                        <th width="130">更新时间</th>
+						<td>{:date('Y-m-d H:i:s', $vo['updatetime'])} </td>
+                    </tr>
+                    <tr>
+                        <th width="130">更新用户</th>
+						<td>{$vo.updateuser} </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>查询“{$keyword} {$year}”评分结果</title>
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" type="text/css" media="all" href="http://public.wine.cn/Weixin/css/base.css">
+<link rel="stylesheet" type="text/css" media="all" href="http://public.wine.cn/Weixin/css/style.css">
+</head>
+<body>
+<div id="boxshow">
+    <div id="title"><span class="titlesay" style="background:none;">查询“{$keyword} {$year}”评分结果</span>
+    </div>
+	<div id="content">
+        <ul class="s_listul">
+            <volist id="vo" name="wine">
+            <a style="color:#000" href="{$vo.url}">
+        	<li>
+            	<div class="list_left">
+                    <p class="p1">{$vo.title}</p>
+                    <p class="p2">年份：{$vo.year}</p>
+                    <div class="pf">
+                        <if condition="$vo.ws neq ''"><p class="li"><span class="name">WS</span><span class="fs">{$vo.ws}</span></p></if>
+                        <if condition="$vo.rp neq ''"><p class="li"><span class="name">RP</span><span class="fs">{$vo.rp}</span></p></if>
+                        <if condition="$vo.jr neq ''"><p class="li"><span class="name">JR</span><span class="fs">{$vo.jr}</span></p></if>
+                    </div>
+                </div>
+                <div class="list_right">
+                    <img src="<if condition="$vo.picurl neq ''"> {$vo.picurl} <else />http://public.wine.cn/Weixin/images/s_listimg.gif</if>" alt="">
+                </div>
+            </li>
+            </a>
+            </volist>
+        </ul>
+   	</div>
+</div>
+</body>
+</html>

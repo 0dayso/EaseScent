@@ -1,0 +1,51 @@
+<include file="Common:header" />
+<include file="Common:wine_city" />
+<div class="wine_main">
+	<div class="m_main_l">
+		<div class="m_preson">
+			<img src="{$myface}"/>
+			<span>{$userinfo.nick_name}</span>
+		</div>
+	</div>
+	<div class="m_main_r">
+		<div class="m_main_r_t">
+			<a href="index.php/User/myInsert"  class="m_r_t_a">我关注过的活动（<var>{$joincount}</var>次）</a>
+			<a href="/index.php/User/my">我发布过的活动（<var>{$myInPartyCount}</var>次）</a>
+		</div>
+		<div class="m_party_box">
+		<if condition="$myInParty">
+            <volist name="myInParty" id="my">
+			<div class="m_party_mod">
+				<div class="party_list_img">
+					<a href="/index.php/Detail/index/id/{$my.id}"><img src="__ROOT__/Common/images/partycreate/{$my.id}/s_.{$my.pictype}"/></a>
+                    <if condition="$my.is_bar eq 1">
+                    <span></span>
+                    </if>
+				</div>
+				<dl class="party_list_con">
+					<dt>
+                    <if condition="$my.stop eq 1">
+						<var>已结束</var>
+                    </if>
+						<a href="__ROOT__/Detail/index/id/{$my.id}">{$my.title}</a>
+					</dt>
+					<dd>时间：<var>{$my.start.data} {$my.start.hour} - {$my.end.data} {$my.end.hour}</var></dd>
+					<dd>地点：<span>{$my.address_info}</span></dd>
+                    <if condition="$ismoney eq 1">
+					<dd>价格：<b>免费</b></dd>
+                    <else/>
+                    <dd>价格: <b>{$my.markprice}</b></dd>
+                    </if>
+					<!--<dd><span>{$my.insertUser}</span>人关注</dd>-->
+				</dl>
+			</div>
+			</volist>
+			<else/>
+			<div style="width:100%;border:1px solid #ccc;">未关注过任何活动，赶紧关注一个吧！</div>
+            </if>
+
+		</div>
+        <div style="width:800px;text-align:center;">{$mypage}</div>
+	</div>
+</div>
+<include file="Common:footer" />

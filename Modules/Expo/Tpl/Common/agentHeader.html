@@ -1,0 +1,16 @@
+<include file="Common:toptb" />
+<div class="z_headMiddle">
+    <div class="z_headMain">
+        <div class="z_headMain_nr clear">
+            <h2 class="fl"><a href="/"><img src="__PUBLIC__/Expo/img/logo_5.png" alt="永不落幕的品酒会" /></a></h2>
+            <div class="z_headMain_nr_searchBox">
+                <form action="{:U('Search/index')}" method="post" id="myform" >
+                    <p class="z_headMain_nr_searchBox_p clear"><input type="text" class="z_headMain_nr_searchBox_inp"  name="keyword"/><input type="button"  class="z_headMain_nr_searchBox_btn" onclick="document.getElementById('myform').submit()"/></p>
+                </form>
+            </div>
+        </div>
+        <div class="z_headMain_gg">
+            <p class="z_headMain_gg_p"> <present name="qy_info">  {$qy_info['qy_name']} <else /> {$Ym_UserInfo['qy_name']} </present> </p>
+        </div>
+    </div>
+</div>

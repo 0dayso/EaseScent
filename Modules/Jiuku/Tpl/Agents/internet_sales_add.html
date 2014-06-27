@@ -1,0 +1,50 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">代理商列表</a> > <a href="{:Url('internet_sales_list')}">网络销售渠道列表</a> > 添加网络销售渠道</div>
+    <div class="form">
+		<form name="myform" action="{:Url('internet_sales_add')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="_backpage" value="{$_REQUEST._backpage}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">添加网络销售渠道</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">所属代理商</th>
+                        <td>
+                            <select name="agents_id">
+                                <option value="0">请选择</option>
+                                <volist name="agents_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$_REQUEST['agents_id'] eq $vo['id']">selected="selected"</if>>{$vo.fname}&nbsp;/&nbsp;{$vo.cname}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">网络销售渠道名称</th>
+                        <td><input type="text" size="80" name="name" class="measure-input" value="" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">网络销售渠道url</th>
+                        <td><input type="text" size="80" name="url" class="measure-input" value="http://" /></td>
+                    </tr>
+                    </tr>
+                        <th width="130">状态</th>
+                        <td>
+                        	<input type="radio" name="status" value="1" checked />
+                            开启
+                            <input type="radio" name="status" value="-1" />
+                            关闭
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

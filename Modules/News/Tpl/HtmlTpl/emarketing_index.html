@@ -1,0 +1,178 @@
+<include file="HtmlTpl:emarketing_header" />
+<!--引入头文件-->   
+<div class="wrap">
+    <!--主要部分-->
+    <div class="i_main1Box clear">
+    	<?php $data = D('BlockData')->getData(6) ?>
+        <div class="flashPlay">
+            <ul>
+            	<?php foreach($data as $val) { ?>
+                <li title="{$val['title']}"><a href="{$val['url']}" target="_blank"><img src="__UPLOAD__News{$val['image']}" alt="{$val['title']}" /></a></li>
+                <?php } ?>
+            </ul>
+            <div class="opaBgBox"></div>
+            <ol>
+            	<?php foreach($data as $key=>$val) { ?>
+                <li <?php if($key == 0){ echo 'class="active"'; } ?>></li>
+                <?php } ?>
+            </ol>
+            <p class="flashPlay_tit">{$slide_show1.0.title}</p>
+        </div>
+        <div class="i_main1Box_rBox">
+    		<?php $data2 = D('BlockData')->getData(7) ?>
+            <h3><a href="{$data2[0]['url']}" title="{$data2[0]['title']}">{$data2[0]['title']}</a></h3>
+            <p>{$data2[0]['description']}</p>
+            <ul>
+            	<?php foreach($data2 as $key=>$val) { ?>
+                <?php if($key == 0) continue; ?>
+                <li> · <a href="{$val['url']}" title="{$val['title']}">{$val['title']}</a></li>
+                <?php } ?>
+            </ul>
+            <p class="more">
+                [<a href=__NEWS_DEPTH__>更多...</a>]
+            </p>
+            <div class="botDownBtn"><a href="__WWW__/download/逸香网2013Q3广告刊例新.zip"> </a></div>
+        </div>
+    </div>
+    <ul class="i_main2Box clear">
+        <li class="i_main2Box_li1">
+            <a href="__WWW__/Emarketing/contactCo"><p>商务合作之前您需要建议吗？联系销售人员，请他们帮助您。</p></a>
+        </li>
+        <li class="line"></li>
+        <li class="i_main2Box_li2">
+            <a href="__WWW__/Emarketing/advertise"><p>整合逸香网广告报价，有效的服务于客户。</p></a>
+        </li>
+        <li class="line"></li>
+        <li class="i_main2Box_li3">
+            <a href="__WWW__/Emarketing/cooperate"><p>葡萄酒品牌传播第一网络媒体。</p></a>
+        </li>
+        <li class="line"></li>
+        <li class="i_main2Box_li4">
+            <a href="__WWW__/Emarketing/successCase"><p>为您提供一个最全面的葡萄酒案例分析平台。</p></a>
+        </li>
+    </ul>
+    <ul class="i_main3Box clear">
+        <li class="i_main3Box_li nml">
+            <div class="i_main3Box_li_l">
+                <div class="i_main3Box_li_IcoBox i_main3Box_ico_about"></div>
+                <p><a href="__WWW__/Emarketing/aboutUs">查看详细</a></p>
+            </div>
+            <div class="i_main3Box_li_r">
+                <p class="i_main3Box_li_r_tit">通过这个栏目了解逸香，逸香网品牌，整体优势及服务</p>
+                <ul class="i_main3Box_li_r_list clear">
+                	<li><a href="__WWW__/Emarketing/aboutUs/id/1">逸香品牌</a></li>
+                    <li><a href="__WWW__/Emarketing/aboutUs/id/2">逸香优势</a></li>
+                    <li><a href="__WWW__/Emarketing/aboutUs/id/3">逸香频道介绍</a></li>
+                    <li><a href="__WWW__/Emarketing/aboutUs/id/4">逸香产品介绍</a></li>
+                    <li><a href="__WWW__/Emarketing/aboutUs/id/5">逸香大事记</a></li>
+                    <li><a href="__WWW__/Emarketing/aboutUs/id/7">About US</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="i_main3Box_li">
+            <div class="i_main3Box_li_l">
+                <div class="i_main3Box_li_IcoBox i_main3Box_ico_yxzy"></div>
+                <p><a href="__WWW__/Emarketing/advertise">查看详细</a></p>
+            </div>
+            <div class="i_main3Box_li_r">
+                <p class="i_main3Box_li_r_tit">介绍商家可以和逸香合作的推广形式，提供商家丰富的合作选择机会</p>
+                <ul class="i_main3Box_li_r_list clear">
+                    <li><a href="__WWW__/Emarketing/advertise">广告服务</a></li>
+                    <li><a href="__WWW__/Emarketing/cooperate">商务合作</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="i_main3Box_li nml">
+            <div class="i_main3Box_li_l">
+                <div class="i_main3Box_li_IcoBox i_main3Box_ico_cgal"></div>
+                <p><a href="__WWW__/Emarketing/successCase">查看详细</a></p>
+            </div>
+            <div class="i_main3Box_li_r">
+                <p class="i_main3Box_li_r_tit">描述各个行业成功案例，通过实际执行案例，客观反映逸香的策划、执行和服务能力</p>
+                <ul class="i_main3Box_li_r_list clear">
+                    <li><a href="__WWW__/Emarketing/successCase/id/15">奥地利合作</a></li>
+                    <li><a href="__WWW__/Emarketing/successCase/id/16">加州合作</a></li>
+                    <li><a href="__WWW__/Emarketing/successCase/id/17">A+课程</a></li>
+                    <li><a href="__WWW__/Emarketing/successCase/id/18">李志延的签售会</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="i_main3Box_li">
+            <div class="i_main3Box_li_l">
+                <div class="i_main3Box_li_IcoBox i_main3Box_ico_hzhb"></div>
+                <p><a href="__WWW__/Emarketing/partners">查看详细</a></p>
+            </div>
+            <div class="i_main3Box_li_r">
+                <p class="i_main3Box_li_r_tit">逸香合作伙伴的展示平台</p>
+                <ul class="i_main3Box_li_r_list clear">
+                	<volist name="partners" id="vo">
+                    <li><a href="{$vo.partners_url}" target="_blank">{$vo.partners_name}</a></li>
+                    </volist>
+                </ul>
+            </div>
+        </li>
+        <li class="i_main3Box_li nml">
+            <div class="i_main3Box_li_l">
+                <div class="i_main3Box_li_IcoBox i_main3Box_ico_khfw"></div>
+                <p><a href="__WWW__/Emarketing/contactCo">查看详细</a></p>
+            </div>
+            <div class="i_main3Box_li_r">
+                <p class="i_main3Box_li_r_tit">提供商家咨询及洽谈合作的联系方式，用户互动的平台，并可参与逸香组织的调研</p>
+                <ul class="i_main3Box_li_r_list clear">
+                    <li><a href="__WWW__/Emarketing/contactCo/id/19">广告合作</a></li>
+                    <li><a href="__WWW__/Emarketing/contactCo/id/20">企业品推</a></li>
+                    <li><a href="__WWW__/Emarketing/contactCo/id/21">教育合作</a></li>
+                    <li><a href="__WWW__/Emarketing/contactCo/id/22">人才服务</a></li>
+                    <li><a href="__WWW__/Emarketing/contactCo/id/23">展会合作</a></li>
+                    <li><a href="__WWW__/Emarketing/contactCo/id/24">产品合作</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="i_main3Box_li">
+            <div class="i_main3Box_li_l">
+                <div class="i_main3Box_li_IcoBox i_main3Box_ico_down"></div>
+                <p><a href="#">查看详细</a></p>
+            </div>
+            <div class="i_main3Box_li_r">
+                <p class="i_main3Box_li_r_tit">提供商家逸香公开的报价</p>
+                <ul class="i_main3Box_li_r_list clear">
+                    <li><a href="__WWW__/download/逸香网2013Q3广告刊例新.zip">广告报价下载</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>    
+    <!--END 主要部分-->
+</div>
+<script type="text/javascript">
+function autoFlashPlay(obj)
+{
+	var iFlashPlayNum=0;
+	var aflashPlayBtn=$(obj+' > ol').find('li');
+	aflashPlayBtn.mouseover(function(){iFlashPlayNum=$(this).index();flashPlay($(this));});
+	var flashPlay_timer=setInterval(function(){doflashPlay();},3000);
+	$(obj).hover(function(){clearInterval(flashPlay_timer);},function(){flashPlay_timer=setInterval(function(){doflashPlay();},3000)})
+	
+	function doflashPlay(){
+		iFlashPlayNum++;
+		if(iFlashPlayNum>=aflashPlayBtn.length)
+		{	
+			iFlashPlayNum=0;	
+		}
+		flashPlay(aflashPlayBtn.eq(iFlashPlayNum));
+	}
+
+	function flashPlay(oBtn,i)
+	{
+		if(!i)
+		{
+			var i=oBtn.index();	
+		}
+		$(obj+' > ol').find('li').removeClass('active');
+		oBtn.addClass('active');
+		$(obj+' > ul').animate({'left':-i*684},'fast');
+		$('.flashPlay_tit').text($(obj+' > ul').find('li').eq(i).attr('title'));	
+	}
+}
+autoFlashPlay('.flashPlay');
+</script>
+<include file="HtmlTpl:emarketing_footer" />

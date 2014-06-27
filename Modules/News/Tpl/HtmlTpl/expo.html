@@ -1,0 +1,361 @@
+<include file="HtmlTpl:header" />
+<!--引入头部文件-->
+<?php
+//专题
+if(!$api1 = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"expo_zhuanti"}',3),true))  $GLOBALS['makehtml'] = false;
+if($api1['response'] != 0)  $GLOBALS['makehtml'] = false;
+//图书
+if(!$api2 = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"expo_dushu"}',3),true))  $GLOBALS['makehtml'] = false;
+if($api2['response'] != 0)  $GLOBALS['makehtml'] = false;
+//博览排行榜
+$top1 = D('NewsArticle')->where(array('catid'=>array('between',array(8,24)),'dateline'=>array(array('gt',(time()-7*24*60*60)),array('lt',time())) ))->order('views DESC')->limit(8)->select();
+//新闻排行榜
+$top1 = D('NewsArticle')->where(array('catid'=>array('between',array(1,7)),'dateline'=>array(array('gt',(time()-7*24*60*60)),array('lt',time())) ))->order('views DESC')->limit(9)->select();
+//封面页数据获取
+$data20 = D('BlockData')->getData(20);//置顶幻灯片
+$data21 = D('BlockData')->getData(21);//置顶大字新闻
+$data22 = D('BlockData')->getData(22);//葡萄酒常识（图+字）
+$data23 = D('BlockData')->getData(23);//葡萄酒养生（图+字）
+$data24 = D('BlockData')->getData(24);//礼仪与品鉴
+$data25 = D('BlockData')->getData(25);//投资与收藏
+$data26 = D('BlockData')->getData(26);//葡萄酒娱乐（图+字）
+$data27 = D('BlockData')->getData(27);//葡萄酒名家（图+字）
+$data28 = D('BlockData')->getData(28);//葡萄酒品牌
+$data29 = D('BlockData')->getData(29);//葡萄酒营销
+$data30 = D('BlockData')->getData(30);//专家专栏
+$data31 = D('BlockData')->getData(31);//葡萄酒酒庄（图+字）
+$data32 = D('BlockData')->getData(32);//产区与旅游（图+字）
+?>
+<!-- 请置于所有广告位代码之前 -->
+<script type="text/javascript" src="http://cbjs.baidu.com/js/m.js"></script>
+<script type="text/javascript">
+BAIDU_CLB_preloadSlots("445575","445574","445572","445570","445569","445568");
+</script>
+<div class="e-adv3">
+	<!-- 广告位：博览首页 顶部通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("445568");</script>
+</div>
+<div class="e-main">
+	<div class="e-left">
+		<div class="e-img-tab">
+			<ul class="img-tab-big">
+            	<volist name="data20" id="vo" offset="0" length="4">
+				<li>
+					<a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" alt="{$vo.title}"/></a>
+				</li>
+                </volist>
+			</ul>
+			<ul class="img-tab-small">
+            	<volist name="data20" id="vo" offset="0" length="4">
+				<li <eq name="i" value="1"> class="e-red"</eq>>
+					<a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" alt="{$vo.title}"/></a>
+				</li>
+                </volist>
+			</ul>
+			<div class="img-tab-shadow"></div>
+			<div class="img-tab-title">
+				<a href="{$data20.0.url}" target="_blank" title="{$data20.0.title}">{$data20.0.title}</a>
+			</div>
+		</div>
+		<div class="e-left-l">
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>葡萄酒常识</strong>
+					<a href="__EXPO__knowledge" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<dl class="e-dl-mod1">
+					<dt>
+						<a href="{$data22.0.url}" target="_blank" title="{$data22.0.title}"><img src="{$data22.0.image}" alt="{$data22.0.title}"/></a>
+					</dt>
+					<dd>
+						<div><a href="{$data22.0.url}" target="_blank" title="{$data22.0.title}">{$data22.0.title}</a></div>
+						<p>{$data22.0.description}</p>
+					</dd>
+				</dl>
+				<ul class="e-ul-mod1">
+                	<volist name="data22" id="vo" offset="1">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>礼仪与品鉴</strong>
+					<a href="__EXPO__taste" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<ul class="e-ul-mod1">
+					<volist name="data24" id="vo">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="e-left-r">
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>葡萄酒养生</strong>
+					<a href="__EXPO__health" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<dl class="e-dl-mod1">
+					<dt>
+						<a href="{$data23.0.html}" target="_blank" title="{$data23.0.title}"><img src="{$data23.0.image}" alt="{$data23.0.title}"/></a>
+					</dt>
+					<dd>
+						<div><a href="{$data23.0.url}" target="_blank" title="{$data23.0.title}">{$data23.0.title}</a></div>
+						<p>{$data23.0.description}</p>
+					</dd>
+				</dl>
+				<ul class="e-ul-mod1">
+					<volist name="data23" id="vo" offset="1">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>投资与收藏</strong>
+					<a href="__EXPO__collection" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<ul class="e-ul-mod1">
+                	<volist name="data25" id="vo">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="e-adv1">
+        	<!-- 广告位：博览首页 第二屏左侧上banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445569");</script>
+		</div>
+		<div class="e-left-l">
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>葡萄酒娱乐</strong>
+					<a href="__EXPO__ent" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<dl class="e-dl-mod1">
+					<dt>
+						<a href="{$data26.0.url}" target="_blank" title="{$data26.0.title}"><img src="{$data26.0.image}" alt="{$data26.0.title}"/></a>
+					</dt>
+					<dd>
+						<div><a href="{$data26.0.url}" target="_blank" title="{$data26.0.title}">{$data26.0.title}</a></div>
+						<p>{$data26.0.description}</p>
+					</dd>
+				</dl>
+				<ul class="e-ul-mod1">
+                	<volist name="data26" id="vo" offset="1">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>葡萄酒品牌</strong>
+					<a href="__EXPO__brand" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<ul class="e-ul-mod1">
+                	<volist name="data28" id="vo">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="e-left-r">
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>葡萄酒名家</strong>
+					<a href="__EXPO__celebrity" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<dl class="e-dl-mod1">
+					<dt>
+						<a href="{$data27.0.url}" target="_blank" title="{$data27.0.title}"><img src="{$data27.0.image}" alt="{$data27.0.title}"/></a>
+					</dt>
+					<dd>
+						<div><a href="{$data27.0.url}" target="_blank" title="{$data27.0.title}">{$data27.0.title}</a></div>
+						<p>{$data27.0.description}</p>
+					</dd>
+				</dl>
+				<ul class="e-ul-mod1">
+                	<volist name="data27" id="vo" offset="1">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>葡萄酒营销</strong>
+					<a href="__EXPO__marketing" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<ul class="e-ul-mod1">
+                	<volist name="data29" id="vo">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="e-adv5">
+			<!-- 广告位：博览首页 第三屏左侧banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445572");</script>
+		</div>
+		<div class="e-left-l">
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>葡萄酒酒庄</strong>
+					<a href="__EXPO__winery" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<dl class="e-dl-mod1">
+					<dt>
+						<a href="{$data31.0.url}" target="_blank" title="{$data31.0.title}"><img src="{$data31.0.image}" alt="{$data31.0.title}"/></a>
+					</dt>
+					<dd>
+						<div><a href="{$data31.0.url}" target="_blank" title="{$data31.0.title}">{$data31.0.title}</a></div>
+						<p>{$data31.0.description}</p>
+					</dd>
+				</dl>
+				<ul class="e-ul-mod1">
+                	<volist name="data31" id="vo" offset="1">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="e-left-r">
+			<div class="e-con1">
+				<h3 class="e-h3-mod1">
+					<strong>产区与旅游</strong>
+					<a href="__EXPO__travel" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg2.jpg"/></a>
+				</h3>
+				<dl class="e-dl-mod1">
+					<dt>
+						<a href="{$data32.0.url}" target="_blank" title="{$data32.0.title}"><img src="{$data32.0.image}" alt="{$data32.0.title}"/></a>
+					</dt>
+					<dd>
+						<div><a href="{$data32.0.url}" target="_blank" title="{$data32.0.title}">{$data32.0.title}</a></div>
+						<p>{$data32.0.description}</p>
+					</dd>
+				</dl>
+				<ul class="e-ul-mod1">
+					<volist name="data32" id="vo">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a><span></span>
+					</li>
+                    </volist> 
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="e-right">
+		<div class="e-con2">
+        	<volist name="top_expo" id="vo">
+			<dl class="e-dl-mod2">
+				<dt><a href="{$vo.html}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></dt>
+				<dd>{$vo.description}</dd>
+			</dl>
+            </volist>
+		</div>
+		<div class="e-box-mod">
+			<div class="e-con3">
+				<h3 class="e-h3-mod2">
+					<strong>专题</strong>
+					<span>Focus</span>
+					<a href="__WWW__Topics" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg6.jpg"/></a>
+				</h3>
+                <volist name="api1.data" id="vo">
+				<dl class="e-dl-mod3">
+					<dt>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.img}"/></a>
+						<span><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></span>
+					</dt>
+					<dd>{$vo.description}<a href="{$vo.url}" target="_blank">【详情】</a></dd>
+				</dl>
+                </volist>
+			</div>
+		</div>
+		<div class="e-box-mod e-margin-t">
+			<div class="e-con4">
+				<h3 class="e-h3-mod2">
+					<strong>博览新闻排行榜</strong>
+                    <!--<span>Top10</span>
+					<a href="##"><img src="__PUBLIC__front/expo/images/index/e-bg6.jpg"/></a>-->
+				</h3>
+				<ul class="e-ul-mod2"><!-- 变成8条 -->
+                	<volist name="hot_week_expo" id="vo">
+                    <li><a href="{$vo.html}" target="_blank" title="{$vo.title}">{$vo.stitle} </a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="e-adv4">
+			<!-- 广告位：博览首页 第二屏右侧banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445570");</script>
+		</div>
+		<div class="e-box-mod e-margin-t">
+			<div class="e-con5">
+				<h3 class="e-h3-mod2">
+					<strong>专家专栏</strong>
+					<span>Experts column</span>
+					<a href="__COLUMN__" target="_blank"><img src="__PUBLIC__front/expo/images/index/e-bg6.jpg"/></a>
+				</h3>
+				<ul class="e-ul-mod3"><!-- 6条数据 -->
+                	<volist name="data30" id="vo">
+                    <li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" alt="{$vo.title}"/></a>
+						<span><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></span>
+					</li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="e-adv2">
+        	<!-- 广告位：博览首页 第三屏右侧上banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445574");</script>
+		</div>
+		<div class="e-adv2">
+        	<!-- 广告位：博览首页 第三屏右侧下banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445575");</script>
+		</div>
+		<div class="e-box-mod">
+			<div class="e-con6">
+				<h3 class="e-h3-mod2">
+					<strong>新闻资讯排行榜</strong>
+					<!--<span>Top10</span>
+					<a href="##"><img src="__PUBLIC__front/expo/images/index/e-bg6.jpg"/></a>-->
+				</h3>
+				<ul class="e-ul-mod2 e-ul-mod2-h"><!-- 9条数据 -->
+                	<volist name="hot_week_news" id="vo">
+                    <li><a href="{$vo.html}" target="_blank" title="{$vo.title}">{$vo.stitle} </a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="e-read">
+	<h3 class="e-h3-mod3">
+		<span>读书 <small>Book Magzines</small></span>
+		<a href="__BOOK__" target="_blank">进入读书频道&gt;&gt;</a>
+    </h3>
+	<ul class="e-ul-mod4">
+    	<volist name="api2.data" id="vo">
+		<li>
+			<a href="__BOOK__info/id/{$vo.id}" target="_blank" title="{$vo.name}"><img alt="{$vo.name}" src="{$vo.img}"/></a>
+			<span><a href="__BOOK__info/id/{$vo.id}" target="_blank" title="{$vo.name}">{$vo.sname}</a></span>
+			<span title="{$vo.author}">{$vo.sauthor}</span>
+		</li>
+        </volist>
+	</ul>
+</div>
+<!--引入尾部文件-->
+<include file="HtmlTpl:footer" />

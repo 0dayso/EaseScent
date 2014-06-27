@@ -1,0 +1,108 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'刷新页面',callback:function(){window.location.href = window.location.href;}},
+                    {name:'关闭'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'刷新页面',callback:function(){window.location.href = window.location.href;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+    <volist id="vo" name="res">
+    $('#updimg_{$vo.id}').fileupload({
+        url : "{:Url('guidetypeUpload')}",
+        dataType : 'json',
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var url = "{:C(\'UPLOAD_URL\')}Dzjp/Guidetype/images/"+data.result.img;
+                $("#pic_input_{$vo.id}").val(url);
+                $("#pic_img_{$vo.id}").attr('src',url);
+            }else{
+                art.dialog({
+                    id: 'error',
+                    content: data.result.msg,
+                    lock: true,
+                });
+            }
+        }
+    });
+    </volist>
+});
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">大众酒评管理</a> >
+        <a href="{:Url('index')}">广告管理</a> >
+        <a href="{:Url('guideIndex')}">导购广告列表</a> >
+        导购广告分类管理
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('guideIndex')}">返回导购广告列表</a>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>广告分类名称</th>
+                    <th>图片</th>
+                    <th>替换图片(622*174)</th>
+                    <th width="30">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="res">
+                <form name="myform_{$vo.id}" action="{:Url('guidetypeIndex')}" method="post" enctype="multipart/form-data">
+                <tr height="150">
+                    <td>
+                        {$vo.id}
+                        <input name="id" type="hidden" value="{$vo.id}">
+                        <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+                    </td>
+                    <td>
+                        <input name="type_name" type="text" size="40" value="{$vo.type_name}" class="measure-input"/>
+                    </td>
+                    <td>
+                        <input id="pic_input_{$vo.id}" name="pic" type="hidden" value="{$vo.pic}" />
+                        <img id="pic_img_{$vo.id}" src="{$vo.pic}" height="120" />
+                    </td>
+                    <td>
+                        <input id="updimg_{$vo.id}" name="updimg" type="file" />
+                    </td>
+                    <td>
+                        <input class="btn" type="submit" value="保存" />
+                    </td>
+                </tr>
+                </form>
+                </volist>
+            </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter" />

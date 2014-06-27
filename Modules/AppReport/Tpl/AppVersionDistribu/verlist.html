@@ -1,0 +1,34 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="150">版本</th>
+                    <th width="150">启动次数</th>
+                    <th width="150">启动用户数</th>
+                    <th width="150">新增用户数</th>
+                    <th width="150">平均使用时长</th>
+                </tr>
+            </thead>
+            <tbody>
+            <volist name="vdata" id="vo">
+            <tr>
+                <td>{$key}</td>
+                <td>{$vo.startno}</td>
+                <td>{$vo.startuserno}</td>
+                <td>{$vo.newuserno}</td>
+                <td>{$vo.avgusedtime}</td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

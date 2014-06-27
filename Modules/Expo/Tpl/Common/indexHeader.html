@@ -1,0 +1,33 @@
+<php>  ${ACTION_NAME} = 'class="active"'; </php>
+<div class="z_headMiddle pb12">
+    <div class="z_headMain">
+        <div class="z_headMain_nr clear">
+           <h2 class="fl"><a href="{:U('Index/index')}"><img src="__PUBLIC__/Expo/img/logo_5.png" alt="永不落幕的品酒会" /></a></h2>
+            <div class="z_headMain_nr_searchBox">
+                <form action="{:U('Search/index')}" method="post" id="myform" >
+                    <p class="z_headMain_nr_searchBox_p clear">
+                      <input type="text" value="<php>echo isset($_REQUEST['keyword']) ? $_REQUEST['keyword']: '' ;</php>" class="z_headMain_nr_searchBox_inp"  name="keyword"/>
+                      <input type="button"  class="z_headMain_nr_searchBox_btn"  onclick="document.getElementById('myform').submit()"/>
+                    </p>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="z_homePage_nav">
+    <ul class="z_nav_nr clear">
+      <if condition="!$user_grade && !$business">
+           <li><a href="{:U('Index/index')}"  {$index}>国内馆</a></li>
+           <li style="position:relative;" class="buildBtn">
+               <a href="{:U('Index/foreign')}" {$foreign}>国外馆</a> <!-- <img style="position: absolute; top:6px; left: 88px;" src="__PUBLIC__/Expo/img/build.gif"/> -->
+           </li>
+      <else/>
+           <li><a href="{:U('Inland/business')}"  {$business}>关于商机</a></li>
+           <li style="position:relative;" class="buildBtn">
+               <a href="{:U('Index/user_grade')}" {$user_grade}>会员等级</a>
+           </li>
+      </if>
+    </ul>
+</div>

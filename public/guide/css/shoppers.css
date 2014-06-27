@@ -1,0 +1,106 @@
+
+
+/*初始化*/
+body{margin:0;font-family:Arial,'宋体',sans-serif;font-size:12px;background-color:#F5F5F5;}
+h1,h2,h3,p,dl,dt,dd,form,input,select {margin:0;padding:0;}
+th,td{padding:0;}
+ul,ol{margin:0;padding:0;list-style-type:none;}
+a img {border:none;}
+a {text-decoration:none;color:black;}
+var,em {font-style:normal;}
+table{border-collapse:collapse;}
+.pt8{ padding-top:8px;color:#5A463D;font-weight:bold;}
+
+
+.shoppers-head-box{width:100%;height:107px;background-color:#92011F;margin-bottom:16px;}
+.shoppers-head{width:1000px;margin:0 auto;overflow:hidden;}
+.shoppers-head h1{float:left;}
+.shoppers-head-search{float:right;width:640px;}
+.shoppers-head-search p{width:640px;text-align:right;line-height:24px;color:#fff;}
+.shoppers-head-search p a{color:#fff;margin:0 8px;}
+.shoppers-search{width:670px;text-align:right;padding-top:12px;}
+.shoppers-searchdiv{float:right;overflow:hidden;}
+.shoppers-search-text{width:580px;height:33px;border:none;background-color:#fff;line-height:33px\9;padding-left:9px;color:#B4B4B4;float:left;font-size:14px;}
+.shoppers-search-button{width:80px;height:33px;border:none;background:url(../images/search-btn-bg.jpg) 0 0 no-repeat;float:left;}
+.shoppers-search-related{width:670px;line-height:28px;}
+.shoppers-search-related a{color:#E9C69D;margin-right:13px;}
+.shoppers-rotation-box{width:1000px;margin:0 auto 11px;overflow:hidden;}
+.shoppers-rotation-img{float:left;width:750px;height:211px;overflow:hidden;position:relative;}
+.shoppers-rotation-img ul{ position:absolute; top:0; left:0;}
+.shoppers-rotation-img ul li{ float:left; overflow:hidden; height:210px;}
+.shoppers-rotation-img div{position:absolute;z-index:10;right:19px;bottom:10px;}
+.shoppers-rotation-img div span{display:inline-block;width:23px;height:23px;line-height:23px;text-align:center;background-color:#F8D98B;color:#B73A58;cursor:pointer;margin-left:7px;}
+.shoppers-rotation-img .rotation-img-current{background-color:#8A0424;color:#FFF1CE;}
+.shoppers-classification{width:999px;border-right:1px #ECECEC solid;height:34px;line-height:34px;background:url(../images/d4.jpg) 0 0 repeat-x;margin:0 auto 11px;color:#523F37;position:relative;}
+.shoppers-classification span{display:inline-block;width:89px;height:34px;color:#fff;padding-left:29px;font-size:14px;background:url(../images/d5.jpg) 0 0 no-repeat;}
+.shoppers-classification-a{color:#523F37;margin:0 22px;}
+.shoppers-classification var{padding-right:17px;background:url(../images/d6.jpg) right 11px no-repeat;cursor:pointer;position:absolute;z-index:20;left:480px;}
+.shoppers-classification-none{width:334px;height:29px;background-color:#F3F3F3;border:1px #DBDBDB solid;position:absolute;left:470px;top:6px;z-index:10;color:#999;padding-top:12px; display:none;}
+.shoppers-classification-none a{margin:0 22px;color:#999;}
+.shoppers-classification-none em{margin-right:18px;}
+.shoppers-index-box{width:1000px;margin:0 auto;}
+.shoppers-index{width:1014px;overflow:hidden;}
+.shoppers-index-content{float:left;width:308px;height:488px;background-color:#fff;border:1px #ECECEC solid;margin:0 14px 14px 0;padding:14px 0 0 14px;color:#8F8F8F; line-height:18px;}
+.shoppers-content-img{width:294px;height:294px;position:relative;text-align:center; overflow:hidden;}
+.content-img-float{position:absolute;right:0;top:0;}
+.shoppers-index h3{width:294px;height:36px;line-height:18px;font-size:12px;overflow:hidden; margin-top:4px;}
+.shoppers-index h3 a{color:#5A463D;}
+.shoppers-content-price{width:294px;overflow:hidden;color:#C8000E;height:56px;background:url(../images/d9.jpg) 0 bottom repeat-x;}
+.shoppers-content-price span{float:left;font-size:16px;font-weight:bold;line-height:66px;}
+.shoppers-content-price var{float:left;font-size:36px;font-weight:bold;line-height:56px;}
+.shoppers-content-price em{float:left;font-size:22px;font-weight:bold;line-height:65px;}
+.shoppers-content-price input{float:right;width:110px;height:36px;border:none;background:url(../images/d8.jpg) 0 0 no-repeat;margin-top:8px;display:inline;cursor:pointer;}
+.shoppers-index-content p{width:287px;line-height:18px;height:54px;overflow:hidden;color:#8F8F8F;padding-top:8px;}
+.z_shoppers-content-say{ height:54px; overflow:hidden;}
+.z_shoppers-content-say span{ height:18px; overflow:hidden; display:block;color:#515151;}
+.shoppers-paging{wisth:1000px;margin:0 auto;padding:14px 0 27px;text-align:center;}
+.shoppers-paging a{display:inline-block;line-height:32px;text-align:center;margin: 0 2px;}
+.shoppers-paging-words{width:78px;height:32px;background:url(../images/d13.jpg) 0 0 no-repeat;border:1px #AA998A solid;color:#333;}
+.shoppers-paging-words2{width:78px;height:32px;background:url(../images/d12.jpg) 0 0 no-repeat;border:1px #AA998A solid;color:#333;}
+.paging-words-color{width:78px;height:32px;background:url(../images/d10.jpg) 0 0 no-repeat;border:1px #E6E6E5 solid;color:#A8A8A7;}
+.paging-words-color2{width:78px;height:32px;background:url(../images/d11.jpg) 0 0 no-repeat;border:1px #E6E6E5 solid;color:#A8A8A7;}
+.shoppers-paging-a{width:32px;height:32px;background-color:#F7F5F2;color:#333;border:1px #AA998A solid;}
+.paging-a-color{width:32px;height:32px;background-color:#92011F;color:#fff;font-weight:bold;border:1px #92011F solid;}
+.shoppers-bottom-box{width:100%;background-color:#92011F;}
+.shoppers-bottom{width:1000px;margin:0 auto;height:37px;line-height:37px;}
+.shoppers-bottom a{float:left;padding-left:28px;color:#fff;background:url(../images/d14.jpg) 0 6px no-repeat;margin-right:22px;display:inlne;}
+
+/*关于逸香 商务合作样式*/
+
+
+.about-box{width:1000px;height:680px;margin:0 auto 29px;position:relative;}
+.about-title{width:1000px;height:38px;position:absolute;top:0;left:0;overflow:hidden;z-index:20;}
+.about-title a{float:left;width:147px;height:37px;border:1px #E0E0E0 solid;border-bottom:none;color:#666;font-size:14px;line-height:37px;text-align:center;margin-right:11px;display:inline;}
+.about-title .about-title-a{height:37px;background-color:#fff;}
+.about-content{width:940px;height:595px;background-color:#fff;border:1px #ECECEC solid;position:absolute;top:37px;z-inedx:10;padding:47px 0 0 58px;color:#333;}
+.about-content p{width:881px;font-size:14px;line-height:30px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

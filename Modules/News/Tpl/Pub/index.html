@@ -1,0 +1,99 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('News/Index/index')}">资讯管理</a> > 资讯列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}">发布新文章</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('News/Pub/index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">栏目：
+                        <select name="catid">
+                            <option value='' selected>全部</option>
+                            <volist id="cate" name="cateList">
+                            <option value="{$cate.catid}" <if condition="$cate['catid'] eq $_REQUEST['catid']" >selected</if>  >{$cate.name}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        标题：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        发布时间：
+                        <input name="btime" id="btime" size="20" type="text" value="{$_REQUEST['btime']}" class="input-text" />
+                        -&nbsp;
+                        <input name="etime" id="etime" size="20" type="text" value="{$_REQUEST['etime']}" class="input-text" />
+                            <script type="text/javascript">
+                                Calendar.setup({
+                                    inputField : "btime",
+                                    trigger    : "btime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d %H:%M:%S"
+                                });
+                                Calendar.setup({
+                                    inputField : "etime",
+                                    trigger    : "etime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d %H:%M:%S"
+                                });
+                            </script>
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">通过审核</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">待审核</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <form action="{:Url('News/Pub/del')}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectAll('aids[]');"></th>
+                    <th width="30">ID</th>
+                    <th>标题</th>
+                    <th width="150">分类</th>
+                    <th width="130">发布时间</th>
+                    <th width="100">发布者</th>
+                    <th width="100">状态</th>
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+            <tr>
+                <td><input type="checkbox" value="{$vo.aid}" name="aids[]"></td>
+                <td>{$vo.aid}</td>
+                <td>{$vo.title}</td>
+                <td>{$category[$vo['catid']]['name']}</td>
+                <td>{$vo.dateline|date='Y-m-d H:i:s', ###}</td>
+                <td>{$vo.createuser}</td>
+                <td><if condition="$vo['status'] eq 1"><a href="{:Url('News/Pub/chgStatus', array('aid' => $vo['aid'], 'status' => '-1'))}" title="将状态改为待审核" style="color:#00cc00">审核通过</a><else/><a href="{:Url('News/Pub/chgStatus', array('aid' => $vo['aid'], 'status' => '1'))}" title="审核通过" style="color:#cc0000">待审核</a></if></td>
+                <td>
+                    <a title="生成静态页面" href="{:Url('makeHtml?aid='.$vo['aid'])}">静态化</a>
+                    <a href="{:Url('News/Pub/edit?aid='. $vo['aid'])}">编辑</a>
+                    <a href="{:Url('News/Pub/del?aid='.$vo['aid'])}" target="delete" title='确定要删除ID为“{$vo.aid}”的新闻吗？'>删除</a>
+                </td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+
+        <div class="footer"><label for="check_box">全选/取消</label> <input type="submit" class="btn" name="dosubmit" value="删除" onclick="return confirm('您确定要删除吗？')"></div>
+    </form>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

@@ -1,0 +1,91 @@
+<include file="Common:cpheader2" />
+<script language="javascript">
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库管理</a> >
+        <a href="{:Url('index')}">搜索词管理</a> >
+        精准词列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('jzcadd')}&_backurl={$_listurl}">添加精准词</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('jzcindex')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" class="input-text" type="text" value="{$_GET.keyword}" size="20" />
+                        &nbsp;&nbsp;
+                        精准词所属：
+                        <select name="relation_type">
+                            <option value="">全部</option>
+                            <option value="1" <if condition="$_GET['relation_type'] eq 1">selected</if>>红酒</option>
+                            <option value="2" <if condition="$_GET['relation_type'] eq 2">selected</if>>白酒</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option value="3" <if condition="$_GET['status'] eq 2">selected</if>>开启</option>
+                            <option value="2" <if condition="$_GET['status'] eq 1">selected</if>>关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>精准词</th>
+                    <th>精准词所属</th>
+                    <th>精准词所关联</th>
+                    <th width="30">状态</th>
+                    <th width="30">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.name}</td>
+                    <td>
+                        <if condition="$vo['relation_type'] eq 1">红酒</if>
+                        <if condition="$vo['relation_type'] eq 2">白酒</if>
+                    </td>
+                    <td>
+                        <if condition="$vo['relation_res']">
+                        {$vo.relation_res.name}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 3">
+                        <a href="{:Url('jzcchgstatus')}&id={$vo.id}&status=2&_backurl={$_listurl}" title="点击关闭" style="color:green;">开启</a>
+                        <elseif condition="$vo['status'] eq 2"/>
+                        <a href="{:Url('jzcchgstatus')}&id={$vo.id}&status=3&_backurl={$_listurl}" title="点击开启" style="color:orange;">关闭</a>
+                        <else/>
+                        </if>
+                    </td>
+                    <td>
+                        <a href="{:Url('jzcedit')}&id={$vo.id}&_backurl={$_listurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter2" />

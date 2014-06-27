@@ -1,0 +1,84 @@
+<include file="Common:header" />
+    <include file="Common:agentHeader" />
+    <include file="Common:agentTopNav" />
+        <div class="z_main">
+            <div class="z_main_nr clear">
+                <if condition="$agent_info['pic_url']">
+                    <div>
+                        <img src="{:C('UPLOAD_DOMAIN')}/Expo/Agent/images/{$agent_info['pic_url']}" style="width:980px;overflow:hidden;margin: 0 0 10px 0;">
+                    </div>
+                </if>
+                <div class="z_n_mainL ">
+                    <div class="z_n_mainL_box">
+                        <h2 class="companyName"><a href="#">{$qy_info['qy_name']}</a></h2>
+                        <!--<h3 class="companyEname"><a href="#">&nbsp;</a></h3>-->
+                        <div class="companyInfo">
+                            <!-- <p>国家：<span>法国</span></p>-->
+                            <p>地址：<span>{$qy_info['qy_province']} {$qy_info['qy_city']}{$qy_info['qy_address']}</span></p>
+                            <p>邮箱：<span>{$agent_info['email']}</span></p>
+                            <p>skype：<span>{$qy_info['qy_skype']}</span></p>
+                            <p>QQ：<span>{$qy_info['qy_qq']}</span></p>
+                            <p>电话：<span>{$qy_info['qy_moblie']}</span></p>
+                            <if condition="$qy_info['qy_web_address'] neq ''">
+                            <p>官网：
+                                <a target="_blank" style="color:#555555;"  href="http://{:str_replace('http\:\/\/','',$qy_info['qy_web_address'])}
+                                 ">点击查看官网</a>
+                            </p>
+                            <else/>
+                            </if>
+                        </div>
+                        <div class="botBg257x4"></div>
+                    </div>
+                    <if condition="$qy_info['qy_introduction'] neq ''">
+                        <div class="companyIntroduceTit"><img src="__PUBLIC__/Expo/img/z_n_companyIntroduce.gif" /></div>
+                        <div class="z_n_mainL_box">
+                            <h2 class="companyIntroduceTxtTit">{$qy_info['qy_name']}</h2>
+                            <p class="companyIntroduceNr">
+                                {$qy_info['qy_introduction']}
+                            </p>
+                            <div class="botBg257x4"></div>
+                        </div>
+                    </if>
+                </div>
+                <div class="z_n_mainR ">
+                    <div class="z_n_companyWineTit"><img src="__PUBLIC__/Expo/img/z_n_companyWineTit.gif" /></div>
+                    <div class="z_n_companyWineList">
+                        <ul class="clear">
+                            <volist id="vo" name="goodsList['list']">
+                                <li>
+                                    <p class="pic imgMid">
+                                        <a href="{:U('Goods/goodsShow?goods_id='.$vo['goods_id'].'&agent_id='.$vo['agent_id'])}">
+                                            <php> $ex= explode(".",$vo['pic_url']); $img = $ex[0].'_400_thumb.'.$ex[1]; </php>
+                                            <img  src="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images{$img}"  height="200"  />
+
+                                        </a>
+                                    </p>
+                                    <div class="nr">
+                                            <h3><a href="{:U('Goods/goodsShow?goods_id='.$vo['goods_id'].'&agent_id='.$vo['agent_id'])}">{$vo.cname}{$vo.fname}</a></h3>
+                                        <div class="nr_type">
+                                            <p>类    型：<span>{$vo.typename}</span></p>
+                                            <p>代理价格：
+                                                <span>
+                                                    <if condition="$vo['price_type'] eq 1 ">面议<else/>
+                                                        {$vo['goods_price']} <if condition="$vo['currency'] eq 1">$/箱<else/>RMB/箱</if>
+                                                    </if>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </volist>
+                        </ul>
+                        <p class="pageNum mt6 mb10">
+                            {$goodsList['pageShow']}
+                        </p>
+                    </div>
+                    <div class="botBg702x4"></div>
+                </div>
+            </div>
+            <!--2013-2-26 add-->
+        </div>
+
+
+  <include file="Common:footer" />
+

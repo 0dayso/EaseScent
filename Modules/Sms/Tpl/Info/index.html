@@ -1,0 +1,59 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> >  概况</div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>客户端</th>
+                    <th>共发送</th>
+                    <th>成功发送批次</th>
+                    <th>批次成功率</th>
+                    <th>发送失败批次</th>
+                    <th>批次失败率</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="clients">
+            <tr>
+				<td>{$vo.id}</td>
+				<td>{$vo.client_name}</td>
+				<td>{$vo.sms_total}</td>
+				<td>{$vo.sms_success}</td>
+				<td>{$vo.percent_success} %</td>
+                <td>{$vo.sms_failed}</td>
+				<td>{$vo.percent_failed} %</td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>平台</th>
+                    <th>共发送</th>
+                    <th>成功发送</th>
+                    <th>成功率</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="platforms">
+            <tr>
+				<td>{$vo.id}</td>
+				<td>{$vo.name}</td>
+				<td>{$vo.sms_total}</td>
+				<td>{$vo.sms_success}</td>
+				<td>{$vo.percent} %</td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    </div>
+
+</div>
+<include file="Common:cpfooter"/>

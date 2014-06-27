@@ -1,0 +1,90 @@
+<include file="Common:cpheader" />
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/kindeditor-min.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/zh_CN.js"></script>
+<script language="javascript">
+var editor;
+var imgbtn;
+KindEditor.ready(function(K) {
+    editor = K.create("#content", {
+        uploadJson:         "{:Url('upload')}&type=Agents/uploads",
+        allowFileManager:   false,
+        afterBlur:          function(){this.sync()}
+    });
+
+    imgbtn = K.uploadbutton({
+        button : K('#imgbtn')[0],
+        fieldName : 'imgFile',
+        url : "{:Url('upload')}&type=Agents/images",
+        afterUpload : function(data) {
+            if (data.error === 0) {
+                var html ='<div class="selected_box"><input name="img_filename[]" type="hidden" value="'+data.filename+'" /><img src="'+data.url+'" /><div><p><var>描述</var><input name="img_description[]" type="text" /></p><p><var>ALT</var><input name="img_alt[]" type="text" /></p><p><var>排序</var><input name="img_queue[]" type="text" /></p></div><span class="del_selected" onclick="imgbox_del(this);"></span></div>';
+                $("#img_list_box").append(html);
+            }
+        }
+    });
+    $(":input[name='imgFile']").css('width','72px');
+    imgbtn.fileBox.change(function(e) {
+        imgbtn.submit();
+    });
+});
+function imgbox_del(this1){
+    $(this1).parent().remove();
+}
+
+$(function(){
+    $('#sub').click(function(){
+        var info = $("textarea[name='info']").val();
+        if(info==""){
+            art.dialog({content: '请填写驳回理由',}).time(2000);
+        }else{
+            //alert(info)
+            $.post('?app=Agents&m=Zhuangmethod&a=back_do',{'id':$("input[name='id']").val(),'info':info},function(msg){
+                var msg = eval("("+msg+")");
+                if(msg == 1){
+                    art.dialog({content: '驳回成功',});
+                    var l = 'location.href="{:Url('Agents/Zhuangmethod/index')}";';
+                    setTimeout(l, 1000);
+                    return;
+                }else{
+                    art.dialog({content: '驳回失败,请联系技术',}).time(3000);
+                    return;
+                }
+            });
+        }
+    });
+});
+</script>
+
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<style>
+.selector_msg{color:red;}
+.selector_expand{display:none;}
+.table-form1:hover{background: #fbffe4;}
+#store_sales_list img{height:85px;};
+</style>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/checkSubmit.js"></script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">代理商管理</a> > <a href="{:Url('index')}">新建品牌/酒庄审核列表</a> > 新建品牌/酒庄驳回操作</div>
+    <div class="form">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">新建品牌/酒庄驳回操作</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">打回理由：</th>
+                        <td>
+                            <td><textarea style="width:90%; height:400px;" name="info" id="content"></textarea></td>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="hidden" name="id" value="{$id}">
+                <input type="button" class="btn" value="驳回" id="sub" />
+            </div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

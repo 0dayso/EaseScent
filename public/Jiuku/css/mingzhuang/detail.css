@@ -1,0 +1,293 @@
+/*位置*/
+.mz-nav{width:1006px;height:26px;margin:0 auto;border-bottom:1px #CDCDCD solid;overflow:hidden;}
+.mz-nav div{float:right;width:220px;padding-top:7px;overflow:hidden;}
+.mz-nav p{line-height:26px;}
+.mz-nav p a:hover{text-decoration:underline;}
+.weizhi span{color:black;}
+
+.z_mz_h3{ font-size:16px; color:#343434; font-weight:bold;height: 58px;line-height: 58px;}
+.z_mz_h3 a{ color:#b00621; font-size:12px; font-weight:normal; text-decoration:none;}
+/*我的关注*/
+.v-my-wine{height:16px;overflow:hidden;}
+.v-my-wine a{height:16px;float:left;color:#000;padding-left:18px;background:url(../../images/mingzhuang/detail/v-bg4.jpg) 1px 0 no-repeat;}
+.v-my-wine a:hover{text-decoration:underline;}
+.v-my-wine .v-my-wine-a{float:right;}
+
+.detailspage-box{width:1006px;margin:0 auto;}
+.detailspage-left{float:left;width:697px;}
+.detailspage-h2{width:100%;height:52px;line-height:52px;font-size:24px;color:#343434;overflow:hidden;}
+.z_mz_plBox{ font-size:12px; color:#343434; padding-left:10px; background:url(../../images/mingzhuang/detail/z_pageJt2.gif) no-repeat 0 3px; height:22px; }
+.z_mz_plBox span{ color:#b00621;}
+.attention-box{width:100%;overflow:hidden; margin-top:8px;}
+.attention-left{float:left;width:338px;overflow:hidden;}
+.attention-left img{width:300px; height:225px;margin-bottom:8px;}
+.attention-ul{float:left;width:358px;overflow:hidden;}
+.attention-ul li{float:left;width:358px;line-height:24px;color:#343434;}
+.attention-ul li a:hover{text-decoration: underline;}
+.attention-a{float:left;width:63px;height:29px;line-height:29px;text-align:center;font-size:14px;color:#333;background:url(../../images/mingzhuang/detail/da-7.jpg) 0 0 no-repeat;margin-top:10px; display:inline;}
+.already-a{float:left;margin-left:1em;height:29px;line-height:29px;text-align:center;font-size:12px;color:#666;margin-top:10px; display:inline;}
+a.already-a:hover{text-decoration:underline;}
+.article-box{width:697px;margin:17px 0;padding:20px 0;border-top:1px #AEAEAE dotted;border-bottom:1px #AEAEAE dotted;}
+.article-box div p strong{width:671px;line-height:32px;font-size:14px;font-weight:bold;}
+.article-box div p{width:697px;line-height:24px;color:#333;font-size:14px;margin-bottom:25px;}
+.article-a{padding-left:15px;color:#B00621;background:url(../../images/mingzhuang/detail/da-8.jpg) 0 center no-repeat;}
+/*.article-a:hover{text-decoration:underline;}*/
+.article-a1{padding-left:15px;color:#B00621;background:url(../../images/mingzhuang/detail/da-81.jpg) 0 center no-repeat;}
+/*.article-a1:hover{text-decoration:underline;}*/
+.detailspage-h3{width:697px;line-height:39px;font-size:14px;color:#343434;}
+.related-box{width:697px;height:83px;overflow:hidden;margin-bottom:25px;}
+.related-box-a{float:left;width:26px;height:26px;margin-top:28px;display:inline;}
+.related-img-box{float:left;width:616px;height:83px;overflow:hidden;}
+.related-img-a{float:left;width:110px;height:83px;text-align:center;margin:0 6px;}
+.related-img-a img{max-width:110px;max-height:83px;}
+.detailspage-h3 var{color:#666;font-size:12px;font-weight:lighter;padding-left:18px;}
+.manor-index-box{width:697px;background-color:#F3F3F3;}
+.manor-box{width:681px;border-bottom:1px #AEAEAE dotted;padding-left:16px;zoom:1;}
+.manor-box:after{display:block;visibility:hidden;clear:both;height:0;content:"";}
+.manor-name{max-width:260px;float:left;overflow:hidden;}
+.manor-name p{color:#343434;margin:4px 0;}
+/*.manor-name span{color:#A7A7A7;line-height:20px;}*/
+.manor-right{position:relative;float:right;margin-right:12px;}
+.manor-right p{padding-top:10px;height:20px;overflow:hidden;}
+.manor-right p select{float:left;color:#343434;}
+.manor-right p em{float:left;width:70px;height:20px;text-align:center;line-height:20px;background:url(../../images/mingzhuang/detail/v-bg33.jpg) 0 0 no-repeat;margin-left:6px;overflow:hidden;}
+.manor-right p var{float:left;width:25px;color:#fff;}
+.manor-right p small{float:left;width:45px;color:#000;font-size:12px;}
+
+
+.history-list-box{display:none;position:absolute;right:0;top:54px;overflow:hidden;}
+.history-all{height:398px;border:1px #AEAEAE solid;background-color:#fff;overflow:hidden;}
+.his-title{position:relative;padding:4px 0 0 12px;border-bottom:1px #AEAEAE solid;background-color:#F0F0F0;}
+.his-title span{display:block;line-height:16px;color:#343434;}
+.his-con{height:340px;margin:5px;overflow-y:auto;overflow-x:hidden;}
+.his-con li{height:15px;line-height:15px;margin-bottom:8px;overflow:hidden;}
+.his-con li span{float:left;display:inline-block;width:40px;}
+.his-con li em{float:left;margin-left:5px;width:70px;background:url(../../images/mingzhuang/detail/v-bg333.jpg) 0 0 no-repeat;text-align:center;}
+.his-con li var{float:left;width:25px;color:#fff;}
+.his-con li small{float:left;width:45px;color:#000;font-size:12px;}
+
+.history{text-align:right;line-height:28px;}
+.history a{color:#B00621;}
+.history a:hover{text-decoration:underline;}
+
+
+.attention-right{float:right;width:259px;padding-top:15px;overflow:hidden;}
+.attention-right-h2{width:259px;height:30px;line-height:30px;background:url(../../images/mingzhuang/detail/da-18.jpg) 0 bottom repeat-x;overflow:hidden;margin-bottom:10px;}
+.attention-right-h2 span{float:left;background:url(../../images/mingzhuang/detail/da-19.jpg) 0 bottom repeat-x;font-size:14px;}
+.attention-right-h2 a{float:right;padding-left:13px;color:#666;background:url(../../images/mingzhuang/detail/da-20.jpg) 0 9px no-repeat;font-size:12px;font-weight:lighter;}
+.attention-right-h2 a:hover{text-decoration:underline;}
+.map-box{width:259px;margin-bottom:20px;}
+.map-box img{width:259px;}
+.img-box{width:259px;overflow:hidden;margin-bottom:20px;}
+.img-box a{float:left;width:74px;height:106px;margin:0 6px;display:inline;}
+.img-box a:hover{text-decoration:underline;}
+.img-box img{width:74px;height:74px;}
+.img-box var{display:block;width:74px;height:32px;line-height:32px;text-align:center;overflow:hidden;}
+.attention-right-ul{width:232px;overflow:hidden;margin-bottom:20px;}
+.attention-right-ul li{float:left;width:232px;height:27px;line-height:27px;overflow:hidden;}
+.attention-right-ul li a{color:#2B2B2B;}
+.attention-right-ul li a:hover{text-decoration:underline;}
+.attention-right-ul2{width:238px;overflow:hidden;margin-bottom:14px;}
+.attention-right-ul2 li{float:left;width:238px;height:18px;line-height:18px;color:#262626;overflow:hidden;}
+.attention-right-ul2 li a{color:#B00621;}
+.attention-right-ul2 li a:hover{text-decoration:underline;}
+.attention-right-advertising{display:block;width:259px;height:113px;margin-bottom:10px;}
+.d-comment{width:671px;}
+/*评论new*/
+.z_mz_page{ height:32px; background:#f2f2f2; border-bottom:3px solid #d0d0d0;}
+.z_mz_page_h4{ line-height:32px; width:74px; border-bottom:3px solid #b40019; border-right:1px solid #e4e4e4; color:#af061e; font-weight:bold; font-size:14px; text-align:center; float:left;}
+.z_mz_page_refresh,.z_mz_page_write{ float:left; width:90px; border-right:1px solid #e4e4e4; text-align:center; line-height:32px; padding-left:14px;}
+.z_mz_page_refresh span{ font-size:12px; color:#797979; text-decoration:none; background:url(../../images/mingzhuang/detail/refreshIco.png) no-repeat 0 10px; padding-left:20px; float:left;}
+.z_mz_page_write a{ font-size:12px; color:#b00621; text-decoration:none; background:url(../../images/mingzhuang/detail/writeIco.png) no-repeat 0 8px; padding-left:20px; float:left;}
+
+.z_mz_page_ul{ float:right; padding-right:10px; margin-top:6px; display:inline;}
+.z_mz_page_ul li{ list-style:none; width:18px; float:left; height:18px; background:#f4f4f4; padding:1px; border:1px solid #dedede; text-align:center; line-height:16px; margin-left:6px; display:inline;}
+.z_mz_page_ul li span{ background:#e8e8e8; float:left; width:18px; height:18px; text-decoration:none; color:#797979; font-size:14px;}
+.z_mz_page_ul li span img{ padding-top:5px;}
+.z_mz_page_ul .active{ background:#b11b26; border:1px solid #b11b26;}
+.z_mz_page_ul .active span{ background:#b11b26; color:#FFF;}
+
+/*评论*/
+.screening-box{
+	width:697px;
+	height:26px;
+	background:url(../../images/mingzhuang/detail/da-14.jpg) 0 bottom repeat-x;
+	line-height:26px;
+	clear:both;
+	padding-top:6px;
+	margin:33px 0 15px;
+}
+.screening-box span{
+	float:left;
+	width:74px;
+	height:26px;
+	color:#AF061E;
+	font-size:14px;
+	font-weight:bold;
+	background:url(../../images/mingzhuang/detail/da-15.jpg) 0 0 no-repeat;
+	margin-right:153px;
+	display:inline;
+}
+.screening-box a{
+	float:right;
+	width:88px;
+	height:24px;
+	text-align:center;
+	line-height:24px;
+	color:#fff;
+	background-color:#B11B26;
+	margin:-6px 10px 0 0;
+}
+.screening-s{
+	width:660px;
+	padding-left:10px;
+	height:26px;
+	line-height:26px;
+	clear:both;
+}
+.screening-s var{
+	float:left;
+	color:#343434;
+	display:inline;
+}
+.screening-s select{
+	float:left;
+	margin:2px 3px 0 0;
+	display:inline;
+	width:80px;
+	border:1px #CFCFCF solid;
+}
+@-moz-document url-prefix(){
+	.screening-s select {margin-top:3px;}
+}
+.screening-box em{
+	float:right;
+	line-height:normal;
+	margin:-1px 12px 0 0;
+	cursor:pointer;
+	color:#797979;
+}
+.screening-box em img{
+	*vertical-align:middle;
+	vertical-align:-3px;
+	margin-right:5px;
+}
+/*图标*/
+.levelIco_16x16{ background:url(../../images/mingzhuang/detail/level_Ico_16x16.gif) no-repeat 0 0; width:16px; height:16px; margin-left:5px; float:left;}
+.cioV_16x16{ background-position:0 -85px;}
+.cioLevel1_16x16{ background-position:0 0;}
+.cioLevel2_16x16{ background-position:0 -17px;}
+.cioLevel3_16x16{ background-position:0 -34px;}
+.cioLevel4_16x16{ background-position:0 -51px;}
+.cioLevel5_16x16{ background-position:0 -68px;}
+
+/*酒评详情排版*/
+.z_wineInfo_l{ width:697px;}
+.z_wineInfo_userInfo{ line-height:24px; color:#555555; font-size:14px;}
+.z_wineInfo_userInfo span{ float:left;}
+.z_wineInfo_userInfo_userName{ font-size:14px; font-weight:bold; color:#b73434; text-decoration:none; float:left;}
+.z_wineInfo_tastAddress{ margin-top:16px; color:#959595; font-size:12px; line-height:20px;}
+.z_wineInfo_tastAddress a,.z_wineInfo_userInfo a{ color:#b73434; text-decoration:none;}
+.z_wineInfo_tastAddress a:hover,.z_wineInfo_userInfo a:hover{ text-decoration:underline;}
+
+.z_wineInfo_picShowBox{ background:#F8F8F8; border:1px solid #e2e2e2; margin-top:16px; padding:6px 16px;}
+.z_wineInfo_wineName{ font-size:14px; color:#555555; font-weight:normal; margin-top:10px;}
+.z_wineInfo_winePoint,.z_wineInfo_wineYear{ font-size:14px; color:#959595; font-weight:normal; margin-top:10px;}
+
+.z_wineInfo_picShowBox_main{ position:relative; top:0; left:0;}
+.z_wineInfo_picShowBox_varyBtnBox{ text-align:right; width:438px; margin:0 auto;}
+.z_wineInfo_picShowBox_varyBtnBox a{ color:#b73434; display:inline-block; margin-left:10px; padding-left:16px; background:url(../../images/mingzhuang/detail/varyPic_11x11.gif) no-repeat 0 2px; font-size:12px; text-decoration:none;}
+.z_wineInfo_picShowBox_varyBtnBox .self{ background-position:0 2px;}
+.z_wineInfo_picShowBox_varyBtnBox .toL{ background-position:0 -13px;}
+.z_wineInfo_picShowBox_varyBtnBox .toR{ background-position:0 -27px;}
+.z_wineInfo_picShowBox_img{ width:438px; height:580px; border:1px solid #e6e6e6; margin:14px auto; background:#FFF;}
+.z_wineInfo_picShowBox_img #z_idContainer{ width:418px; height:560px; margin:10px;}
+.z_wineInfo_picShowBox_list{ list-style:none; position:absolute; bottom:0px; right:10px; _top:200px; _right:26px;}
+.z_wineInfo_picShowBox_list li{ width:70px; height:70px; border:1px solid #b3b1b2; margin-top:6px; cursor:pointer; background:#000;}
+.z_wineInfo_picShowBox_list li img{ opacity:0.3; filter:alpha(opacity:30); width:100%; height:100%;}
+.z_wineInfo_picShowBox_list .active img{ opacity:1; filter:alpha(opacity:100);}
+.z_wineInfo_picShowBox_preBtn{ position:absolute; width:66px; height:60px; border:1px solid #232323; top:300px; left:110px; _left:10px; cursor:pointer; opacity:0.6;filter:alpha(opacity:60); background:url(../../images/mingzhuang/detail/z_picPreBtn.gif) no-repeat 50% 50% #333;}
+.z_wineInfo_picShowBox_nextBtn{ position:absolute; width:66px; height:60px; border:1px solid #232323; top:300px; right:110px; _right:130px; cursor:pointer; opacity:0.6;filter:alpha(opacity:60); background:url(../../images/mingzhuang/detail/z_picNextBtn.gif) no-repeat 50% 50% #333;}
+
+.z_wineInfo_sendwine{ height:40px; line-height:40px; color:#959595; font-size:12px;}
+.z_wineInfo_sendwine_time{ float:left;}
+.z_wineInfo_sendwine_time a,.z_wineInfo__sendwineBtn a{ color:#959595; text-decoration:none;}
+.z_wineInfo_sendwine_time a:hover,.z_wineInfo__sendwineBtn a:hover{ text-decoration:underline;}
+.z_wineInfo__sendwineBtn{ float:right; display:inline;}
+.z_wineInfo__sendwineBtn i{ color:#b73434; font-style:normal;}
+.z_wineInfo_shareBox{ margin-right:40px;}
+.z_wineInfo_shareBox a{ position:relative; top:4px;}
+
+.z_wineInfo_comment{ position:relative;border:1px solid #e0e0e0; background:#fafafa; color:#878787; font-size:12px;}
+.z_wineInfo_comment_tip{ width:12px; height:6px; background:url(../../images/mingzhuang/detail/top_jt_12x6.gif) no-repeat 0 0 ; position:absolute; top:-6px; _top:-5px; right:30px;}
+.z_wineInfo_comment_txta{ width:97%; margin:8px 5px 0; height:86px; border:1px solid #d8d8d8; resize:none; font-size:12px;}
+.z_wineInfo_comment_fnBox{ margin:6px 8px 6px 16px; _padding-bottom:6px;}
+.z_wineInfo_comment_faceBtn{ float:left; margin-top:4px; display:inline;}
+.z_wineInfo_comment_wordNum{ margin-left:40%; margin-top: 6px; float:left; display:inline;}
+.z_wineInfo_comment_transmit{ float:right; margin-right:20px; display:inline; position:relative; top:4px;}
+.z_wineInfo_comment_transmit input{ position:relative; top:3px;}
+.z_wineInfo_comment_submitBtn{ float:right;}
+.z_wineInfo_comment_clearTxtBtn{ float:right; cursor:pointer;}
+
+.z_wineInfo_commentList{ margin-top:15px; border-top:4px solid #efefef; list-style:none;}
+.z_wineInfo_commentList li{ margin:12px 6px; padding-bottom:10px; border-bottom:1px dotted #bebebe;}
+.z_wineInfo_commentList_userPic{ float:left;}
+.z_wineInfo_commentList_userPic img{ border:1px solid #cccccc; padding:1px;}
+.z_wineInfo_commentList_userNr{ float:left; margin-left:10px; font-size:12px; width:600px; display:inline; overflow:hidden;}
+.z_wineInfo_commentList_userNr a{ color:#b73434; text-decoration:none;}
+.z_wineInfo_commentList_userNr a:hover{ text-decoration:underline;}
+.z_wineInfo_commentList_userNr .userName{ font-size:14px; font-weight:bold; color:#b73434;}
+.userCommentTime{ color:#959595;}
+.z_wineInfo_commentList_replayNr{ height:44px; line-height:22px; overflow:hidden;}
+.z_wineInfo_commentList_replay{ text-align:right; padding-right:16px;}
+.z_wineInfo_commentList_replay a{ color:#b73434;}
+
+.z_wineInfo_pageNum{ text-align:right;color:#bababa; font-size:12px; margin-bottom:16px;}
+
+/*酒评详情-转发页*/
+.z_wineInfo_transmit{ border-top:1px solid #d6d6d6; margin-top:14px; position:relative; background:#f8f8f8; padding:16px; padding-bottom:0;}
+.z_wineInfo_transmit_tip{ width:12px; height:6px; background:url(../../images/mingzhuang/detail/top_jt_12x6.gif) no-repeat 0 0; position:absolute; left:30px; top:-6px; _top:-5px;}
+.z_wineInfo_transmit_userInfo{ font-size:12px; color:#555555; line-height:20px;}
+.z_wineInfo_transmit_userInfo a{ color:#b73434;}
+.z_wineInfo_transmit_userInfo .userName{ color:#b73434; font-weight:bold; text-decoration:none; float:left; }
+.z_wineInfo_transmit_userInfo .userName:hover{ text-decoration:underline;}
+.z_wineInfo_transmit_wineInfo{ border:1px solid #e4e4e4; background:#f4f4f4; padding:13px 15px; margin-top:10px; width:560px;}
+.z_wineInfo_transmit_wineInfo .pic{ float:left; width:78px;margin-right:20px;}
+.z_wineInfo_transmit_wineInfo .pic img{ border:1px solid #cfcfd3;max-width:78px;}
+.z_wineInfo_transmit_wineInfo .nr{ float:left;  display:inline; line-height:26px; color:#555555; font-size:14px;}
+
+
+/*酒友动态列表*/
+.z_wineInfoList{ margin-top:4px; min-height:300px;}
+.z_wineInfoList .msg{ display:block;text-align: center;margin: 10px;color: #555;}
+.z_wineInfoList li{ margin-top:16px; border-bottom:1px dotted #bdbdbd;}
+.z_wineInfoList_userPic{ float:left;}
+.z_wineInfoList_userPic img{ border:1px  solid #d3d2d0; padding:1px; width:50px; height:50px;}
+.z_wineInfoList_userSay{ width:620px; float:left; margin-left:20px;}
+.z_wineInfo_morePicIco{position:absolute; bottom:0; left:0;height:16px; width:100%;}
+.z_wineInfo_morePicIco i{height:16px; width:100%; background:#666; opacity:0.3; filter:alpha(opacity:30); position:absolute;}
+.z_wineInfo_morePicIco img{ position:absolute; top:4px; left:18px; z-index:2; border:0 !important;}
+.z_wineInfo_transmit_h4{ font-size:14px; font-weight:bold; color:#555555; margin-bottom:8px;}
+.z_wineInfo_searchPicBox{ margin-top:10px;}
+.z_wineInfo_userInfo_pl{ color:#555555; margin-top:6px;}
+.z_wineInfo_userInfo_pl i{ color:#959595;}
+.z_wineInfo_userInfo_pl a{ color:#b73434;}
+.z_wineInfo_userInfo_pl a:hover{ text-decoration:underline;}
+a.ah_u:hover{ text-decoration:underline !important;}
+
+/*分页*/
+.z_page{ width:420px; margin:10px auto;}
+.z_page li{ float:left; margin-left:10px; display:inline; height:22px; line-height:22px; background:url(../../images/mingzhuang/detail/pagingBg.gif) no-repeat right -92px;}
+.z_page li span{ color:#868686; text-align:center; padding:0 3px 0 8px; display:inline-block; height:22px; background:url(../../images/mingzhuang/detail/pagingBg.gif) no-repeat 0 -46px; position:relative; left:-5px;}
+.z_page .active{ background-position:right -69px;}
+.z_page .active span{ background-position:-94px -46px; color:#FFF;}
+.z_page .sBtn{ width:23px; height:22px; margin-left:6px;}
+.z_page .sBtn span{ background:none;}
+.z_page .first{ background-position:0 0;}
+.z_page .nofirst{ background-position:0 -24px;}
+.z_page .previous{ background-position:-24px 0;}
+.z_page .noprevious{ background-position:-24px -24px;}
+.z_page .next{ background-position:-53px 0;}
+.z_page .nonext{ background-position:-53px -24px;}
+.z_page .last{ background-position:-77px 0;}
+.z_page .nolast{ background-position:-77px -24px;}

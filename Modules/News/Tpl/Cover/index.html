@@ -1,0 +1,44 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Cover/index')}">封面页管理</a></div>
+    <div class="list-menu">
+        <if condition="$_SESSION['admin_adminer'] eq 1"><a class='btn' href="{:Url('add')}">增加新封面</a></if>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>封面ID</th>
+                    <th>标题</th>
+                    <th>物理目录</th>
+                    <th>模板文件</th>
+                    <th>添加时间</th>
+                    <th>添加者</th>
+                    <th>修改时间</th>
+                    <th>修改者</th>
+                    <th>推荐位管理</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="lists">
+            <tr>
+				<td>{$vo.id}</td>
+                <td>{$vo.title}</td>
+                <td>{$vo.path}</td>
+                <td>{$vo.template}</td>
+				<td>{$vo.addtime|date="Y-m-d H:i:s", ###}</td>
+				<td>{$vo.adduser}</td>
+				<td>{$vo.updatetime|date="Y-m-d H:i:s", ###}</td>
+				<td>{$vo.updateuser}</td>
+                <td> <a href="{:Url('blockitem?cid='.$vo['id'])}">区块操作</a> </td>
+                <td>
+                    <a href="{:Url('update?id='.$vo['id'])}">更新静态页</a> <a href="{:Url('edit?id='.$vo['id'])}">编辑</a>
+                    <if condition="$_SESSION['admin_adminer'] eq 1"><a href="{:Url('del?id=' . $vo['id'])}" title="是否删除<b>“{$vo.title}”</b>封面页?" target="delete">删除</a></td></if>
+			</tr>
+			</volist>
+        </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

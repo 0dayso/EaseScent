@@ -1,0 +1,112 @@
+<include file="Common:header" />
+<div class="re_main clear">	
+    <include file="Common:menu" />
+        <div class="re_main_r">
+        	<h3 class="re_main_r_h3">Edit the Information</h3>
+            <div class="bb1cccccc"></div>
+            <p class="col959595">Complete the information for improving the brand awardness</p>
+            <p class="re_main_r_p01">Account：<span>{$userinfo.email}</span>   <a href="#">Change E-mail Address</a></p>
+            <table width="100%" cellpadding="0" cellspacing="0" class="re_main_r_tab01">
+            	<tbody>
+                	<tr>
+                    	<td align="right">Name：</td>
+                        <td>
+                            <input name="nick_name" value="{$userinfo.nick}" type="text" class="w578inp" />
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Full Name：</td>
+                        <td>
+                            <input  name="company_name" value="{$userinfo.qy_name}" type="text" class="w578inp" />
+                            <span style="color:red;">*</span>
+                        
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Industry：</td>
+                        <td>
+                        <select name="hangye" class="select">
+                        <option value="-1">-SELECT-</option>
+						{$hy_option}
+                        </select>
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Business Nature：</td>
+                        <td>
+                        <select name="xingzhi" class="select">
+                        <option value="-1">-SELECT-</option>
+						{$xz_option}
+                        </select>
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Employees：</td>
+                        <td>
+                        <select name="guimo" class="select">
+                        <option value="-1">-SELECT-</option>
+						{$gm_option}
+                        </select>
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Website：</td>
+                        <td>
+                        <input name="web_address" type="text" value="{$userinfo.qy_web_address}" class="w578inp" />
+                        
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right" valign="top">Introduction：</td>
+                        <td>
+                        <textarea  name="introduction" class="txta">{$userinfo.qy_introduction}</textarea>
+                        
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Country：</td>
+                        <td>
+                        <select name="country" id="country" class="select">
+                        	<option>-SELECT-</option>
+                            <volist name="en_country" id="co">
+                                <option <if condition="$userinfo.qy_country eq $co"> selected </if> value="{$co}">{$co}</option>
+                            </volist>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Address：</td>
+                        <td><input type="text"  name="address_info"  value="{$userinfo.qy_address}" class="w578inp" />
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Telephone：</td>
+                        <td><input type="text"  name="company_tel" value="{$userinfo.qy_moblie}" class="w578inp w217" />
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td align="right">Contact：</td>
+                        <td><input type="text"  name="contacts" value="{$userinfo.qy_contacts}" class="w578inp w217" />
+                            <span style="color:red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td></td>
+                        <td><a href="#" class="pinkBtn"><span 
+                        <if condition="$type neq 'index'"> item="下一步" <else/> item="Submit" </if> id="company_btn">Submit</span></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script src="__JS__/company_en.js" type="text/javascript"></script>
+</html>

@@ -1,0 +1,781 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Btasting/Wtasting/index')}">品酒会管理</a> > 新建品酒会</div>
+    <div class="form">
+        <form name="myform" id="myform" method="post" enctype="multipart/form-data">
+                <table width="100%" cellspacing="0" class="table-list">
+                    <thead>
+                        <tr>
+                            <th>基本属性</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+			        <tbody>
+                        <tr>
+                            <td width="130">酒会名称</td>
+                            <td><input type="text" size="30" id="submit-name" value="" class="measure-input"/></td>
+                        </tr>
+                        <tr>
+                            <td width="130">专家团成员</td>
+                            <td>
+                                <br/>
+                                <input type="text" size="80" id="experts-selected-show-box" value="" class="measure-input"/> <a id="change-experts-modify" href="###">修改</a> <a id="delete-all-selected-experts" href="###">全部移除</a>
+                                <input type="hidden" id="experts-list">
+                                <input type="hidden" id="submit-experts">
+                                <br/><br/>
+                                <a id="add-new-expert" href="{:Url('Btasting/Expert/add')}" class=btn>添加新专家</a> <a href="###" id="show-expert-select-box" class=btn>从专家团选择</a>
+								<style>
+								  #expert-lists li,#expert-lists-selected li{margin-left:4px;margin-top:3px; margin-bottom:3px; clear:both;}
+								  #expert-lists-selected a.delete-expert-selected{display:block; float:right; margin-right:10px;}
+								</style>
+								<div id="expert-select-box" style="display:none;position:absolute;width:400px; background:#fff; border:1px solid #dedede;margin-left:80px;margin-top:5px;">
+								   <div style="margin:4px;padding:3px; border-bottom:1px solid #dddddd">专家库</div>
+								   <div style="margin-left:4px; margin-right:4px; margin-bottom:5px;">
+									  <div style="width:190px; float:left; border-right:1px solid #dedede; height:100px; overflow:auto;">
+                                          <ul id="expert-lists">
+                                            <volist id="e" name="expert">
+                                            <li><label><input id="expert-checkbox-id-{$e.id}" class="expert-checkboxs" title="{$e.name}" type="checkbox" value="{$e.id}" name="expertids[]"> {$e.name}</label></li>
+                                            </volist>
+										 </ul>
+									  </div>
+									  <div style="width:190px; float:right; height:100px; overflow:auto;">
+										 <ul id="expert-lists-selected">
+										 </ul>
+									  </div>
+								   </div>
+								   <div style="clear:both"></div>
+								   <div style="margin:4px;padding:10px; border-top:1px solid #dddddd">
+									 <a href="###" id="enter-select-experts" class="btn">确认</a> <a id="close-add-expert" href="###">关闭</a>
+								   </div>
+								</div>
+                                <br/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="130">酒会属性</td>
+                            <td height="35">
+                                <label><input type="radio" name="type" checked class="btasting-type-radio" value="1"> 公开品酒会</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <label><input type="radio" name="type" class="btasting-type-radio" value="2"> 盲品会</label>
+                                <span id="btasting-password" style="display:none">
+                                    <span id="btasting-password-text"></span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span id="btasting-password-info">输入密码：</span><input type="text" id="btasting-password-textbox" size="10" class="measure-input"/>
+                                    <input id="btasting-password-enter" type="button" class="btn" value="确认">
+                                    <input type="hidden" id="submit-password">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>酒会时间</td>
+                            <td><input type="text" id="wineparty-time" size="20" class="measure-input"> 例如:{:date('Y-m-d', time() + 86400)}</td>
+                        </tr>
+                        <tr>
+                            <td width="130">前台广告录入</td>
+                            <td>
+						        <input type="file" name="uploadfile">
+                                <input type="button" id="upload-adv-image" class="btn" value="添加广告图片">
+                                <div id="upload-adv-show" style="display:none; margin-top:12px; margin-bottom:8px;position:relative;"></div>
+                                <input type="hidden" id="submit-advimage">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table width="100%" cellspacing="0" class="table-list">
+                    <thead>
+                        <tr>
+                            <th>分组并添加酒款</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+			        <tbody>
+                        <tr>
+                            <td width="130">添加分组</td>
+                            <td><input type="text" size="20" id="add-groups-name" class="measure-input"/> 最多10个汉字 </td>
+                        </tr>
+                        <tr>
+                            <td width="130">分组编号</td>
+                            <td><input type="text" size="15" id="add-groups-id" class="measure-input"/> 支持数字、字母，最多6位 </td>
+                        </tr>
+                        <tr>
+                            <td width="130"></td>
+                            <td><input type="button" id="add-groups" class="btn" value="确认"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <br/>
+            <ul id="group-lists" style="width:700px; float:left;" class="tabBut cu-li">
+                <li group-id="0" group-item="未分组" group-name="未分组" class="group-list on">未分组</li>
+            </ul>
+            <div id="operat-group" style="display:none;width:200px; float:right; margin-right:10px;"><a href="###" id="rename-this-group" title="重命名该组">重命名该组</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="###" id="del-this-group" title="删除该组">删除该组</a></div>
+            <div class="clear"></div>
+            <div class="tab-nav">
+                <div>
+                    <a id="add-wine-to-this-group" href="###">添加酒款至该组</a>
+                </div>
+                <div id="add-wine-area" style="margin:20px;display:none">
+                    酒名(中\英) &nbsp;&nbsp;<input type="text" size="60" id="select-wine-name" value="" class="measure-input"/>&nbsp;&nbsp;年份&nbsp;<select id="select-wine-year"></select>&nbsp;&nbsp;代理商&nbsp;<input type="text" id="wine-agents-name" size="20" class="measure-input">&nbsp;&nbsp;参考价&nbsp;<input type="text" id="wine-agents-price" size="5" class="measure-input">&nbsp;&nbsp;<input type="button" class="btn" value="确定" id="select-wine-enter">
+                    <input name="" note="记录当前酒款酒库ID" value="" type="hidden" id="select-wine-id">
+                    <div id="select-wine-box" style="display:none;margin-left:68px; border:1px solid #dedede; width:434px;border-top:0px; overflow:hidden; z-index:999; position:absolute; background:#ffffff">
+                        <ul id="select-wine-content">
+                            <li style="padding:4px 10px 1px;color:#999999;clear:both">请点击选择    <a id="close-wine-box" style="display:block;float:right" href="#">关闭</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <table id="group-wine-lists" width="100%" cellspacing="0" class="table-list" style="margin-top:10px;">
+                </table>
+                <div class="footer"><input type="checkbox" id="check-wine-box" value=""><label for="check-wine-box">全选/取消</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="删除" name="dosubmit" id="delete-group-wines-btn" class="btn"> <span id="group-wine-page"></span> </div>
+            </div>
+            <div class="bottom">
+                <input id="all-submit" type="button" class="btn" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提交&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a id="drop-wine-and-return" href="{:Url('Btasting/Wtasting/index')}">放弃并返回</a>
+            <div>
+        </form>
+    <div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+    var WPID = 0;
+    var GID = 0;
+    var GNAME = '未分组';
+    var GITEM = '未分组';
+
+    //必须填写酒会名称才能进行其他操作
+    if(!WPID) {
+        $("#submit-name").focus();
+    }
+
+    //生成酒会ID
+    if(!WPID) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: "{:Url('Btasting/Wtasting/add?op=addwp')}",
+            success: function(data){
+                if(data.result) {
+                    WPID = data.result;
+                } else {
+                    alert('页面打开遇到问题，请刷新该页面');
+                    window.location.reload();
+                }
+            },
+            async:false
+        });
+    }
+
+    if(!WPID) {
+        alert('页面打开遇到问题，请刷新该页面');
+        window.location.reload();
+    }
+
+    $("#select-wine-name").keyup(function(){
+        var winename = $(this).val();
+        if(winename != '') {
+            $.ajax({
+                type: 'get',
+                dataType:"jsonp",
+                url : 'http://ajax.wine.cn/?action=VHdrdWsxTkFfbncxSXdwe3B%2Fc3tNe3J7fWpJd3B7',
+                timeout: 3000,
+                data:{kw: $(this).val(), st: 0},
+                success: function(data){
+                    if(data.errorCode == 0) {
+                        $("#select-wine-box").show();
+                        $(".select-wine-list").remove();
+                        for(var wnum in data.result) {
+                            if(wnum > 9) break;
+                            var cwine = data.result[wnum].cname + data.result[wnum].fname;
+                            $("#select-wine-content").append($("<li title='" + cwine + "' wine-id='" + data.result[wnum].id + "' class='select-wine-list' style='padding:5px 10px;cursor:pointer;'>" + cwine + "</li>"));
+                        }
+                        $(".select-wine-list").mouseover(function(){
+                            $(this).css("background-color","#dedede");
+                        }).mouseout(function(){
+                            $(this).css("background-color","#ffffff");
+                        }).click(function(){
+                            var wineid = $(this).attr('wine-id');
+                            $("#select-wine-box").hide();
+                            $("#select-wine-name").val($(this).attr('title'));
+                            $("#select-wine-id").val(wineid);
+                            $.ajax({
+                                type: 'get',
+                                dataType: 'jsonp',
+                                url: 'http://ajax.wine.cn/?action=Xn1hf2E7REtVZH07Y316cVJ9enA%3D=',
+                                timeout: 3000,
+                                data:{ id: wineid, isy:1},
+                                success: function(data){
+                                    $("#select-wine-year option").remove();
+                                    if(data.errorCode == 0) {
+                                        if(data.result.ywine) {
+                                            $("<option value=''>请选择年份</option>").appendTo($("#select-wine-year"));
+                                            for(var ynum in data.result.ywine) {
+                                                $("<option wine-id='" + wineid + "' wine-year='" + data.result.ywine[ynum].year + "' value='" + data.result.ywine[ynum].id + "'>" + data.result.ywine[ynum].year + "年</option>").appendTo($("#select-wine-year"));
+                                            }
+                                        } else {
+                                            $("<option value=''>暂无年份信息</option>").appendTo($("#select-wine-year"));
+                                            alert("该酒款暂无年份信息，请到酒库录入相关数据。");
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
+            });
+        } else {
+            $("#select-wine-box").hide();
+        }
+    });
+
+    $("#select-wine-enter").click(function(){
+        var name = $("#select-wine-name").val();
+        var jkid = $("#select-wine-id").val();
+        var yid = $("#select-wine-year").val();
+        var agent = $("#wine-agents-name").val();
+        var price = $("#wine-agents-price").val();
+        if(!name) {
+            DialogMsgBox("酒款名称丢失，请重新酒款");
+            return;
+        }
+        if(!jkid) {
+            DialogMsgBox("酒库关联ID丢失，请重新选择酒款");
+            return;
+        }
+        if(!yid) {
+            DialogMsgBox("酒款年份不存在，请重新选");
+            return;
+        }
+        if(!GID) {
+            DialogMsgBox("请选择或添加相应分组");
+            return;
+        }
+        $.post("{:Url('Btasting/Wtasting/add?op=addwine')}", {gid: GID, name:name, jkid: jkid, yid:yid, wpid:WPID, agent:agent, price:price}, function(result){
+            if(result.errno == 0) {
+                DialogMsgBox("酒款添加成功"); 
+                $("#select-wine-name").val('');
+                $("#wine-agents-name").val('');
+                $("#wine-agents-price").val('');
+                $("#select-wine-year option").remove();
+                WinesLists();
+                return;
+            } else {
+                DialogMsgBox("该款酒在该分组下已经存在"); 
+                return;
+            }
+        }, 'json');
+    });
+
+    $("#close-wine-box").click(function(){
+        $("#select-wine-box").hide();
+    });
+
+    $("#add-wine-to-this-group").click(function(){
+        var winearea = $("#add-wine-area");
+        if(winearea.css('display') == 'none') {
+            winearea.show(400);
+            $(this).html('隐藏酒款添加框');
+        } else {
+            winearea.hide(200);
+            $(this).html('添加酒款至该组');
+        }
+    });
+
+    $("#rename-this-group").click(function(){
+        art.dialog({
+            lock: true,
+            width: 400,
+            ok:function(){
+                if(!GID) {
+                    alert("请先选择分组再进行此操作");
+                    return false;
+                }
+                var groupname = $("#rename-group-name").val();
+                var groupitem = $("#rename-group-item").val();
+                $.post("{:Url('Btasting/Wtasting/add?op=editgroup')}", {gid:GID, name:groupname, item: groupitem}, function(data){
+                    if(data.errno == 0) {
+                        GNAME = groupname;
+                        GITEM = groupitem;
+                        var gon = $("#group-lists .on");
+                        gon.attr("group-name", GNAME);
+                        gon.attr("group-item", GITEM);
+                        gon.html(GNAME);
+                        WinesLists();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+            },
+            cancel:function(){
+                return true;
+            },
+            okValue: '确定',
+            cancelValue: '取消',
+            content: '<div>分组名称：<input type="text" id="rename-group-name" value="' + GNAME + '" class="measure-input" size="10"><br/><br/>分组编号：<input type="text" value="' + GITEM + '" id="rename-group-item" class="measure-input" size="5"></div>'
+        });
+    });
+
+    $("#del-this-group").click(function(){
+        if(!GID) {
+            DialogMsgBox("请选择要删除的分组！");
+            return false;
+        }
+        if(!confirm("确认删除该分组吗？")) {
+            return false;
+        }
+        $.post("{:Url('Btasting/Wtasting/add?op=delgroup')}", {gid : GID}, function(data){
+            if(data) {
+                $("#group-lists .on").remove();
+                $("#group-lists>li:first").addClass('on');
+                GID = 0;
+                GNAME = '未分组';
+                GITEM = '未分组';
+                WinesLists();
+            }
+        }, 'json');
+    });
+
+    $(".group-list").live("click", function(){
+        $(".tabBut .on").removeClass("on").addClass("group-list");
+        $(this).removeClass("group-list").addClass("on");
+        GID = $(this).attr('group-id');
+        GITEM = $(this).attr('group-item');
+        GNAME = $(this).attr('group-name');
+        if(!GID) {
+            $("#operat-group").hide();
+        } else {
+            $("#operat-group").show();
+        }
+        WinesLists();
+    });
+    $("#check-wine-box").click(function(){
+        var aa = $(this).attr("checked");
+        if(aa == 'checked') {
+            $("input[name='wine-ids']").each(function() {
+                this.checked=true;
+            });
+        } else {
+            $("input[name='wine-ids']").each(function() {
+                this.checked=false;
+            });
+        }
+    });
+    
+    //wines detail
+    $(".group-wine-show").live('click', function(){
+        var jkid = $(this).attr('jiuku-id');
+        var wineid = $(this).attr('wine-id');
+        var yid = $(this).attr('year-id');
+        var detail = $("#group-wine-show-detail-id-" + wineid);
+        $(".show-wine-details").remove();
+        if($(this).attr("status") == 'show') {
+            $(this).attr('status', 'hide');     
+            return false;
+        }
+        $(".group-wine-show").each(function(){
+            $(this).attr('status', 'hide');
+        });
+        $("<div id='show-wine-notic-tmp' style='color:#cc0000;display:none'>正在加载，请稍候...</div>").insertAfter(detail);
+        $.ajax({
+            type: 'get',
+            dataType: 'jsonp',
+            url: "http://ajax.wine.cn/?action=Xn1hf2E7REtVZH07Y316cVJ9enA%3D=",
+            timeout: 3000,
+            data: {id: jkid, isf:1, ist:1, isi:1, isc:1, isr:1, isw:1 , ish:1, isg:1, ist:1, isbgw:1},
+            success: function(data){
+                if(data.errorCode == 0) {
+                    //require years info etc.
+                    $.get("http://ajax.wine.cn/?action=X3xgfmA6RUpUZXw6bGJ8e3BTfHtx&st=1&isf=1&id=" + yid, '', function(yearinfo){
+                        if(yearinfo.errorCode == 0) {
+                            var region = '',fdots = '',dots = '',wdot = '',html = '', grape = '', winery = '', country = '',wineimg = '',agents = '', finished = 0;
+                            if(data.result.region) {
+                                for( var dnum in data.result.region) {
+                                    region += fdots;
+                                    for(var snum in data.result.region[dnum]) {
+                                        region += dots + data.result.region[dnum][snum].cname;
+                                        dots = ' >> ';
+                                    }
+                                    fdots = '<br/>';
+                                }
+                            }
+                            if(data.result.country) {
+                                country = data.result.country.cname;
+                            }
+                            if(data.result.winery) {
+                                for(var wnum in data.result.winery) {
+                                    winery += wdot + data.result.winery[wnum].cname;
+                                    wdot = '，';
+                                }
+                            }
+                            if(data.result.grape) {
+                               grape = data.result.grape.cname; 
+                            }
+                            if(data.result.img) {
+                                wineimg = "<img src='" + data.result.img[0].filename + "' width='135' height='135'>";
+                            }
+
+                            html =  "<tr class='show-wine-details'><td colspan='7'><table class='tmptable' width='40%' style='margin:20px; margin-left:100px; float:left; font-size:13px;' cellspacing='0'>";
+                            html += "<tr><td width='130'>序号：</td><td>" + data.result.id + "</td></tr>";
+                            html += "<tr><td width='130'>英文酒名：</td><td>" + data.result.fname + "</td></tr>";
+                            html += "<tr><td width='130'>中文酒名：</td><td>" + data.result.cname + "</td></tr>";
+                            html += "<tr><td width='130'>年份：</td><td>" + yearinfo.result.year + "</td></tr>";
+                            html += "<tr><td width='130'>价位区间：</td><td>" + yearinfo.result.price + "</td></tr>";
+                            html += "<tr><td width='130'>国家：</td><td>" + country + "</td></tr>";
+                            html += "<tr><td width='130'>产区：</td><td>" + region + "</td></tr>";
+                            html += "<tr><td width='130'>酒庄信息：</td><td>" + winery + "</td></tr>";
+                            html += "<tr><td width='130'>品种：</td><td>" + grape + "</td></tr>";
+                            html += "<tr><td width='130'>代理商：</td><td><span id='agents-yid-" + yid + "'></span></td></tr>";
+                            html += "<tr><td width='130'>文字描述：</td><td>" + data.result.content + "</td></tr>";
+                            html += "</table>";
+                            html += "<table width='40%' class='tmptable' style='margin:20px; float:left; font-size:13px;' cellspacing='0'><tr><td style='border:0px;'>";
+                            html += wineimg;
+                            html += "</td></tr></table>";
+                            html += "</td></tr>";
+                            $(html).insertAfter(detail);
+                            $("#show-wine-notic-tmp").remove();
+                            //完成度
+                            finished += data.result.fname ? 10: 0;
+                            finished += data.result.cname ? 10: 0;
+                            finished += yearinfo.result.year ? 10: 0;
+                            finished += yearinfo.result.price ? 10: 0;
+                            finished += country ? 10: 0;
+                            finished += region ? 10: 0;
+                            finished += winery ? 10: 0;
+                            finished += grape ? 10: 0;
+                            finished += data.result.content ? 10: 0;
+                            $.get("http://ajax.wine.cn/?action=X3xgfmA6RUpUZXw6bGJ8e3BTfHtx&id=" + yid + "&isa=1",'', function(rest){
+                                if(rest.result.agents) {
+                                    for(var agnum in rest.result.agents) {
+                                        if(rest.result.agents[agnum].cname) {
+                                            agents += rest.result.agents[agnum].cname + '&nbsp;&nbsp;';
+                                        }
+                                    }
+                                }
+                                $("#agents-yid-" + yid).html(agents);
+                                finished += agents ? 10: 0;
+                                $("#finished-yid-" + yid).html(finished);
+                                $.post("{:Url('Btasting/Wtasting/add?op=winefinished')}", {id:wineid, finished:finished}, function(){}, 'json');
+                            }, 'jsonp');
+                        } else {
+                            $("#show-wine-notic-tmp").html("年份数据数据错误...");
+                        }
+                    }, 'jsonp');
+                } else {
+                    $("#show-wine-notic-tmp").html("酒款数据错误...");
+                }
+            },
+            error: function(){
+                    $("#show-wine-notic-tmp").html("获取超时，请重新点击查看...");
+                }
+        });
+        $(this).attr('status', 'show');
+    });
+
+    $("#close-add-expert").click(function(){
+        $("#expert-select-box").hide(200);
+    });
+
+    $("#show-expert-select-box").click(function(){
+        $("#expert-select-box").show(200);
+    });
+    
+    $(".expert-checkboxs").click(function(){
+        if($(this).attr('checked') == 'checked') {
+            $("<li id='expert-selected-id-" + $(this).val() + "'> " + $(this).attr('title') + " <a href='###' expert-name='" + $(this).attr('title') + "' expert-id='" + $(this).val() + "' class='delete-expert-selected'>删除</a> </li>").appendTo($("#expert-lists-selected"));
+            var experts = $("#experts-list").val();
+            $("#experts-list").val(experts + '|' + $(this).val() + '|');
+        } else {
+            $("#expert-selected-id-" + $(this).val()).remove();
+            var experts = $("#experts-list").val();
+            var nexperts = experts.replace('|' + $(this).val() + '|','');
+            $("#experts-list").val(nexperts);
+        }
+    });
+
+    $(".delete-expert-selected").live("click", function(){
+        $("#expert-checkbox-id-" + $(this).attr('expert-id')).removeAttr('checked');
+        $("#expert-selected-id-" + $(this).attr('expert-id')).remove();
+        var experts = $("#experts-list").val();
+        var nexperts = experts.replace('|' + $(this).attr('expert-id') + '|','');
+        $("#experts-list").val(nexperts);
+    });
+    
+    $("#enter-select-experts").click(function(){
+        var experts = $("#experts-list").val();
+        var exps = dots = '';
+        $(".delete-expert-selected").each(function(){
+            exps += dots + $(this).attr('expert-name');
+             dots = '、';
+        });
+        $("#experts-selected-show-box").val(exps);
+        if(experts) {
+            experts = '|' + experts + '|';
+        }
+        $("#submit-experts").val(experts);
+        $("#expert-select-box").hide(200);
+    });
+
+    $("#delete-all-selected-experts").click(function(){
+        $("#experts-selected-show-box").val('');
+        $("#experts-list").val('');
+        $("#submit-experts").val('');
+        $("#expert-lists-selected li").remove();
+        $(".expert-checkboxs").removeAttr('checked');
+    });
+
+    $("#change-experts-modify").click(function(){
+        $("#expert-select-box").show(200);        
+    });
+
+    $(".btasting-type-radio").click(function(){
+        if($(this).val() == 1) {
+            $("#btasting-password").fadeOut(100);
+        } else {
+            $("#btasting-password").fadeIn(100);
+        }
+    });
+
+    $("#btasting-password-enter").click(function(){
+        var pwd = $("#btasting-password-textbox").val();   
+        $("#btasting-password-textbox").val('');
+        if(pwd) {
+            $("#btasting-password-info").html("修改密码：");
+            $("#submit-password").val(pwd);
+            $("#btasting-password-text").html('&nbsp;&nbsp;&nbsp;&nbsp;密码：' + pwd);
+        } else {
+            $("#btasting-password-info").html("输入密码：");
+            DialogMsgBox('您填写的盲品会密码为空，请重新填写！');
+        }
+    });
+
+    //广告图上传
+    $("#upload-adv-image").click(function(){
+        var form = $("#myform");
+        form.attr("action", "{:Url('Btasting/Wtasting/add?op=upload&wpid=')}" + WPID);
+        form.attr("target", "advImgUpload");
+        form.submit();
+        form.attr("action", '');
+        form.attr("target", "");
+    });
+
+    $(".delete-adv-images").live('click', function(){
+        var id = $(this).attr("adv-id");
+        $("#advshow-" + id).remove();
+        var ids = $("#submit-advimage").val();
+        var ides = ids.replace('|' + id + '|','');
+        $("#submit-advimage").val(ides);
+    });
+
+    $("#add-groups").click(function(){
+        var name = $("#add-groups-name").val();
+        var id = $("#add-groups-id").val();
+        if(!name) {
+            return DialogMsgBox("分组名称不能为空");   
+        }
+        if(!id) {
+            return DialogMsgBox("分组ID不能为空");   
+        }
+        $.post("{:Url('Btasting/Wtasting/add?op=addgroup')}", {name: name, id: id, wpid:WPID}, function(data){
+            if(data.errno == 0) {
+                $("<li group-name='" + name + "'group-item='" + id + "' group-id='" + data.result + "' class='group-list'>" + name + "</li>").appendTo($("#group-lists"));
+                $("#add-groups-name").val('');
+                $("#add-groups-id").val('');
+            } else {
+                alert(data.result);
+            }
+        }, 'json');
+    });
+
+    //分页
+    $("#group-wine-page a").live("click", function(){
+        var url = $(this).attr('href');
+        WinesLists(url);
+        return false;
+    });
+    
+    $(".change-group-wine-item").live('click', function(){
+        var obj = $("<input size='5' type='text' wine-id='" + $(this).attr('wine-id') + "' class='measure-input'>");
+        var that = $(this);
+        that.html('');
+        obj.insertAfter(that);
+        obj.bind('blur', function(){
+            var input = $(this);
+            var wid = input.attr('wine-id');
+            var item = input.val();
+            if(item) {
+                $.post("{:Url('Btasting/Wtasting/add?op=updateWineItem')}", {wid:wid, item:item}, function(data){
+                    input.remove();
+                    that.html(item);
+                }, 'json');
+            }
+        });
+    });
+
+    //delete
+    $("#delete-group-wines-btn").click(function(){
+        var ids = '';
+        var dots = '';
+        $("input[name='wine-ids']").each(function(){
+            if(this.checked) {
+                ids += dots + this.value;
+                dots = ',';
+            }
+        });
+        DeleteWines(ids);
+    });
+    //delete one
+    $("#group-wine-delete").live('click', function(){
+        var wineid = $(this).attr('wine-id');
+        DeleteWines(wineid);
+    });
+    //change group
+    $(".group-wine-change-group").live('click', function(){
+        var wineid = $(this).attr('wine-id');
+        var select = '<option value="">请选择新分组</option>';
+        $.post("{:Url('Btasting/Wtasting/add?op=grouplist')}", {wid:WPID}, function(data){
+            if(data.errno == 0) {
+                for(var snum in data.list) {
+                    select += "<option value='" + data.list[snum].gid + "'>" + data.list[snum].name + "</option>";
+                }
+                $("#group-wine-change-group-select-" + wineid + " select").remove();
+                $("<select wine-id='" + wineid + "' class='group-wine-change-group-chg' id='group-wine-change-group-chg-" + wineid + "'>" + select + "</select>").appendTo($("#group-wine-change-group-select-" + wineid));
+                $("#group-wine-change-group-" + wineid).hide();
+            } else {
+                DialogMsgBox(data.message);
+            }
+        }, 'json');
+           
+    });
+    //change group enter
+    $(".group-wine-change-group-chg").live('change', function(){
+        var newgid = $(this).children('option:selected').val();
+        if(!newgid) {
+            DialogMsgBox('分组ID为空');
+        } else {
+            var wineid = $(this).attr('wine-id');
+            $.post("{:Url('Btasting/Wtasting/add?op=changewinegroup')}", {gid:newgid, wineid: wineid}, function(data){
+                if(data.errno != 0) {
+                    DialogMsgBox(data.message);
+                } else {
+                    WinesLists();
+                }
+            }, 'json');
+        }
+    });
+    //add new expert btn
+    $("#add-new-expert").click(function(){
+        if(confirm("确定离开该页面？离开后所有已添加项将全部丢失!")) {
+            true;
+        } else {
+            return false;
+        }
+    });
+    
+    $("#all-submit").click(function(){
+        var name = $("#submit-name").val();
+        var experts = $("#submit-experts").val();
+        var type = $("input[name='type']:checked").val();
+        var password = $("#submit-password").val();
+        var time = $("#wineparty-time").val();
+        if(!name) {
+            DialogMsgBox("酒会名称不能为空");
+            return false;
+        } else if(!experts) {
+            DialogMsgBox("专家团成员不能为空");
+            return false;
+        } else if(!type) {
+            DialogMsgBox("请选择酒会属性");
+            return false;
+        } else if(type == 2 && !password) {
+            DialogMsgBox("请设置盲品会密码");
+            return false;
+        } else if(!time) {
+            DialogMsgBox("请设置品酒会时间");
+            return false;
+        }
+        $.post("{:Url('Btasting/Wtasting/add?op=submit')}", {wpid:WPID, name:name, experts:experts, type:type, password:password, time:time}, function(data){
+            if(data.errno == 0) {
+                DialogMsgBox(data.message);
+                var code = "window.location.href = '{:Url('Btasting/Wtasting/index')}'";
+                setTimeout(code, 2000);
+            } else {
+                DialogMsgBox(data.message);
+            }
+        }, 'json');        
+    });
+
+    $("#drop-wine-and-return").click(function(){        
+        $.post("{:Url('Btasting/Wtasting/add?op=dropwine')}", {wpid: WPID}, function(data){
+            return true;
+        }, 'json');
+    });
+    
+    (function($){
+        //由于firefox会缓存Form表单结果，附加代码用于专家团选取专家处理
+        $("input[name='expertids[]']").each(function(){
+            if($(this).attr('checked') == 'checked') {
+                $("<li id='expert-selected-id-" + $(this).val() + "'> " + $(this).attr('title') + " <a href='###' expert-name='" + $(this).attr('title') + "' expert-id='" + $(this).val() + "' class='delete-expert-selected'>删除</a> </li>").appendTo($("#expert-lists-selected")); 
+                var experts = $("#experts-list").val();
+            }
+        });
+        
+        var iframeDom = $("<iframe></iframe");
+        iframeDom.attr("style", "width:0px; height:0px;border:0px;");
+        iframeDom.attr("name", "advImgUpload");
+        iframeDom.attr("id", "advImgUpload");
+        iframeDom.appendTo($("body"));
+    })($);
+
+    //一些功能性函数
+    var DialogMsgBox = function(msg, title){
+        art.dialog({
+            lock: true,
+            title: title || '提示信息',
+            content: msg,
+            ok:function(){
+                return true;
+            },
+            okValue: '知道了',
+        });
+    }
+    //获取wines列表,带分页
+    var WinesLists = function(link) {
+        var url = link || "{:Url('Btasting/Wtasting/add?op=winelist')}";
+        $("#group-wine-lists tr").remove();
+        $("#group-wine-page span").remove();
+        $("<div id='append-wines-list-notic' style='margin:5px; color:#cc0000'>列表加载中...</div>").appendTo($("#group-wine-lists"));
+        $.post(url, {gid:GID, wpid:WPID}, function(data){
+            $("#append-wines-list-notic").remove();
+            for(var num in data.list) {
+            $("<tr id='group-wine-show-detail-id-" + data.list[num].id + "'><td><input type='checkbox' name='wine-ids' value='" + data.list[num].id + "'></td><td>" + GITEM + "<span class='change-group-wine-item' wine-id='" + data.list[num].id + "'>" + data.list[num].item + "</span></td><td>" + data.list[num].name + "</td><td>完成度 <span id='finished-yid-" + data.list[num].yid + "'>" + data.list[num].finish + "</span>%</td><td><a href='###' class='group-wine-show' year-id='" + data.list[num].yid + "' jiuku-id='" + data.list[num].jkid + "' wine-id='" + data.list[num].id + "'>查看</a></td><td><a href='###' id='group-wine-delete' wine-id='" + data.list[num].id +  "'>删除</a></td><td width='200'><a href='###' class='group-wine-change-group' id='group-wine-change-group-" + data.list[num].id + "' wine-id='" + data.list[num].id + "'>更改分组至</a><span id='group-wine-change-group-select-" + data.list[num].id + "'></span></td></tr>").appendTo($("#group-wine-lists"));
+            }
+            $("<span>" + data.page + "</span>").appendTo($("#group-wine-page"));
+        }, 'json');
+    }
+    //delete wines
+    var DeleteWines = function(ids) {
+        if(ids) {
+            $.post("{:Url('Btasting/Wtasting/add?op=delwines')}", {ids:ids}, function(data){
+                WinesLists();
+                if(data.message) {
+                    DialogMsgBox(data.message);
+                } else {
+                    alert("请求超时");
+                }
+            }, 'json');
+        }
+    }
+});
+
+//图片上传回调函数
+var uploadImageCallBack = function(status, data){
+    if(status) {
+        $("<div id='advshow-" + data + "' style='width:133px; position:relative; float:left; margin:10px;'><img src='{:Url('Btasting/ImageShow/rich?w=120&h=120&rich=')}" + data + "' style='padding:3px; border:1px solid #ccc; background:#dedede'><span class='delete-adv-images' adv-id='" + data + "' style='position: absolute;cursor: pointer;height: 13px;width:13px;margin:0px;top:-3px; right:0px; background:url(http://public.wine.cn/Jiuku/images/common/x.jpg)'></span>").appendTo($("#upload-adv-show"));
+        $("#upload-adv-show").show(200);
+        var ids = $("#submit-advimage");
+        ids.val(ids.val() + '|' + data + '|');
+	} else {
+	    alert("图片上传失败：" + data);
+	}
+}
+</script>
+<include file="Common:cpfooter" />

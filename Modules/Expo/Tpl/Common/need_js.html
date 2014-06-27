@@ -1,0 +1,16 @@
+<!--这里不建议用 thinkphp 自带的 IF 标签 会对SEO有影响 统一换成php语法 -->
+<?php if(in_array(ACTION_NAME,array('release','release_winetool','editGoods','introduce'))){ ?>
+    <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/js/sizzle.js"></script>
+    <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/uploadify/jquery.uploadify-3.1.min.js" charset="utf-8"></script>
+    <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/js/Validation/jquery.validationEngine-zh_CN.js"  charset="utf-8"></script>
+    <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/js/Validation/jquery.validationEngine.js"  charset="utf-8"></script>
+<?php }?>
+
+<?php if(ACTION_NAME=="goodsManage" || ACTION_NAME=="info"){ ?>
+        <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/js/sizzle.js"></script>
+<?php }?>
+
+<?php if(ACTION_NAME=="info"){ ?>
+   <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/js/chose.js"></script>
+   <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/uploadify/jquery.uploadify-3.1.min.js"></script>
+<?php }?>

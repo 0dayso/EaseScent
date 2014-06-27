@@ -1,0 +1,91 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'再次添加',callback:function(){window.location.href = window.location.href;}},
+                    {name:'复制添加'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+});
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Jk/Index/index')}">酒库源数据管理</a> >
+        <a href="{:Url('index')}">其他信息</a> >
+        <a href="{:Url('winetypeIndex')}">酒款类型列表</a> >
+        添加酒款类型
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('winetypeAdd')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">外文名</th>
+                        <td>
+                            <input name="fname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>中文名</th>
+                        <td>
+                            <input name="cname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属父类型</th>
+                        <td>
+                            <select name="pid">
+                                <option value="-1"></option>
+                                <option value="0">----顶级类型，没有所属父类型----</option>
+                                <volist name="winetype_treelist" id="vo">
+                                <option value="{$vo.id}">{$vo.prefix}{$vo.value}</option>
+                                </volist>
+                            </select>
+                            <span class="msg_span">[必选]</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" />开启</label>
+                <label><input type="radio" name="status" value="2" checked/>关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

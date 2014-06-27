@@ -1,0 +1,260 @@
+<div class="comment-box">
+			<div class="n-login" style="display:block;"><!-- 未登录显示 -->
+				<div class="comment-t">
+					<span></span>
+					<strong>网友评论</strong>
+					<var>
+						<a href="javascript:popuplogin();">登录</a>
+						| 
+						<a href="javascript:jumpregistration();">注册</a>
+					</var>
+				</div>
+				<div class="n-login-c">
+					<textarea disabled="disabled">登录以后，才可以发表评论</textarea>
+				</div>
+			</div>
+			<div class="is-login"><!-- 登录下 -->
+				<div class="comment-t">
+					<span></span>
+					<strong>网友评论</strong>
+				</div>
+				<div class="is-login-c">
+					<div class="is-login-c-l">
+						<a href="http://i.wine.cn/User/" target="_blank">
+							<img src="" alt="" />
+                        </a>
+						<a href="http://i.wine.cn/User/" target="_blank" class="is-login-c-l-t">未知</a>
+					</div>
+					<div class="is-login-c-r">
+						<div class="is-login-text">
+							<textarea></textarea>
+                            <div id="c_msg"><img src=""></div>
+						</div>
+						<div class="is-login-s">
+							<input type="button" id="comment_button" value="发表评论" hidefocus/>
+							<a href="###" class="d-tb">同步到个人空间</a>
+							<var id="prompt"></var>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ul class="comment-con" id="comment_list"><!-- 评论信息 -->
+			</ul>
+</div>
+<script type="text/javascript" src="__ROOT__/Common/js/jquery.chackTextarea.js"></script> 
+<script>
+var Aid = <?php echo $partyInfo["id"]; ?>;
+var ctype = <?php echo "'".$commentType."'"; ?>;
+//时间戳转日期
+function changeTimeFormat(time) {
+	var date = new Date(time);
+	var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+	var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+	var hh = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+	var mm = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+	return date.getFullYear() + "-" + month + "-" + currentDate+" "+hh + ":" + mm;
+	//返回格式：yyyy-MM-dd hh:mm
+}
+//删除回复
+function del_replay(id,cid){
+	var del_r = confirm("您确认要删除这条回复吗?");
+	if(del_r == true){
+		$.post("/Uc/checklogin",function(msg){
+			var msg=eval("(" + msg + ")");
+			$.post('__ROOT__/Common/apiCommentini',{'ctype':'delr','id':id,'uid':msg.mid,'pid':cid},function(msg1){
+				var msg1=eval("(" + msg1 + ")");
+				if(msg1.status == 1){
+					get_replay(cid);
+				}
+			});
+		});
+	}
+}
+function GRHTML(data,cid){
+	var HTML = $("#replay_"+cid+"_list");
+	$.post("/Uc/checklogin",function(msg){
+		var msg=eval("(" + msg + ")");
+		var html='';
+		$.each(data,function(){
+			html += '<div class="com-back-mod"><div class="com-back-mod-l"><a href="http://i.wine.cn/User/u/'+this.uid+'" target="_blank"><img src="'+this.avater+'" alt="'+this.nickname+'" /></a></div><div class="com-back-mod-r"><p	class="com-back-mod-con"><var class="others-name"><a href="http://i.wine.cn/User/u/'+this.uid+'" target="_blank">'+this.nickname+'</a>：</var>'+this.content+'<span>('+changeTimeFormat(this.create_time*1000)+')</span></p><div class="com-back-contr">';
+			if(msg.mid == this.m_id){
+				html +='<a href="javascript:del_replay('+this.id+','+cid+');">删除</a>';
+			}
+			html +='<!--<a href="###" target="_blank">回复</a>--></div></div></div>';
+		});
+		HTML.html(html);
+	});
+}
+function get_replay(cid){
+	var replay_list = $("#replay_"+cid+"_list");
+	replay_list.html('<div class="replay-msg">获取回复......</div>');
+	$.post('__ROOT__/Common/apiCommentini',{'ctype':'sr','id':cid},function(msg){
+		var msg=eval("(" + msg + ")");
+		if(msg.status != 1){
+			replay_list.html('<div class="replay-msg">获取失败！<a href="javascript:get_replay('+cid+');">重试</a></div>');
+		}else{
+			$("#comment_"+cid).find("#com_show").html('回复('+msg.data.count+')');
+			if(msg.data.count == 0){
+				replay_list.html('<div class="replay-msg">还没有任何回复~！</div>');
+			}else{
+				GRHTML(msg.data.data,cid);
+			}
+		}
+	});
+}
+function show_replay(cid){
+	var replay_box = $("#comment_"+cid).find(".comment-others");
+	$(".comment-others").not(replay_box).html('').hide();
+	replay_box.toggle();
+	if(replay_box.css("display")=="block"){
+		$.post("/Uc/checklogin",function(msg){
+			var msg=eval("(" + msg + ")");
+			if(msg.online == 1){
+				replay_box.html('<div class="comment-others-con"><span class="d-san"></span><textarea></textarea><div id="r_msg"><img src=""></div><div class="com-o-sent"><!--<span class="com-o-sent-l"><a href="###" class="com-others-bq"><img src="__ROOT__/Common/images/expert_static_page/d-pic10.jpg" alt="" />表情</a><input type="checkbox" id="com-sent-t" /><label for="com-sent-t">同时转发这条微博</label></span>--><span class="com-o-sent-r"><input type="button" id="replay_button" hidefocus/><var id="prompt"></var></span></div></div>');
+				replay_box.chackTextarea({
+					chackNum : 140,
+					chackObj:"textarea", //文本域的hook
+					chackNumObj :"#prompt",//提示文字的hook
+					chackBtn:"#replay_button", //按钮的hook
+					disabledClass:"chackTextarea-disabled",//按钮disabled状态下的样式
+					errorClass:"chackTextarea-errortxt" //超过限定字符提示文字的样式
+				});
+				$("#replay_button").click(function(){
+					var r_content = replay_box.find("textarea").val();
+					if(r_content == ''){
+						replay_box.find("#prompt").html('请输入回复内容').css({"color":"#FF3300"});
+						return false;
+					}
+					$.post("/Uc/checklogin",function(msg){
+						var msg=eval("(" + msg + ")");
+						$.post('__ROOT__/Common/apiCommentini',{'ctype':'r','id':cid,'uid':msg.mid,'content':r_content},function(msg1){
+							var msg1=eval("(" + msg1 + ")");
+							if(msg1.status != 1){
+								$("#r_msg>img").attr("src","__ROOT__/Common/images/expert_static_page/c-msg-f.gif");
+								$('#r_msg').show();
+								setTimeout(function(){
+									$("#r_msg").hide();
+								},2000);
+							}else{
+								$("#r_msg>img").attr("src","__ROOT__/Common/images/expert_static_page/c-msg-s.gif");
+								$('#r_msg').show();
+								replay_box.find("textarea").val('');
+								setTimeout(function(){
+									$("#r_msg").hide();
+								},2000);
+								get_replay(cid);
+							}
+						});
+					});
+				});
+			}
+			replay_box.append('<div class="com-back" id="replay_'+cid+'_list"></div>');
+			get_replay(cid);
+		});
+	}
+}
+//删除评论
+function del_comment(id,uid){
+	$.post("/Uc/checklogin",function(msg){
+		var msg=eval("(" + msg + ")");
+		var del_c = confirm("您确认要删除这条评论吗?");
+		if(del_c == true){
+			$.post('__ROOT__/Common/apiCommentini',{'ctype':'del','id':id,'uid':msg.mid},function(msg1){
+				var msg1=eval("(" + msg1 + ")");
+				if(msg1.status == 1){
+					get_comment();
+				}
+			});
+		}
+	});
+}
+//构建评论列表HTML
+function GCHTML(data,HTML){
+	$.post("/Uc/checklogin",function(msg){
+		var msg=eval("(" + msg + ")");
+		var html='';
+		$.each(data,function(){
+			html +='<li id="comment_'+this.tid+'">';
+				html +='<div class="com-person-face"><a href="http://i.wine.cn/User/u/'+this.uid+'" target="_blank"><img src="'+this.avater+'" alt="'+this.nickname+'" /></a></div>';
+				html +='<div class="comment-con-r">';
+					html +='<p	class="comment-text"><var class="com-name"><a href="http://i.wine.cn/User/u/'+this.uid+'" target="_blank">'+this.nickname+'</a>：</var>'+this.content+'</p>';
+					html +='<div class="com-contr">';
+						html +='<span>';
+						if(msg.mid == this.m_id){
+							html +='<a href="javascript:del_comment('+this.tid+');">删除</a>';
+						}
+						html +='<!--<a href="###">收藏</a>--><a href="javascript:show_replay('+this.tid+');" class="com-show">回复('+this.replys+')</a></span>';
+						html +='<a href="###">'+changeTimeFormat(this.create_time*1000)+'</a><var>来自<a href="'+this.from_url+'" target="_blank">'+this.from+'</a></var>';
+					html +='</div>';
+				html +='</div>';
+				html +='<div class="comment-others"></div>';
+			html +='</li>';
+		});	
+		HTML.html(html);
+	})
+}
+//获取评论列表
+function get_comment(){
+	$("#comment_list").html('<li class="comment-msg">获取评论......</li>');
+	$.post('__ROOT__/Common/apiCommentini',{'ctype':'s','type':ctype,'rel':Aid},function(msg){
+		var msg=eval("(" + msg + ")");
+		if(msg.status != 1){
+			$("#comment_list").html('<li class="comment-msg">获取失败！<a href="javascript:get_comment();">重试</a></li>');
+		}else{
+			$(".comment-t>span").html('共有'+msg.data.count+'条评论');
+			if(msg.data.count == 0){
+				$("#comment_list").html('<li class="comment-msg">还没有评论，赶快抢占沙发~！</li>');
+			}else{
+				GCHTML(msg.data.data,$("#comment_list"));
+			}
+		}
+	});
+}
+get_comment();
+//评论框体
+$.post("/Uc/checklogin",function(msg){
+	var msg=eval("(" + msg + ")");
+	if(msg.online != 1){
+		$(".is-login").html('');
+		$(".n-login").show();
+	}else{
+		$(".n-login").html('');
+		$(".is-login-c-l").find("img").attr("src","http://i.wine.cn/User/Api/User.php?c=User&m=avatar&access_token=1000000003&token_secret=92A5hymz0AXTykJfhUr1&uid="+msg.mid);
+		$(".is-login-c-l-t").html(msg.nickname);
+		$(".is-login").show();
+		$(".is-login-c-r").chackTextarea({
+			chackNum : 140,
+			chackObj:"textarea", //文本域的hook
+			chackNumObj :"#prompt",//提示文字的hook
+			chackBtn:"#comment_button", //按钮的hook
+			disabledClass:"chackTextarea-disabled",//按钮disabled状态下的样式
+			errorClass:"chackTextarea-errortxt" //超过限定字符提示文字的样式
+		});
+		$("#comment_button").click(function(){
+			var c_content = $(".is-login-c-r").find("textarea").val();
+			if(c_content == ''){
+				$(".is-login-c-r").find("#prompt").html('请输入回复内容').css({"color":"#FF3300"});
+				return false;
+			}
+			$.post('__ROOT__/Common/apiCommentini',{'ctype':'c','type':ctype,'relation':Aid,'uid':msg.mid,'content':c_content},function(msg1){
+				var msg1=eval("(" + msg1 + ")");
+				if(msg1.status != 1){
+					$("#c_msg>img").attr("src","__ROOT__/Common/images/expert_static_page/c-msg-f.gif");
+					$('#c_msg').show();
+					setTimeout(function(){
+						$("#c_msg").hide();
+					},2000);			
+				}else{
+					$("#c_msg>img").attr("src","__ROOT__/Common/images/expert_static_page/c-msg-s.gif");
+					$('#c_msg').show();
+					$(".is-login-c-r").find("textarea").val('');
+					setTimeout(function(){
+						$("#c_msg").hide();
+					},2000);
+					get_comment();
+				}
+			});
+		});
+	}
+});
+</script>

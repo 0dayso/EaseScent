@@ -1,0 +1,66 @@
+<include file="Common:header" />
+<div class="main">
+	<include file="Common:menu" />
+	<div class="confirm-box">
+		<h3 class="confirm-h3">基本资料</h3>
+		<div class="basic-con">
+			<div class="basic-con-t">
+				复杂的密码可以有效保障您账户的安全
+			</div>
+			<div class="login-div">
+				<span class="l-span" style="text-align:right;width:84px;">当前密码：</span>
+				<input type="password" id="oldpass" class="login-ipt1"/>
+			</div>
+			<div class="login-div">
+				<span class="l-span" style="text-align:right;width:84px;">新密码：</span>
+				<input type="password" id="newpass" class="login-ipt1"/>
+			</div>
+			<div class="login-div">
+				<span class="l-span" style="text-align:right;width:84px;">确认新密码：</span>
+				<input type="password" id="repass" class="login-ipt1"/>
+			</div>
+			<div class="email-change-sub" style="padding-left:88px;">
+				<input type="button" id="editpass" value="提交" class="login-sub">
+				<input type="button" value="返 回" class="login-sub2">
+			</div>
+			<!--<div class="basic-seven" style="margin-left:88px;">
+				个人信息保存成功
+			</div>-->
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#editpass").click(function(){
+		var oldpass = $("#oldpass").val();
+		var newpass = $("#newpass").val();
+		var repass = $("#repass").val();
+		if(oldpass==""){
+			alert("请输入当前密码!")
+			return;
+		}
+		if(newpass==""){
+			alert("请输入新密码!");
+			return;
+		}
+		if(newpass.length<5||newpass.length>21){
+			alert("密码长度在6～20之间");
+			return;
+		}
+		if(newpass!=repass){
+			alert("两次输入密码不一样，请重新输入!");
+			return;
+		}
+		$.post("/index.php/Index/updatepass",{oldpass:oldpass,newpass:newpass},function(result){
+			if(result.status==1){
+				alert(result.message);
+				window.location.href=result.jumpUrl;
+			}else{
+				alert(result.message);
+			}
+		},"json");
+		
+	})
+})
+</script>
+<include file="Common:footer" />

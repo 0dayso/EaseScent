@@ -1,0 +1,109 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+function arealevel_cn(mark){
+    var iframe_src = "{:Url('Jiuku/Common/arealevelCn')}"+'&mark='+mark;
+    var baidumapdialog = art.dialog({
+        id : 'arealevel_cn',
+        lock: true,
+        background: _DIALOG_BG_COLOR,
+        OPACITY: _DIALOG_BG_OPACITY,
+        content: '<iframe src="'+iframe_src+'" width="320px" height="300px"></iframe>',
+    });
+}
+function close_arealevel_cn(mark,id,text){
+    $("#area_id").val(id);
+    $("#area_text").text(text);
+    art.dialog({id:'arealevel_cn'}).close();
+}
+function baidumap(mark){
+    var iframe_src = "{:Url('Jiuku/Common/baidumap')}"+'&id='+mark;
+    var baidumapdialog = art.dialog({
+        id : 'baidu_map',
+        lock: true,
+        background: _DIALOG_BG_COLOR,
+        OPACITY: _DIALOG_BG_OPACITY,
+        content: '<iframe src="'+iframe_src+'" width="600px" height="500px"></iframe>',
+    });
+}
+function close_baidumap(mark,lng,lat){
+    $("#lng").val(lng);
+    $("#lat").val(lat);
+    var baidusitemap = 'http://api.map.baidu.com/staticimage?center='+lng+','+lat+'&width=300&height=200&zoom=12&markers='+lng+','+lat;
+    var baidusitemap_l = 'http://api.map.baidu.com/staticimage?center='+lng+','+lat+'&width=900&height=600&zoom=16&markers='+lng+','+lat;
+    $("#map_img>img").attr('src',baidusitemap);
+    $("#map_img").attr({href:baidusitemap_l,target:'_blank',title:'点击查看详细'}).show()
+    art.dialog({id:'baidu_map'}).close();
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">代理商列表</a> > <a href="{:Url('store_sales_list')}">实体销售渠道列表</a> > 编辑实体销售渠道</div>
+    <div class="form">
+		<form name="myform" action="{:Url('store_sales_edit')}" method="post" enctype="multipart/form-data">
+            <input name="id" type="hidden" value="{$_REQUEST.id}">
+            <input name="_backpage" type="hidden" value="{$_REQUEST._backpage}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑实体销售渠道</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">所属代理商</th>
+                        <td>
+                            <select name="agents_id">
+                                <option value="0">请选择</option>
+                                <volist name="agents_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$res['agents_id'] eq $vo['id']">selected="selected"</if>>{$vo.fname}&nbsp;/&nbsp;{$vo.cname}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">店铺名称</th>
+                        <td><input name="name" type="text" size="80" class="measure-input" value="{$res.name}" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">电话</th>
+                        <td><input name="tel" type="text" size="80" class="measure-input" value="{$res.tel}" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">选择地区</th>
+                        <td>
+                            <a href="javascript:arealevel_cn();">选择地区</a>
+                            <span id="area_text"><volist name="res['area_f_sort']" id="vos">{$vos.name} > </volist></span>
+                            <input id="area_id" name="area_id" type="hidden" value="{$res.area_id}" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">详细地址</th>
+                        <td><input name="address" type="text" size="80" class="measure-input" value="{$res.address}" /></td></td>
+                    </tr>
+                    <tr>
+                        <th width="130">标注地图</th>
+                        <td>
+                            <a href="javascript:baidumap();">标注地图</a>
+                            <input id="lat" name="lat" type="hidden" value="{$res.lat}" />
+                            <input id="lng" name="lng" type="hidden" value="{$res.lng}" />
+                            <if condition="$res['lat'] and $res['lng']">
+                            <a id="map_img" href="http://api.map.baidu.com/staticimage?center={$res.lng},{$res.lat}&width=900&height=600&zoom=16&markers={$res.lng},{$res.lat}" target="_blank"><img src="http://api.map.baidu.com/staticimage?center={$res.lng},{$res.lat}&width=300&height=200&zoom=12&markers={$res.lng},{$res.lat}" /></a>
+                            <else/>
+                            <a id="map_img" style="display:none;"><img /></a>
+                            </if>
+                        </td>
+                    </tr>
+                    </tr>
+                        <th width="130">状态</th>
+                        <td>
+                        	<input name="status" type="radio" value="1" <if condition="$res['status'] eq '1'">checked</if> />
+                            开启
+                            <input name="status" type="radio" value="-1" <if condition="$res['status'] eq '-1'">checked</if> />
+                            关闭
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

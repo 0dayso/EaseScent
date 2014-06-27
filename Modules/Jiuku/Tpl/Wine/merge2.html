@@ -1,0 +1,399 @@
+<include file="Common:cpheader" /><script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/kindeditor-min.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/zh_CN.js"></script>
+<script language="javascript">
+var selected_content;
+KindEditor.ready(function(K) {
+	selected_content = K.create("textarea[name='content']", {
+		readonlyMode:	true,
+		items:			false,
+	});
+	var option_content = K.create("textarea[class='option_content']", {
+		readonlyMode:	true,
+		items:			false,
+	});
+});
+</script>
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/ht_wine.js"></script>
+<script language="javascript">
+function selected_wine_box_toggle(){
+	$("#selected_wine_box").toggle();
+}
+
+function change_selected(this1,type){
+	if(type == 'content'){
+		var val = $(this1).nextAll("textarea:eq(0)").val();
+		$("textarea[name='content']").val(val);
+		selected_content.html(val);
+		$(".option_"+type).removeClass("merge_selected").addClass("merge_option");
+		$(this1).removeClass("merge_option").addClass("merge_selected");
+	}else{
+		var text = $(this1).text();
+		var val = $(this1).next("input[type='hidden']").val();
+		$("#selected_"+type).html('<span>'+text+'</span><input name="'+type+'" type="hidden" value="'+val+'" />');
+		$(".option_"+type).removeClass("merge_selected").addClass("merge_option");
+		$(this1).removeClass("merge_option").addClass("merge_selected");
+	}
+}
+function checkSubmit(table_name,jump_url){
+		$("form[name='myform']").submit();
+		return;
+}
+</script>
+<style>
+.list_more {color:#666;}
+.list_more .list_more_msg{margin-left:30%}
+.list_more .list_more_msg span{text-decoration:underline;cursor:pointer;}
+.list_more .list_more_res{}
+.list_more .list_more_res li{margin:4px 0;overflow:hidden;}
+.list_more .list_more_res span{float:left;width:80px;margin-left:30px;}
+.list_more .list_more_res var{float:left;color:#C63;}
+/*.ke-container{ margin:-15px 0 0 60px;}*/
+.merge_option{ cursor:pointer;}
+.merge_option:hover{ cursor:pointer; color:#09F;}
+.merge_selected{ cursor:pointer; background-color:#09F; color:#fff;}
+.merge_option2{ cursor:pointer;}
+.merge_option2:hover{ cursor:pointer; color:#090;}
+.merge_selected2{ cursor:pointer; background-color:#090; color:#fff;}
+.merge_option3{ cursor:pointer;}
+.merge_option3:hover{ cursor:pointer; color:#60C;}
+.merge_selected3{ cursor:pointer; background-color:#60C; color:#fff;}
+.merge_option_img{ cursor:pointer; border:1px solid #fff; display:inline-block;}
+.merge_option_img:hover{ border-bottom-color:#090;}
+.merge_selected_img{ cursor:pointer; border:1px solid #090; display:inline-block;}
+
+#table .table-list tbody td{ white-space: nowrap;}
+</style>
+<div id="table">
+	<!--<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">酒款列表</a> > 合并酒款</div>-->
+    <!--<div class="list-menu"></div>-->
+    <div class="list">
+    	<strong>参考酒款：</strong>
+        <table cellspacing="0" class="table-list" >
+            <tbody>
+                <tr>
+                    <td style="width:70px;color:#C64;">标识ID</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if>"><if condition="$i eq 1">{$vo.id}<else/><a href="{:Url('merge2',array('idstr' => $vo['id'].','.$vo['idstr']))}" title="选择该项为主参考进行合并">{$vo.id}</a></if></span>&nbsp;<if condition="count($vo['idarr']) gt 1"><a href="{:Url('merge2',array('idstr' => $vo['idstr']))}" style="color:red;" title="去除该参考项">×</a></if><input type="hidden" value="{$vo.id}" /></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">外文名</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_fname" onclick="change_selected(this,'fname');">{$vo.fname}</span><input type="hidden" value="{$vo.fname}" /></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">中文名</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_cname" onclick="change_selected(this,'cname');">{$vo.cname}</span><input type="hidden" value="{$vo.cname}" /></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">别名</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_aname" onclick="change_selected(this,'aname');">{$vo.aname}</span><input type="hidden" value="{$vo.aname}" /></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">内容</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_content" onclick="change_selected(this,'content');">选择</span><textarea class="option_content" style="width:400px; height:200px;">{$vo.content}</textarea></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">SEO标题</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_seo_t" onclick="change_selected(this,'seo_t');">{$vo.seo_t}</span><input type="hidden" value="{$vo.seo_t}" /></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">SEO关键字</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_seo_k" onclick="change_selected(this,'seo_k');">{$vo.seo_k}</span><input type="hidden" value="{$vo.seo_k}" /></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">SEO内容</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_seo_d" onclick="change_selected(this,'seo_d');">{$vo.seo_d}</span><input type="hidden" value="{$vo.seo_d}" /></td></volist>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">酒款类型</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_winetype" onclick="change_selected_winetype(this);"><volist name="vo.winetype_res" id="vowt" key="keywt"><if condition="$keywt neq 1">&nbsp;＞&nbsp;</if>{$vowt.fname} {$vowt.cname}</volist></span><input type="hidden" value="{$vo.winetype_id}" /></td></volist>
+                </tr>
+                <script language="javascript">
+				function change_selected_winetype(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();
+					$("#selected_winetype").html('<span>'+text+'</span><input name="winetype_id" type="hidden" value="'+val+'" />');
+					$(".option_winetype").addClass("merge_option").removeClass("merge_selected");
+					$(this1).addClass("merge_selected").removeClass("merge_option");
+				}
+				</script>
+                <tr>
+                    <td style="color:#C64;">所属国家</td>
+                	<volist name="res" id="vo" key="i"><td><span class="<if condition="$i eq 1">merge_selected<else/>merge_option</if> option_country" onclick="change_selected_country(this);">{$vo.country_res.fname} {$vo.country_res.cname}</span><input type="hidden" value="{$vo.country_id}" /></td></volist>
+                </tr>
+                <script language="javascript">
+				function change_selected_country(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();
+					$("#selected_country").html('<span>'+text+'</span><input name="country_id" type="hidden" value="'+val+'" />');
+					$(".option_country").addClass("merge_option").removeClass("merge_selected");
+					$(this1).addClass("merge_selected").removeClass("merge_option");
+				}
+				</script>
+                <tr>
+                    <td style="color:#C64;">所属产区</td>
+                	<volist name="res" id="vo" key="i"><td><volist name="vo.region_res" id="vor" key="is"><p><span mark="<if condition="$i eq 1">1<else/>0</if>" class="<if condition="$i eq 1">merge_selected2<else/>merge_option2</if> option_join_region_<?php $count = count($vor); echo $vor[$count-1]['id']; ?>" onclick="change_selected_join_region(this);"><volist name="vor" id="vos" key="keys"><if condition="$keys neq 1">&nbsp;＞&nbsp;</if>{$vos.fname} {$vos.cname}</volist></span><input type="hidden" value="<?php $count = count($vor); echo $vor[$count-1]['id']; ?>" /></p></volist></td></volist>
+                </tr>
+                <script language="javascript">
+				function change_selected_join_region(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();//产区id
+					if($("#selected_join_region_"+val).length > 0){
+						$("#selected_join_region_"+val).remove();
+					}
+					if($(this1).attr("mark") == "1"){
+						$(this1).attr("mark","0").addClass("merge_option2").removeClass("merge_selected2");
+					}else{
+						$("#selected_join_region").append('<p id="selected_join_region_'+val+'"><span>'+text+'</span><input name="region_idarr[]" type="hidden" value="'+val+'" /></p>');
+						$(".option_join_region_"+val).attr("mark","0").addClass("merge_option2").removeClass("merge_selected2");
+						$(this1).attr("mark","1").addClass("merge_selected2").removeClass("merge_option2");
+					}
+				}
+				</script>
+                <tr>
+                    <td style="color:#C64;">所属酒庄</td>
+                	<volist name="res" id="vo" key="i"><td><volist name="vo.winery_res" id="vow" key="is"><p><span mark="<if condition="$i eq 1">1<else/>0</if>" class="<if condition="$i eq 1">merge_selected2<else/>merge_option2</if> option_join_winery_{$vow.id}" onclick="change_selected_join_winery(this);">{$vow.fname} {$vow.cname}</span><input type="hidden" value="{$vow.id}" /></p></volist></td></volist>
+                </tr>
+                <script language="javascript">
+				function change_selected_join_winery(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();//酒庄id
+					if($("#selected_join_winery_"+val).length > 0){
+						$("#selected_join_winery_"+val).remove();
+					}
+					if($(this1).attr("mark") == "1"){
+						$(this1).attr("mark","0").addClass("merge_option2").removeClass("merge_selected2");
+					}else{
+						$("#selected_join_winery").append('<p id="selected_join_winery_'+val+'"><span>'+text+'</span><input name="winery_idarr[]" type="hidden" value="'+val+'" /></p>');
+						$(".option_join_winery_"+val).attr("mark","0").addClass("merge_option2").removeClass("merge_selected2");
+						$(this1).attr("mark","1").addClass("merge_selected2").removeClass("merge_option2");
+					}
+				}
+				</script>
+                <tr>
+                    <td style="color:#C64;">葡萄品种</td>
+                	<volist name="res" id="vo" key="i">
+                    <td>
+                    <volist name="vo.grape_res" id="vog" key="is"><p><span mark="<if condition="$i eq 1">1<else/>0</if>" class="<if condition="$i eq 1">merge_selected2<else/>merge_option2</if> option_join_grape_{$vog.id}" onclick="change_selected_join_grape(this);"><!--{$vog.percent} % -->{$vog.fname} {$vog.cname}</span><input type="hidden" value="{$vog.id}" /><input type="hidden" value="{$vog.percent}" /></p></volist>
+                    </td>
+                    </volist>
+                </tr>
+                <script language="javascript">
+				function change_selected_join_grape(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();//葡萄品种id
+					var val2 = $(this1).next("input[type='hidden']").next("input[type='hidden']").val();//百分比
+					if($("#selected_join_grape_"+val).length > 0){
+						$("#selected_join_grape_"+val).remove();
+					}
+					if($(this1).attr("mark") == "1"){
+						$(this1).attr("mark","0").addClass("merge_option2").removeClass("merge_selected2");
+					}else{
+						$("#selected_join_grape").append('<p id="selected_join_grape_'+val+'"><span>'+text+'</span><input name="grape_idarr[]" type="hidden" value="'+val+'" /><input name="grape_percentarr[]" type="hidden" value="'+val2+'" /></p>');
+						$(".option_join_grape_"+val).attr("mark","0").addClass("merge_option2").removeClass("merge_selected2");
+						$(this1).attr("mark","1").addClass("merge_selected2").removeClass("merge_option2");
+					}
+				}
+				</script>
+                <tr>
+                    <td style="color:#C64;">图片</td>
+                	<volist name="res" id="vo" key="i">
+                    <td>
+                    <volist name="vo.img_res" id="voi" key="is"><var><span mark="<if condition="$i eq 1">1<else/>0</if>" class="<if condition="$i eq 1">merge_selected_img<else/>merge_option_img</if> option_s_img_<?php echo str_replace('.','_',$voi['filename']); ?>" onclick="change_selected_s_img(this);"><img src="http://upload.wine.cn/Jiuku/Wine/images/{$voi.filename}" style="height:90px;float:left;margin:5px;" /></span><input type="hidden" value="{$voi.filename}" /></var></volist>
+                    </td>
+                    </volist>
+                </tr>
+                <script language="javascript">
+				function change_selected_s_img(this1){
+					var html = $(this1).html();
+					var val = $(this1).next("input[type='hidden']").val();//图片文件名
+					if($("#selected_s_img_"+val.replace('.','_')).length > 0){
+						$("#selected_s_img_"+val.replace('.','_')).remove();
+					}
+					if($(this1).attr("mark") == "1"){
+						$(this1).attr("mark","0").addClass("merge_option_img").removeClass("merge_selected_img");
+					}else{
+						$("#selected_s_img").append('<var id="selected_s_img_'+val.replace('.','_')+'"><span>'+html+'</span><input name="img_filenamearr[]" type="hidden" value="'+val+'" /></var>');
+						$(".option_s_img_"+val.replace('.','_')).attr("mark","0").addClass("merge_option_img").removeClass("merge_selected_img");
+						$(this1).attr("mark","1").addClass("merge_selected_img").removeClass("merge_option_img");
+					}
+				}
+				</script>
+                <tr>
+                    <td style="color:#C64;">年份酒信息</td>
+                	<volist name="res" id="vo" key="key">
+                    <td style="vertical-align:top;">
+                        <table id="table_ywine_res_{$key}">
+                          <tr><td>年份</td><td>参考价格</td><volist name="evalparty_res" id="voep"><td>{$voep.sname}评分</td></volist><td>所获荣誉</td></tr>
+                          <volist name="vo.ywine_res" id="voy">
+                          <tr id="option_s_ywine_{$voy.year}">
+                            <td>{$voy.year}</td>
+                            <td><span mark="0" class="merge_option3 option_s_ywine_{$voy.year}_price" onclick="change_selected_s_ywine(this);">{$voy.price}</span><input type="hidden" value="{$voy.year}" /><input type="hidden" value="{$voy.price}" /></td>
+                            <volist name="voy.eval" id="voye">
+                            <td><span mark="0" class="merge_option3 option_s_ywine_eval_{$voy.year}_{$voye.evalparty_id}" onclick="change_selected_s_ywine_eval(this);" title="{$voye.refweb_url}">{$voye.score}</span><input type="hidden" value="{$voy.year}" /><input type="hidden" value="{$voye.evalparty_id}" /><input type="hidden" value="{$voye.score}" /><input type="hidden" value="{$voye.refweb_id}" /><input type="hidden" value="{$voye.refweb_url}" /></td>
+                            </volist>
+                            <td><volist name="voy.honor" id="voyh"><p><span mark="0" class="merge_option3 option_s_ywine_honor_{$voy.year}_{$voyh.id}" onclick="change_selected_s_ywine_honor(this);">{$voyh.fname}{$voyh.cname}</span><input type="hidden" value="{$voy.year}" /><input type="hidden" value="{$voyh.id}" /></p></volist></td>
+                          </tr>
+                          </volist>
+                        </table>
+                    </td>
+                    </volist>
+                </tr>
+                <script language="javascript">
+				function change_selected_s_ywine(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();//年份
+					var val2 = $(this1).next("input[type='hidden']").next("input[type='hidden']").val();//参考价格
+					if($(this1).attr("mark") == "1"){
+						$("#selected_s_ywine_"+val+"_price").html('');
+						if($("#selected_s_ywine_"+val).find("input").length == 0){
+							$("#selected_s_ywine_"+val).hide();
+						}
+						$(this1).attr("mark","0").addClass("merge_option3").removeClass("merge_selected3");
+					}else{
+						$("#selected_s_ywine_"+val+"_price").html('<span>'+text+'</span><input name="ywine_yeararr[]" type="hidden" value="'+val+'" /><input name="ywine_pricearr[]" type="hidden" value="'+val2+'" />');
+						$("#selected_s_ywine_"+val).show();
+						$(".option_s_ywine_"+val+"_price").attr("mark","0").addClass("merge_option3").removeClass("merge_selected3");
+						$(this1).attr("mark","1").addClass("merge_selected3").removeClass("merge_option3");
+					}
+				}
+				function change_selected_s_ywine_eval(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();//年份
+					var val2 = $(this1).next("input[type='hidden']").next("input[type='hidden']").val();//评价机构ID
+					var val3 = $(this1).next("input[type='hidden']").next("input[type='hidden']").next("input[type='hidden']").val();//分数
+					var val4 = $(this1).next("input[type='hidden']").next("input[type='hidden']").next("input[type='hidden']").next("input[type='hidden']").val();//来源网址refweb_id
+					var val5 = $(this1).next("input[type='hidden']").next("input[type='hidden']").next("input[type='hidden']").next("input[type='hidden']").next("input[type='hidden']").val();//来源refweb_url
+					if($(this1).attr("mark") == "1"){
+						$("#selected_s_ywine_eval_"+val+"_"+val2).html('');
+						if($("#selected_s_ywine_"+val).find("input").length == 0){
+							$("#selected_s_ywine_"+val).hide();
+						}
+						$(this1).attr("mark","0").addClass("merge_option3").removeClass("merge_selected3");
+					}else{
+						$("#selected_s_ywine_eval_"+val+"_"+val2).html('<span title="'+val5+'">'+text+'</span><input name="ywine_eval_yeararr[]" type="hidden" value="'+val+'" /><input name="ywine_eval_evalparty_idarr[]" type="hidden" value="'+val2+'" /><input name="ywine_eval_scorearr[]" type="hidden" value="'+val3+'" /><input name="ywine_eval_refweb_idarr[]" type="hidden" value="'+val4+'" /><input name="ywine_eval_refweb_urlarr[]" type="hidden" value="'+val5+'" />');
+						$("#selected_s_ywine_"+val).show();
+						$(".option_s_ywine_eval_"+val+"_"+val2).attr("mark","0").addClass("merge_option3").removeClass("merge_selected3");
+						$(this1).attr("mark","1").addClass("merge_selected3").removeClass("merge_option3");
+					}
+				}
+				function change_selected_s_ywine_honor(this1){
+					var text = $(this1).text();
+					var val = $(this1).next("input[type='hidden']").val();//年份
+					var val2 = $(this1).next("input[type='hidden']").next("input[type='hidden']").val();//荣誉ID
+					if($("#selected_s_ywine_honor_"+val+"_"+val2).length > 0){
+						$("#selected_s_ywine_honor_"+val+"_"+val2).remove();
+					}
+					if($(this1).attr("mark") == "1"){
+						if($("#selected_s_ywine_"+val).find("input").length == 0){
+							$("#selected_s_ywine_"+val).hide();
+						}
+						$(this1).attr("mark","0").addClass("merge_option3").removeClass("merge_selected3");
+					}else{
+						$("#selected_s_ywine_honor_"+val).append('<p id="selected_s_ywine_honor_'+val+'_'+val2+'"><span>'+text+'</span><input name="ywine_honor_yeararr[]" type="hidden" value="'+val+'" /><input name="ywine_honor_honor_idarr[]" type="hidden" value="'+val2+'" /></p>');
+						$("#selected_s_ywine_"+val).show();
+						$(".option_s_ywine_honor_"+val+"_"+val2).attr("mark","0").addClass("merge_option3").removeClass("merge_selected3");
+						$(this1).attr("mark","1").addClass("merge_selected3").removeClass("merge_option3");
+					}
+				}
+				</script>
+            </tbody>
+        </table>
+    </div>
+    <div class="search">
+    	<strong>预览合并后的酒款：</strong><span style=" cursor:pointer; color:#00F;" onclick="selected_wine_box_toggle();">显示/隐藏</span>
+		<form name="myform" action="{:Url('merge2')}" method="post" enctype="multipart/form-data">
+        <volist name="res" id="vo"><input name="idarr[]" type="hidden" value="{$vo.id}" /></volist>
+        <table width="100%" cellspacing="0" class="table-list" id="selected_wine_box" style="display:block;">
+            <tbody>
+                <tr>
+                    <td style="width:67px;color:#C64;">标识ID<var title="该ID代表即将合并后的数据保存ID，其他参考ID将会被删除">[?]</var></td>
+                	<td style="width:384px;" id="selected_id"><span>{$res.0.id}</span><input name="id" type="hidden" value="{$res.0.id}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">外文名</td>
+                	<td id="selected_fname"><span>{$res.0.fname}</span><input name="fname" type="hidden" value="{$res.0.fname}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">中文名</td>
+                	<td id="selected_cname"><span>{$res.0.cname}</span><input name="cname" type="hidden" value="{$res.0.cname}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">别名</td>
+                	<td id="selected_aname"><span>{$res.0.aname}</span><input name="aname" type="hidden" value="{$res.0.aname}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">内容</td>
+                	<td><textarea name="content" style="width:600px; height:300px;">{$res.0.content}</textarea></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">SEO标题</td>
+                	<td id="selected_seo_t"><span>{$res.0.seo_t}</span><input name="seo_t" type="hidden" value="{$res.0.seo_t}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">SEO关键字</td>
+                	<td id="selected_seo_k"><span>{$res.0.seo_k}</span><input name="seo_k" type="hidden" value="{$res.0.seo_k}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">SEO内容</td>
+                	<td id="selected_seo_d"><span>{$res.0.seo_d}</span><input name="seo_d" type="hidden" value="{$res.0.seo_d}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">酒款类型</td>
+                	<td id="selected_winetype"><span><volist name="res.0.winetype_res" id="vowt" key="keywt"><if condition="$keywt neq 1">&nbsp;＞&nbsp;</if>{$vowt.fname} {$vowt.cname}</volist></span><input name="winetype_id" type="hidden" value="{$res.0.winetype_id}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">所属国家</td>
+                	<td id="selected_country"><span>{$res.0.country_res.fname} {$res.0.country_res.cname}</span><input name="country_id" type="hidden" value="{$res.0.country_id}" /></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">所属产区</td>
+                	<td id="selected_join_region"><volist name="res.0.region_res" id="vor"><p id="selected_join_region_<?php $count = count($vor); echo $vor[$count-1]['id']; ?>"><span><volist name="vor" id="vos" key="is"><if condition="$is neq 1">&nbsp;＞&nbsp;</if>{$vos.fname} {$vos.cname}</volist></span><input name="region_idarr[]" type="hidden" value="<?php $count = count($vor); echo $vor[$count-1]['id']; ?>" /></p></volist></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">所属庄园</td>
+                	<td id="selected_join_winery"><volist name="res.0.winery_res" id="vow"><p id="selected_join_winery_{$vow.id}"><span>{$vow.fname} {$vow.cname}</span><input name="winery_idarr[]" type="hidden" value="{$vow.id}" /></p></volist></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">葡萄品种</td>
+                    <td id="selected_join_grape"><volist name="res.0.grape_res" id="vog"><p id="selected_join_grape_{$vog.id}"><span>{$vog.fname} {$vog.cname}</span><input name="grape_idarr[]" type="hidden" value="{$vog.id}" /><input name="grape_percentarr[]" type="hidden" value="{$vog.percent}" /></p></volist></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">图片</td>
+                    <td id="selected_s_img"><volist name="res.0.img_res" id="voi"><var id="selected_s_img_<?php echo str_replace('.','_',$voi['filename']); ?>"><span><img src="http://upload.wine.cn/Jiuku/Wine/images/{$voi.filename}" style="height:90px;float:left;margin:5px;" /></span><input name="img_filenamearr[]" type="hidden" value="{$voi.filename}" /></var></volist></td>
+                </tr>
+                <tr>
+                    <td style="color:#C64;">年份酒信息</td>
+                    <td>
+                        <table>
+                          <tr><td width="100px">年份</td><td>参考价格</td><volist name="evalparty_res" id="voep"><td width="100px">{$voep.sname}评分</td></volist><td>所获荣誉</td></tr>
+                          <for start="date('Y')" end="1900" step="-1" comparison="egt">
+                          <tr id="selected_s_ywine_{$i}" style="display:none;">
+                            <td>{$i}</td>
+                            <td id="selected_s_ywine_{$i}_price"></td>
+                            <volist name="evalparty_res" id="voep" key="voep_i"><td id="selected_s_ywine_eval_{$i}_{$voep.id}"></td></volist>
+                            <td id="selected_s_ywine_honor_{$i}"></td>
+                          </tr>
+                          </for>
+                          <tr id="selected_s_ywine_NV" style="display:none;">
+                            <td>NV</td>
+                            <td id="selected_s_ywine_NV_price"></td>
+                            <volist name="evalparty_res" id="voep" key="voep_i"><td id="selected_s_ywine_eval_NV_{$voep.id}"></td></volist>
+                            <td id="selected_s_ywine_honor_{$i}"></td>
+                          </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td></td><td><input type="button" class="btn" value="提交" onclick="checkSubmit('Wine');" /></td></tr>
+            </tbody>
+        </table>
+        </form>
+    </div>
+</div>
+<script>
+$.each($("#table_ywine_res_1").find("span"),function(i,n){
+	if($(n).text() != '') $(n).click();
+});
+</script>
+<include file="Common:cpfooter" />

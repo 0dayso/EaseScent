@@ -1,0 +1,126 @@
+<include file="Common:cpheader" />
+<script>
+/*function get_detail(id){
+    art.dialog({id:'preview_detail'}).close();
+    var content_html = '';
+    $.post('?app=Jiuku&m=OutAcAgents&a=ajaxInternetGetDetail',{'id':id},function(msg){
+        var msg = eval("("+msg+")");
+        if(msg.result){
+            content_html += '<table width="100%" cellspacing="0" class="table-form">';
+            content_html += '<tr><td width="150">ID</td><td>'+msg.result.id+'</td></tr>';
+            content_html += '<tr><td>中文名</td><td>'+msg.result.cname+'</td></tr>';
+            content_html += '<tr><td>外文名</td><td>'+msg.result.fname+'</td></tr>';
+            content_html += '<tr><td>年份</td><td>'+msg.result.year+'</td></tr>';
+            var price_title = '';
+            if(msg.result.price_res){
+                $.each(msg.result.price_res,function(i,n){
+                    price_title += n.date+' 更新 '+n.price+'&#10;';
+                });
+            }
+            content_html += '<tr><td>当前价格</td><td><span title="'+price_title+'">'+msg.result.price+'</span></td></tr>';
+            content_html += '<tr><td>链接URL</td><td><a href="'+msg.result.url+'">'+msg.result.url+'</a></td></tr>';
+            if(msg.result.agents_res)    content_html += '<tr><td>所属代理商信息</td><td>'+msg.result.agents_res.fname+'&nbsp;'+msg.result.agents_res.cname+'</td></tr>';
+            if(msg.result.internet_sales_res)    content_html += '<tr><td>所属代理商网络销售信息</td><td>'+msg.result.internet_sales_res.name+'</td></tr>';
+            if(msg.result.wine_res)    content_html += '<tr><td>所关联的标准酒款</td><td>'+msg.result.wine_res.fname+'</td></tr>';
+            if(msg.result.wine_caname_res)    content_html += '<tr><td>所关联的标准酒款中文名</td><td>'+msg.result.wine_caname_res.cname+'</td></tr>';
+            if(msg.result.img_res){
+                content_html += '<tr><td>图片</td><td>'
+                $.each(msg.result.img_res,function(i,n){
+                    content_html += '<img style="max-height:150px;" src="{:C(\'DOMAIN.UPLOAD\')}Jiuku/Wine/images/'+n.filename+'">';
+                });
+                content_html += '</td><tr>'
+            }
+            content_html += '</table>';
+        }else{
+            content_html = '<div style="color:red;text-align:center;">获取异常</div>';
+        }
+        art.dialog({
+            id : 'preview_detail',
+            content: content_html,
+        });
+    });
+}*/
+/*function change_agents_select(){
+    $("#internet_sales_id_span").html('');
+    if($("select[name='agents_id']").val() != 0){
+        $.post('?app=Jiuku&m=OutAcAgents&a=ajaxGetInternetSales',{'id':$("select[name='agents_id']").val()},function(msg){
+            var msg = eval("("+msg+")");
+            if(msg.errorCode != 0){
+                art.dialog({
+                    content: msg.errorStr,
+                });
+            }else{
+                var html = '所属网络销售：<select name="internet_sales_id"><option value="0">请选择</option>';
+                $.each(msg.result,function(i,n){
+                    html += '<option value="'+n.id+'">'+n.name+'</option>';
+                })
+                html += '</select>&nbsp;&nbsp;';
+                $("#internet_sales_id_span").html(html);
+            }
+        });
+    }
+}*/
+</script>
+<style>
+</style>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('Jiuku/Agents/index')}">代理商列表</a> > <a href="{:Url('Jiuku/Agents/internet_sales_wine_list')}">代理商网络销售酒款列表</a> > 脚本更新异常数据列表</div>
+    <div class="search" style="color:red;">
+        该页面显示的数据是超过3天未发生后台脚本更新和操作更新的代理商（也买酒、酒美网、网酒网、品尚红酒）酒款数据。造成这种情况的原因可能是：
+        <br>
+        &nbsp;&nbsp;1.该酒款确实未发生价格改动
+        <br>
+        &nbsp;&nbsp;2.酒款已下架或删除
+        <br>
+        &nbsp;&nbsp;3.后台更新脚本异常
+        <br/>
+        需要你做的：
+        <br>
+        &nbsp;&nbsp;当发生情况“1”时，将数据进行“排除（该操作会将代理商酒款的操作时间更改为当前时间）”或“编辑”操作。
+        <br/>
+        &nbsp;&nbsp;当发生情况“2”时，将数据进行“关闭”或“删除”操作。
+        <br/>
+        &nbsp;&nbsp;当发生情况“3”时，请告之相关程序人员。
+        <br/>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="35">ID</th>
+                    <th width="250">酒款名</th>
+                    <th width="35">年份</th>
+                    <th width="50">当前价格</th>
+                    <th width="70">链接</th>
+                    <th width="80">所属网络销售渠道</th>
+                    <th width="150">最后脚本更新时间</th>
+                    <th width="150">最后操作更新时间</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td><span title="{$vo.cname}&#10;{$vo.fname}">{$vo.cname}</span></td>
+                    <td>{$vo.year}</td>
+                    <td id="price_{$vo.id}">{$vo.price}</td>
+                    <td><a href="{$vo.url}" target="_blank" title="{$vo.url}">跳转</a></td>
+                    <td style="color:#06F;"><if condition="$vo['internet_sales_res']">{$vo.internet_sales_res.name}<else/>无</if></td>
+                    <td style="color:#900;"><?php echo date('Y-m-d H:i:s',$vo['last_script_time']); ?></if></td>
+                    <td style="color:#900;"><?php echo date('Y-m-d H:i:s',$vo['last_edit_time']); ?></if></td>
+                    <td>
+                        <!-- <a href="javascript:get_detail({$vo.id});">预览</a> -->
+                        <a href="{:Url('internet_sales_wine_upderror_list')}&id={$vo.id}&type=pass&_backpage={$_pageurl}">排除</a>
+                        <a href="{:Url('internet_sales_wine_edit')}&id={$vo.id}&_backpage={$_pageurl}">编辑</a>
+                        <a href="{:Url('internet_sales_wine_upderror_list')}&id={$vo.id}&type=close&_backpage={$_pageurl}">关闭</a>
+                        <a href="{:Url('internet_sales_wine_upderror_list')}&id={$vo.id}&type=del&_backpage={$_pageurl}">删除</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

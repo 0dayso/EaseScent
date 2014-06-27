@@ -1,0 +1,664 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>edit</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/gwcss/admin/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/gwcss/admin/z_admin.css" />
+             <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/uploadify/uploadify.css" />
+            <script type="text/javascript" src="__PUBLIC__/Expo/js/jquery-1.7.2.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Expo/js/z_aMain.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Expo/js/cancel_gx.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Expo/js/chose.js"></script>
+             <script language="javascript" src="__PUBLIC__/Expo/uploadify/jquery.uploadify-3.1.min.js"></script>
+        <script type="text/javascript">
+        
+          function mysubmit(myform,id){
+                if(!check_winename()){
+                      $("#require").html('Required filed');
+                }else if(cur_img_num==0){
+                      $("#require").html('Upload one picture at least');
+                }else if(!check_price()){
+                     $("#require").html('Fill in Agent Price');
+                }else if(!check_winetype()){
+                   $("#require").html('Choose Style');
+                }else if(!check_winegrape()){
+                    $("#require").html('Fill in one grape variety at least');
+                }else if(!check_winecountry()){
+                   $("#require").html('Choose Country');
+                }else if(!check_wineregion()){
+                    $("#require").html('Choose Region');
+                }else if(!check_wineintroduction()){
+                    $("#require").html('Please fill in the introduction of the wine');
+                }else{
+                    $('#parameter').val(id);//关联酒款放入表单
+                    javascript:document.getElementById('myform').submit();
+                }
+            }
+         
+            $(document).ready(function() {
+                  init_uploadify();
+                //取的酒款信息填充到文本框中
+                var html ="";
+                  if('{$wineInfo['fname']}'=='{$wineInfo['cname']}'){
+                     html ='<a id='+{$wineInfo['id']}+' href="javascript:;"><span>'+'{$wineInfo['fname']}'+'</a>';
+                    }else{
+                    html ='<a id='+{$wineInfo['id']}+' href="javascript:;"><span>'+'{$wineInfo['fname']}'+'</span>/'+'{$wineInfo['cname']}'+'</a>';
+                    }
+                $('#z_aWrap_r_showBox_Inp').hide();
+                $('.z_aWrap_r_showBox').hide();
+                //内容填充到酒款框
+                $('.z_aWrap_r_showBox_p').show().html(html+'<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>');
+                var winetext = ''+{$wineInfo['id']}+','+'{$wineInfo['fname']}'+','+'{$wineInfo['cname']}'+'';
+                $('#kjwinetext').val(winetext);//关联酒款放入表单
+
+                if('{$type.cname}'!=null){
+                    $('#typeList1').hide();
+                }
+                if('{$country}'!=null){
+                    $('#countryList').hide();
+                }
+                if('{$region}'!=null){
+                    $('#regionList1').hide();
+                }
+                //获取国家列表信息
+                $.post("{:U('JkApi/getCountry')}", {keyword:$("#z_aWrap_r_showBox_Inp").val()},
+                function(data){
+                    $("#countryList").append("<option value='chose'>请选择</option>");
+                    for(var i in data){
+                        var option = $("<option>").text(data[i].cname).val(data[i].id + '|' + data[i].fname+'|'+data[i].cname);
+                        $("#countryList").append(option);
+                    }
+                    $("#countryList").append("<option value='other'>其它</option>");
+                },'json');
+                //获取一级类型列表信息
+                $.post("{:U('JkApi/getType')}", {pid:""},
+                function(data){
+                    $("#typeList1").append("<option value='chose'>请选择</option>");
+                    for(var i in data){
+                        var option = $("<option>").text(data[i].cname).val(data[i].id + '|' + data[i].fname+'|'+data[i].cname);
+                        $("#typeList1").append(option);
+                    }
+                    $("#typeList1").append("<option value='other'>其它</option>");
+
+                },'json');
+                //获取二级类型列表信息
+                $("#typeList1").change(function(){
+                    if($('#typeList1').val()!=='other'){
+                        //获取选中的文本值赋值到隐藏框中提交
+                        var a = $('#typeList1').find('option:selected').val();
+                        $('#typename1').val(a);
+                        $('#kjtypetext').val("");//将级联类型框空置
+                        $('#ktypetext').val("");//将级联类型框空置
+                        $.post("{:U('JkApi/getType')}", {pid:$("#typeList1").val()},
+                        function(data){
+                            $("#typeList2").empty();
+                            $("#typeList2").show();
+                            $("#typeList2").append("<option value='chose'>请选择</option>");
+                            for(var i in data){
+                                var option = $("<option>").text(data[i].cname).val(data[i].id + '|' + data[i].fname+'|'+data[i].cname);
+                                $("#typeList2").append(option);
+                            }
+                        },'json');}
+                });
+                //获取二级类型列表信息
+                $("#typeList2").change(function(){
+                    //获取选中的文本值赋值到隐藏框中提交
+                    var a = $('#typeList2').find('option:selected').val();
+                    $('#typename2').val(a);
+                });
+                //根据国家id获取产区列表信息
+                $("#countryList").change(function(){
+                    if($('#countryList').val()!=='other'){
+                        //获取选中的文本值赋值到隐藏框中提交
+                        var a = $('#countryList').find('option:selected').val();
+                        $('#countryname').val(a);
+                        var strindex = a.indexOf("|", 0);
+                        var countryid =a.substring(0,strindex);
+                        $.post("{:U('JkApi/getRegion')}", {country_id:countryid},
+                        function(data){
+                            $('#kcountrytext').hide();
+                            $('#kregiontext').hide();
+                            $("#regionList1").empty();
+                            $("#regionList1").append("<option value='other'>请选择</option>");
+                            for(var i in data){
+                                var option = $("<option>").text(data[i].cname).val(data[i].id + '|' + data[i].fname+'|'+data[i].cname);
+                                $("#regionList1").append(option);
+                            }
+                            $("#regionList1").append("<option value='other'>其它</option>");
+                        },'json');
+                    }
+                });
+                 //一级产区取消关联
+                    $('#kregion > i').live('click',function(){
+                        var a = $('#kjcountrytext').val();
+                        var strindex = a.indexOf("|", 0);
+                        var countryid =a.substring(0,strindex);
+                        $.post("{:U('JkApi/getRegion')}", {country_id:countryid},
+                         function(data){
+                                $('#kcountrytext').hide();
+                                $('#kregiontext').hide();
+                                $("#regionList1").empty();
+                                $("#regionList1").append("<option value='other'>请选择</option>");
+                                for(var i in data){
+                                    if(data[i].cname !=""){
+                                         var option = $("<option>").text(data[i].fname+"|"+data[i].cname).val(data[i].id + '|' + data[i].fname+'|'+data[i].cname);
+                                         $("#regionList1").append(option); 
+                                    }
+                                  
+                                }
+                                $("#regionList1").append("<option value='other'>其它</option>");
+                            },'json');
+                            });
+                //根据一级产区获取二级产区列表信息
+                $("#regionList1").change(function(){
+                    $('#kregiontext').hide();
+                    if($('#regionList1').val()!=='other'){
+                        //获取选中的文本值赋值到隐藏框中提交
+                        var a = $('#regionList1').find('option:selected').val();
+                        $('#kjregiontext').val("");
+                        $('#regionname1').val(a);
+                        var strindex = a.indexOf("|", 0);
+                        var pid =a.substring(0,strindex);
+                        $.post("{:U('JkApi/getRegion')}", {pid:pid},
+                        function(data){
+                            $('#kcountrytext').hide();
+                            $('#kregiontext').hide();
+                            $("#regionList2").show();
+                            $("#regionList2").empty();
+                            $("#regionList2").append("<option value='other'>请选择</option>");
+                            for(var i in data){
+                                var option = $("<option>").text(data[i].cname).val(data[i].id + '|' + data[i].fname+'|'+data[i].cname);
+                                $("#regionList2").append(option);
+                            }
+                        },'json');
+                    }
+                });
+
+                //获取二级产区列表信息
+                $("#regionList2").change(function(){
+                    //获取选中的文本值赋值到隐藏框中提交
+                    var a = $('#regionList2').find('option:selected').val();
+                    $('#regionname2').val(a);
+                });
+
+                //国家框选择其它
+                $("#countryList").change(function(){
+                    if($("#countryList").val()=='other'){
+                        $("#kjcountrytext").val("");
+                        $("#countryname").val("");
+                        $("#regionList1").empty();//将产区select框至空
+                        $("#regionList1").append("<option value='other'>其它</option>");
+                        $("#regionList2").hide();
+                        $('#kcountrytext').show().val("");
+                        $('#kregiontext').show().val("");
+                        $("#kjregiontext").val("");//将文本框内容清空
+                        $("#regionname1").val("");
+                    }
+                });
+                //国家框选择请选择
+                $("#countryList").change(function(){
+                    if($("#countryList").val()=='chose'){
+                        $("#kjcountrytext").val("");
+                        $("#countryname").val("");
+                        $("#regionList1").empty();//将产区select框至空
+                        $("#regionList1").append("<option value='chose'>请选择</option>");
+                        $("#regionList2").hide();
+                        $("#kjregiontext").val("");//将文本框内容清空
+                        $("#regionname1").val("");
+                    }
+                });
+
+                //产区框选择其它
+                $("#regionList1").change(function(){
+                    if($("#regionList1").val()=='other'){
+                        $("#kjregiontext").val("");//将文本框内容清空
+                        $("#regionname1").val("");
+                        $("#regionname2").val("");
+                        $("#regionList2").hide();
+                        $('#kregiontext').show().val("");
+                    }
+                });
+
+                //类型框选择其它
+                $("#typeList1").change(function(){
+                    if($("#typeList1").val()=='other'){
+                        $("#ktypet").val("");//将文本框内容清空
+                        $("#typename1").val("");
+                        $("#typename2").val("");
+                        $('#kjtypetext').val("");//将级联类型框空置
+                        $("#typeList2").hide();
+                        $('#ktypetext').show().val("");
+                    }
+                });
+                //下拉框信息获取
+                $("#z_aWrap_r_showBox_Inp").keyup(function(e){
+                    $.post("{:U('JkApi/getData')}", {keyword:$("#z_aWrap_r_showBox_Inp").val()},
+                    function(data){
+                        $(".z_aWrap_r_showBox").html("");
+                        for(var i in data){
+                            var html ='<a id='+data[i].id+' title="'+data[i].fname+'/'+data[i].cname+'" href="javascript:;"><span>'+data[i].fname+'</span>/'+data[i].cname+'</a>';
+                            $(".z_aWrap_r_showBox").append(html);
+                        }
+                        $(".z_aWrap_r_showBox >a").click(function(){
+                            var a_text=$(this).html();
+                            $('#z_aWrap_r_showBox_Inp').hide();
+                            $('.z_aWrap_r_showBox').hide();
+                            //内容填充到酒款框
+                            $('.z_aWrap_r_showBox_p').show().html(a_text+'<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>');
+                            //通过id获取酒款详情
+                            var id = $(this).attr("id");
+                            $.post("{:U('JkApi/getFullData')}",{id:id},function(data){
+                                //酒款框关联处理
+                                //酒款内容填充到表单提交
+                                var winetext = ''+data.id+','+data.fname+','+data.cname+'';
+                                $('#kjwinetext').val(winetext);
+
+                                //国家框关联处理
+                                if (data.countryfname || data.countrycname ){
+                                    $('.country').hide();//原国家框隐藏
+                                    $('#kcountrytext').hide();//原国家框隐藏
+                                    $('#countryList').hide();//原国家框隐藏
+                                   var country = '<span>'+data.countryfname+'</span>'+'('+data.countrycname+')';
+                                    //内容填充到国家框
+                                    $('#kcountry').show().html(country+'<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>');
+                                    //内容填充到表单提交
+                                    var countrtytext = ''+data.countryid+','+data.countryfname+','+data.countrycname+'';
+                                    $('#kjcountrytext').val(countrtytext);
+                                }
+                                //类型框关联处理
+                                if (data.winetype){
+                                    $('#type').hide();//原类型框隐藏
+                                    $('#typeList1').hide();//原类型框隐藏
+                                    $('#typeList2').hide();//原类型框隐藏
+                                    var winetype = "";
+                                    for(var i in data.winetype){
+                                          winetype += '<span>'+data.winetype[i].fname+'</span>'+'('+data.winetype[i].cname+')'+'/';
+                                    }
+                                    //内容填充到类型框
+                                    $('#ktype').show().html(winetype+'<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>');
+
+                                    //内容填充到表单提交
+                                    var typetext = "";
+                                    for(var i in data.winetype){
+                                        typetext += ''+data.winetype[i].id+','+data.winetype[i].fname+','+data.winetype[i].cname+'|';
+                                    }
+                                    $('#kjtypetext').val(typetext);
+                                }
+                                //产区框关联处理
+                                if (data.region ){
+                                    //$('#region').hide();//原类型框隐藏
+                                    $('#kregiontext').hide();
+                                    $('#regionList1').hide();//原类型框隐藏
+                                    $('#regionList2').hide();//原类型框隐藏
+                                    var region = "";
+                                    for(var i in data.region){
+                                        region += '<span>'+data.region[i].fname+'</span>'+'('+data.region[i].cname+')'+'/';
+                                    }
+                                    //内容填充到关联框
+                                    $('#kregion').show().html(region+'<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>');
+
+                                    //内容填充到表单提交
+                                    var regiontext = "";
+                                    for(var i in data.region){
+                                        regiontext += ''+data.region[i].id+','+data.region[i].fname+','+data.region[i].cname+'|';
+                                    }
+                                    $('#kjregiontext').val(regiontext);
+
+                                }
+                                //品种比例关联处理
+                                if (data.grape){
+                                    $('#percent').hide();//原类型框隐藏
+                                    var type = "";
+                                    for(var i in data.grape){
+                                        type += ''+data.grape[i].cname+':'+data.grape[i].percent+'%'+';';
+                                    }
+                                    //内容填充到品种比例框
+                                    $('#kpercent').show().html(type+'<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>');
+
+                                    //内容填充到表单提交
+                                    var grapetext = "";
+                                    for(var i in data.region){
+                                        grapetext += ''+data.grape[i].fname+'/'+data.grape[i].cname+':'+data.grape[i].percent+'%';
+                                    }
+                                    $('#kjgrapetext').val(grapetext);
+                                }
+
+                            },'json');
+                        });
+                    }
+                    , "json")
+
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+      <include file="Winery:header" /> 
+        <div class="z_aWrap clear">
+            <div class="z_aWrap_l">
+                <h2>My Wineries</h2>
+                <ul>
+                    <li><a href="{:U('Winery/info?winery_id='.$winery_id)}">Basic Info<em></em></a></li>
+                    <li><a href="{:U('Winery/status?winery_id='.$winery_id)}">Status</a></li>
+                    <li><a href="{:U('Winery/introduce?winery_id='.$winery_id)}">Introduction</a></li>
+                    <li><a href="{:U('Winery/release?winery_id='.$winery_id)}">Wines Release</a></li>
+                    <li><a href="{:U('Winery/manage?winery_id='.$winery_id)}">Management</a></li>
+                </ul>
+            </div>
+            <div class="z_aWrap_r z_aWrap_r_E">
+                <form action="{:U('Winery/edit?id='.$wine_id.'&winery_id='.$winery_id)}" method="post" id="myform">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td align="right" class="td1">
+                                 <span style="color:red">*</span>
+                        	Name of Wines：
+                                </td>
+                                <td>
+                                    <div class="por">
+                                        <input class="w588" type="text" id="z_aWrap_r_showBox_Inp" name="kwinetext"  autocomplete="off"/>
+                                        <p class="z_aWrap_r_showBox_p"></p>
+                                        <p class="z_aWrap_r_showBox"> </p>
+                                        <input type="text" class="w280"  style="display:none" id="kjwinetext" name="kjwinetext"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" class="td1">
+                                 <span style="color:red">*</span>
+                        	Pictures：
+                                </td>
+                                <td>
+                                    <ul class="upLoadPicUl clear">
+                                        <if condition="$img_list neq ''">
+                                            <volist name="img_list" id="img">
+                                                <li>
+                                                    <input type="hidden" value="{$img['path']}" name="img_file[]">
+                                                        <input type="hidden" value="1" name="img_queue[]"><img width="100%" height="100%" src="{$img['url']}">
+                                                                <p class="pic_closeBtn"><img src="__PUBLIC__/Expo/img/pic_closeBtn.gif" onclick="delImg({$img['id']},this);"></p>
+                                                                <if condition="$img['queue'] neq '1'">
+                                                                    <p class="txt"><a href="#" onclick="first(this)"></a></p> <else/></if>
+                                                                </li>
+                                                                </volist> <else/>
+                                                                </if>
+                                                                <if condition="$img_count neq '4'">
+                                                                     <li> <a href="javascript:;" id="file_uploadify"></a></li><else/>
+                                                                </if>
+                                                                </ul>
+                                                                <input type="hidden" name="allImg" id="allImg">
+                                                                    </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td align="right" class="td1">
+                        	<span style="color:red">*</span>Style：
+                                                                        </td>
+                                                                        <td>
+                                                                            <select id="typeList1" name="typeList1"></select>
+                                                                            <input type="hidden"  id="typename1" name="typename1">
+                                                                                <select  id="typeList2" name="typeList2" style="display:none;"></select>
+                                                                                <input type="hidden"  id="typename2" name="typename2">
+                                                                                    <if condition="$type neq ''">
+                                                                                        <p class="z_aWrap_r_showBox_p2 por" id="ktype" style="display: block">
+                                                                                            <span>{$type.fname}</span>({$type.cname})<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>
+                                                                                            <input type="hidden"  id="ketypetext" name="ketypetext" value="{$type.id}|{$typeSub.id}">
+                                                                                        </p>
+                                                                                        <else/>
+                                                                                    </if>
+                                                                                    <input type="text" class="w280"  style="display:none" id="ktypetext" name="ktypetext"/>
+                                                                                    <input type="text" class="w280"  style="display:none" id="kjtypetext" name="kjtypetext"/>
+                                                                                    </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td align="right" class="td1">
+                        	<span style="color:red">*</span>    Grape Variety：
+                                                                                        </td>
+                                                                                        <td>                                                                                            
+                                                                                                <div id="percent" style="display:none;">
+                                                                                                <span class="ratio">
+                                                                                                    <input class="inp1" type="text" name="variety[]" id="variety"/>
+                                                                                                    <input class="inp2" type="text" name="percent[]"/> %
+                                                                                                </span>
+                                                                                                <span class="ratio" >
+                                                                                                    <input class="inp1" type="text" name="variety[]"/>
+                                                                                                    <input class="inp2" type="text" name="percent[]"/> %
+                                                                                                </span>
+                                                                                                <span class="ratio" >
+                                                                                                    <input class="inp1" type="text" name="variety[]"/>
+                                                                                                    <input class="inp2" type="text" name="percent[]"/> %
+                                                                                                </span>
+                                                                                                <span id="addRatioBtnId" class="addRatioBtn"><img src="__PUBLIC__/Expo/img/z_aWrap_addRAtioBtn38x38.gif" id="addRatioBtn" /></span>
+                                                                                                <span class="table_tip_E Grape" style="display:none">Incorrect input;Arabic figures works only</span>
+                                                                                                 </div>
+                                                                                                <if condition="$wineInfo['variety'] neq ''">
+                                                                                                 <p class="z_aWrap_r_showBox_p2 por" id="kpercent"style="display:block">
+                                                                                                 <span>{$wineInfo['variety']}</span><i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>
+                                                                                                 </p><else/></if>
+                                                                                                <input type="text" class="w280"  style="display:none" id="kjgrapetext" name="kjgrapetext"value="{$wineInfo['variety']}"/>                                                                                           
+                                                                                                    </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td align="right" class="td1">
+                        	<span style="color:red">*</span>    Country：
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <select class="country" id="countryList" name="countryList"></select>
+                                                                                            <input type="hidden"  id="countryname" name="countryname">
+                                                                                                <if condition="$country neq ''">
+                                                                                                    <p class="z_aWrap_r_showBox_p2 por" id="kcountry" style="display:block">
+                                                                                                        <span>{$country.fname}</span>({$country.cname})<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>
+                                                                                                        <input type="hidden"  id="kecountrytext" name="kecountrytext" value="{$country.id}">
+                                                                                                    </p>
+                                                                                                    <else/></if>
+                                                                                                <input type="text" class="w280"  style="display:none" id="kjcountrytext" name="kjcountrytext"/>
+                                                                                                <input type="text" class="w280"  style="display:none" id="kcountrytext" name="kcountrytext"/>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td align="right" class="td1">
+                        	<span style="color:red">*</span>    Region：
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <select id="regionList1" name="regionList1"><option value='chose'>请选择</option></select>
+                                                                                            <input type="hidden"  id="regionname1" name="regionname1">
+                                                                                                <select  id="regionList2" name="regionList2" style="display:none;"></select>
+                                                                                                <input type="hidden"  id="regionname2" name="regionname2">
+                                                                                                    <if condition="$region neq ''">
+                                                                                                        <p class="z_aWrap_r_showBox_p2 por" id="kregion" style="display:block">
+                                                                                                            <span>{$region.fname}</span>({$region.cname})<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"/></i>
+                                                                                                            <input type="hidden"  id="keregiontext" name="keregiontext" value="{$region.id}|{$regionSub.id}">
+                                                                                                        </p>
+                                                                                                        <else/>
+                                                                                                    </if>
+                                                                                                    <input type="text" class="w280"  style="display:none" id="kregiontext" name="kregiontext"/>
+                                                                                                    <input type="text" class="w280"  style="display:none" id="kjregiontext" name="kjregiontext"/>
+                                                                                                    </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td align="right" class="td1">
+                        	Status：
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="w280" name="honor"/>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td align="right" class="td1">
+                        	Alcohol：
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <input type="text" class="w30" name="degree" onblur="check_wine(this)"value="{$wineInfo['degree']}"/> %
+                                                                                                            <span class="table_tip_E Alcohol" style="display:none">Incorrect input; Alcohol level should be only one decimal</span>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td align="right" class="td1">
+                        	Volume：
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <select name="volume">
+                                                                                                                <option value="-1">选择容量</option>
+                                                                                                                <option value="187ML" <if condition="$wineInfo['volume'] eq '187ML'"> selected </if>>187ML</option>
+                                                                                                                <option value="375ML"<if condition="$wineInfo['volume'] eq '375ML'"> selected </if>>375ML</option>
+                                                                                                                <option value="500ML" <if condition="$wineInfo['volume'] eq '500ML'"> selected </if>>500ML</option>
+                                                                                                                <option value="750ML" <if condition="$wineInfo['volume'] eq '750ML'"> selected </if>>750ML</option>
+                                                                                                                <option value="1L" <if condition="$wineInfo['volume'] eq '1L'"> selected </if>>1L</option>
+                                                                                                                <option value="3L" <if condition="$wineInfo['volume'] eq '3L'"> selected </if>>3L</option>
+                                                                                                                <option value="5L" <if condition="$wineInfo['volume'] eq '5ML'"> selected </if>>5L</option>
+                                                                                                                <option value="6L" <if condition="$wineInfo['volume'] eq '6L'"> selected </if>>6L</option>
+                                                                                                            </select>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td align="right" class="td1">
+                        	<span style="color:red">*</span>    Agent Price：
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <if condition="$wineInfo['inital_price'] eq -1 ">
+                                                                                                                <label><input type="radio" name="price" value="-1" checked="checked"/> Negotiate </label>
+                                                                                                                <label><input type="radio" name="price" value="0" /> Other</label>
+                                                                                                                <input type="text" class="w100" name="pricetext" id="pricetext"/>
+                                                                                                                <else/>
+                                                                                                                <label><input type="radio" name="price" value="-1" /> Negotiate </label>
+                                                                                                                <label><input type="radio" name="price" value="0" checked="checked"/> Other</label>
+                                                                                                                <input type="text" class="w100" name="pricetext" value="{$wineInfo['inital_price']}"id="pricetext"/>
+                                                                                                            </if>
+                                                                                                            <select name="moneytype">
+                                                                                                                <option value="$">dollar $</option>
+                                                                                                                <option value="RMB">RMB</option>
+                                                                                                            </select>
+                                                                                                            <span class="table_tip_E Price " style="display:none">please input price</span>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td align="right" class="td1">
+                        	MinimumBuying：
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <if condition="$wineInfo['lowest_buy_amount'] eq 0">
+                                                                                                                <input type="text" class="w40" name="lowest_buy_amount" id="lowest" onblur="check(this)" /> 瓶
+                                                                                                                <else/>
+                                                                                                                <input type="text" class="w40" name="lowest_buy_amount" id="lowest" onblur="check(this)" value="{$wineInfo['lowest_buy_amount']}"/> 瓶
+                                                                                                            </if>
+                                                                                                            <span class="table_tip_E MinimumBuying" style="display:none">Incorrect input;Arabic figures works only</span>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td align="right" class="td1" valign="top">
+             <span style="color:red">*</span>     Description：
+                                                                                                        </td>
+                                                                                                        <td>
+                                                               <textarea class="z_aWrap_txta" id="description" name="description" >{$wineInfo['description']} </textarea>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td></td>
+                                                                                                        <td>
+                                                                                                                 <span style="color:red;" id="require"></span>
+                                                                                                        </td>
+
+                                                                                                    </tr>
+                                                                                                    <tr>
+                                                                                                        <td align="right" class="td1">&nbsp;
+
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a href="javascript:void(0)" class="pinkBtn" onclick="mysubmit(myform,0)"><span>Submit</span></a>
+                                                                                                            <a href="javascript:void(0)" class="pinkBtn" onclick="mysubmit(myform,1)"><span>Submet & Continue to Release</span></a>
+                                                                                                            <input type="hidden" name="parameter" id="parameter">
+                                                                                                        </td>  </tr>
+                                                                                                    </tbody>
+                                                                                                    </table>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                    <div class="z_aFoot">
+                                                                                                        <div class="z_aFoot_main">
+                                                                                                            <p class="fl">
+                                                                                                                <a href="{:U('Index/contact')}" class="aboutUsHref">About us</a>
+                                                                                                                <a href="{:U('Index/cooperation')}" class="cooperationHref">Business Cooperation</a>
+
+                                                                                                            </p>
+                                                                                                            <p class="fr">wine.cn © 2011 email:bd@wine.cn</p>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    </body>
+     <script type="text/javascript">
+      var cur_img_num = '<?php echo $img_count;?>';
+function first(o){
+    var parent = o.parentNode.parentNode;
+    parent.parentNode.insertBefore(o.parentNode.parentNode,parent.parentNode.firstChild);
+}
+
+function delImg(id, obj){
+    cur_img_num--;
+    $(obj).parent().parent().remove();
+    $(".upLoadPicUl li").each(function(k, v){
+        if( $(this).find(":input[name='img_queue[]']").val() != undefined)
+            $(this).find(":input[name='img_queue[]']").val(k+1);
+    })
+    if (cur_img_num < 4 ) {
+        init_uploadify();
+        $(".upLoadPicUl li").last().show();
+    }
+}
+// 发布微博图片上传
+ init_uploadify = function(){
+        $(function(){
+            $('#file_uploadify').uploadify({
+                'swf'             : '__PUBLIC__/Expo/uploadify/uploadify.swf',
+                'uploader'        : '__PUBLIC__/Expo/uploadify/uploadify.php?type=wine',
+                'buttonImage'     : '__PUBLIC__/Expo/uploadify/button-upload.gif',
+                'height'          : 110,
+                'width'           : 110,
+                'auto'			   : true,
+                'buttonCursor'    : 'hand',
+                'fileTypeDesc' : 'Image Files',
+                'fileTypeExts' : '*.gif; *.jpg; *.png',
+                'removeCompleted' : true,
+                'fileSizeLimit' : '2048KB',
+                'onUploadError'		  : function (file, errorCode, errorMsg, errorString){
+                alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
+                },
+                'onUploadSuccess' : function(file, data, response){
+                data = eval("("+ data +")");
+                if (data.error === 0) {
+                /**
+                 * @brief  计算图片长宽比例
+                 */
+                    var img_width = '', img_height = '';
+                    if (data.width > data.height){
+                        var img_size_html = 'width="100%"';
+                    } else {
+                        var img_size_html = 'height="100%"';
+                    }
+
+                if(cur_img_num < 4){
+                    cur_img_num++;
+
+
+                    var html ='<li><input name="img_file[]" type="hidden" value="'+data.filename+'" />'
+                            +'<input name="img_queue[]" class="img_queue"type="hidden" value="'+cur_img_num+'" />'
+                            +'<img src="'+data.url+'" '+img_size_html+' /> '
+                            +'<p class="pic_closeBtn"><img src="__PUBLIC__/Expo/img/pic_closeBtn.gif" onclick="delImg(-1,this)" /></p>'
+                            +'<a href="#" onclick="first(this)"></a></li>';
+
+                    $("#file_uploadify").parent().before(html);
+                    if (cur_img_num === 4) {
+                        $('#file_uploadify').uploadify('stop');
+                        $('#file_uploadify').uploadify('destroy');
+                        $(".upLoadPicUl li").last()
+                        .html('<a href="javascript:;" id="file_uploadify"></a>')
+                        .hide();
+                    }
+                }
+
+                }
+                }
+
+            });
+        });
+}
+  </script>
+                                                                                                    </html>

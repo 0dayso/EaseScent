@@ -1,0 +1,47 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Cover/index')}">封面管理</a> > 增加新数据</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">返回封面页列表</a>
+        <a class='btn' href="{:Url('blockitem?cid='.$cid)}">返回区块列表</a>
+        <a class='btn' href="{:Url('blockdata?op=list&cid='.$cid.'&blockid='.$blockid)}">返回区块数据列表</a>
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('News/Cover/blockdata?op=add&blockid='.$blockid.'&cid='.$cid)}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="cid" value="{$cid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加"{$block.name}"区块数据</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标题</th>
+                        <td><input type="text" size="40" name="title" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">描述</th>
+                        <td>
+                            <textarea name="description" style="width:90%;height:40px"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">链接</th>
+                        <td><input type="text" size="40" name="url" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">图片</th>
+                        <td><input type="file" name="image"></td>
+                    </tr>
+                    <tr>
+                        <th width="130">排序</th>
+                        <td><input type="text" size="10" name="display" value="" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

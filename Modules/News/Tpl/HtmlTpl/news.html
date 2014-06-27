@@ -1,0 +1,366 @@
+<include file="HtmlTpl:header" />
+<!--引入头部文件-->
+<?php
+//酒会
+if(!$api1 = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"news_jiuhui"}',3),true))   $GLOBALS['makehtml'] = false;
+if($api1['response'] != 0)  $GLOBALS['makehtml'] = false;
+//展会
+if(!$api2 = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"news_zhanhui"}',3),true))  $GLOBALS['makehtml'] = false;
+if($api2['response'] != 0)  $GLOBALS['makehtml'] = false;
+//培训
+if(!$api3 = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"news_peixun"}',3),true))   $GLOBALS['makehtml'] = false;
+if($api3['response'] != 0)  $GLOBALS['makehtml'] = false;
+//专题
+if(!$api4 = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"news_zhuanti"}',3),true))  $GLOBALS['makehtml'] = false;
+if($api4['response'] != 0)  $GLOBALS['makehtml'] = false;
+//国内排行榜
+$top1 = D('NewsArticle')->where(array('catid'=>4,'dateline'=>array(array('gt',(time()-7*24*60*60)),array('lt',time())) ))->order('views DESC')->limit(7)->select();
+//国际排行榜
+$top2 = D('NewsArticle')->where(array('catid'=>2,'dateline'=>array(array('gt',(time()-7*24*60*60)),array('lt',time())) ))->order('views DESC')->limit(5)->select();
+//深度报道排行榜
+$top3 = D('NewsArticle')->where(array('catid'=>array('in','5,6,7'),'dateline'=>array(array('gt',(time()-7*24*60*60)),array('lt',time())) ))->order('views DESC')->limit(3)->select();
+//封面页数据获取
+$data9 = D('BlockData')->getData(9);//置顶幻灯片
+$data10 = D('BlockData')->getData(10);//置顶大字新闻
+$data11 = D('BlockData')->getData(11);//国内资讯 - 图片（含热点关注）
+$data12 = D('BlockData')->getData(12);//国内资讯 - 文字新闻
+$data13 = D('BlockData')->getData(13);//国内资讯 - 右侧政策法规
+$data14 = D('BlockData')->getData(14);//国际资讯 - 图片（含热点关注）
+$data15 = D('BlockData')->getData(15);//国际资讯 - 文字新闻
+$data16 = D('BlockData')->getData(16);//国际资讯 - 右侧专家
+$data17 = D('BlockData')->getData(17);//深度报道 - 图片新闻
+$data18 = D('BlockData')->getData(18);//深度报道 - 文字新闻
+$data19 = D('BlockData')->getData(19);//深度报道 - 右侧博览
+?>
+<!-- 请置于所有广告位代码之前 -->
+<script type="text/javascript" src="http://cbjs.baidu.com/js/m.js"></script>
+<script type="text/javascript">
+BAIDU_CLB_preloadSlots("435174","435178","435182","445147","445148","445158","445162","445168","445170");
+</script>
+<div class="n-adv1">
+	<!-- 广告位：新闻频道顶部通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("435174");</script>
+</div>
+<div class="n-main">
+	<div class="n-lef">
+		<div class="n-con1">
+			<div class="img_tab">
+				<div class="big_img">
+                    <volist name="data9" id="vo">
+                    <a href="{$vo.url}" target="_blank" title="{$vo.title}" <eq name="i" value="1"> style="display:block;"</eq>><img src="{$vo.image}" alt="{$vo.title}"/><span class="img_shadow">{$vo.title}</span></a>
+                    </volist>
+				</div>
+				<div class="img_num">
+                    <volist name="data9" id="vo">
+                    <span <eq name="i" value="1">class="img_num_red"</eq>></span>
+                    </volist>
+				</div>
+			</div>
+			<div class="n-con1-right">
+                <volist name="data10" id="vo">
+				<dl class="n-con1-dl">
+					<dt><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></dt>
+					<dd>{$vo.description}</dd>
+				</dl>
+                </volist>
+			</div>
+		</div>
+		<div class="n-con2">
+			<h3 class="n-h3">
+				<strong><a href="__NEWS__china/" target="_blank">国内 . 资讯</a></strong>
+				<a href="__NEWS__china/" target="_blank">更多&gt;</a>
+			</h3>
+			<div class="n-con2-l">
+				<div class="n-con2-img">
+					<a href="{$data11.0.url}" target="_blank" title="{$data11.0.title}"><img src="{$data11.0.image}" alt="{$data11.0.title}"/></a>
+					<em></em>
+					<span><a href="{$data11.0.url}" target="_blank" title="{$data11.0.title}">{$data11.0.title}</a></span>
+				</div>
+				<div class="n-con2-news">
+					<h4>热点关注</h4>
+                    <volist name="data11" id="vo" offset="1">
+					<dl class="n-con2-dl">
+						<dt><a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" alt="{$vo.title}"/></a></dt>
+						<dd>
+							<strong><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></strong>
+							<span>{$vo.description}<a href="{$vo.url}" target="_blank">[详情]</a></span>
+						</dd>
+					</dl>
+                    </volist>
+				</div>
+			</div>
+			<div class="n-con2-r">
+				<div class="n-con2-tit"><a href="{$data12.0.url}" target="_blank" title="{$data12.0.title}">{$data12.0.title}</a></div>
+				<ul class="n-ul-mod">
+                	<volist name="data12" id="vo" offset="1">
+					<li><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="n-rig">
+		<div class="n-adv2">
+        	<!-- 广告位：新闻频道 首屏右侧（上）banner --><script type="text/javascript">BAIDU_CLB_fillSlot("435178");</script>
+        </div>
+		<div class="n-adv2">
+        	<!-- 广告位：新闻频道 首屏右侧（下）banner --><script type="text/javascript">BAIDU_CLB_fillSlot("435182");</script>
+        </div>
+		<div class="n-mod-c">
+			<div class="n-white1">
+				<h3 class="n-h-mod">
+					<strong>政策法规</strong>
+					<a href="__NEWS__zcfg/" target="_blank"></a>
+				</h3>
+				<ul class="n-ul-mod2">
+                	<volist name="data13" id="vo">
+					<li><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+		<div class="n-mod-c">
+			<div class="n-white2">
+				<h3 class="n-h-mod">
+					<strong>国内排行榜</strong>
+				</h3>
+				<ul class="n-ul-mod3">
+                	<volist name="top1" id="vo">
+					<li><a href="{$vo.htmlrule}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="n-adv4">
+	<div class="n-adv4-l">
+		<!-- 广告位：新闻频道 第二屏左上半通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("445147");</script>
+	</div>
+	<div class="n-adv4-r">
+    	<!-- 广告位：新闻频道 第二屏右上banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445158");</script>
+	</div>
+</div>
+<div class="n-middle">
+	<div class="n-lef">
+		<div class="n-con2">
+			<h3 class="n-h3">
+				<strong><a href="__NEWS__world/" target="_blank">国际 . 资讯</a></strong>
+				<a href="__NEWS__world/" target="_blank">更多&gt;</a>
+			</h3>
+			<div class="n-con2-l">
+				<div class="n-con2-img">
+					<a href="{$data14.0.url}" target="_blank" title="{$data14.0.title}"><img src="{$data14.0.image}" alt="{$data14.0.title}"/></a>
+					<em></em>
+					<span><a href="{$data14.0.url}" target="_blank" title="{$data14.0.title}">{$data14.0.title}</a></span>
+				</div>
+				<div class="n-con2-news">
+					<h4>热点关注</h4>
+                    <volist name="data14" id="vo" offset="1">
+					<dl class="n-con2-dl">
+						<dt><a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" alt="{$vo.title}"/></a></dt>
+						<dd>
+							<strong><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></strong>
+							<span>{$vo.description}<a href="{$vo.url}" target="_blank">[详情]</a></span>
+						</dd>
+					</dl>
+                    </volist>
+				</div>
+			</div>
+			<div class="n-con2-r">
+				<div class="n-con2-tit"><a href="{$data15.0.url}" target="_blank" title="{$data15.0.title}">{$data15.0.title}</a></div>
+				<ul class="n-ul-mod">
+                	<volist name="data15" id="vo" offset="1">
+					<li><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="n-rig">
+		<div class="n-mod-c">
+			<div class="n-white3">
+				<h3 class="n-h-mod">
+					<strong>专家专栏</strong>
+					<a href="__COLUMN__" target="_blank"></a>
+				</h3>
+				<ul class="n-bo-con">
+					<volist name="data16" id="vo">
+					<li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" alt="{$vo.title}"/></a>
+						<span><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></span>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</div>
+		<div class="n-mod-c">
+			<div class="n-white4">
+				<h3 class="n-h-mod">
+					<strong>国际排行榜</strong>
+				</h3>
+				<ul class="n-ul-mod3">
+                	<volist name="top2" id="vo">
+					<li><a href="{$vo.htmlrule}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="n-adv4">
+	<div class="n-adv4-l">
+		<!-- 广告位：新闻频道 第二屏左下半通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("445148");</script>
+	</div>
+	<div class="n-adv4-r">
+    	<!-- 广告位：新闻频道 第二屏右下banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445162");</script>
+	</div>
+</div>
+<div class="n-bottom">
+	<div class="n-lef">
+		<div class="n-con2">
+			<h3 class="n-h3">
+				<strong><a href="" target="_blank">深度 . 报道</a></strong>
+				<a href="" target="_blank">更多&gt;</a>
+			</h3>
+			<div class="n-con2-l">
+				<div class="n-div-mod">
+					<h4><a href="__NEWS__showList/id/192" target="_blank">访  谈</a></h4>
+					<div class="n-div-mod-t"><a href="{$data17.0.url}" target="_blank" title="{$data17.0.title}">{$data14.0.title}</a></div>
+					<dl class="n-con2-dl">
+						<dt><a href="{$data17.0.url}" target="_blank" title="{$data17.0.title}"><img src="{$data17.0.image}" alt="{$data17.0.title}"/></a></dt>
+						<dd>
+							<span>{$data17.0.description}<a href="{$data17.0.url}" target="_blank">[详情]</a></span>
+						</dd>
+					</dl>
+				</div>
+				<div class="n-div-mod">
+					<h4><a href="__NEWS__showList/id/193" target="_blank">聚  焦</a></h4>
+					<div class="n-div-mod-t"><a href="{$data17.1.url}" target="_blank" title="{$data17.1.title}">{$data17.1.title}</a></div>
+					<dl class="n-con2-dl">
+						<dt><a href="{$data17.1.url}" target="_blank" title="{$data17.1.title}"><img src="{$data17.1.image}" alt="{$data17.1.title}"/></a></dt>
+						<dd>
+							<span>{$data17.1.description}<a href="{$data17.1.url}" target="_blank">[详情]</a></span>
+						</dd>
+					</dl>
+				</div>
+			</div>
+			<div class="n-con2-r">
+				<div class="n-con2-tit"><a href="{$data18.0.url}" target="_blank" title="{$data18.0.title}">{$data18.0.title}</a></div>
+				<ul class="n-ul-mod">
+                	<volist name="data18" id="vo" offset="1">
+					<li><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="n-rig">
+		<div class="n-mod-c">
+			<div class="n-white3">
+				<h3 class="n-h-mod">
+					<strong>葡萄酒博览</strong>
+					<a href="__EXPO__" target="_blank"></a>
+				</h3>
+				<ul class="n-bo-con">
+					<volist name="data19" id="vo">
+					<li>
+						<a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" alt="{$vo.title}"/></a>
+						<span><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></span>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</div>
+		<div class="n-mod-c">
+			<div class="n-white5">
+				<h3 class="n-h-mod">
+					<strong>深度报道排行榜</strong>
+				</h3>
+				<ul class="n-ul-mod3">
+                	<volist name="top3" id="vo">
+					<li><a href="{$vo.htmlrule}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+                    </volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="n-adv4">
+	<div class="n-adv4-l">
+    	<!-- 广告位：新闻频道 第三屏左侧半通栏 --><script type="text/javascript">BAIDU_CLB_fillSlot("445168");</script>
+	</div>
+	<div class="n-adv4-r">
+    	<!-- 广告位：新闻频道 第三屏右侧banner --><script type="text/javascript">BAIDU_CLB_fillSlot("445170");</script>
+	</div>
+</div>
+<div class="n-bottom2">
+	<div class="n-lef">
+		<div class="n-con4">
+			<ul class="n-con4-nav"><li class="n-con4-nav-sp">酒会</li><li>展会</li><li>培训及讲座</li></ul>
+			<div class="c-con4-box">
+				<div class="c-con4-list c-con4-show">
+					<ul class="n-ul-mod">
+                    	<volist name="api1.data" id="vo" offset="0" length="5">
+						<li><span><a href="__JIUHUI__Detail/index/id/{$vo.id}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></span><em>{$vo.date}</em></li>
+                        </volist>
+					</ul>
+					<ul class="n-ul-mod" style="float:right;">					
+                    	<volist name="api1.data" id="vo" offset="5" length="5">
+						<li><span><a href="__JIUHUI__Detail/index/id/{$vo.id}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></span><em>{$vo.date}</em></li>
+                        </volist>
+					</ul>
+				</div>
+				<div class="c-con4-list">
+					<ul class="n-ul-mod">
+                    	<volist name="api2.data" id="vo" offset="0" length="5">
+						<li><span><a href="__WINESHOW__theshow/sid/{$vo.id}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></span><em>{$vo.date}</em></li>
+                        </volist>
+					</ul>
+					<ul class="n-ul-mod" style="float:right;">
+                    	<volist name="api2.data" id="vo" offset="5" length="5">
+						<li><span><a href="__WINESHOW__theshow/sid/{$vo.id}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></span><em>{$vo.date}</em></li>
+                        </volist>
+					</ul>
+				</div>
+				<div class="c-con4-list">
+					<ul class="n-ul-mod">					
+                    	<volist name="api3.data" id="vo" offset="0" length="5">
+						<li><span><a href="__PEIXUN__Detail/index/id/{$vo.id}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></span><em>{$vo.date}</em></li>
+                        </volist>
+					</ul>
+					<ul class="n-ul-mod" style="float:right;">
+                    	<volist name="api3.data" id="vo" offset="5" length="5">
+						<li><span><a href="__PEIXUN__Detail/index/id/{$vo.id}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></span><em>{$vo.date}</em></li>
+                        </volist>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="n-rig">
+		<div class="n-mod-c">
+			<div class="n-white6">
+				<h3 class="n-h-mod">
+					<strong>专题</strong>
+					<a href="__WWW__Topics" target="_blank"></a>
+				</h3>
+				<div class="n-img-tab">
+					<div class="n-img-big-box">
+						<ul class="n-img-big">
+                        	<volist name="api4.data" id="vo">
+							<li><a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.img}" alt="{$vo.stitle}"/></a></li>
+                            </volist>
+						</ul>
+					</div>
+					<div class="n-img-num">                    	
+                        <volist name="api4.data" id="vo">
+                        <span <eq name="i" value="1"> class="n-img-num-red"</eq>>{$i}</span>
+                        </volist>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--引入尾部文件-->
+<include file="HtmlTpl:footer" />

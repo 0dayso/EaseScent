@@ -1,0 +1,82 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Agents/Index/index')}">代理商管理</a> >
+        代理商列表
+    </div>
+    <!--
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}&_backpage={$_pageurl}">添加代理商</a>
+    </div>
+    -->
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" type="text" value="{$_GET['keyword']}" class="input-text" placeholder="外文全称、中文全称" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_GET['status']" >selected</if> value="1">开启</option>
+                            <option <if condition="-1 eq $_GET['status']" >selected</if> value="-1">关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>外文全称</th>
+                    <th>中文全称</th>
+                    <th width="60">状态</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.fname}</td>
+                    <td>{$vo.cname}</td>
+                    <td>
+                        <if condition="$vo['status'] eq 1">
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=-1&_backpage={$_pageurl}" title="将状态改为关闭" style="color:#00cc00">开启</a>
+                        <else/>
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=1&_backpage={$_pageurl}" title="将状态改为开启" style="color:#cc0000">关闭</a>
+                        </if>
+                    </td>
+                    <td>
+                        <!-- <a href="{:Url('edit')}&id={$vo.id}&_backpage={$_pageurl}">编辑</a> 
+                        <br /> -->
+                        销售渠道列表（
+                        <a href="{:Url('Agents/InternetSales/index')}&agents_id={$vo.id}">网络</a>
+                        /
+                        <a href="{:Url('Agents/StoreSales/index')}&agents_id={$vo.id}">实体</a>
+                        ）
+                        <br />
+                        代理酒款列表（
+                        <a href="{:Url('Agents/InternetWine/index')}&agents_id={$vo.id}">网络</a>
+                        /
+                        <a href="{:Url('Agents/StoreWine/index')}&agents_id={$vo.id}">实体</a>
+                        ）
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

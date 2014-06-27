@@ -1,0 +1,44 @@
+<include file="Common:header" />
+       <include file="Common:agentHeader" />
+        <include file="Common:agentTopNav" />
+        <div class="z_main">
+            <div class="z_main_nr">
+                <div class="company_profile">
+                    <h3 class="z_main_nr_l_titH3"><img src="__PUBLIC__/Expo/img/z_tit_qyjs.gif" /></h3>
+                    <p class="z_main_nr_l_p_qyjs" style="padding:12px 20px;">{:htmlspecialchars_decode($agent_info['description'])}</p>
+
+                    <div class="h20"></div>
+                </div>
+                <div class="z_main_nr_r">
+
+                        <h3 class="z_main_nr_r_titH3">{$qy_info['qy_name']}</h3>
+                        <div class="z_main_nr_r_pList bb1d_ccc">
+                            <p>地址：<span>{$qy_info['qy_address']}</span></p>
+                            <p>邮箱：<span>{$agent_info['email']}</span></p>
+                            <p>skype：<span>{$qy_info['qy_skype']}</span></p>
+                            <p>QQ：<span>{$qy_info['qy_qq']}</span></p>
+                            <p>电话：<span>{$qy_info['qy_moblie']}</span></p>
+                            <if condition="$qy_info['qy_web_address'] neq ''">
+                            <p class="bb1d_ccc">官网：
+                            <a target="_blank" style="color:#555555;"  href="http://{:str_replace('http\:\/\/','',$qy_info['qy_web_address'])}">点击查看官网</a>
+                            </p>
+                             <else/>
+                             </if>
+                            <p>联系供货商：
+                                <span class="contactBox">
+                                    <a href="mailto:admin@i5good.com"><img src="__PUBLIC__/Expo/img/z_ico_mail18x15.png" /></a>
+                                    <if condition="$qy_info['qy_skype'] neq ''">
+                                        <a href="callto://{$qy_info['qy_skype']}"><img src="__PUBLIC__/Expo/img/z_ico_skype20x20.png" border="0"></a>
+                                    </if>
+                                    <if condition="$qy_info['qy_qq'] neq ''">
+                                        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$qy_info['qy_qq']}&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:272761906:52" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+                                    </if>
+                                </span>
+                            </p>
+                        </div>
+
+                </div>
+            </div>
+            <div class="z_main_nrBotBg"></div>
+        </div>
+ <include file="Common:footer" />

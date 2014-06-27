@@ -1,0 +1,73 @@
+<include file="Common:admin_header" />
+<body class="wp-admin">
+	<div class="main-div">
+    <table>
+    <tr>
+        <td align="right">公司名称:</td>
+        <td>{$info.qy_name}</td>
+    <tr>
+    <tr>
+        <td align="right">公司电话:</td>
+        <td>{$info.qy_moblie}</td>
+    </tr>
+    <tr>
+        <td align="right">所属行业:</td>
+        <td>{$info.qy_hangye}</td>
+    </tr>
+    <tr>
+        <td align="right">企业性质:</td>
+        <td>{$info.qy_xingzhi}</td>
+    </tr>
+    <tr>
+        <td align="right">企业规模:</td>
+        <td>{$info.qy_guimo}</td>
+    </tr>
+    <tr>
+        <td align="right">企业网址:</td>
+        <td><a href="{$info.qy_web_address}" target="_blank">{$info.qy_web_address}</a></td>
+    </tr>
+    <tr>
+        <td align="right">企业地址:</td>
+        <td>{$info.qy_province}{$info.qy_city}{$info.qy_address}</td>
+    </tr>
+    <tr>
+        <td align="right">企业联系人:</td>
+        <td>{$info.qy_contacts}</td>
+    </tr>
+    <tr>
+        <td align="right">企业营业执照:</td>
+        <td>
+            <a href="__UPLOAD__/bfiles/b_{$info.id}/pic.{$info.b_type}" title="查看原图" target="_blank">
+                <img src="__UPLOAD__/bfiles/b_{$info.id}/m_pic.{$info.b_type}">
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">企业介绍:</td>
+        <td>{$info.qy_introduction}</td>
+    </tr>
+    <tr>
+        <input type="hidden" id="id" value="{$info.id}">
+        <td align="right"><input type="button" name="apply" value="审核通过" class="button"></td>
+        <td align="left"><input type="button" name="apply" value="申请不通过" class="button"></td>
+    </tr>
+    </div>
+</body>
+<script type="text/javascript">
+$(function(){
+    $("input[name=apply]").click(function(){
+        var type = $(this).val();
+        var id = $("#id").val();
+        if(type=="审核通过"){
+           var  go = 2;
+        }else{
+          var go = 3;
+        }
+    $.post("/index.php/CompanyConfirm/apply",{id:id,type:go},function(result){
+        alert(result.message);
+        window.location.href="/index.php/CompanyConfirm"
+    },"json")
+    })
+})
+</script>
+</html>

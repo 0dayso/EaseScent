@@ -1,0 +1,41 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Links/index')}">友情链接</a> > 增加友情链接</div>
+    <div class="form">
+		<form name="myform" action="{:Url('add')}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加友情链接</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">友情链接名称</th>
+                        <td><input type="text" size="20" name="name" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">分类</th>
+                        <td>
+                            <select name="cid">
+                                <volist id="c" name="cate">
+                                <option value="{$c.id}">{$c.name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">描述</th>
+                        <td><input type="text" size="80" name="title" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">链接</th>
+                        <td><input type="text" size="60" name="url" value="" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

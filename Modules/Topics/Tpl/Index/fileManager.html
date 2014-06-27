@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<!-- Force latest IE rendering engine or ChromeFrame if installed -->
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+<meta charset="utf-8">
+<title>图片批量上传</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap styles -->
+<link rel="stylesheet" href="__PUBLIC__/bootstrap/bootstrap.min.css">
+
+<link rel="stylesheet" href="__PUBLIC__/bootstrap/bootstrap-select.min.css" />
+<!-- Generic page styles -->
+<link rel="stylesheet" href="__PUBLIC__/fileupload/css/style.css">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="__PUBLIC__/fileupload/css/jquery.fileupload-ui.css">
+</head>
+<body>
+<div class="container">
+    <div id="chooseDir">
+        <select id="upload_dir" name="subDir" class="selectpicker" data-style="btn-warning">
+            <option>选择文件所属专题</option>
+            <?php foreach($treeShow as $dir => $son){  if($dir!==0):?>
+                <option value="<?php echo $dir; ?>"><?php echo $dir; ?></option>
+            <?php endif; }?>
+        </select>
+    </div>
+    <!-- The fileinput-button span is used to style the file input field as button -->
+    <span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>选择文件...</span>
+        <!-- The file input field used as target for the file upload widget -->
+        <input id="fileupload" type="file" name="files[]" multiple>
+    </span>
+    <br>
+    <br>
+    <!-- The global progress bar -->
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <!-- The container for the uploaded files -->
+    <div id="files" class="files"></div>
+</div>
+<script src="__PUBLIC__/common/js/jquery.min.js" type="text/javascript"></script>
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="__PUBLIC__/fileupload/js/vendor/jquery.ui.widget.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="__PUBLIC__/fileupload/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="__PUBLIC__/fileupload/js/jquery.fileupload.js"></script>
+<script src="__PUBLIC__/bootstrap/bootstrap.min.js"></script>
+<script src="__PUBLIC__/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
+<script>
+/*jslint unparam: true */
+/*global window, $ */
+$(function () {
+    'use strict';
+    $('#upload_dir').change(function(){
+        var url = '{:Url("Topics/Index/UploadHandler")}&upload_dir='+$('#upload_dir').val()
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo('#files');
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            console.log(progress);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+            if( progress == 100){
+                alert('上传完成。');
+            }
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    });
+    $('.selectpicker').selectpicker();
+});
+</script>
+</body> 
+</html>

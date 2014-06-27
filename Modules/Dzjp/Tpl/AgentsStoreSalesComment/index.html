@@ -1,0 +1,78 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Dzjp/Index/index')}">大众酒评管理</a> >
+        代理商实体店评论列表
+    </div>
+    <div class="list-menu">
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" type="text" value="{$_GET['keyword']}" class="input-text" placeholder="评论内容" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="3 eq $_GET['status']" >selected</if> value="3">审核通过</option>
+                            <option <if condition="2 eq $_GET['status']" >selected</if> value="2">待审核</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>用户昵称</th>
+                    <th>评论时间</th>
+                    <th>代理商实体店</th>
+                    <th>综合评分</th>
+                    <th>环境评分</th>
+                    <th>服务评分</th>
+                    <th>评论</th>
+                    <th width="60">状态</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td><if condition="$vo['uname']">{$vo.uname}<else/>-</if></td>
+                    <td>{$vo.time|date="Y-m-d H:i:s",###}</td>
+                    <td><if condition="$vo['store_sales_name']">{$vo.store_sales_name}<else/>-</if></td>
+                    <td>{$vo.c_score}</td>
+                    <td>{$vo.e_score}</td>
+                    <td>{$vo.s_score}</td>
+                    <td><span title="{$vo.comment}">{$vo.scomment}</span></td>
+                    <td>
+                        <if condition="$vo['status'] eq 3">
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=2&_backpage={$_pageurl}" title="将状态改为待审核" style="color:#00cc00">审核通过</a>
+                        <elseif condition="$vo['status'] eq 2"/>
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=3&_backpage={$_pageurl}" title="将状态改为审核通过" style="color:#cc0000">待审核</a>
+                        </if>
+                    </td>
+                    <td>
+                        <a href="{:Url('edit')}&id={$vo.id}&_backpage={$_pageurl}">编辑</a>
+                        <a href="{:Url('del')}&id={$vo.id}&_backpage={$_pageurl}" target="delete" title='确定要删除ID为“{$vo.id}”的评论吗？'>删除</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

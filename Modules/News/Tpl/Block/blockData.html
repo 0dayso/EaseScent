@@ -1,0 +1,41 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Block/index')}">区块管理</a> > 静态区块数据管理</div>
+    <div class="list">
+        <form action="{:Url('News/Block/blockData')}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">排序</th>
+                    <th>标题</th>
+                    <th width="150">推送时间</th>
+					<th width="150">推送者</th>
+                    <th width="130">发布时间</th>
+                    <th width="100">发布者</th>
+                    <th width="100">静态化</th>
+                    <th width="100">状态</th>
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="data">
+            <tr>
+                <td><input type="text" size="5" class="input-text" value="{$vo.display}" name="aids[{$vo.bid}][{$vo.aid}]"></td>
+                <td>{$vo.title}</td>
+                <td>{$vo.btime|date='Y-m-d H:i:s', ###}</td>
+                <td>{$vo.buser}</td>
+                <td>{$vo.time|date='Y-m-d H:i:s', ###}</td>
+                <td>{$vo.user}</td>
+                <td><if condition="$vo['html'] eq 1"><font color="#dedede">已生成</font><else/>未生成</if></td>
+                <td><if condition="$vo['status'] eq 1"><font style="color:#00cc00">审核通过</font><else/><font style="color:#cc0000">待审核</font></if></td>
+                <td><!--a href="{:Url('News/Block/editData?aid='. $vo['aid'].'&bid='.$vo['bid'])}">编辑</a--> <a href="{:Url('News/Block/delData?aid='.$vo['aid'].'&bid='.$vo['bid'])}" target="delete" title='确定要删除ID为“{$vo.aid}”的推送信息吗？'>删除</a></td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+        <div class="footer"> <input type="submit" value="更新排序" name="dosubmit" class="btn"></div>
+    </form>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

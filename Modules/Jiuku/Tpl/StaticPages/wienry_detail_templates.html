@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="{:C('DOMAIN.PUBLIC')}/Jiuku/css/login_box.css" rel="stylesheet" type="text/css" />
+<link href="{:C('DOMAIN.PUBLIC')}/Jiuku/css/winery_detail.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}/common/js/jquery.min.js"></script>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/login_box.js"></script>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/winery_detail.js"></script>
+
+<!--图片放大JS-->
+<script src="{:C('DOMAIN.PUBLIC')}/fancyzoom/FancyZoom.js" language="JavaScript" type="text/javascript"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/fancyzoom/FancyZoomHTML.js" language="JavaScript" type="text/javascript"></script>
+<script>
+$(function(){
+	zoomImagesURI="{:C('DOMAIN.PUBLIC')}/fancyzoom/images/";
+	setupZoom();
+});
+</script>
+<!--图片放大end-->
+</head>
+<body>
+<!-- 头部导航 -->
+<div class="mz-nav">
+	<div class="v-my-wine"></div>
+	<p>
+		<a href="#">首页</a>
+		&gt;
+		<a href="#">名庄</a>
+		&gt;
+		<span onclick="popuploginbox();">{$res.fname} {$res.cname}</span>
+	</p>
+</div>
+<div class="detailspage-box">
+	<!-- 左侧开始 -->
+	<div class="detailspage-left">
+		<h2 class="detailspage-h2"><input id="id" type="hidden" value="{$res.id}" />{$res.fname} {$res.cname}</h2>
+		<div class="attention-box">
+			<div class="attention-left">
+				<img alt="{$res.img_res.0.alt}" title="{$res.img_res.0.description}" src="UPLOAD_WWWPATH/Winery/images/{$res.img_res.0.filename}"/>
+                <!-- Baidu Button BEGIN -->
+                <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+                    <a class="bds_tsina"></a>
+                    <a class="bds_tqq"></a>
+                    <a class="bds_tsohu"></a>
+                    <a class="bds_t163"></a>
+                    <a class="bds_renren"></a>
+                    <a class="bds_kaixin001"></a>
+                    <a class="bds_tieba"></a>
+                    <span class="bds_more"></span>
+                    <a class="shareCount"></a>
+                </div>
+				<script type="text/javascript" id="bdshare_js" data="type=tools" ></script>
+                <script type="text/javascript" id="bdshell_js"></script>
+                <script type="text/javascript">
+                    document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + new Date().getHours();
+                </script>
+                <!-- Baidu Button END -->
+			</div>
+			<ul class="attention-ul"> 
+				<notempty name="res.honor_res"><li>分级：<volist name="res.honor_res" id="vo"><if condition="$i neq 1">&nbsp;|&nbsp;</if>{$vo.cname}</volist></li></notempty>
+				<notempty name="res.region_res"><li>所属产区：<volist name="res.region_res" id="vo"><if condition="$i neq 1">&nbsp;|&nbsp;</if>{$vo.fname} {$vo.cname}</volist></li></notempty>
+				<notempty name="res.acreage"><li>面积：{$res.acreage}</li></notempty>
+				<notempty name="res.plant_age"><li>平均树龄：{$res.plant_age}</li></notempty>
+				<li>红葡萄品种：<empty name="res.grape_red_res">无<else/><volist name="res.grape_red_res" id="vo">{$vo.cname}{$vo.percent}%&nbsp;</volist></empty></li>
+				<li>白葡萄品种：<empty name="res.grape_white_res">无<else/><volist name="res.grape_white_res" id="vo">{$vo.cname}{$vo.percent}%</volist></empty></li>
+				<notempty name="res.address"><li>地址：{$res.address}</li></notempty>
+				<notempty name="res.tel"><li>电话：{$res.tel}</li></notempty>
+				<notempty name="res.url"><li>官网：{$res.url}</li></notempty>
+                <li id="attention_li"></li>
+			</ul>
+		</div>
+		<div class="article-box">
+        	<div>
+        	<p><strong>简述</strong></p>
+            <p>{$res.description}</p>
+            </div>
+            <div class="article-detail" style="display:none;">{$res.content}</div>
+			<a id="article-a" class="article-a" href="javascript:;;" hidefocus>查看全部</a>
+		</div>
+		<h3 class="detailspage-h3">酒庄相关图片</h3>
+		<div class="related-box">
+			<span class="related-box-a" id="c2"><img src="{:C('DOMAIN.PUBLIC')}/Jiuku/images/winery_detail/da-9.jpg"/></span>
+			<div class="related-img-box">
+				<div class="c-box">
+                	<volist name="res.img_res" id="vo">
+					<a class="related-img-a" href="http://wine.cn.quwine.com{:C('DOMAIN.UPLOAD')}/Jiuku/Winery/images/{$vo.filename}" title="{$vo.description}" hidefocus><img alt="{$vo.alt}" src="http://wine.cn.quwine.com{:C('DOMAIN.UPLOAD')}/Jiuku/Winery/images/{$vo.filename}" style="height:80px;"/></a>
+                    </volist>
+				</div>
+			</div>
+			<span class="related-box-a" id="c1" style="cursor:pointer"><img src="{:C('DOMAIN.PUBLIC')}/Jiuku/images/winery_detail/da-10.jpg"/></span>
+		</div>
+        <notempty name="res.wine_res">
+		<h3 class="detailspage-h3">酒庄旗下葡萄酒<var>注： RP:Robert Parker WS:Wine Specatator JR:Jancis Robinson</var></h3>
+		<div class="manor-index-box">
+		<!-- 开始循环 循环的最后一个要给一个borer:none; -->
+        	<volist name="res.wine_res" id="vo" key="key">
+            <div class="manor-box">
+				<div class="manor-name">
+					<p>{$vo.cname}   年产量：{$vo.yield}</p>
+					<span>{$vo.fname}</span>
+				</div>
+                <div class="manor-right">
+					<p>
+						<select class="score_years">
+                        	<volist name="vo.ywine_res" id="vos">
+							<option rp="{$vos.rp}" ws="{$vos.ws}" jr="{$vos.jr}">{$vos.year}</option>
+                            </volist>
+						</select>
+						<em class="rp">
+							<span>RP</span>
+							<small>{$vo.ywine_res.0.rp}</small>
+						</em>
+						<em class="ws">
+							<span>WS</span>
+							<small>{$vo.ywine_res.0.ws}</small>
+						</em>
+						<em class="jr">
+							<span>JR</span>
+							<small>{$vo.ywine_res.0.jr}</small>
+						</em>
+					</p>
+					<div class="history"><a href="javascript:;;">查看历年所有评分</a></div>
+					<div class="history-list-box">
+						<div class="history-all">
+                            <div class="his-title"><span>{$vo.cname}</span><var>{$vo.fname}</var></div>
+                            <ul class="his-con">
+                                <volist name="vo.ywine_res" id="vos">
+                                <li>
+                                    <span>{$vos.year}年</span>
+                                    <em><var>RP</var><small>{$vos.rp}</small></em>
+                                    <em><var>WS</var><small>{$vos.ws}</small></em>
+                                    <em><var>JR</var><small>{$vos.jr}</small></em>
+                                </li>
+                                </volist>
+                            </ul>
+                        </div>
+					</div>
+				</div>
+			</div>
+            </volist>
+		<!-- 循环结束 -->
+		</div>
+        </notempty>
+		<div class="screening-box">
+            <span>全部发言</span>
+            <a href="###">我要写酒评</a>
+        </div>
+        <div class="screening-s">
+            <var>筛选：</var>
+            <select style="width:183px;">
+                <option>全部评论</option>
+            </select>
+            <select>
+                <option>...</option>
+            </select>
+            <var style="margin-left:20px;">排序：</var>
+            <select>
+                <option>最新酒评</option>
+                <option>最新发言</option>
+                <option>回复量</option>
+            </select>
+        </div>
+        <div class="comment-box">
+            <ul class="comment-con"><!-- 评论信息 -->
+                <li>
+                    <div class="com-person-face">
+                        <a href="###"><img src="images/d-pic11.jpg" alt="" /></a>
+                    </div>
+                    <div class="comment-con-r">
+                        <p	class="comment-text"><a href="###" class="com-name">Wendy:</a> Hi 我是亓闻Wendy快来注家团队已经国内率先推册新浪微博吧！获取资讯、记录生活，都在这儿再不来你家团队已经国内率先推就OUT啦！</p>
+                        <div class="w-village-model">
+                            <div class="w-v-l">
+                                <a href="###"><img src="images/w-pic1.jpg"/></a>
+                            </div>
+                            <div class="w-v-r">
+                                <dl class="w-v-model-c">
+                                    <dt><a href="###">法国隆河谷阿玛迪庄园特酿干红</a></dt>
+                                    <dd>Cotes du Rhone Grande Reserve</dd>
+                                    <dd>年份：1996</dd>
+                                    <dd>评分：10分</dd>
+                                    <dd>类型/色泽：葡萄酒/桃红；深...<a href="###">更多>></a></dd>
+                                </dl>
+                                <ul class="w-t-img-more">
+                                    <li>
+                                        <a href="###"><img src="images/w-pic1.jpg"/></a>
+                                    </li>
+                                    <li>
+                                        <a href="###"><img src="images/w-pic1.jpg"/></a>
+                                    </li>
+                                    <li>
+                                        <a href="###"><img src="images/w-pic1.jpg"/></a>
+                                    </li>
+                                    <li>
+                                        <a href="###"><img src="images/w-pic1.jpg"/></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="com-contr">                                        
+                            <span>
+                                <a href="###">删除</a>
+                                <a href="###">收藏</a>
+                                <a href="###" class="com-show">评论(5)</a>
+                            </span>
+                            <a href="###">06月12日  12：55 </a>       
+                            <a href="###">来自逸香微博 </a>  
+                        </div>
+                    </div>
+                    <div class="comment-others"><!-- 点击评论的时候下拉 -->
+                        <div class="comment-others-con">
+                            <span class="d-san"></span>
+                            <textarea></textarea>
+                            <div class="com-o-sent">
+                                <span class="com-o-sent-l">
+                                    <a href="###" class="com-others-bq">
+                                        <img src="{:C('DOMAIN.PUBLIC')}/Jiuku/images/winery_detail/d-pic10.jpg" alt="" />
+                                        表情
+                                    </a>
+                                    <input type="checkbox" id="com-sent-t" />
+                                    <label for="com-sent-t">同时转发这条微博</label>
+                                </span>
+                                <span class="com-o-sent-r">
+                                    <input type="button" hidefocus/>
+                                    <var>还能输入126个字</var>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="com-back"><!-- 回复模块 -->
+                            <div class="com-back-mod">
+                                <div class="com-back-mod-l">
+                                    <a href="###"><img src="images/d-pic12.jpg" alt="" /></a>
+                                </div>
+                                <div class="com-back-mod-r">
+                                    <p	class="com-back-mod-con"><a href="###" class="others-name">zzzzs:</a>还能<span>(刚刚)</span></p>
+                                    <div class="com-back-contr">
+                                        <a href="###">删除</a>
+                                        <a href="###">回复</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="com-back-mod">
+                                <div class="com-back-mod-l">
+                                    <a href="###"><img src="images/d-pic12.jpg" alt="" /></a>
+                                </div>
+                                <div class="com-back-mod-r">
+                                    <p	class="com-back-mod-con"><a href="###" class="others-name">zzzzs:</a>还能输入126个字还能输入126个字还能输入126个字还能输入126个字<span>(刚刚)</span></p>
+                                    <div class="com-back-contr">
+                                        <a href="###" target="_blank">删除</a>
+                                        <a href="###" target="_blank">回复</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="evaluation-box">
+        
+			<textarea disabled="disabled" id="comment_content"></textarea>
+			<div class="evaluation-div">
+				<span><a href="javascript:;;" class="choose-up">关联酒款</a></span>
+                <span id="relate_text"></span>
+                <input id="relate_type" type="hidden" value="grandcru" />
+                <input id="relate_id" type="hidden" value="{$res.g_id}" />
+                <input id="relate_score" type="hidden" value="" />
+                <div class="evaluation-div-r">
+                    <span id="prompt">还能输入<em>140</em>个字!</span>
+                    <img style="cursor:pointer;" src="/admin/index.php?app=Jiuku&m=OutAcCommon&a=verify" width="40" height="21" id="verifyImg" />
+                    <input type="text" name="verifyTest" id="verifyTest" class="evaluation-div-r-text"/>
+                    <input id="comment_op" type="button" class="evaluation-div-r-sub" disabled="disabled" value="评论" />
+                </div>
+			</div>
+			<div class="choose-up-box"><!-- 选择条件弹出框 -->
+				<div class="choose-san"></div>
+				<div class="choose-c">
+					<select id="c_filter_w">
+                    	<option value="0">选择酒款</option>
+						<volist name="res.wine" id="vo">
+                        <option value="{$vo.wine_id}">{$vo.wine_name} {$vo.wine_type}</option>
+                        </volist>
+					</select>
+					<select id="c_filter_s" disabled="disabled"></select>
+				</div>
+				<div class="choose-star">
+					<span>我来评分</span>
+					<div class="star-box">
+						<span class="star-five" item="100" id="c_score"></span>
+						<em class="star-num"><b></b><b></b><b></b><b></b><b></b></em>
+					</div>
+				</div>
+				<div class="choose-sure">
+					<a href="javascript:;;" value="1">确定</a>
+					<a href="javascript:;;" value="0">取消</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 左侧结束 -->
+	<!-- 右侧开始 -->
+	<div class="attention-right">
+    	<notempty name="res.g_map">
+		<h2 class="attention-right-h2"> 
+			<span>名庄地图</span>
+            <a href="__IMAGES__/{$res.g_map}" title="{$res.g_name}地图">查看大图</a>
+		</h2>
+		<div class="map-box">
+			 <a href="__IMAGES__/{$res.g_map}" title="{$res.g_name}地图"><img src="__IMAGES__/{$res.g_map}" alt="{$res.g_name}地图"/></a>
+		</div>
+        </notempty>
+        <notempty name="res.attention">
+		<h2 class="attention-right-h2"> 
+			<span>最新关注</span>
+            <gt name="res.count_attention" value="6">
+			<a href="__WWW__/mingzhuang/attentionUser/id/{$res.g_id}">查看更多成员</a>
+            </gt>
+		</h2>
+		<div class="img-box">
+        	<volist name="res.attention" id="vo" offset="0" length="6">
+			<a href="__WWW__/mingzhuang/user/id/{$vo.uid}" target="_blank" hidefocus>
+				<img src="__ACCOUNT__/member/avatar?u={$vo.user_name}" original="__ACCOUNT__/member/avatar?u={$vo.user_name}">
+				<var>{$vo.nick_name}</var>
+			</a>
+            </volist>
+		</div>
+        </notempty>
+        <notempty name="res.article">
+		<h2 class="attention-right-h2"> 
+			<span>相关资讯</span>
+		</h2>
+		<ul class="attention-right-ul"> 
+        	<volist name="res.article" id="vo">
+			<li><a href="{$vo.html}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+            </volist>
+		</ul>
+        </notempty>
+        <notempty name="res.party">
+		<h2 class="attention-right-h2"> 
+			<span>关注此庄的人正在参加的活动</span>
+		</h2>
+        <volist name="res.party" id="vo">
+		<ul class="attention-right-ul2"> 
+			<li><a href="__JIUHUI__/Detail/index/id/{$vo.id}" target="_blank">{$vo.title}</a></li>
+			<li>时间：{$vo.time}</li>
+			<li>城市：{$vo.city}</li>
+		</ul>
+        </volist>
+        </notempty>
+		<a class="right-advertising" href="###" hidefocus><img src="{:C('DOMAIN.PUBLIC')}/Jiuku/images/winery_detail/da-23.jpg"/></a>
+	</div>
+	<!-- 右侧结束 -->
+</div>
+</body>
+</html>

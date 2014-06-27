@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>index</title>
+        
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_mainStyle.css" />
+        <script language="javascript" src="__PUBLIC__/jquery-ui-1.9.1.custom/js/jquery-1.8.2.js"></script>
+        <script type="text/javascript">
+            function showFull(){
+                if($("#shorttext").css('display') != 'none'){
+                    $("#alltext").show();
+                    $("#shorttext").hide();
+                    $("#showmore").removeClass('down').addClass('up').text("up");
+                }else{
+                    $("#alltext").hide();
+                    $("#shorttext").show();
+                    $("#showmore").removeClass('up').addClass('down').text("More");
+                }
+            }
+           $(document).ready(function(){
+                    $('.img-flash').click(function(){
+                        $('#img-flash').attr('src', $(this).attr('src'));                      
+                        $('.z_main_nrBox1_l_ul > li').attr('class', '');
+                        $(this).parent().attr('class', 'active');
+                    });
+            });
+        </script>
+    </head>
+    <body>
+       <include file="Foreign:header" /> 
+ 
+     <div class="z_nav">
+        <ul class="z_nav_nr clear">
+            <li><a href="{:U('Foreign/index?winery_id='.$winery_id)}" class="active">Home</a></li>
+            <li><a href="{:U('Foreign/product?winery_id='.$winery_id)}" >Wine Supplies</a></li>
+            <li><a href="{:U('Foreign/honor?winery_id='.$winery_id)}">File Integrity</a></li>
+            <li><a href="{:U('Foreign/info?winery_id='.$winery_id)}">Chateau Introduction</a></li>
+            <li><a href="{:U('Foreign/contact?winery_id='.$winery_id)}">Contact</a></li>
+        </ul>
+    </div>
+    <div class="z_main">
+        <div class="z_main_nr">
+            <div class="z_main_nrBox1 clear">
+                <div class="z_main_nrBox1_l">
+                    <p class="z_main_nrBox1_l_bigPic"><a href="#"><img src="{$img['0']['url']}" width="435" height="326" id="img-flash"/></a></p>
+                    <ul class="z_main_nrBox1_l_ul">
+                        <li class="active"><img src="{$img['0']['url']}" width="103" height="76" class="img-flash"/></li>
+                        <li><img src="{$img['1']['url']}"width="103" height="76" class="img-flash"/></li>
+                        <li><img src="{$img['2']['url']}"width="103" height="76" class="img-flash"/></li>
+                        <li><img src="{$img['3']['url']}" width="103" height="76" class="img-flash"/></li>
+                    </ul>
+                </div>
+
+                <div class="z_main_nrBox1_r">
+                    <h3 class="z_main_nrBox1_rH3 bb1d_ccc">{$qy_info['qy_name']}</h3>
+                    <div class="z_main_nrBox1_rNr z_main_nrBox1_rNr_E">
+                        <p>Nation<span>{$qy_info['qy_country']}</span></p>
+                        <p>Address:<span>{$qy_info['qy_address']}</span></p>
+                        <p>E-mail:<span>{$winery_info['email']}</span></p>
+                        <p>Phone: <span>{$qy_info['qy_moblie']}</span></p>
+                        <p>skype: <span> {$qy_info['qy_skype']}</span></p>
+                        <p>Website:<span>{$qy_info['qy_web_address']}</span></p>
+                    </div>
+                    <div class="z_botBg415x4"></div>
+                </div>
+            </div>
+            <h2 class="z_main_tit"><img src="__PUBLIC__/Expo/img/z_main_tit_qyjj_E.gif" /></h2>
+            <div class="z_main_nrBox2">
+                <!--<h3 class="z_main_nrBox2_h3">瓦兰德鲁庄园的历史</h3>-->
+                <div class="z_main_nrBox2_p z_main_nrBox2_p_E" id="shorttext">{:substr($qy_info['qy_introduction'],0,300)}…… </div>
+                <div class="z_main_nrBox2_p" style="display:none;"id="alltext">{$qy_info['qy_introduction']}</div>
+                <div class="moreBtn">
+                    <div class="moreBtn_btn down" onclick="showFull()" id="showmore">More</div>
+                </div>
+            </div>
+            <h2 class="z_main_tit"><img src="__PUBLIC__/Expo/img/z_main_tit_dljk_E.gif" /></h2>
+            <div class="z_main_nrBox3">
+                <ul class="z_main_nrBox3_ul">
+                    <volist name="wine_list" id="vo">
+                        <li class="clear">
+                            <p class="pic"><a href="{:U('Foreign/wine?wine_id='.$vo['id'].'&winery_id='.$vo['winery_id'])}"><img src="{$vo.pic_url}" height="150" width="200"/></a></p>
+                            <div class="nr">
+                                <h3><a href="{:U('Foreign/wine?wine_id='.$vo['id'].'&winery_id='.$vo['winery_id'])}">{$vo.fname}</h3>
+                                <div class="nr_list">
+                                    <p><i>Style:</i><span>{:$allType[$vo[type_id]][fname]}</span></p>
+                                    <p><i>GrapeVarieties: </i><span>{$vo.variety}</span></p>
+                                    <if condition="$vo['price'] eq -1 && $vo['inital_price'] eq -1">
+                                        <p><i>Price:</i><span>face</span></p>
+                                        <else/>
+                                        <if condition="$vo['money_type'] eq '$'">
+                                            <p><i>Price:</i><span>{$vo['inital_price']}$</span></p>
+                                            <else/>
+                                            <p><i>Price:</i><span>{$vo['price']}RMB</span></p>
+                                        </if>
+                                    </if>
+                                    <p><i>Introduction:</i><em class="col555">{$vo.description}</em></p>
+                                </div>
+                            </div>
+                        </li>
+                    </volist>
+                </ul>
+                <p class="pageNum">
+                    {$page}
+                </p>
+                <div class="h1"></div>
+            </div>
+            <div class="z_main_nrBotBg978x4_one"></div>
+        </div>
+    </div>
+    <include file="Foreign:foot" /> 
+</body>
+</html>

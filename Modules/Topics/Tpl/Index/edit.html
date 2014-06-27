@@ -1,0 +1,249 @@
+<include file="Common:header" />
+    <script type="text/javascript" src="__PUBLIC__/topics/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/common/js/jquery.form.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/topics/js/topics.js"></script>
+    <div id="wrapper">
+        <div id="content">
+            <div id="parts">
+	            <form id="topicsData" method="post" action="{:Url(\'Topics/Index/addData\')}" enctype="multipart/form-data">
+	                <ul class="left floatL">
+	                   <li class="part part0 type">
+	                       <span class="name">专题类型::</span>
+	                       <select id="typeId" name="tid" tid="{$tp['typeid']}">
+	                        <volist name="ttype" id="vo">
+	                           <option value="{$vo.id}">{$vo.name}</option>
+	                        </volist>
+	                       </select>
+	                   </li>
+	                   <li class="part part1 url">
+	                        <span class="name">专题链接::</span>
+	                        <input id="" name="dirnm" type="text" value="{$tp.dirnm}" /><span>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span></span><input type="text" name="pgnm" value="{$tp.pgnm}" />
+	                        <span class="hints" style="display:inline-block;color:red;font-weight:bold;font-size:14px;">*</span>
+	                        <span style="display:block;">直接填写字母即可，如：abc，则生成的链接为：http://topic.wine.cn/<a style="color:blue;">abc</a>/<a style="color:purple;">index</a>.html</span>
+	                    </li>
+	                    <li class="part part2 cnm">
+	                        <span class="name">中文名称::</span>
+	                        <input id="" name="cnm" type="text" value="{$tp.cnm}" />
+	                    </li>
+	                    <li class="part part3 enm">
+	                        <span class="name">英文名称::</span>
+	                        <input id="" name="enm" type="text" value="{$tp.enm}" />
+	                    </li>
+	                    <li class="part part4 view">
+	                    	<span class="name">展示图片::</span>
+	                    	<if condition="$tp.view eq ''">展示图片未添加或已删除
+                            <else/><a href="__TOPIC__/{$tp.dirnm}/images/{$tp.view}" title="__TOPIC__/{$tp.dirnm}/images/{$tp.view}" class="oldView">{$tp.view}</a>
+							</if>
+							<input type="button" value="更改" id="changeView" /> 
+	                    </li>
+	                    <li class="part part5 des">
+	                        <span class="name">专题描述::</span>
+	                        <div class="clearB"></div>
+	                        <textarea id="" name="des" rows="6" cols="50" class="descon">{$tp.des}</textarea>
+	                    </li>
+	                    <li class="part part6 seot">
+	                        <span class="name">SEO 标题::</span>
+	                        <input id="" name="seot" type="text" value="{$tp.seot}"/>
+	                    </li>
+	                    <li class="part part6 seok">
+	                        <span class="name">SEO 关键词::</span>
+	                        <input id="" name="seok" type="text" value="{$tp.seok}" />
+	                    </li>
+	                    <li class="part part6">
+	                        <span class="name">SEO 描述::</span>
+	                        <div class="clearB"></div>
+	                        <textarea id="" name="seod" rows="6" cols="50" class="seod">{$tp.seod}</textarea>
+	                    </li>
+	                    <li class="part part7 editor">
+	                        <span class="name">专题内容::</span>
+	                        <div id="showBtn"><input type="button" value="点击展开编辑" /></div>
+	                        <div id="editorBlock">
+	                            <textarea id="editor" name="cont" style="width:100%; height:600px;">{$tp.cont}</textarea>
+	                            <input id="editDone" type="button" value="完成编辑,点击收起" />
+	                        </div>
+	                    </li>
+	                    <li class="part part8 ctrl">
+	                        <span class="name">展示控制::</span>
+	                        <dl class="isopen"> 
+	                            <dt>开启</dt>
+	                            <dd>
+	                                <input id="" name="isopen" value="1" type="radio" class="radio" checked="checked" />on
+	                                <input id="" name="isopen" value="0" type="radio" class="radio" />off
+	                            </dd>  
+	                        </dl>
+	                        <dl>
+	                            <dt>置顶</dt>
+	                            <dd>
+	                                <input id="" name="istop" value="1" type="radio" class="radio" />on
+	                                <input id="" name="istop" value="0" type="radio" class="radio" checked="checked" />off
+	                            </dd>  
+	                        </dl>
+	                        <dl>
+	                            <dt>推荐</dt>
+	                            <dd>
+	                                <input id="" name="isrec" value="1"type="radio" class="radio" />on
+	                                <input id="" name="isrec" value="0" type="radio" class="radio" checked="checked" />off
+	                            </dd>
+	                        </dl>
+	                        <div class="clearB"></div>
+	                    </li>
+	                    <li class="part part9 ct">
+	                        <span class="name">创建时间::</span>
+	                        <input type="text" id="createTime" name="ct" value="{$tp.ct|date='Y-m-d H:i:s',###}" onclick="WdatePicker()" />
+	                    </li>
+	                </ul>
+	                <div class="right floatR clearR">
+	                    <dl>
+	                        <dt>公共头部文件选择</dt>
+	                        <dd>
+	                        <select id="headerFile" name="headerFile">
+	                            <option value="1">专题头部（topicsheader）</option>
+	                            <option value="2">逸香网头部（header20130312）</option>
+	                        </select>
+	                        </dd>
+	                        <dd>
+	                            <p>hint : 公共底部文件默认与所选头部文件对应，所以不用再次选择。</p>
+	                        </dd>
+	                    </dl>
+	                 </div>
+                </form>
+               	<div class="right floatR clearR">
+                    <div id="articleTable">
+                        <div id="srh">
+                            <select id="sorts" name="sort">
+                                <option value="请选择"></option>
+                                <volist name="asort" id="vo">
+                                <option value="{$vo.sort_id}">{$vo.sort_name}</option>
+                                </volist>
+                            </select>
+                            <input type="button" value="&nbsp;&nbsp;s o&nbsp;&nbsp;" id="so" />
+                            <iframe id="ifrm" src="{:Url('Topics/Index/table')}" frameborder="0"></iframe>
+                        </div>
+                        
+                        <div id="buttons">
+                            <input type="button" value="获取选中文章Url、Image" id="doSel"/><br/>
+                        </div>
+                        <div id="urlList">
+		                	<p>文章Url列表:</p>
+		                	<div>
+	                            <input name="makeurl" type="hidden" value="{:Url('Topics/Index/generateUrl')}" />
+	                            <input name="tabledata" type="hidden" value="{:Url('Topics/Index/table')}" />
+		                		<table id="urlContainer">
+	                                <tr><th>文章Id</th><th>文章Url</th><th>文章Img</th></tr>
+		                		</table>
+		                	</div>
+	                	</div>
+                    </div>
+	                
+                    <div id="uploadStatics">
+                        <form name="upjcimg" id="upjcimg" method="post" action="{:Url('Topics/Index/upload')}" enctype="multipart/form-data">
+	                        <table>
+	                        	<thead align="center"><tr>上传图片、CSS、JS到指定目录，必须指定，目录名同专题名。如<b style="color:blue;">" abc "</b></tr></thead>
+	                        	<tr><th>浏览</th><th>专题名称</th><th>上传</th></tr>
+	                        	<tr>
+	                        		<td><input type="file" name="statics" /></td>
+                                    <td>
+                                        <select id="subDirName" name="subDirName">
+                                            <option value="{$tp.dirnm}">{$tp.dirnm}</option>
+                                        </select>
+                                    </td>
+	                        		<td><input type="button" value="上传" id="upBtn" /></td>
+	                        	</tr>
+                                <caption align="bottom">指定专题名称之后，所在目录为 : [ <b style="color:blue;">abc</b>/images(js｜css)/ ]，同名文件会被覆盖。</caption>
+	                        </table>
+                        </form>
+                        <div id="staticsList">
+                        	<ul>
+                        		<li>
+                        			<p>JS</p>
+                        			<ul cat="js">
+	                        			<volist name="aStatics['js']" id="vo" empty="没有js文件">
+	                        			<li>
+	                        				<a href="__TOPIC__/{$tp.dirnm}/js/{$vo}" title="{$vo}" target="_blank">{$vo}</a>
+	                        				<input type="hidden" name="delLink" value="{:Url('Topics/Index/delStatics')}&type=js&fn={$vo}"/>
+	                        				<span class="delBtn">删&nbsp;除</span>
+	                        			</li>
+	                        			</volist>
+                        			</ul>
+                        		</li>
+                        		<li>
+                        			<p>CSS</p>
+                        			<ul cat="css">
+                        				<volist name="aStatics['css']" id="vo" empty="没有css文件">
+	                        			<li>
+	                        				<a href="__TOPIC__/{$tp.dirnm}/css/{$vo}" title="{$vo}" target="_blank">{$vo}</a>
+	                        				<input type="hidden" name="delLink" value="{:Url('Topics/Index/delStatics')}&type=css&fn={$vo}"/>
+	                        				<span class="delBtn">删&nbsp;除</span>
+	                        			</li>
+	                        			</volist>
+	                        		</ul>
+                        		</li>
+                        		<li>
+                        			<p>IMAGES<span class="expand">展开...</span></p>
+                        			<ul id="topicImg" cat="images">
+	                        			<volist name="aStatics['image']" id="vo" empty="没有image文件">
+	                        			<li>
+                                        <a href="__TOPIC__/{$tp.dirnm}/images/{$vo}" title="__TOPIC__/{$tp.dirnm}/images/{$vo}" class="zoom">{$vo}</a>
+	                        				<input type="hidden" name="delLink" value="{:Url('Topics/Index/delStatics')}&type=images&fn={$vo}"/>
+	                        				<span class="delBtn">删&nbsp;除</span>
+	                        			</li>
+	                        			</volist>
+	                        			<li><span class="fold">...收起</span></li>
+                        			</ul>
+                        		</li>
+                        	</ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearB"></div>
+            </div>
+			<div id="actionBarForEdit"><input type="button" value="提交" /></div>
+        </div>
+	    <div class="clearB"></div>
+	    <div id="tipsPart">
+	    	<h3>Tips:</h3>
+	    	<div id="tipsCon">
+	    		<p>为了能够动态的调用文章，添加了一个标签"article"</p>
+	    		<dl>
+	    			<dt>article 标签的属性:type,table,field,where,aid,order,limit,id,key,mod,datefmt.</dt>
+	    			<dd><span>type</span>: 文章类型ID。aid与type之能选其一，都存在则以aid为准。</dd>
+	    			<dd><span>table</span>: 文章表名，默认为"es_article"表，目前文章都在这个表，保持默认即可。</dd>
+	    			<dd><span>field</span>: 调用的字段名，默认为"article_id,title,description,link_url,add_time"。<span id="fieldList">查看所有field</span>
+	    				
+	    			</dd>
+	    			<dd><span>where</span>: 数据查询条件，默认根据type查询</dd>
+	    			<dd><span>aid</span>: 文章ID字符串，i.e. '18234' 或者 '18234,18235,18236,...'，须知：指定了aid后，limit和where属性无效，当然还有type。</dd>
+	    			<dd><span>order</span>: 文章查询结果排序，默认根据文章ID从大到小倒序排列。</dd>
+	    			<dd><span>limit</span>: 查询结果数量限制，i.e. '7',表示从0开始查询7条，'2,8',表示从第2条开始，查询后8条。默认查询全部。</dd>
+	    			<dd><span>id</span>: 查询结果标识，任意字符串，只能以下划线或字母开头，默认为article。</dd>
+	    			<dd><span>key</span>: 循环变量key，默认为‘i’，保持默认即可。</dd>
+	    			<dd><span>mod</span>: 余数，默认为2，一般用来判断查询结果的排列位置的奇偶性。</dd>
+	    			<dd><span>datefmt</span>:时间显示格式，默认为'Y-m-d'。i.e. 2013-03-12</dd>
+	    			<dd>注：常用属性：type或aid</dd>
+	    			<dt>article 标签使用示例</dt>
+	    			<dd><img src="__PUBLIC__/topics/images/article-tag-usage.png" /></dd>
+	    		</dl>
+	    		<div id="fieldShow">
+  					<ul>
+  						<volist name="fields" id="vo">
+  							<li>{$vo}</li>
+  						</volist>
+  							<li>url</li>
+  							<li>picname</li>
+  							<li>picdesc</li>
+  							<li>atime</li>
+  					</ul>
+  				</div>
+	    	</div>
+	    </div>
+    </div>
+<include file="Common:footer" />
+<script type="text/javascript" src="__PUBLIC__/common/js/FancyZoom/FancyZoom.js"></script>
+<script type="text/javascript" src="__PUBLIC__/common/js/FancyZoom/FancyZoomHTML.js"></script>
+<script type="text/javascript">
+/*-----------图片放大-----------------*/
+$(function(){
+	zoomImagesURI = '__PUBLIC__/common/js/FancyZoom/FancyImg/zoom/'
+	setupZoom();
+});
+</script>

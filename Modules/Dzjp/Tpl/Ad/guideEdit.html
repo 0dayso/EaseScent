@@ -1,0 +1,155 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+    /*日期控件*/
+    $( "#datepicker" ).datetimepicker({
+        timeText: '时间',
+        hourText: '时',
+        minuteText: '分',
+        secondText: '秒',
+        currentText: '当前时间',
+        closeText: '关闭',
+        changeMonth: true,
+        changeYear: true,
+        timeFormat: 'HH:mm:ss',
+        dateFormat: 'yy-mm-dd'
+    });
+    $('#updimg').fileupload({
+        url : "{:Url('guideUpload')}",
+        dataType : 'json',
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html = '<div class="selbox"><input name="origin_img" type="hidden" value="{:C(\'UPLOAD_URL\')}Dzjp/Guide/images/'+data.result.img+'" /><input name="thum_img" type="hidden" value="{:C(\'UPLOAD_URL\')}Dzjp/Guide/images/'+data.result.img+'" /><img src="{:C(\'UPLOAD_URL\')}Dzjp/Guide/images/'+data.result.img+'" /><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#updimg_box").html(html);
+            }else{
+                art.dialog({
+                    id: 'error',
+                    content: data.result.msg,
+                    lock: true,
+                });
+            }
+        }
+    });
+});
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">大众酒评管理</a> >
+        <a href="{:Url('index')}">广告管理</a> >
+        <a href="{:Url('guideIndex')}">导购广告列表</a> >
+        修改导购广告
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('guideEdit')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <input name="id" type="hidden" value="{$res.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">所属分类</th>
+                        <td>
+                            <select name="type">
+                                <option value="">全部</option>
+                                <volist name="type_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$res['type'] eq $vo['id']">selected</if>>{$vo.type_name}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>关联酒款中文名ID</th>
+                        <td><input name="wine_id" type="text" size="10" value="{$res.wine_id}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>广告图片(640*370)</th>
+                        <td>
+                            <input id="updimg" name="updimg" type="file" />
+                            <div id="updimg_box">
+                                <div class="selbox">
+                                    <input name="origin_img" type="hidden" value="{$res.origin_img}" />
+                                    <input name="thum_img" type="hidden" value="{$res.thum_img}" />
+                                    <img src="{$res.origin_img}" />
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>广告客户</th>
+                        <td><input name="ad_customer" type="text" size="80" value="{$res.ad_customer}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>导购标题</th>
+                        <td><input name="guide_title" type="text" size="80" value="{$res.guide_title}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>推荐理由</th>
+                        <td><input name="recommend_reason" type="text" size="80" value="{$res.recommend_reason}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>现价/原价</th>
+                        <td>
+                            <input name="discount_price" type="text" size="10" value="{$res.discount_price}" class="measure-input"/>
+                            /
+                            <input name="origin_price" type="text" size="10" value="{$res.origin_price}" class="measure-input"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>已售数</th>
+                        <td><input name="sales_num" type="text" size="10" value="{$res.sales_num}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>下架时间</th>
+                        <td><input id="datepicker" name="outofdate_time" class="measure-input" type="text" size="30" readonly value="{$res.outofdate_time|date='Y-m-d H:i:s',###}"/></td>
+                    </tr>
+                    <tr>
+                        <th>排序</th>
+                        <td>
+                            <input name="sort_num" type="text" size="10" value="{$res.sort_num}" class="measure-input"/>
+                            *数值越大优先级越高
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="1" <if condition="$res['status'] eq '1'">checked</if> />开启</label>
+                <label><input type="radio" name="status" value="0" <if condition="$res['status'] eq '0'">checked</if> />关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

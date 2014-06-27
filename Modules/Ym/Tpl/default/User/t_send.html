@@ -1,0 +1,64 @@
+<include file="Common:header" />
+<div class="common-mian">
+	<div class="c-tit">
+		找回密码
+	</div>
+    <form action="/index.php/User/UcValid" method="get">
+	<div class="email-r">
+		<div class="email-con-c">
+			<div>
+				<var>您要认证手机号码：</var>
+				<em>{$username}</em>输入有误？ 
+				<a href="javascript:;" onclick="window.history.go(-1)">返回重新输入</a>
+			</div>
+			<dl class="auth-code">
+				<dt>
+					<p class="auth-code-p">
+						<a href="###" id="send"><var>50</var>秒后重新获取</a>
+						<em>验证码已发送，请查收！</em>
+					</p>
+				</dt>
+				<dd class="auth-code-num">
+					<em>验证码：</em>
+					<input type="text" name="code" class="login-ipt2"/>
+				</dd>
+				<dd>
+					<input type="button" value="提 交" class="login-sub" hidefocus>
+					<input type="button" value="取 消" class="login-sub2">
+				</dd>
+			</dl>
+		</div>
+	</div>
+    </form>
+	<div class="t-model">
+		<p class="t-model-t">没有收到验证码？您可以：</p>
+		<p><span>▪</span>网络繁忙，请您稍等几分钟</p>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+     $("#send").click(function(){ 
+        var st = $("#send").text();
+        if(st=="重新获取"){
+            window.location.reload();
+        }
+     })
+     function init(){
+        var st = $("#send").text();
+        time = 49;
+        if(st!="重新获取"){
+            var tao = setInterval(function(){
+				if(time>0){
+					$("#send").html("<var>"+time--+"</var>秒后重新获取");
+				}else{
+					$("#send").html("重新获取");
+					clearInterval(tao);
+				}
+			},1000);
+        }
+     
+     }
+     init();
+})
+</script>
+<include file="Common:footer" />

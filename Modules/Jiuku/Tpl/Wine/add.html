@@ -1,0 +1,306 @@
+<include file="Common:cpheader" />
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/kindeditor-min.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/zh_CN.js"></script>
+<script language="javascript">
+var editor;
+var winelabelbtn;
+var wineimgbtn;
+KindEditor.ready(function(K) {
+	editor = K.create("#content", {
+		uploadJson:			"{:Url('upload')}&type=Wine/uploads",
+		allowFileManager:	false,
+		afterBlur:			function(){this.sync()}
+	});
+
+    winelabelbtn = K.uploadbutton({
+        button : K('#winelabelbtn')[0],
+        fieldName : 'winelabelFile',
+        url : "{:Url('upload')}&type=Wine/labels",
+        afterUpload : function(data) {
+            if (data.error === 0) {
+                var html ='<div class="selected_box"><input name="label_filename[]" type="hidden" value="'+data.filename+'" /><img src="'+data.url+'" /><div><p><var>年份</var><input name="label_year[]" type="text" value="" /></p></div><span class="del_selected" onclick="labelbox_del(this);"></span></div>';
+                $("#label_list_box").append(html);
+            }else{
+                alert(data.message);
+            }
+        }
+    });
+    $(":input[name='winelabelFile']").css('width','72px');
+    winelabelbtn.fileBox.change(function(e) {
+        winelabelbtn.submit();
+    });
+
+    wineimgbtn = K.uploadbutton({
+        button : K('#wineimgbtn')[0],
+        fieldName : 'wineimgFile',
+        url : "{:Url('upload')}&type=Wine/images",
+        afterUpload : function(data) {
+            if (data.error === 0) {
+                var html ='<div class="selected_box"><input name="img_filename[]" type="hidden" value="'+data.filename+'" /><img src="'+data.url+'" /><div><p><var>描述</var><input name="img_description[]" type="text" /></p><p><var>ALT</var><input name="img_alt[]" type="text" /></p><p><var>排序</var><input name="img_queue[]" type="text" /></p></div><span class="del_selected" onclick="imgbox_del(this);"></span></div>';
+                $("#img_list_box").append(html);
+            }else{
+                alert(data.message);
+            }
+        }
+    });
+    $(":input[name='wineimgFile']").css('width','72px');
+    wineimgbtn.fileBox.change(function(e) {
+        wineimgbtn.submit();
+    });
+});
+function imgbox_del(this1){
+    $(this1).parent().remove();
+}
+function labelbox_del(this1){
+    $(this1).parent().remove();
+}
+</script>
+
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<style>
+.selector_msg{
+	color:red;
+}
+.selector_expand{
+	display:none;
+}
+.boxes div{display:inline-block; margin:1px 5px; padding:2px; border:1px solid #D0D0D0;}
+.boxes span{ margin:1px 5px; padding:2px; cursor:pointer;}
+.boxes span:hover{color:red;}
+</style>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/wineMarage.js"></script>
+<script language="javascript">
+function select_winetype(id){
+	$(".boxes").find("div").attr({style:""});
+	$(".boxes").find("span").attr({style:""});
+	if($("input[name='winetype_id']").val() == id){
+		$("input[name='winetype_id']").val(0);
+	}else{
+		$("input[name='winetype_id']").val(id);
+		$("#winetype_"+id).attr({style:"color:red;"});
+		$("#winetype_"+id).parentsUntil(".boxes","div").attr({style:"border:1px solid #3CF;"});
+	}
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">酒款列表</a> > 添加酒款</div>
+    <div class="form">
+		<form name="myform" action="{:Url('add')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="backpage" value="{$backpage}">
+			<input type="hidden" name="jump_url" value="">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">关联属性</li>
+                <li id="tab_setting_3" onclick="SwapTab('tab_setting_3','tab_3');">SEO相关</li>
+                <li id="tab_setting_4" onclick="SwapTab('tab_setting_4','tab_4');">相关图片</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">外文名</th>
+                        <td><input type="text" size="80" name="fname" value="{$res.fname}" class="measure-input"/><em></em></td>
+                    </tr>
+                    <tr>
+                        <th width="130">英文名</th>
+                        <td><input type="text" size="80" name="ename" value="{$res.ename}" class="measure-input"/><em></em></td>
+                    </tr>
+                    <tr>
+                        <th width="130">中文别名</th>
+                        <td>
+                            <textarea id="caname_textarea" name="caname" readonly="readonly" style="width:50%; height:50px;"><volist name="res.caname_res" id="vo">{$vo.cname};</volist></textarea>
+                            <br>
+                            <input id="caname_input" type="text" size="80" class="measure-input"/>
+                            <input id="caname_btn" type="button" value="添加" style="padding:4px;" />
+                            <input type="button" value="重置" style="padding:4px;" onclick="javascript:$('#caname_textarea').val('');" />
+                            <script>
+                            $("#caname_btn").click(function(){
+                                var cname = $.trim($("#caname_input").val());
+                                cname = cname.replace(/\s+/g,' ');
+                                if(cname != ''){
+                                    $("#caname_textarea").val($("#caname_textarea").val()+cname+';');
+                                }
+                                $("#caname_input").val('')
+                            })
+                            </script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">内容</th>
+						<td><textarea style="width:90%; height:400px;" name="content" id="content">{$res.content}</textarea></td>
+                    </tr>
+                    </tr>
+                        <th width="130">状态</th>
+                        <td>
+                        	<input type="radio" name="status" value="1" checked />
+                            开启
+                            <if condition="!$into_dzjp_winelabel_scan_record_res">
+                            <input type="radio" name="status" value="-1" />
+                            关闭
+                            </if>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+            	<table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">类型</th>
+						<td>
+                        	<input name="winetype_id" type="hidden" value="" />
+                            <div class="boxes">
+                            	<volist name="winetypeList" id="vo">
+                                <div>
+                                    <span id="winetype_{$vo.id}" onclick="select_winetype({$vo.id});">{$vo.cname}</span>
+                                    <volist name="vo.son_res" id="vos">
+                                    <div>
+                                    	<span id="winetype_{$vos.id}" onclick="select_winetype({$vos.id});">{$vos.cname}</span>
+                                        <volist name="vos.son_res" id="voss">
+                                        <div><span id="winetype_{$voss.id}" onclick="select_winetype({$voss.id});">{$voss.cname}</span></div>
+                                        </volist>
+                                    </div>
+                                    </volist>
+                                </div>
+                                </volist>
+                            </div>
+                            <script language="javascript">select_winetype(<?php echo $res['winetype_id']; ?>)</script>
+						</td>
+                    </tr>
+                	<tr>
+                        <th width="130">所属国家</th>
+                        <empty name="res.country_res">
+						<td><input id="ini_country_id" name="country_id" type="hidden" value="0" /><input class="country_radio_input measure-input" type="text" /></td>
+                        <else />
+						<td><input id="ini_country_id" name="country_id" type="hidden" value="0" disabled="disabled" /><input class="country_radio_input measure-input" type="text" style="display:none;" /><div class="selected_box"><input name="country_id" type="hidden" value="{$res.country_res.id}" /><div>{$res.country_res.fname} ╱ {$res.country_res.cname}</div><a class="del_selected" href="javascript:void(0)" onclick="country_radio_input_del(this);"></a></div></td>
+                        </empty>
+                    </tr>
+                	<tr>
+                        <th width="130">所属产区</th>
+						<td>
+                            <input class="region_choose_input measure-input" type="text" />
+                            <div class="selector_list_box">
+                                <volist name="res.join_region_res" id="vo">
+                                <div class="selected_box">
+                                	<input name="joinregion_region_id[]" type="hidden" value="{$vo.region_id}" />
+                                    <div>{$vo.region_fname} ╱ {$vo.region_cname}</div>
+                                    <a class="del_selected" href="javascript:void(0)" onclick="region_choose_input_del(this);"></a>
+                                </div>
+                                </volist>
+                            </div>
+						</td>
+                    </tr>
+                	<tr>
+                        <th width="130">所属庄园</th>
+						<td>
+                            <input class="winery_choose_input measure-input" type="text" />
+                            <div class="selector_list_box">
+                                <volist name="res.join_winery_res" id="vo">
+                                <div class="selected_box">
+                                	<input name="joinwinery_winery_id[]" type="hidden" value="{$vo.winery_id}" />
+                                    <div>{$vo.winery_fname} ╱ {$vo.winery_cname}</div>
+                                    <a class="del_selected" href="javascript:void(0)" onclick="winery_choose_input_del(this);"></a>
+                                </div>
+                                </volist>
+                            </div>
+						</td>
+                    </tr>
+                	<tr>
+                        <th width="130">葡萄品种</th>
+						<td>
+                            <input class="grape_choose_input measure-input" type="text" percentage="true" />
+                            <div class="selector_list_box">
+                            	<volist name="res.join_grape_res" id="vo">
+                            	<div class="selected_box">
+                                	<input name="joingrape_grape_id[]" type="hidden" value="{$vo.grape_id}" />
+                                	<div>
+                                    	<input name="joingrape_grape_percentage[]" style="width:30px;" value="{$vo.grape_percentage}" />%
+                                    	{$vo.grape_fname} ╱ {$vo.grape_cname}
+                                    </div>
+                                    <a class="del_selected" href="javascript:void(0)" onclick="grape_choose_input_del(this);"></a>
+                                </div>
+                                </volist>
+                            </div>
+						</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_3" style="display:none">
+            	<table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">seo标题</th>
+						<td><input type="text" size="80" name="seo_t" value="{$res.seo_t}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">seo关键字</th>
+						<td><textarea style="width:60%; height:40px;" name="seo_k">{$res.seo_k}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th width="130">seo描述</th>
+						<td><textarea style="width:60%; height:40px;" name="seo_d">{$res.seo_d}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_4" style="display:none">
+            	<table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">酒标</th>
+                        <td>
+                            <input type="button" id="winelabelbtn" value="选择图片" />
+                            <div id="label_list_box">
+                                <volist name="res.label_res" id="vo">
+                                <div class="selected_box">
+                                    <input name="label_filename[]" type="hidden" value="{$vo.filename}" />
+                                    <img src="{:C('DOMAIN.UPLOAD')}Jiuku/Wine/labels/{$vo.filename}" />
+                                    <div>
+                                        <p><var>年份</var><input name="label_year" type="text" value="{$vo.year}" /></p>
+                                    </div>
+                                    <span class="del_selected" onclick="labelbox_del(this);"></span>
+                                </div>
+                                </volist>
+                                <if condition="$into_dzjp_winelabel_scan_record_res"><!-- 大众酒评酒标扫描记录代入信息 -->
+                                <div class="selected_box">
+                                    <input name="into_dzjp_winelabel_scan_record_id" type="hidden" value="{$into_dzjp_winelabel_scan_record_res.id}" />
+                                    <input name="into_dzjp_winelabel_scan_record_img" type="hidden" value="{:C('SCAN_WINE_LABEL_URL_PATH')}{$into_dzjp_winelabel_scan_record_res.filename}" />
+                                    <img src="{:C('SCAN_WINE_LABEL_URL_PATH')}{$into_dzjp_winelabel_scan_record_res.filename}" />
+                                    <div>
+                                        <p><var>年份</var><input name="into_dzjp_winelabel_scan_record_year" type="text" value="" /></p>
+                                    </div>
+                                    <span class="del_selected" onclick="labelbox_del(this);"></span>
+                                </div>
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">相关图片</th>
+                        <td>
+                            <input type="button" id="wineimgbtn" value="选择图片" />
+                            <div id="img_list_box">
+                                <volist name="res.img_res" id="vo">
+                                <div class="selected_box">
+                                    <input name="img_filename[]" type="hidden" value="{$vo.filename}" />
+                                    <img src="{:C('DOMAIN.UPLOAD')}Jiuku/Wine/images/{$vo.filename}" />
+                                    <div>
+                                        <p><var>描述</var><input name="img_description[]" type="text" value="{$vo.description}" /></p>
+                                        <p><var>ALT</var><input name="img_alt[]" type="text" value="{$vo.alt}" /></p>
+                                        <p><var>排序</var><input name="img_queue[]" type="text" value="{$vo.queue}" /></p>
+                                    </div>
+                                    <span class="del_selected" onclick="imgbox_del(this);"></span>
+                                </div>
+                                </volist>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="button" class="btn" value="提交" onclick="checkSubmit();" />
+                <if condition="!$into_dzjp_winelabel_scan_record_res">
+                <input type="button" class="btn" value="提交并添加酒的年份" onclick="checkSubmit('{:Url('Jiuku/Ywine/add?wine_id=')}');" />
+                </if>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

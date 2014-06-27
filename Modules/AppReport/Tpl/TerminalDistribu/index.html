@@ -1,0 +1,316 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+
+<!--[if lte IE 8]><script src="__PUBLIC__/flot/excanvas.min.js"></script><![endif]-->
+<script src="__PUBLIC__flot/jquery-1.8.3.min.js"></script>
+<script src="__PUBLIC__flot/jquery.flot.min.js"></script>
+<script src="__PUBLIC__flot/jquery.flot.time.min.js"></script>
+<script src="__PUBLIC__flot/jquery.flot.canvas.min.js"></script>
+<script src="__PUBLIC__flot/jquery.flot.categories.min.js"></script>
+
+<script>
+    //画图
+    function tubiao(data, eID){
+        $(eID).css({
+            height: '300px',
+            width: '1000px',
+            border:'1px solid'
+        });
+        console.log(data);
+        $.plot(eID, [ data ], {
+            
+            series: {
+                bars: {
+                    show: true,
+                    barWidth: 0.6,
+                    align: "center",
+                    fillColor:'#4095b5'
+                }                
+            },
+            xaxis: {
+                mode: "categories",
+                tickLength: 0
+            },          
+            grid: {
+                borderWidth:1,
+                backgroundColor: '#fff'
+            }
+        });
+    }
+    //tab切换
+    function SwapTab(id1, id2) {
+        $(".tab-nav").each(function(){
+            $(this).children("iframe").css('display','none');
+        });
+        $(".on").each(function(){
+            $(this).removeClass('on');
+        });
+        $("#" + id1).addClass('on');
+        $("#" + id2).children("iframe").css('display', 'block');
+    }
+    //变量声明       
+        //机型
+    var ticks = [],
+        //分辨率
+        fticks = [],
+        //点击状态 1-机型，2-分辨率
+        zdType = 1
+            ;
+    $(function(){
+        //默认加载
+        $.ajax({
+            url : '/index.php?app=AppReport&m=TerminalDistribu&a=ajaxjx',
+            data: 'type='+1+'&t=zt',
+            type : 'get',
+            dataType : 'json',
+            success : function(data){
+                for(i in data){
+                    ticks.push([data[i].model, data[i].new_user_ratio]);
+                }
+            tubiao(ticks, "#placeholder1");
+            }
+        });
+        $.ajax({
+            url : '/index.php?app=AppReport&m=TerminalDistribu&a=ajaxfbl',
+            data: 'type='+1+'&t=zt',
+            type : 'get',
+            dataType : 'json',
+            success : function(data){
+                for(i in data){
+                    fticks.push([data[i].model, data[i].new_user_ratio]);
+                }
+            }
+        });
+        //机型与分辨率切换
+        $(".tab_setting").unbind().each(function(){
+            $(this).click(function(){
+                var id = $(this).attr("id");
+                $("#placeholder1").html("");
+                    if(id == "tab_setting_1"){
+                        tubiao(ticks, "#placeholder1"); 
+                        zdType = 1;
+                    }
+                    if(id == "tab_setting_2"){
+                        tubiao(fticks, "#placeholder1");
+                        zdType = 2;
+                    }
+            });
+        }); 
+        //版本切换
+        $("#type").change(function(){
+            var type=$("#type option:selected").val();
+            var src="/index.php?app=AppReport&m=TerminalDistribu&a=zt&type="+type;
+            var src2 = '/index.php?app=AppReport&m=TerminalDistribu&a=fzt&type='+type;
+            $("#tab_1 iframe").attr('src', src);
+            $("#tab_2 iframe").attr('src', src2);
+            $("#placeholder1").html("");
+            $.ajax({
+                url : '/index.php?app=AppReport&m=TerminalDistribu&a=banben',
+                data: 'type='+type,
+                type : 'get',
+                dataType : 'json',
+                success : function(data){
+                    ticks = [];
+                    for(var i in data){
+                        ticks.push([data[i].model, data[i].new_user_ratio]);
+                    }
+                    //检测是否是选中 机型 状态
+                    (zdType == 1) && tubiao(ticks, "#placeholder1");
+                }
+            }); 
+            $.ajax({
+                url : '/index.php?app=AppReport&m=TerminalDistribu&a=fbanben',
+                data: 'type='+type,
+                type : 'get',
+                dataType : 'json',
+                success : function(data){
+                    fticks = [];
+                    var i = 0,
+                    l = data.length;
+                    for(; i < l; i++){
+                        fticks.push([data[i].model, data[i].new_user_ratio]); 
+                    } 
+                    //检测是否是选中 分辨率 状态
+                    (zdType == 2) && tubiao(fticks, "#placeholder1");
+                }
+            }); 
+        });
+        //日期
+        $(".choose").click(function(){
+            var val=$(this).attr('value');
+            var type=$("#type option:selected").val();
+            var src="/index.php?app=AppReport&m=TerminalDistribu&a="+val+"&type="+type;
+            if (val == 'week') {
+                var src2 = '/index.php?app=AppReport&m=TerminalDistribu&a=fweek&type='+type;
+                $("#tab_2 iframe").attr('src', src2);
+            }else if(val == 'mounth'){
+                var src3 = '/index.php?app=AppReport&m=TerminalDistribu&a=fmounth&type='+type;
+                $("#tab_2 iframe").attr('src', src3);
+            }else{
+                var src4 = '/index.php?app=AppReport&m=TerminalDistribu&a=fzt&type='+type;
+                $("#tab_2 iframe").attr('src', src4);
+            }
+            $("#tab_1 iframe").attr('src', src);
+            $("#placeholder1").html("");
+            
+            $.ajax({
+                url : '/index.php?app=AppReport&m=TerminalDistribu&a=ajaxjx',
+                data: 'type='+type+'&t='+val,
+                type : 'get',
+                dataType : 'json',
+                success : function(data){
+                    ticks = [];
+                    for(var i in data){
+                        ticks.push([data[i].model, data[i].new_user_ratio]);
+                    }
+                    //检测是否是选中 机型 状态
+                    (zdType == 1) && tubiao(ticks, "#placeholder1");
+                }
+            });
+            $.ajax({
+                url : '/index.php?app=AppReport&m=TerminalDistribu&a=ajaxfbl',
+                data: 'type='+type+'&t='+val,
+                type : 'get',
+                dataType : 'json',
+                success : function(data){
+                    fticks = [];
+                    var i = 0,
+                    l = data.length;
+                    for(; i < l; i++){
+                        fticks.push([data[i].model, data[i].new_user_ratio]); 
+                    } 
+                    //检测是否是选中 分辨率 状态
+                    (zdType == 2) && tubiao(fticks, "#placeholder1");
+                }
+            });
+        });
+        //时间区间
+        $("#search").click(function(){
+            var type=$("#type option:selected").val();
+            var stime=$("#btime").val();
+            var etime=$("#etime").val();
+            if (stime !== '' && etime !== '') {
+                var src="/index.php?app=AppReport&m=TerminalDistribu&a=jsh&type="+type+"&stime="+stime+"&etime="+etime;
+                var src2="/index.php?app=AppReport&m=TerminalDistribu&a=fsh&type="+type+"&stime="+stime+"&etime="+etime;
+                $("#tab_1 iframe").attr('src', src);
+                $("#tab_2 iframe").attr('src', src2);
+                $("#placeholder1").html("");
+                
+                $.ajax({
+                    url : '/index.php?app=AppReport&m=TerminalDistribu&a=ajaxjsh',
+                    data: 'type='+type+'&stime='+stime+'&etime='+etime,
+                    type : 'get',
+                    dataType : 'json',
+                    success : function(data){
+                        ticks = [];
+                    for(var i in data){
+                        ticks.push([data[i].model, data[i].new_user_ratio]);
+                    }
+                    //检测是否是选中 机型 状态
+                    (zdType == 1) && tubiao(ticks, "#placeholder1");
+                    }
+                });
+
+                $.ajax({
+                    url : '/index.php?app=AppReport&m=TerminalDistribu&a=ajaxfsh',
+                    data: 'type='+type+'&stime='+stime+'&etime='+etime,
+                    type : 'get',
+                    dataType : 'json',
+                    success : function(data){
+                        fticks = [];
+                        var i = 0,
+                        l = data.length;
+                        for(; i < l; i++){
+                            fticks.push([data[i].model, data[i].new_user_ratio]); 
+                        } 
+                        //检测是否是选中 分辨率 状态
+                        (zdType == 2) && tubiao(fticks, "#placeholder1");
+                    }
+                });
+            };
+            
+        });
+    });
+</script>
+
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('AppReport/TerminalDistribuAction/index')}">终端报表</a> > 终端分布</div>
+    <div class="div-box-default">
+        <select name="type" id="type">
+            <option value='1'>大众酒评 Android</option>
+            <option value='2'>大众酒评 IOS</option>
+        </select>
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('News/Pub/add')}" method="post" enctype="multipart/form-data">
+            <div class="search">
+                <table width="100%" cellspacing="0" class="search-form">
+                <form action="{:Url('News/Pub/index')}" method="post">
+                    <tbody>
+                        <tr>
+                            <td width="">
+                                
+                                &nbsp;&nbsp;
+                                &nbsp;&nbsp;
+                                终端分布：
+                                <a href="javascript:" value="zt" class="choose">昨天</a>
+                                &nbsp;&nbsp;
+                                <a href="#" value="week" class="choose">近7日</a>
+                                &nbsp;&nbsp;
+                                <a href="#" value="mounth" class="choose">近30日</a>
+                                &nbsp;&nbsp;
+                                &nbsp;&nbsp;
+                                发布时间：
+                                <input name="btime" id="btime" size="20" type="text" value="{$_REQUEST['btime']}" class="input-text" />
+                                -&nbsp;
+                                <input name="etime" id="etime" size="20" type="text" value="{$_REQUEST['etime']}" class="input-text" />
+                                    <script type="text/javascript">
+                                        Calendar.setup({
+                                            inputField : "btime",
+                                            trigger    : "btime",
+                                            onSelect   : function() { this.hide() },
+                                            showTime   : 24,
+                                            dateFormat : "%Y-%m-%d"
+                                        });
+                                        Calendar.setup({
+                                            inputField : "etime",
+                                            trigger    : "etime",
+                                            onSelect   : function() { this.hide() },
+                                            showTime   : 24,
+                                            dateFormat : "%Y-%m-%d"
+                                        });
+                                    </script>
+                                &nbsp;&nbsp;
+                                <input type="button" class="btn" id="search" value="搜索" />
+                        </td>
+                        </tr>
+                    </tbody>
+                </form>
+                </table>
+            </div>
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on tab_setting" onclick="SwapTab('tab_setting_1','tab_1');">机型</li>
+                <li id="tab_setting_2" class="tab_setting" onclick="SwapTab('tab_setting_2','tab_2');">分辨率</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <div class="demo-container">
+                    <div id="placeholder1" class="demo-placeholder"></div>
+                </div>
+                <iframe src="/index.php?app=AppReport&m=TerminalDistribu&a=zt&type=1" width="1200px" height='600px' frameborder="0"></iframe>
+            </div>
+            
+            <div class="tab-nav" id="tab_2">
+                <iframe src="/index.php?app=AppReport&m=TerminalDistribu&a=fzt&type=1" width="1200px" height='600px' frameborder="0"></iframe>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+</script>
+<include file="Common:cpfooter" />

@@ -1,0 +1,30 @@
+<include file="Common:header" />
+<div class="common-mian">
+	<div class="c-tit">
+		设置新密码
+	</div>
+	<div class="email-r">
+    <form action="/index.php/User/reSetPass" method="post">
+		<div class="email-con-c">
+			<div>
+				复杂的密码可以有效保障您账户的安全
+			</div>
+			<dl class="auth-code">
+				<dd class="auth-code-num">
+					<em>新密码:</em>
+					<input type="password" name="pass"  class="login-ipt1"/>
+				</dd>
+				<dd class="auth-code-num" style="margin-left:-85px;">
+					<em>确认新密码:</em>
+					<input type="password" name="repass" class="login-ipt1"/>
+				</dd>
+			</dl>
+			<div class="email-sub">
+				<input type="submit" value="提 交" class="login-sub" hidefocus>
+				<input type="button" value="取 消" class="login-sub2">
+			</div>
+		</div>
+    </form>
+	</div>
+</div>
+<include file="Common:footer" />

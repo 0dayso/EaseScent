@@ -1,0 +1,286 @@
+<include file="Common:cpheader2" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'再次添加',callback:function(){window.location.href = window.location.href;}},
+                    {name:'复制添加'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭窗口'}
+                );
+            }
+        }
+    });
+    $('#updimg').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#updimg_msg").text(progress + '%');
+        },
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html = '<div class="selbox"><input name="imgs[]" type="hidden" value="'+data.result.img+'" /><img src="{:C(\'DOMAIN.UPLOAD\')}Jiuku/Wine/images/'+data.result.img+'" /><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#updimg_box").append(html);
+            }
+            //拖拽排序
+            $( "#updimg_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+            $( "#updimg_box" ).disableSelection();
+            //拖拽排序end
+        }
+    });
+});
+function barcode_a(){
+    var barcode = $("#barcode_text").val();
+    if(barcode == ''){
+        art.dialog({
+            content: '<span style="color:#c00;">增加失败！“条形码”不可为空。</span>',
+            button: [{name: '关闭窗口'}],
+            time: 2,
+        });
+        return false;
+    }
+    if($("#barcode_box").find("input[value='"+barcode+"']").length != 0){
+        art.dialog({
+            content: '<span style="color:#c00;">增加失败！“条形码”已被增加。</span>',
+            button: [{name: '关闭窗口'}],
+            time: 2,
+        });
+        return false;
+    }
+    $.post("{:Url('add')}",{'type':'ini_barcode','barcode':barcode},function(msg){
+        if(msg.error != 0){
+            art.dialog({
+                content: '<span style="color:#c00;">'+msg.msg+'</span>',
+                button: [{name: '关闭窗口'}],
+                time: 2,
+            });
+        }else{
+            var html = '<div class="selbox"><input name="barcodes[]" type="hidden" value="'+barcode+'" />'+barcode+'<span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+            $("#barcode_box").append(html);
+        }
+        $("#barcode_text").val('');
+    },'json');
+}
+//brand_autocomplete
+$(function(){
+    $("#brand_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $("#brand_l").css('z-index',1);
+            $.post("{:Url('OutAcAjax/getBrandForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.value}
+                    }));
+                }
+                $("#brand_l").css('z-index',-1);
+            },'json');
+        },
+        select: function(event, ui){
+            if($("#brand_box").find("div[key='"+ui.item.id+"']").length == 0){
+                var html = '<div class="selbox" key="'+ui.item.id+'" ><input name="brand_ids[]" type="hidden" value="'+ui.item.id+'" /><div><span>'+ui.item.label+'</span></div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#brand_box").append(html);
+            }
+        },
+        close: function(event, ui){
+            $(this).val('');
+        }
+    });
+});
+function brand_s(){
+    $("#brand_text").focus();
+    $("#brand_text").autocomplete("search", "");
+}
+//brand_autocomplete/
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库管理</a> >
+        <a href="{:Url('index')}">洋酒酒款列表</a> >
+        添加洋酒酒款
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('add')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">关联属性</li>
+                <li id="tab_setting_3" onclick="SwapTab('tab_setting_3','tab_3');">相关图片</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">中文名</th>
+                        <td>
+                            <input name="cname" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[必填] [唯一]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>英文名</th>
+                        <td>
+                            <input name="ename" type="text" size="80" value="" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>条形码</th>
+                        <td>
+                            <input id="barcode_text" type="text" size="60" value="" class="measure-input"/>
+                            <span class="symbol-add" onclick="barcode_a();"></span>
+                            <span class="msg_span">[必须]</span>
+                            <div id="barcode_box"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>酒精度（°C）</th>
+                        <td>
+                            <input name="alcohol_degree" type="text" size="20" value="" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>净含量</th>
+                        <td>
+                            <input name="capacity" type="text" size="20" value="" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>包装规格</th>
+                        <td>
+                            <input name="specificat" type="text" size="40" value="" class="measure-input"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>官方指导价格（￥）</th>
+                        <td>
+                            <input name="official_price" type="text" size="20" value="" class="measure-input"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>酒厂</th>
+                        <td>
+                            <input name="brew_house" type="text" size="80" value="" class="measure-input"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>原料</th>
+                        <td>
+                            <input name="raw_material" type="text" size="120" value="" class="measure-input"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>描述</th>
+                        <td>
+                            <textarea name="description" style="width:500px;height:30px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>商品特点</th>
+                        <td>
+                            <textarea name="product_features" style="width:500px;height:30px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>酿造工艺</th>
+                        <td>
+                            <textarea name="brew_process" style="width:500px;height:30px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>荣誉奖项</th>
+                        <td>
+                            <textarea name="honor_awards" style="width:500px;height:30px;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none;">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">所属产地</th>
+                        <td>
+                            <select name="region_id">
+                            <option value="0">请选择</option>
+                            <volist name="region_list" id="vo">
+                            <option value="{$vo.id}">{$vo.cname}</option>
+                            </volist>
+                            </select>
+                            <span class="msg_span">[必选]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属类型</th>
+                        <td>
+                            <select name="type_id">
+                            <option value="0">请选择</option>
+                            <volist name="type_list" id="vo">
+                            <option value="{$vo.id}">{$vo.cname}</option>
+                            </volist>
+                            </select>
+                            <span class="msg_span">[必选]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属品牌</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="brand_text" type="text" size="40" value="" class="measure-input" />
+                                <input id="brand_id" name="brandy_id" type="hidden" value="0"/>
+                                <span id="brand_s" class="autocomplete-sel" onclick="brand_s();"></span>
+                                <span id="brand_l" class="autocomplete-loading"></span> 
+                            </div>
+                            <div id="brand_box"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_3" style="display:none;">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">相关图片（多选）</th>
+                        <td>
+                            <input id="updimg" name="updimg" type="file" multiple />
+                            <span id="updimg_msg">可拖拽排序</span>
+                            <div id="updimg_box"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" />开启</label>
+                <label><input type="radio" name="status" value="2" checked/>关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter2" />

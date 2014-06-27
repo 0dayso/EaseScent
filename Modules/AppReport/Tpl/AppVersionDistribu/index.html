@@ -1,0 +1,89 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__flot/appversion.js"></script>
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('AppReport/Index/index')}">终端报表</a> >
+        应用-版本分布
+    </div>
+    <div class="div-box-default">
+        <select id="apptype">
+            <volist name="_applist" id="vo">
+            <option value="{$vo.id}">{$vo.name}</option>
+            </volist>
+        </select>
+    </div>
+    <div class="div-box-default">
+        <div class="search">
+            <table width="100%" cellspacing="0" class="search-form">
+                <tbody>
+                    <tr>
+                        <td>Top10版本分布趋势：
+                            <a href="javascript:;" class="days" day="7">近7日</a>
+                            <a href="javascript:;" class="days" day="30">近30日</a>
+                            <a href="javascript:;" class="days" day="0">全部</a>
+                            <input type="hidden" name="timesection" value="">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <input type="radio" id="radio1" name="rel" cat="newuser" checked>
+            <label for="radio1">新增用户</label>&nbsp;
+            <input type="radio" id="radio2" name="rel" cat="activeuser">
+            <label for="radio2">活跃用户</label>&nbsp;
+            <input type="radio" id="radio3" name="rel" cat="starttime">
+            <label for="radio3">启动次数</label>&nbsp;
+            <input type="hidden" name="cat" value="newuser">
+        </div>
+        <div class="div-box-default">
+            <div id="topTen"></div>
+        </div>
+    </div>
+    <div class="div-box-default">
+        <div id="table">
+            <div class="search">
+            <table width="100%" cellspacing="0" class="search-form">
+                <tbody>
+                    <tr>
+                        <td width="">版本分布统计：
+                            <!-- 时间：
+                            <input name="btime" id="btime" size="20" type="text" value="" class="input-text" />
+                            -&nbsp;
+                            <input name="etime" id="etime" size="20" type="text" value="" class="input-text" />
+                                <script type="text/javascript">
+                                    Calendar.setup({
+                                        inputField : "btime",
+                                        trigger    : "btime",
+                                        onSelect   : function() { this.hide() },
+                                        showTime   : 24,
+                                        dateFormat : "%Y-%m-%d %H:%M:%S"
+                                    });
+                                    Calendar.setup({
+                                        inputField : "etime",
+                                        trigger    : "etime",
+                                        onSelect   : function() { this.hide() },
+                                        showTime   : 24,
+                                        dateFormat : "%Y-%m-%d %H:%M:%S"
+                                    });
+                                </script>
+                            &nbsp;&nbsp; -->
+                            <!-- <select name="vlist">
+                                <option value="">全部版本</option>
+                                <volist name="verno" id="vo">
+                                    <option>{$vo.version}</option>
+                                </volist>
+                            </select>
+                            <input type="submit" name="search" class="btn" value="搜索" /> -->
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <iframe id="extra" src="/index.php?app=AppReport&m=AppVersionDistribu&a=verlist" width="100%" height="500px"></iframe>
+    </div>
+</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

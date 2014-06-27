@@ -1,0 +1,81 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/UserGroup/index')}">用户组管理</a> > 资讯栏目权限设定</div>
+    <div class="list-menu">
+        设定<font style="font-weight:bold; color:#cc0000">“{$group.name}”</font>用户组对资讯栏目的权限
+    </div>
+    <form action="{:Url('NewsAuth/index')}" method="post">
+    <input type="hidden" name="gid" value="{$group.gid}">    
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="100">CATID</th>
+                    <th>用户组名称</th>
+					<th>项目权限设定</th>
+                </tr>
+            </thead>
+			<tbody>
+            <tr>
+				<td></td>
+				<td></td>
+                <td>
+                    <label><input type="checkbox" onclick="checkboxSelect('check-see')" id="check-see"> 查看</label>
+                    <label><input type="checkbox" onclick="checkboxSelect('check-add')" id="check-add"> 发表</label>
+                    <label><input type="checkbox" onclick="checkboxSelect('check-edit')" id="check-edit"> 编辑</label>
+                    <label><input type="checkbox" onclick="checkboxSelect('check-del')" id="check-del"> 删除</label>
+                    <label><input type="checkbox" onclick="checkboxSelect('check-status')" id="check-status"> 改变审核状态</label>
+                    <label><input type="checkbox" onclick="checkboxSelect('check-html')" id="check-html"> 生成HTML</label>
+                </td>
+			</tr>
+			<volist id="vo" name="category">
+            <tr>
+				<td>{$vo.catid}</td>
+				<td>{$vo.name}</td>
+                <td>
+                    <label><input class="check-see" type="checkbox" name="auth[{$vo.catid}][]" <if condition="$auth[$vo['catid']]['see'] neq ''">checked</if> value="see"> 查看</label>
+                    <label><input class="check-add" type="checkbox" name="auth[{$vo.catid}][]" <if condition="$auth[$vo['catid']]['add'] neq ''">checked</if> value="add"> 发表</label>
+                    <label><input class="check-edit" type="checkbox" name="auth[{$vo.catid}][]" <if condition="$auth[$vo['catid']]['edit'] neq ''">checked</if> value="edit"> 编辑</label>
+                    <label><input class="check-del" type="checkbox" name="auth[{$vo.catid}][]" <if condition="$auth[$vo['catid']]['del'] neq ''">checked</if> value="del"> 删除</label>
+                    <label><input class="check-status" type="checkbox" name="auth[{$vo.catid}][]" <if condition="$auth[$vo['catid']]['status'] neq ''">checked</if> value="status"> 改变审核状态</label>
+                    <label><input class="check-html" type="checkbox" name="auth[{$vo.catid}][]" <if condition="$auth[$vo['catid']]['html'] neq ''">checked</if> value="html"> 生成HTML</label>
+                </td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    <div class="bottom"><input type="submit" value="提交" class="btn"> <label> <input type="checkbox" id="check-all"> 全选</label> </div>
+    </div>
+    </form>
+</div>
+<script>
+    var checkboxSelect = function(id){
+        var aa = $("#" + id).attr('checked');
+        if(aa == 'checked') {
+            $("." + id).each(function() {
+                this.checked=true;
+            });
+        } else {
+            $("." + id).each(function() {
+                this.checked=false;
+            });
+        }
+    }
+
+    $(function(){
+        $("#check-all").click(function(){
+            var aa = $(this).attr('checked');
+            if(aa == 'checked') {
+                $("input[type=checkbox]").each(function() {
+                    this.checked=true;
+                });
+            } else {
+                $("input[type=checkbox]").each(function() {
+                    this.checked=false;
+                });
+            }
+        });
+    })
+
+</script>
+<include file="Common:cpfooter"/>

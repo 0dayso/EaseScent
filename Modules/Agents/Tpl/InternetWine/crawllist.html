@@ -1,0 +1,170 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+if(self.frameElement == null){
+	$("html").remove();
+}
+function drop_this(id){
+	$.post("{:Url('Agents/Public/dropCapturDataForId')}",{'id':id},function(msg){
+		if(msg == 1){
+			$("#td_"+id).remove();
+		}
+	});
+}
+function show_this(this1){
+	var jsondata = $(this1).next().next("textarea").val();
+	var data = eval("("+jsondata+")");
+	var content_html = '<table width="100%" cellspacing="0" class="table-form"><tr><th>所属网站</th><td>'+data.internet_sales_name+'</td></tr><tr><th>链接(web)</th><td><a href="'+data.url+'" target="_blank">'+data.url+'</a></td></tr><tr><th>链接(wap)</th><td><a href="'+data.m_url+'" target="_blank">'+data.m_url+'</a></td></tr><tr><th>外文名</th><td>'+data.fname+'</td></tr><tr><th>中文名</th><td>'+data.cname+'</td></tr><tr><th>年份</th><td>'+data.year+'</td></tr><tr><th>价格</th><td>'+data.price+'</td></tr>';
+    content_html += '<tr><th>图片</th><td>';
+    if(data.img == '' && data.z_img == '' && data.f_img == ''){
+        content_html += '<span style="color:red;">没有图片</span>';
+    }else{
+        if(data.z_img != ''){
+            content_html += '<img style="max-height:98px;border:1px red solid;margin:2px;" title="正标" src="'+data.z_img+'">';
+        }
+        if(data.f_img != ''){
+            content_html += '<img style="max-height:98px;border:1px blue solid;margin:2px;" title="副标" src="'+data.f_img+'">';
+        }
+        var imgarr = data.img.split(',');
+        $.each(imgarr,function(i,n){
+            content_html += '<img style="max-height:98px;border:1px #555 solid;margin:2px;" title="其他图片" src="'+n+'">';
+        })
+    }
+	content_html += '</td></tr><tr><th>状态</th><td>';
+    if(data.status == 1){
+        content_html += '上架';
+    }else if(data.status == 2){
+        content_html += '下架';
+    }else if(data.status == 3){
+        content_html += '无货';
+    }else if(data.status == 4){
+        content_html += '删除';
+    }else{
+        content_html += '无状态';
+    }
+    content_html += '</td></tr><tr><th>操作</th><td><input type="button" value="选择" onclick="sel_this(this);" style="padding:2px 4px;" /><textarea style="display:none;">'+jsondata+'</textarea></td></table>';
+	var show_capture_data_dialog = art.dialog({
+		id : 'show_capture_data',
+		title : '预览',
+		lock: true,
+		content: content_html,
+	});
+
+}
+function sel_this(this1){
+	var jsondata = $(this1).next("textarea").val();
+	var data = eval("("+jsondata+")");
+	if(detect_year(data.year) != 1){
+		data.year = '';
+		alert("年份检测失败！请手动填选。");
+	}
+    $(window.parent.document).find("input[name='key']").val(data.key);
+    $(window.parent.document).find("input[name='fname']").val(data.fname);
+	$(window.parent.document).find("input[name='cname']").val(data.cname);
+	$(window.parent.document).find("textarea[name='yearstr']").val(data.year);
+	$(window.parent.document).find("input[name='price']").val(data.price);
+    $(window.parent.document).find("input[name='url']").val(data.url);
+    $(window.parent.document).find("input[name='wap_url']").val(data.m_url);
+    var img_arr = data.img.split(',');
+    if(data.z_img){
+        img_arr.push(data.z_img);
+    }
+    if(data.f_img){
+        img_arr.push(data.f_img);
+    }
+    parent.grab_image(img_arr.join(','));
+    /*var imgarr = data.img.split(',');
+    $.each(imgarr,function(i,n){
+        parent.grab_image(n);
+    })*/
+	parent.sort_year();
+    $(window.parent.document).find("#price_time_span").html('<select name="price_time" style="border:1px solid blue;color:blue;"><option value="0">请选择该价格的有效时间</option><option value="-1">1.使用当前时间（即点击提交时的时间）</option><option value="'+data.time+'">2.数据抓取时间（即'+data.date+'）</option></select>');
+    $(window.parent.document).find("#capture_data_tr").find("td").html('<label for="is_del_this_capture_data" style="cursor:pointer;color:blue;"><input id="is_del_this_capture_data" name="capture_data_id" type="checkbox" checked="checked" value="'+data.id+'" />&nbsp;添加后抓取数据列表将不再显示该条数据</label>')
+	parent.close_capture_data();
+}
+function detect_year(str){
+	var is = 1;
+	var arr = str.split(',')
+	$.each(arr,function(i,n){
+		if((1900 <= n <= <?php echo date('Y'); ?> && n.length == 4) || n === 'NV' || n === 'NOYEAR'){
+		}else{
+			is = 0;
+		}
+	});
+	return is;
+}
+</script>
+<div id="table">
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('capture_data')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        所属网站：
+                        <select name="internet_sales_name">
+                            <option value="">全部</option>
+                            <volist name="internet_sales_res" id="vo">
+                            <option value="{$vo.internet_sales_name}" <if condition="$_REQUEST['internet_sales_name'] eq $vo['internet_sales_name']">selected="selected"</if>>{$vo.internet_sales_name}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        关键字：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        状态<span style="color:red;" title="现仅有网酒网与酒美网有状态区分，也买酒品尚红酒皆为无状态">[?]</span>：
+                        <select name="status">
+                            <option value="-1" <if condition="$_REQUEST['status'] eq '-1'">selected="selected"</if>>全部</option>
+                            <option value="1" <if condition="$_REQUEST['status'] eq '1'">selected="selected"</if>>上架</option>
+                            <option value="2" <if condition="$_REQUEST['status'] eq '2'">selected="selected"</if>>下架</option>
+                            <option value="3" <if condition="$_REQUEST['status'] eq '3'">selected="selected"</if>>无货</option>
+                            <option value="4" <if condition="$_REQUEST['status'] eq '4'">selected="selected"</if>>删除</option>
+                            <option value="0" <if condition="$_REQUEST['status'] eq '0'">selected="selected"</if>>无状态</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>外文名</th>
+                    <th>中文名</th>
+                    <th>年份</th>
+                    <th>价格</th>
+                    <th>所属网站</th>
+                    <th>状态</th>
+                    <th width="120">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr id="td_{$vo.id}">
+                    <td>{$vo.id}</td>
+                    <td>{$vo.fname}</td>
+                    <td>{$vo.cname}</td>
+                    <td>{$vo.year}</td>
+                    <td>{$vo.price}</td>
+                    <td>{$vo.internet_sales_name}</td>
+                    <td>
+                        <if condition="$vo['status'] eq 1">上架
+                        <elseif condition="$vo['status'] eq 2"/>下架
+                        <elseif condition="$vo['status'] eq 3"/>无货
+                        <elseif condition="$vo['status'] eq 4"/>删除
+                        <else />无状态
+                        </if>
+                    </td>
+                    <td><input type="button" value="预览" onclick="show_this(this);" style="padding:2px 4px;" /> <input type="button" value="选择" onclick="sel_this(this);" style="padding:2px 4px;" /><textarea style="display:none;"><?php echo json_encode($vo); ?></textarea> <input type="button" value="移除" onclick="drop_this({$vo.id});" style="padding:2px 4px; color:red;" /></td>
+                </tr>
+                </volist>
+        	</tbody>
+        </table>
+    	<div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

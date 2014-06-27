@@ -1,0 +1,25 @@
+<!doctype html>
+<html class="bg" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	<title>热门葡萄品种</title>
+	<link rel="stylesheet" type="text/css" href="{:C('DOMAIN.PUBLIC')}Jiuku/css/grape/wap_index.css">
+</head>
+<body class="bg">
+	<div id="wapwarp">
+		<h2 class="hosttitle">红葡萄</h2>
+		<ul class="hostlist">
+			<volist name="res.red" id="vo">
+			<li><a href="{$vo.id}.shtml">{$vo.cname}</a></li>
+			</volist>
+		</ul>
+		<h2 class="hosttitle">白葡萄</h2>
+		<ul class="hostlist">
+			<volist name="res.white" id="vo">
+			<li><a href="{$vo.id}.shtml">{$vo.cname}</a></li>
+			</volist>
+		</ul>
+	</div>
+</body>
+</html>

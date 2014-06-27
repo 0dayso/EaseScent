@@ -1,0 +1,61 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Vote/Index/index')}">投票管理</a> > 投票主题列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}&_backpage={$_pageurl}">添加投票主题</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" type="text" value="{$_GET['keyword']}" class="input-text" placeholder="主题、置放页面" />
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>主题</th>
+                    <th>起始时间 - 结束时间 （状态）</th>
+                    <th>置放页面</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.title}</td>
+                    <td><?php $nowtime = time(); ?>
+                        {$vo.btime|date='Y-m-d H:i:s', ###} - {$vo.etime|date='Y-m-d H:i:s', ###}
+                        <if condition="$vo['btime'] gt $nowtime">
+                        <span style="color:blue;">（未开始）</span>
+                        <elseif condition="$vo['etime'] lt $nowtime" />
+                        <span style="color:red;">（已结束）</span>
+                        <else />
+                        <span style="color:green">（进行中）</span>
+                        </if>
+                    </td>
+                    <td>{$vo.url}</td>
+                    <td>
+                        <a href="{:Url('edit')}&id={$vo.id}&_backpage={$_pageurl}">编辑</a>
+                        <a href="{:Url('del')}&id={$vo.id}&_backpage={$_pageurl}" target="delete" title='确定要删除ID为“{$vo.id}”的投票主题吗？' style="color:red;">删除</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

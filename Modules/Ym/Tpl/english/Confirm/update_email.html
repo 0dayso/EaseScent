@@ -1,0 +1,60 @@
+<include file="Common:header" />
+    <div class="re_main clear">
+    	<div class="re_main_l">
+            <include file="Common:menu" />
+        </div>
+        <div class="re_main_r">
+        	<h3 class="re_main_r_h3">Email Verification</h3>
+            <div class="bb1cccccc"></div>
+            <div class="mt20 fs14">Change Email</div>
+            <p class="ml6 mt14 f14">Old E-mail： {$userinfo.email}   
+            <strong>
+                <if condition="$userinfo.email_valid eq 1">Verified<else/>Not Verified</if>
+            </strong></p>
+            <p class="mt20">
+            <input type="text" id="change_email" class="w578inp w378" /> 
+            <var class="col959595 f14">Enter the email address you want</var></p>
+            <p class="mt14"><a href="#" class="pinkBtn"><span>Submit and send verification email</span></a></p>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+$(function(){
+	$("#change_email").focusout(function(){
+		var email = $.trim($("#change_email").val());
+		if(email==""){
+			$(this).next().text("Please Enter your email");
+			$(this).next().css({color:"red"});
+		}else{
+			$.post("/index.php/User/check_email",{email:email},function(result){
+				if(result.status==1){
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"#555"});
+				}else{
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"red"});
+				}
+			},"json");
+		}
+	});
+	$("#update_email_btn").click(function(){
+		var email = $.trim($("#change_email").val());
+		if(email==""){
+			$("#change_email").next().text("Please Enter your email");
+			$("#change_email").next().css({color:"red"});
+		}else{
+			$.post("/index.php/Confirm/update_email_do",{email:email},function(result){
+				if(result.status==1){
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"#555"});
+					window.location.href = result.jumpUrl;
+				}else{
+					$("#change_email").next().text(result.message);
+					$("#change_email").next().css({color:"red"});
+				}
+			},"json")
+		}
+	})
+})
+</script>
+</html>

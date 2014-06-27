@@ -1,0 +1,286 @@
+<include file="Common:header" />
+<include file="Agent:header" />
+	<div class="z_aWrap clear">
+	<include file="Common:godos_leftSide" />
+		<form id="myform" action="__URL__/updateGoods" method="post" >
+			<div class="z_aWrap_r">
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+							<td align="right" class="td1" width="20%"> <span style="color:red;" id="require">*</span>{$Think.lang.winename}：</td>
+							<td>
+								<div class="por" id="por_hidden">
+									<if condition="$goodsData['goodsInfo']['wineid']">
+										<input style="width:570px;" type="" id="z_aWrap_r_showBox_Inp" name="winename"  autocomplete="off" class="validate[wine_name] text-input" value="{$goodsData['goodsInfo']['fname']}/{$goodsData['goodsInfo']['cname']}" />
+									<else />
+										<input style="width:570px;" type="text" id="z_aWrap_r_showBox_Inp" name="winename"  autocomplete="off" class="validate[wine_name] text-input" value="{$goodsData['goodsInfo']['cname']}" />
+									</if>
+
+
+									<p class="z_aWrap_r_showBox_p" id="NameReplace"></p>
+									<p class="z_aWrap_r_showBox" id="searchList"></p>
+								</div>
+							</td>
+						</tr>
+
+
+
+
+						<tr>
+							<td align="right" class="td1"><span style="color:red;" id="require">*</span>{$Think.lang.wineimg}：</td>
+							<td>
+								<ul class="upLoadPicUl clear">
+									<php>$imgNum= 0;</php>
+									<volist id="vo" name="goodsData['imgs_url']">
+									 	<php>$imgNum++;</php>
+										<li>
+											<input name="img_file[{$vo.id}]"   type="hidden" value="{$vo.img_url}">
+											<input name="img_queue[{$vo.id}]"  type="hidden" value="{$vo.sort_order}">
+											<input name="img_id[]"     type="hidden" value="{$vo.id}">
+											<img src="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images/{$vo.img_url}" height="100%" width="113px;">
+											<p class="pic_closeBtn">
+												<img src="__PUBLIC__/Expo/img/pic_closeBtn.gif" onclick="delImg(-1,this)">
+											</p>
+											<a href="#" onclick="first(this)"></a>
+										</li>
+									</volist>
+									<li >
+										 <a href="javascript:;" id="file_uploadify" class="uploadify"></a>
+	                                </li>
+								</ul>
+							</td>
+						</tr>
+
+
+
+
+						<tr>
+							<td align="right" class="td1" > <span style="color:red;" id="require">*</span>{$Think.lang.winetype}：</td>
+							<td id="wineTypeListTd">
+								 <if condition="$goodsData['goodsInfo']['typeid'] && $goodsData['goodsInfo']['second_typeid']">
+									<select id="wineTypeList" name="winetype" class="validate[wine_select]">
+										<option value="{$goodsData['goodsInfo']['typeid']}|{:strtr($goodsData['goodsInfo']['typename'],',','|')}">
+											{$goodsData['goodsInfo']['typename']}
+										</option>
+									</select>
+									<select id="wineType" name="type" style="">
+										<option value="{$goodsData['goodsInfo']['second_typeid']}|{:strtr($goodsData['goodsInfo']['second_typename'],',','|')}">
+											{$goodsData['goodsInfo']['second_typename']}
+										</option>
+									</select>
+								<else />
+									<input name="wineTypeList_input" id="wineTypeListTd_input" value="{$goodsData['goodsInfo']['typename']}">
+							        <i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"></i>
+								</if>
+									<p class="replace_winetype" id="r_winetype" ></p>
+									<input id="replace_winetype_input" name="winetype_input" type="hidden">
+							</td>
+						</tr>
+
+
+
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.proportion}：</td>
+							<td>
+								<div id="percent">
+									<span class="ratio">
+										<if condition="$goodsData['goodsInfo']['variety']">
+												<volist id="vo" name="goodsData['goodsInfo']['variety']">
+												<input class="inp1" name="inp[]" type="text" value="{$vo.0}" />
+												<input class="inp2" name="inp_percent[]" type="text" value="{$vo.1}"/>%
+												</volist>
+										<else />
+												<input class="inp1" name="inp[]" type="text"  />
+												<input class="inp2" name="inp_percent[]" type="text" />%
+										</if>
+									</span>
+									<span id="addRatioBtnId" class="addRatioBtn">
+											<img src="__PUBLIC__/Expo/img/z_aWrap_addRAtioBtn38x38.gif" id="addRatioBtn" />
+									</span>
+		                        </div>
+							</td>
+						</tr>
+
+
+
+
+						<tr>
+							<td align="right" class="td1"><span style="color:red;" id="require">*</span>{$Think.lang.country}：</td>
+							<td id="countryListTd">
+								<select class="validate[wine_country]"  class="country" id="countryList" name="country"  <if condition="!$goodsData['goodsInfo']['country_id']"> style="display:none;" </if>>
+									<option value="{$goodsData['goodsInfo']['country_id']}|{:strtr($goodsData['goodsInfo']['country_name'],',','|')}">
+										{$goodsData['goodsInfo']['country_name']}
+									</option>
+								</select>
+								<if condition="!$goodsData['goodsInfo']['country_id']">
+									<input value="{$goodsData['goodsInfo']['country_name']}" name="countryList_input" id="countryList_input">
+									<i><img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"></i>
+								</if>
+								<p class="replace_country" id="r_country" ></p>
+								<input name="country_input" id="replace_country_input" type="hidden">
+							</td>
+						</tr>
+
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.region}：</td>
+							<td id="regionListTd">
+								<select id="regionList" name="region"  <if condition="!$goodsData['goodsInfo']['region_id']"> style="display:none;" </if>>
+									<option value="{$goodsData['goodsInfo']['region_id']}|{:strtr($goodsData['goodsInfo']['region_name'],',','|')}">
+										{$goodsData['goodsInfo']['region_name']}
+									</option>
+								</select>
+								<if condition="!$goodsData['goodsInfo']['region_id']">
+									<input name="regionListTd_input" value="{$goodsData['goodsInfo']['region_name']}" id="regionListTd_input"><i>
+									<img src="__PUBLIC__/Expo/img/z_aWrapCloseBtn20x20.png"></i>
+								</if>
+								<p class="replace_region" id="r_region" ></p>
+								<input name="region_input" id="replace_region_input" type="hidden">
+							</td>
+						</tr>
+
+
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.awards}：</td>
+							<td>
+								<input type="text" class="w280"  name="awards" value="{$goodsData['goodsInfo']['awards']}"/>
+							</td>
+						</tr>
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.alcoholic_strength}</td>
+							<td>
+								<input type="text"  class="validate[custom[number],min[1]] " name="strength" value="<php> echo $goodsData['goodsInfo']['strength'] ? $goodsData['goodsInfo']['strength'] : '';</php>"/>
+								%
+							</td>
+						</tr>
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.volume}：</td>
+							<td>
+
+								<select name="volume">
+									<option value="">{$goodsData['goodsInfo']['volume']}</option>
+									<option value="187ML">187ML</option>
+									<option value="375ML">375ML</option>
+									<option value="500ML">500ML</option>
+									<option value="750ML">750ML</option>
+									<option value="1L">1L</option>
+									<option value="3L">3L</option>
+									<option value="5L">5L</option>
+									<option value="6L">6L</option>
+								</select>
+								ml
+							</td>
+						</tr>
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.agent_price}：</td>
+							<td>
+								<label>
+								<php>$checked =""; if($goodsData['goodsInfo']['price_type']==1)$checked ="checked";	</php>
+							    <input type="radio" name="price_type" value="1" {$checked} />
+									面议
+								</label>
+								<php>$checked =""; if($goodsData['goodsInfo']['price_type']==0)$checked ="checked";	</php>
+								<label>
+									<input type="radio" name="price_type" value="0" {$checked} id="radio_other_price" />
+									其他
+								</label>
+								<input type="text" class="w100"   id="wine_price" name="wine_price" value="<php> echo $goodsData['goodsInfo']['goods_price'] ? $goodsData['goodsInfo']['goods_price']:''; </php>"/>
+								<php>
+									$m=''; if($goodsData['goodsInfo']['currency']==1) $m='selected = "selected"';
+								</php>
+								<select name="currency">
+									<option selected = "selected" value="0">人民币</option>
+									<option {$m} value="1">美元</option>
+								</select>
+							</td>
+						</tr>
+
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.minimum_purchase}：</td>
+							<td>
+								<input class="validate[custom[integer],min[1]] w40"  type="text"  name="minimum" value="<php> echo $goodsData['goodsInfo']['minimum'] ? $goodsData['goodsInfo']['minimum']: '';</php>"/>
+								瓶
+							</td>
+						</tr>
+
+
+
+						<tr>
+							<td align="right" class="td1" valign="top">{$Think.lang.describe}：</td>
+							<td>
+								<include file="Common:editor" />
+							</td>
+						</tr>
+
+
+						<tr>
+							<td align="right" class="td1">&nbsp;</td>
+							<td>
+								<input type="submit"  class="form-submit" value="提  交" style="width:197px;">
+								<input type="submit" name="submit_and_add" class="form-submit" value="提交继续发布" style="width:400px;">
+								<input type="hidden" value="{$goodsData['goodsInfo']['goods_id']}" name="goods_id">
+							</td>
+						</tr>
+
+
+					</tbody>
+				</table>
+			</div>
+		</form>
+	</div>
+
+<script language="javascript" src="__PUBLIC__/Expo/js/expo_product.js"></script>
+<script type="text/javascript">
+	var Jk_Api_getCountry_Url  = "__WEBSITE__{:U('JkApi/getCountry')}";
+	var Jk_Api_getType_Url     = "__WEBSITE__{:U('JkApi/getType')}";
+	var Jk_Api_getRegion_Url   = "__WEBSITE__{:U('JkApi/getRegion')}";
+	var Jk_Api_getData_Url     = "__WEBSITE__{:U('JkApi/getData')}";
+	var Jk_Api_getFullData_Url = "__WEBSITE__{:U('JkApi/getFullData')}";
+	var Public                 = "__PUBLIC__";
+	var cur_img_num 		   = {$imgNum}; //图片数量 初始化
+	jQuery(document).ready(function(){
+	    // binds form submission and fields to the validation engine
+	    jQuery("#myform").validationEngine();
+	});
+
+	$(document).ready(function() {
+		/*监控用户用户~行为*/
+		monitor_ActWineName();
+		monitor_ActCountry();
+		monitor_ActRegion();
+		monitor_ActRegionInput();
+		monitor_ActWineType();
+		monitor_ActWinTpyeInput();
+		monitor_WineNameCancel();
+		monitor_AddInpInput();
+		monitor_imgColse();
+		/*end*/
+
+		/*数据初始化*/
+		getCountryList();      //初始化国家信息  （初始化信息）
+		getWineTypeList();	   //获取酒品类型    （初始化信息）
+		init_uploadify();      //flash 上传
+		/*end*/
+
+
+		/*图片上传控制*/
+		if (cur_img_num >3) {
+			$(".upLoadPicUl li").last().html('<a href="javascript:;" id="file_uploadify"></a>').hide();
+		}
+	});
+</script>
+<include file="Common:footer" />
+

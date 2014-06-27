@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>{$title}</title>
+<meta name="description" content="{$description}" />
+<meta name="keywords" content="{$keywords}" />
+<link rel="stylesheet" type="text/css" href="__CSS__/common.css"/>
+<script src="__CJS__/jquery.min.js" type="text/javascript"></script>
+<script src="__JS__/common.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="top-bg">
+	<div class="top-box">
+		<h1><a href="/index.php"></a></h1>
+		<if condition="$front_ym_user.qy_name neq false">
+			<div class="reg-infor">
+				<a href="__EXPO_HOST__/index.php/YmApi/skipQy">{$front_ym_user.qy_name}</a>
+                |
+                <a  href="/index.php">帐号管理</a>
+                |
+                <a  href="__EXPO_HOST__/index.php?m=Select&a=index">我的Expo</a>
+                 | 
+				<a href="/index.php/User/loginout" hidefocus>退出</a>
+			</div>
+        <else/>
+			<div class="reg-infor">
+                <span> 
+                    <a  href="/index.php/Index/index/t/english/l/ym-en">
+                        <img src="__IMG__/english/EnglishIco.gif"> EngLish
+                    </a>
+                    <a  href="/index.php/Index/index/t/default/l/ym-zh">
+                        <img src="__IMG__/english/chinaIco.gif"> 中文版
+                    </a>
+                </span>
+            </div>
+		</if>
+	</div>
+</div>

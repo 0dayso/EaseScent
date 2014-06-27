@@ -1,0 +1,88 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Dzjp/Index/index')}">大众酒评管理</a> >
+        代理商实体店报错列表
+    </div>
+    <div class="list-menu">
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        <!-- 反馈实体店：
+                        <input id="keyword" type="text" value="{$_GET['keyword']}" class="input-text" placeholder="" />
+                        &nbsp;&nbsp; -->
+                        用户昵称：
+                        <input name="uname" type="text" value="{$_GET['uname']}" class="input-text" placeholder="" />
+                        &nbsp;&nbsp;
+                        报错类型：
+                        <select name="error_type">
+                            <option value="">全部</option>
+                            <volist name="_error_type" id="vo">
+                            <option <if condition="$key eq $_GET['error_type']" >selected</if> value="{$key}">{$vo}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="have_feedback">
+                            <option value="">全部</option>
+                            <option <if condition="'1' eq $_GET['have_feedback']" >selected</if> value="1">已反馈</option>
+                            <option <if condition="'0' eq $_GET['have_feedback']" >selected</if> value="0">未反馈</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>报错时间</th>
+                    <th>实体店名称（ID）</th>
+                    <th>实体店联系方式</th>
+                    <th>报错类型</th>
+                    <th>其他信息</th>
+                    <th>报错用户昵称</th>
+                    <th>报错用户联系方式</th>
+                    <th width="60">状态</th>
+                    <th width="60">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.report_time|date="Y-m-d H:i:s",###}</td>
+                    <td><if condition="$vo['store_sales_res']">{$vo.store_sales_res.name}（{$vo.store_sales_res.id}）<else/>-</if></td>
+                    <td><if condition="$vo['store_sales_res']['tel']">{$vo.store_sales_res.tel}<else/>-</if></td>
+                    <td>{$_error_type[$vo['error_type']]}</td>
+                    <td><span title="{$vo.other}">{$vo.sother}</span></td>
+                    <td><if condition="$vo['uname']">{$vo.uname}<else/>-</if></td>
+                    <td><if condition="$vo['contact_info']">{$vo.contact_info}<else/>-</if></td>
+                    <td>
+                        <if condition="$vo['have_feedback'] eq 0">
+                        <span style="color:#cc0000">未反馈</span>
+                        <elseif condition="$vo['have_feedback'] eq 1"/>
+                        <span style="color:#00cc00">已反馈</span>
+                        </if>
+                    </td>
+                    <td>
+                        <a href="{:Url('feedback')}&id={$vo.id}&_backpage={$_pageurl}">反馈</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

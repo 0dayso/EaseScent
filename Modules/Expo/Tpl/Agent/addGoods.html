@@ -1,0 +1,193 @@
+<include file="Common:header" />
+<include file="Agent:header" />
+	<div class="z_aWrap clear">
+		<include file="Common:godos_leftSide" />
+		<form id="myform" action="{:U('Agent/addGoods')}" method="post" >
+			<div class="z_aWrap_r">
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+							<td align="right" class="td1" width="20%"> <span style="color:red;" id="require">*</span>{$Think.lang.winename}：</td>
+							<td>
+								<div class="por" id="por_hidden">
+									<input style="width:570px;" type="text" id="z_aWrap_r_showBox_Inp" name="winename"  autocomplete="off" class="validate[wine_name] text-input"  />
+									<p class="z_aWrap_r_showBox_p" id="NameReplace"></p>
+									<p class="z_aWrap_r_showBox" id="searchList" ></p>
+									<iframe id="DivShim" src="javascript:false;" scrolling="no" frameborder="0" style="position:absolute; top:0px; left:0px; display:none;"></iframe>
+								</div>
+							</td>
+						</tr>
+						<tr>
+
+							<td align="right" class="td1"><span style="color:red;" id="require">*</span>{$Think.lang.wineimg}:</td>
+							<td>
+								<ul class="upLoadPicUl clear">
+									<input id="is_upload_image" class="validate[upload_imge]"    style="width:1px;height:1px;padding:0;">
+									<li>
+	                                    <a href="javascript:;" id="file_uploadify"></a>
+	                                </li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="td1" > <span style="color:red;" id="require">*</span>{$Think.lang.winetype}：</td>
+							<td id="wineTypeListTd">
+								<select id="wineTypeList" name="winetype" class="validate[wine_select]">
+									<option value="">请选择</option>
+								</select>
+								<select id="wineType" name="type" style="display:none;">
+									<option value="">请选择</option>
+								</select>
+								<p class="replace_winetype" id="r_winetype" ></p>
+								<input id="replace_winetype_input" name="winetype_input" type="hidden"></td>
+						</tr>
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.proportion}：</td>
+							<td>
+								<div id="percent">
+									<span class="ratio">
+										<input class="inp1" class="" name="inp[]" type="text" />
+										<input class="validate[custom[integer],min[1]] inp2" name="inp_percent[]" type="text" />%
+									</span>
+									<span id="addRatioBtnId" class="addRatioBtn">
+										<img src="__PUBLIC__/Expo/img/z_aWrap_addRAtioBtn38x38.gif" id="addRatioBtn" />
+									</span>
+	                        </div>
+							</td>
+						</tr>
+
+						<tr>
+							<td align="right" class="td1"><span style="color:red;" id="require">*</span>{$Think.lang.country}：</td>
+							<td id="countryListTd">
+								<select class="validate[wine_country]"  class="country" id="countryList" name="country" >
+									<option value="">请选择</option>
+								</select>
+								<p class="replace_country" id="r_country" ></p>
+								<input name="country_input" id="replace_country_input" type="hidden"></td>
+						</tr>
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.region}：</td>
+							<td id="regionListTd">
+								<select id="regionList" name="region">
+									<option>请选择</option>
+								</select>
+								<p class="replace_region" id="r_region" ></p>
+								<input name="region_input" id="replace_region_input" type="hidden">
+							</td>
+						</tr>
+
+
+						<tr>
+							<td align="right" class="td1">{$Think.lang.awards}：</td>
+							<td>
+								<input type="text" class="w280"  name="awards"/>
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="td1">{$Think.lang.alcoholic_strength}：</td>
+							<td>
+								<input class="validate[custom[number],min[1]]"  type="text" class="w30" name="strength" />
+								%
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="td1">{$Think.lang.volume}：</td>
+							<td>
+								<select name="volume">
+									<option >选择容量</option>
+									<option value="187ML">187ML</option>
+									<option value="375ML">375ML</option>
+									<option value="500ML">500ML</option>
+									<option value="750ML">750ML</option>
+									<option value="1L">1L</option>
+									<option value="3L">3L</option>
+									<option value="5L">5L</option>
+									<option value="6L">6L</option>
+								</select>
+								ml
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="td1" >{$Think.lang.agent_price}：</td>
+							<td>
+								<label>
+									<input type="radio" name="price_type" checked value="1" />
+									{$Think.lang.discuss_personally}：
+								</label>
+								<label>
+									<input type="radio" name="price_type"  id="radio_other_price" value="0"/>
+									{$Think.lang.other}：
+								</label>
+								<input class="w100" type="text"  name="wine_price" id="wine_price" />
+								<select name="currency">
+									<option value="0">人民币</option>
+									<option value="1">美元</option>
+									<option value="2">欧元</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="td1">{$Think.lang.minimum_purchase}：</td>
+							<td>
+								<input class="validate[custom[integer],min[1]]" type="text" size="2" value="1" name="minimum" />	瓶
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="td1" valign="top"> {$Think.lang.describe}：</td>
+							<td>
+								<include file="Common:editor" />
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="td1">&nbsp;</td>
+							<td>
+								<input type="submit"  class="form-submit" value="提  交" style="width:197px;">
+								<input type="submit" name="submit_and_add" class="form-submit" value="提交继续发布" style="width:400px;">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</form>
+	</div>
+
+
+<script language="javascript" src="__PUBLIC__/Expo/js/expo_product.js"></script>
+<script type="text/javascript">
+	var Jk_Api_getCountry_Url  = "__WEBSITE__{:U('JkApi/getCountry')}";
+	var Jk_Api_getType_Url     = "__WEBSITE__{:U('JkApi/getType')}";
+	var Jk_Api_getRegion_Url   = "__WEBSITE__{:U('JkApi/getRegion')}";
+	var Jk_Api_getData_Url     = "__WEBSITE__{:U('JkApi/getData')}";
+	var Jk_Api_getFullData_Url = "__WEBSITE__{:U('JkApi/getFullData')}";
+	var Public                 = "__PUBLIC__";
+	var cur_img_num 		   = 0; //图片数量         初始化
+	jQuery(document).ready(function(){
+	    // binds form submission and fields to the validation engine
+	    jQuery("#myform").validationEngine();
+	});
+
+	jQuery(document).ready(function() {
+	/*监控用户用户~行为*/
+		monitor_ActWineName();
+		monitor_ActCountry();
+		monitor_ActRegion();
+		monitor_ActRegionInput();
+		monitor_ActWineType();
+		monitor_ActWinTpyeInput();
+		monitor_WineNameCancel();
+		monitor_AddInpInput();
+	/*end*/
+
+	/*数据初始化*/
+		getCountryList();      //初始化国家信息  （初始化信息）
+		getWineTypeList();	   //获取酒品类型    （初始化信息）
+		init_uploadify();      //flash 上传
+	/*end*/
+
+	});
+
+</script>
+<include file="Common:footer" />

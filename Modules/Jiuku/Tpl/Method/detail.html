@@ -1,0 +1,83 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">总代理申请列表</a> > 总代理申请详情</div>
+    <div class="form">
+        <ul class="tabBut cu-li">
+            <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+        </ul>
+        <div class="tab-nav" id="tab_1">
+            <table width="100%" cellspacing="0" class="table-form">
+                <tr>
+                    <th width="130">企业外文名称</th>
+                    <td>{$list.fname}</td>
+                </tr>
+                <tr>
+                    <th width="130">企业中文名称</th>
+                    <td>{$list.cname}</td>
+                </tr>
+                <tr>
+                    <th width="130">企业地址</th>
+                    <td>{$list.address}</td>
+                </tr>
+                <tr>
+                    <th width="130">登录账号</th>
+                    <td>{$list.zhanghao}|待解决</td>
+                </tr>
+                <tr>
+                    <th width="130">企业电话</th>
+                    <td>{$list.tel}</td>
+                </tr>
+                <tr>
+                    <th width="130">认证资料</th>
+                    <td>{$list.method_data}</td>
+                </tr>
+                <tr>
+                    <th width="130">申请类型</th>
+                    <td><if condition="$list.auth_method eq 1" ><font color="red">资质图片</font><elseif condition="$list.auth_method eq 2" /><font color="red">电子邮件验证</font><else /><font color="red">酒庄官网信息验证</font></if></td>
+                </tr>
+                <tr>
+                    <th width="130">申请类型</th>
+                    <td>
+                        <if condition="$list.type eq 1">按品牌申请总代理<else />按酒款申请总代理</if>&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <th width="130">申请的品牌/酒款</th>
+                    <if condition="$list.type eq 1">
+                    <td>{$list.winery_fname}<if condition="$list.winery_cname neq ''"> / {$list.winery_cname}</if></td>
+                    <else />
+                    <td>{$list.wine_fname}<if condition="$list.winery_cname neq ''"> / {$list.wine_cname}</if></td>
+                    </if>
+                </tr>
+                <if condition="$abne neq ''">
+                <tr>
+                    <th width="130">认证异常</th>
+                    <td>
+                        <table width="100%" cellspacing="0" border="1">
+                            <tr>
+                                <th width="30">选择</th>
+                                <th width="400" text-align="center">已存在总代理的酒款</th>
+                                <th text-align="center">总代理资格所属企业</th>
+                            </tr>
+                            <volist name="abn" id="abn">
+                            <tr>
+                                <td><input type="checkbox" checked="checked" value="" id="check_box" onclick="selectAll('ids[]');"></td>
+                                <td><font color="red">{$abn.wine_fname} <if condition="$abn.wine_cname neq ''">/ {$abn.wine_cname}</if></font></td>
+                                <td><font color="red"></font>{$abn.fname} <if condition="$abn.cname neq ''">/ {$abn.cname}</if></td>
+                            </tr>
+                            </volist>
+                        </table>
+                    </td>
+                </tr>
+                </if>
+            </table>
+        </div>
+        <input type="hidden" name="abn" value="{$abn}" />
+        <input type="hidden" name="aid" value="{$list.agent_id}" />
+        <input type="hidden" name="type" value="{$list.type}" />
+        <input type="hidden" name="type_id" value="{$list.type_id}" />
+        <input type="hidden" name="wine_id" value="{$list.wine_id}" />
+        <input type="hidden" name="winery_id" value="{$list.winery_id}" />
+    </div>
+</div>
+<include file="Common:cpfooter" />

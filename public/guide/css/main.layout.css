@@ -1,0 +1,42 @@
+@charset "utf-8";
+/* CSS Document */
+
+body,h1,h2,h3,h4,h5,p,table,tr,td,em,i,dl,dd,dt,ul,li,strong,span,input,form,textarea{ margin:0; padding:0;}
+
+body,button,input,select,textarea{font:12px/1.5 "微软雅黑",arial,\5b8b\4f53;color:#393939;}
+
+ul li{ list-style:none;}
+
+a{ text-decoration:none;}
+
+img{ border:0;}
+
+.clear{zoom:1;}
+
+.clear:after{ display:block; content:""; visibility:hidden; height:0; clear:both;}
+
+table{ border-collapse:collapse;}
+
+table tr td{ border:none;}
+.winedg{ width:1000px; overflow:hidden; margin:0 auto;}
+.daogou{ width:1000px; height:349px; background:url(../images/bg_daogou.jpg) no-repeat 0 center; margin-bottom:15px;}
+.daogou_left{ width:646px; height:349px; float:left;}
+.daogou_left a{ width:620px; overflow:hidden; display:block; margin:0 auto; margin-top:13px;}
+.daogou_left a img{ display:block;}
+.daogou_right{ width:354px; height:349px; float:right;}
+.daogou_right h1,h2,h1 a,h2 a{ width:354px; overflow:hidden; display:block; font-family:"微软雅黑";}
+.daogou_right h1 a{ font-family:"微软雅黑"; font-size:16px; line-height:16px; color:#333; margin-top:13px; font-size:16px; line-height:16px;height: 16px;width: 320px;overflow: visible;}
+.daogou_right h2 a{ color:#555; line-height:23px; font-size:14px; margin-top:7px;_margin-top:5px;}
+.daogou_right h3{ width:354px; margin-top:12px;}
+.daogou_right h3 var{ width:300px; overflow:hidden; font-family:"微软雅黑"; font-size:35px; line-height:35px; color:#fd4c02; text-align:left; _margin-top:10px; float:left; font-style:normal; display:block;margin-top:12px}
+.daogou_right h3 span{ width:34px; height:18px; margin-top: 8px; background:url(../images/winebg01.jpg) no-repeat 0 center; position:absolute; float:right;}
+
+.daogou_right h3 em{ position:relative; font-style:normal;font-family:"微软雅黑"; font-size:14px; line-height:14px; color:#d20653; top:-10px; right:-15px;}
+.daogou_right h4{ width:354px; overflow:hidden;}
+.daogou_right h4 a{ width:105px; overflow:hidden; display:block; margin-top:13px;_ margin-top:8px;}
+.daogou_right h4 img{ width:105px; height:36px;display:block;}
+
+.daogou_right .winelist{ width:354px; margin-top:17px;_margin-top:13px;}
+.winelist li{ width:354px;}
+.winelist li span{ width:76px; float:left; font-family:"微软雅黑"; font-size:14px; line-height:24px; color:#333; display:block;}
+.winelist li p{ width:278px; overflow:hidden; float:right; display:block;font-family:"微软雅黑"; font-size:14px; line-height:24px; color:#555;}

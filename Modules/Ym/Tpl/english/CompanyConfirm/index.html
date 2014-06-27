@@ -1,0 +1,42 @@
+<include file="Common:admin_header" />
+<body class="wp-admin">
+    <form class="form-div" id="search" method="POST"> 
+    <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    <input type="text" name="name" value="">
+    <select name="comany">
+        <option value="-1">请选择</option>
+        <option value="1">待申请</option>
+        <option value="2">申请通过</option>
+        <option value="3">申请失败</option>
+    </select>
+    <input type="submit" value="搜索">
+    </form>
+	<div class="list-div">
+    <table>
+    <tr>
+        <th>序号</th>
+        <th>公司名称</th>
+        <th>公司电话</th>
+        <th>公司地址</th>
+        <th>公司介绍</th>
+        <th>管理</th>
+    </tr>
+    <volist name="list" id="list">
+    <tr>
+        <td>{$list.id}</td>
+        <td>{$list.qy_name}</td>
+        <td>
+            {$list.qy_moblie}
+        </td>
+        <td>{$list.qy_address}</td>
+        <td>{$list.qy_introduction}</td>
+        <td><a href="/index.php/CompanyConfirm/info/id/{$list.id}">审核</a></td>
+    </tr>
+    </volist> 
+    <tr>
+        <td colspan="6" style="text-align:right;">{$page}</td>
+    </tr>
+    </table>
+    </div>
+</body>
+</html>

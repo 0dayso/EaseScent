@@ -1,0 +1,76 @@
+<include file="Common:cpheader" />
+<script>
+$(function(){
+    var type = $("input[name='type']:checked").val();
+    $.post('?app=Jiuku&m=Method&a=index',{'type':type},function(msg){
+        var msg = eval("("+msg+")");
+            console.log(msg);
+    });
+})
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > 总代理申请列表</div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="1">待处理</option>
+                            <option <if condition="2 eq $_REQUEST['status']" >selected</if> value="2">已处理</option>
+                            <option <if condition="3 eq $_REQUEST['status']" >selected</if> value="3">已驳回</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        申请类型：
+                        &nbsp;&nbsp;
+                        按品牌申请 &nbsp;&nbsp;<input type="radio" name="type" value="1" checked="checked" />
+                        &nbsp;&nbsp;
+                        按酒款申请 &nbsp;&nbsp;<input type="radio" name="type" value="2" <if condition="2 eq $_REQUEST['type']" >selected</if> />
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">序号</th>
+                    <th width="250">公司名称</th>
+                    <th>申请的品牌/酒款</th>
+                    <th>申请认证资质</th>
+                    <th width="60">公司电话</th>
+                    <th width="120">申请时间</th>
+                    <th width="200">管理操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td><span>{$vo.agent_fname} / {$vo.agent_cname}</span></td>
+                    <td><span>{$vo.wine_fname} / {$vo.wine_cname}<if condition="$vo.type eq 1" ><font color="red">(品牌)</font><else /><font color="red">(酒款)</font></if></span></td>
+                    <td><if condition="$vo.auth_method eq 1" ><font color="red">资质图片</font>|{$vo.method_data}<elseif condition="$vo.auth_method eq 2" /><font color="red">电子邮件验证</font>|{$vo.method_data}<else /><font color="red">酒庄官网信息验证</font>|{$vo.method_data}</if></td>
+                    <td>{$vo.tel}</td>
+                    <td>{$vo.add_time|date='Y-m-d h:i:s',###}</td>
+                    <td>
+                        <a href="{:Url('method', array('aid'=>$vo['agent_id'], 'type'=>$vo['type'], 'type_id'=>$vo['type_id']))}">审核</a>
+                        <a href="{:Url('back', array('type'=>$vo['type'], 'type_id'=>$vo['type_id']))}">打回</a>
+                        <a href="{:Url('detail', array('aid'=>$vo['agent_id'], 'type'=>$vo['type'], 'type_id'=>$vo['type_id']))}" />查看详情</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>酒评关联列表</title>
+    <style>
+        html,body,h1,h2,h3,h4,h5,h6,div,table,a,img,span,dl,dt,dd {
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+        body {
+            width: 80%;
+            margin: auto;
+        }
+        #wrapper {
+            position: relative;
+        }
+        .panel {
+            background: url("__PUBLIC__/admin/images/home_icon.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+            border-bottom: 1px solid #E2E9EA;
+            height: 25px;
+            line-height: 25px;
+            padding-left: 20px;
+        }
+        #sort {
+            clear: both;
+            margin: 10px 0;
+            display: table;
+        }
+        #sort .sort-btn {
+            width: 200px;
+            height: 20px;
+            padding: 5px;
+            font-size: 14px;
+            border-top: 1px solid #CCCCCC;
+            border-bottom: 1px solid #CCCCCC;
+            cursor: pointer;
+            text-align: center;
+            float: left;
+        }
+        .sort-btn:hover {
+            background-color: #3A6EA5;
+            color: white;
+        }
+        .sort-btn:first-of-type {
+            border-left: 1px solid #CCCCCC;
+            border-top-left-radius: 5px;
+            -webkit-border-top-left-radius: 5px;
+            -moz-border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            -webkit-border-bottom-left-radius: 5px;
+            -moz-border-bottom-left-radius: 5px;
+        }
+        .sort-btn:nth-of-type(4) {
+            border-right: 1px solid #CCCCCC;
+            border-top-right-radius: 5px;
+            -webkit-border-top-left-radius: 5px;
+            -moz-border-top-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            -webkit-border-bottom-right-radius: 5px;
+            -moz-border-bottom-right-radius: 5px;
+        }
+        .choosed {
+            background-color: #3A6EA5;
+            color: white;
+        }
+        iframe {
+            /*min-width: 850px;*/
+        }
+        #action-area {
+            width: 850px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            padding: 30px;
+            position: fixed;
+            left: 180px;
+            top: 120px;
+            background-color: #EEEEEE;
+            display: none;
+        }
+        #action-area h3 {
+            background-color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+        #fname-list {
+            z-index: 9;
+            border: 1px solid #CCCCCC;
+            border-top: none;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            padding:10px;
+            position: absolute;
+            background-color: #F5F5F5;
+            display: none;
+        }
+        #fname-list p {
+            border-bottom: 1px solid #CCCCCC;
+            margin: 0;
+            padding-left: 12px;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+            display: block;
+        }
+        #fname-list p:last-of-type{
+            border-bottom: none;
+        }
+        #fname-list p:hover {
+            background-color: #494F4F;
+            color: #B5B5B5;
+        }
+        #close {
+            float: right;
+            width: 30px;
+            height: 12px
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -webkit-box-shadow: 3px 3px 3px #CCCCCC;
+            -moz-box-shadow: 3px 3px 3px #CCCCCC;
+            box-shadow: 3px 3px 3px #CCCCCC;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            display: inline-block;
+        }
+        dl dt {
+            height: 40px;
+            line-height: 40px;
+            margin: 10 auto;
+            color: #333333;
+        }
+        .compare {
+            float: left;
+        }
+        #img-box {
+            min-width: 50px;
+            /*max-width: 300px;*/
+            height: 120px;
+            overflow: hidden;
+        }
+        #img-box img {
+            width: 60px;
+            height: 100px;
+            margin-right: 2px;
+        }
+        #seprate {
+            width: 100px;
+            height: 1px;
+            display: inline-block;
+            float: left;
+        }
+        #submit-btn {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="panel">
+            当前位置：
+            <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+            <a href="{:Url('Index/index')}">大众酒评管理</a> >
+            关联酒评与酒款
+        </div>
+        <div id="sort">
+            <div class="sort-btn" status="1">未关联</div>
+            <div class="sort-btn" status="2">用户已关联</div>
+            <div class="sort-btn" status="3">已处理</div>
+            <div class="sort-btn" status="4">已忽略</div>
+            <input type="hidden" name="posted-status" value="">
+        </div>
+        <iframe src="{:Url('Dzjp/RelateCommentToWine/listTable?status=1')}" frameborder="0" name="ifm"></iframe>
+        <div id="action-area">
+            <h3>关联酒款<span id="close" title="关闭">×</span></h3>
+            <div class="compare">
+                <dl>
+                    <dt>酒库匹配酒款</dt>
+                    <dd id="s-method">
+                        <label for="s-by-ename">
+                            <input type="radio" name="s" id="s-by-ename" checked="checked">按原文名搜
+                        </label>
+                        <label for="s-by-id">
+                            <input type="radio" name="s" id="s-by-id">按中文名ID搜
+                        </label>
+                        <input type="hidden" name="s-method" value="s-by-ename">
+                    </dd>
+                    <dd>
+                        <input type="text" name="s-box" id="s-box" placeholder="请输入原文名(不少于3个字符)">
+                        <div id="fname-list"></div>
+                    </dd>
+                    <dd><span>中文别名:</span>
+                        <select name="caname" id="caname">
+                            <option value="">请选择中文别名</option>
+                        </select>
+                    </dd>
+                    <dd><span>酒庄：</span><p></p></dd>
+                    <dd><span>国家产区：</span><p></p></dd>
+                    <dd><span>酒款图片：</span><br/><img src="" alt=""></dd>
+                </dl>
+                <div id="exp-id" expid=""></div>
+            </div>
+            <div id="seprate"></div>
+            <div class="compare">
+                <dl>
+                    <dt>用户酒评信息</dt>
+                    <dd><span>原文名：</span><b></b></dd>
+                    <dd><span>中文别名：</span><b></b></dd>
+                    <dd><span>酒款年份：</span><b></b></dd>
+                    <dd>
+                        <span>酒款图片：</span>
+                        <div id="img-box">
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+            <div id="submit-btn"><input type="button" value="提交关联"></div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="__PUBLIC__common/js/jquery.min.js"></script>
+<script src="__PUBLIC__common/js/jquery.iframe-auto-height.js"></script>
+<script>
+$(document).ready(function() {
+    var reqData;
+    $('iframe').iframeAutoHeight();
+    $('iframe').load(function(){
+        var ifWidth = $(this).contents().width();
+        $(this).width(ifWidth);
+    });
+    $('.sort-btn').each(function(index, el) {
+        if (index == 0) {
+            $(this).addClass('choosed');
+        };
+        $(this).click(function(event) {
+            $('iframe').attr('src',"{:Url('Dzjp/RelateCommentToWine/listTable?status=')}"+$(this).attr('status'));
+            $(this).addClass('choosed').siblings().removeClass('choosed');
+        });
+    });
+    $('#action-area #close').click(function(event) {
+        $('#action-area').hide();
+    });
+    $('#s-method').find('input[name!="s-method"]').each(function(index, el) {
+        $(this).click(function(event) {
+            var mtd = $(this).attr('id');
+            if (mtd == 's-by-ename') {
+                $('#s-box').attr('placeholder', '请输入原文名(不少于3个字符)');
+            } else{
+                $('#s-box').attr('placeholder', '请输入酒款中文名ID');
+            };
+            $('#s-method').find('input[name="s-method"]').val(mtd);
+            $('#caname').html('<option value="0">请选择中文别名</option>');
+        });
+    });
+    $('#s-box').keyup(function(event) {
+        var ipt = $.trim($('#s-box').val());
+        if (ipt.length < 3) {
+            return false;
+        }
+        if (!isNaN(ipt)) {
+            return false;
+        };
+        $.ajax({
+            url: '{:Url("Dzjp/RelateCommentToWine/getFnameList")}',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {request: ipt},
+            success: function(fname){
+                if (fname != null) {
+                    var tagP = '';
+                    for(var i in fname){
+                        tagP += '<p>'+fname[i]['fname']+'</p>';
+                    }
+                    $('#fname-list').html(tagP).show();
+                };
+            }
+        });
+        
+
+    });
+    $('#s-box').blur(function(event) {
+        var mtd = $('#s-method').find('input[name="s-method"]').val();
+        var ipt = $.trim($('#s-box').val());
+        if (ipt.length == 0) {
+            alert('什么都不输入是不行的！');
+            return false;
+        }
+        switch(mtd){
+            case 's-by-ename':
+            var req = String(ipt);
+            reqData = {method: mtd,request: req};
+            getCnameList(reqData);
+            break;
+            case 's-by-id' :
+            var req = parseInt(ipt);
+            if (isNaN(req)) {
+                alert('请输入靠谱的ID！');
+                return false;
+            };
+            reqData = {method: mtd,request: req};
+            getCnameList(reqData);
+            break;
+        }
+    });
+    $(document).on('click', '#fname-list p', function(event) {
+        event.preventDefault();
+        fname = $(this).text();
+        $('#s-box').val(fname).focus();
+        $('#fname-list').hide();
+
+    });
+    $(document).on('change', '#caname', function(event) {
+        event.preventDefault();
+        var wid = $(this).val();
+        if (wid == 0) {
+            return false;
+        };
+        $.ajax({
+            url: '{:Url("Dzjp/RelateCommentToWine/getStdInfo")}',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {wid: wid},
+            success: function(res){
+                var actionArea = $('#action-area');
+                if (res != null) {
+                    var prefix = 'http://upload.wine.cn/Jiuku/Wine/labels/100_100/';
+                    if (res[2] == null) {
+                        var imgSrc = '';
+                    } else {
+                        var imgSrc = prefix+res[2]['filename'];
+                    };
+                    actionArea.children('div.compare').eq(0).find('dd').eq(3).find('p').html(res[0]['fname'] + '/' + res[0]['cname']);
+                    actionArea.children('div.compare').eq(0).find('dd').eq(4).find('p').html(res[1]['fname'] + '/' + res[1]['cname']);
+                    actionArea.children('div.compare').eq(0).find('dd').eq(5).find('img')
+                    .attr('src',imgSrc);
+                }
+            }
+        });
+    });
+    $('#submit-btn').click(function(event) {
+        event.preventDefault();
+        var wid = $.trim($('#caname').val());
+        var expid = $.trim($('#exp-id').attr('expid'));
+        if(isNaN(expid)){
+            return false;
+        }
+        if ((wid == 0) || isNaN(wid)) {
+            return false;
+        }
+        var data = {wid: wid, expid: expid, relate: 'related'};
+        $.ajax({
+            url: '{:Url("Dzjp/RelateCommentToWine/doRelate")}',
+            type: 'POST',
+            dataType: 'text',
+            data: data,
+            success: function(res){
+                alert(res);
+                $('#action-area').hide();
+                var ifsrc = $('iframe').attr('src');
+                $('iframe').attr('src',ifsrc);
+            }
+        });
+    });
+});
+function getCnameList(reqData) {
+    $.ajax({
+        url: '{:Url("Dzjp/RelateCommentToWine/getCnameList")}',
+        type: 'POST',
+        dataType: 'JSON',
+        data: reqData,
+        success: function(res){
+            var opt = '<option value="0">请选择中文别名</option>';
+            if (res != null) {
+                for (var i in res){
+                    opt += '<option value="'+res[i]['id']+'">'+res[i]['cname']+'</option>';
+                };
+                $('#caname').html(opt);
+            };
+        }
+    })
+}
+</script>

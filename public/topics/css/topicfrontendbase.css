@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+
+var,em {font-style:normal;}
+.TONG{width:1000px;margin:0 auto;background-color:#fff;}
+.head-box{width:100%; padding-top:2px;}
+.head-index{line-height:15px;overflow:hidden;}
+.head-index h1{float:left;width:85px;margin-right:14px;display:inline;}
+.head-index a{float:left;color:#1C1C1C;font-size:12px;display:inline;}
+.head-index var{float:left;color:#B7B7B7;padding:0 13px;}
+.head-index .head-index-a{font-size:12px;color:#6C6C6C;}
+
+
+.foot{ height:36px; line-height:36px; text-align:center; background:#333333; color:#616161; font-size:12px; font-family:"宋体";}
+.foot a{ color:#FFF;}
+.foot a:hover{ text-decoration:underline;}

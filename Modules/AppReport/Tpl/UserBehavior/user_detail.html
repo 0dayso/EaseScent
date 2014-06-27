@@ -1,0 +1,147 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+    
+    <!-- <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('News/Pub/index')}" method="post">
+            <tbody>
+                <tr height="20pz";>
+                    <td width="">
+                    <select class="div-box-default" height=20px>
+                        
+                <volist name="_applist" id="vo">
+                <option value="{$vo.id}">{$vo.name}</option>
+            </volist>
+                    </select>
+                        
+                        &nbsp;&nbsp;
+                        <!-- 标题：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" /> 
+                        &nbsp;&nbsp;
+                        <a href="#" class="choose" value='1'>昨天</a>&nbsp;
+                        <a href="#" class="choose" value='7'>近7日</a>&nbsp;
+                        <a href="#" class="choose" value='30'>近30日</a>&nbsp;
+                        &nbsp;&nbsp;
+                        
+                        <input name="btime" id="btime" size="20" type="text" value="{$_REQUEST['btime']}" class="input-text" />
+                        -&nbsp;
+                        <input name="etime" id="etime" size="20" type="text" value="{$_REQUEST['etime']}" class="input-text" />
+                            <script type="text/javascript">
+                                Calendar.setup({
+                                    inputField : "btime",
+                                    trigger    : "btime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d %H:%M:%S"
+                                });
+                                Calendar.setup({
+                                    inputField : "etime",
+                                    trigger    : "etime",
+                                    onSelect   : function() { this.hide() },
+                                    showTime   : 24,
+                                    dateFormat : "%Y-%m-%d %H:%M:%S"
+                                });
+                            </script>
+                        &nbsp;&nbsp;
+                        <!-- 状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">通过审核</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">待审核</option>
+                        </select>
+                        &nbsp;&nbsp; 
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div> -->
+    <div class="list">
+       
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>触发事件</th>
+                    <th>发生次数</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+               <foreach name='data' item='vo'>
+                <tr>
+                    <td>{$vo.id} {$vo.acitve}</td>
+                    <td>{$vo.times}</td>
+                </tr>
+                </foreach>
+            </volist>
+        </tbody>
+        </table>
+     <div class="pages">{$page}</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+      $(".search").hide();
+        $(".div-box-default").change(function(){
+            var val=$(".div-box-default option:selected").val();     
+            $.ajax({
+              url: "/index.php?app=AppReport&m=UserBehavior&a=ios_userbeh&type="+val,
+              dataType: "JSON",
+              success: function(msg){
+                 var str='';
+                 for(i in msg['data']){
+                  str +='<tr><td>'+msg['data'][i].id + msg['data'][i].acitve+'</td><td>'+msg['data'][i].times+'</td></tr>'; 
+                 }
+                 $(".table-list tbody").empty();
+                $(".table-list tbody").html(str);
+                $(".pages").html(msg['page']);
+              }
+            });
+        });
+
+        $(".choose").click(function(){
+            var val=$(this).attr('value');
+            var type=$(".div-box-default option:selected").val();
+             $.ajax({
+              url: "/index.php?app=AppReport&m=UserBehavior&a=near_data&time="+val+"&type="+type,
+              type:'GET',
+              dataType: "JSON",
+              success: function(msg){
+                 var str='';
+                 for(i in msg){
+                  str +='<tr><td>'+msg[i].id + msg[i].acitve+'</td><td>'+msg[i].times+'</td></tr>'; 
+                 }
+                $(".table-default tbody").html(str);
+              }
+            });
+       // alert(val+'--'+type);
+            
+        });
+
+        $("input[name='endtime']").change(function(){
+            var endtime=$(this).val();
+            var starttime=$("input[name='statime']").val();
+            var type=$(".div-box-default option:selected").val();
+            $.ajax({
+              url: "/index.php?app=AppReport&m=UserBehavior&a=get_record&stime="+starttime+"&type="+type+"&etime="+endtime,
+              type:'GET',
+              dataType: "JSON",
+              success: function(msg){
+                 var str='';
+                 for(i in msg){
+                  str +='<tr><td>'+msg[i].id + msg[i].acitve+'</td><td>'+msg[i].times+'</td></tr>'; 
+                 }
+                $(".table-default tbody").html(str);
+              }
+            });
+
+        });
+    });
+</script>
+<include file="Common:cpfooter" />

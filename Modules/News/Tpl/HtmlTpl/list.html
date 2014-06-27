@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="keywords" content="{$cat.keywords}" />
+<meta name="description" content="{$cat.description}" />
+<title>{$cat.title}</title>
+<link href="{:C('DOMAIN.PUBLIC')}front/news/css/list.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}common/js/jquery.min.js"></script>
+
+<!--新闻头部--><!--#include virtual="/_Block/6.html"-->
+<div class="l-adv1">
+    <!-- 广告位：新闻列表页 顶部通栏 -->
+    <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "445172";</script>
+    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+</div>
+<div class="l-nav">
+    您现在的位置：<a href="__WWW__">逸香网</a><volist name="pcats" id="vo"> &gt; <a href="{$vo.url_prefix}index.shtml">{$vo.name}</a></volist>
+</div>
+<div class="l-main">
+    <div class="l-main-left">
+        <div class="l-part1">
+            <volist name="top2news" id="vo">
+            <dl>
+                <dt><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></dt>
+                <dd>{$vo.description}</dd>
+            </dl>
+            </volist>
+        </div>
+        <div class="l-adv2">
+            <!-- 广告位：新闻列表页 首屏左中半通栏 -->
+            <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "445176";</script>
+            <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+        </div>
+        <div class="l-part2">
+            <ul class="l-ul-mod">
+                <volist name="lists" id="vo" mod="6">
+                <if condition="($i neq 1) AND ($mod eq 0)">
+                </ul>
+                <ul class="l-ul-mod">
+                </if>
+                <li>
+                    <a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a>
+                    <span>{$vo.dateline}</span>
+                 </li>
+                </volist>
+            </ul>
+        </div>
+        <div class="winery_biao">
+            <div class="black2">{$pages}</div>
+        </div>
+        <div class="l-adv2">
+            <!-- 广告位：新闻列表页 底部左侧banner -->
+            <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "445181";</script>
+            <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+        </div>
+        <!--<div class="l-part3">
+            <ul class="l-part3-l" id="l-nav5">
+                <li class="l-tab-li">物园葡萄这个利班</li>
+                <li>激动人心的产区</li>
+                <li>阿根利最优秀葡萄酒品牌</li>
+                <li>利最优秀根多萨葡萄</li>
+                <li>酒厂旅游指南一</li>
+                <li>瓦拉这个利班牙激动人的</li>
+            </ul>
+            <div class="l-part3-r" id="l-con5">
+                <ul class="l-part3-r-ul l-ul-mod2-show">
+                    <li>
+                        <a href="###" target="_blank"><img src="__P_IMAGES__/news_l/l-pic6.jpg" alt="" /></a>
+                        <span class=""><a href="###" target="_blank">阿根利最优秀葡萄酒品牌</a></span>
+                    </li>
+                    <li>
+                        <a href="###" target="_blank"><img src="__P_IMAGES__/news_l/l-pic6.jpg" alt="" /></a>
+                        <span class=""><a href="###" target="_blank">阿根利最优秀葡萄酒品牌</a></span>
+                    </li>
+                    <li>
+                        <a href="###" target="_blank"><img src="__P_IMAGES__/news_l/l-pic6.jpg" alt="" /></a>
+                        <span class=""><a href="###" target="_blank">阿根利最优秀葡萄酒品牌</a></span>
+                    </li>
+                    <li>
+                        <a href="###" target="_blank"><img src="__P_IMAGES__/news_l/l-pic6.jpg" alt="" /></a>
+                        <span class=""><a href="###" target="_blank">阿根利最优秀葡萄酒品牌</a></span>
+                    </li>
+                </ul>
+                <ul class="l-part3-r-ul">
+                    <li>
+                        <a href="###" target="_blank"><img src="__P_IMAGES__/news_l/l-pic6.jpg" alt="" /></a>
+                        <span class=""><a href="###" target="_blank">阿根利最优秀葡萄酒品牌</a></span>
+                    </li>
+                    <li>
+                        <a href="###" target="_blank"><img src="__P_IMAGES__/news_l/l-pic6.jpg" alt="" /></a>
+                        <span class=""><a href="###" target="_blank">阿根利最优秀葡萄酒品牌</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
+    </div>
+    <!--资讯列表右边栏--><!--#include virtual="/_Block/7.html"-->
+</div>
+<include file="Common:footer20130312" />

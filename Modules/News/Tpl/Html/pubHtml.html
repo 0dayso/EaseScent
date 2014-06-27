@@ -1,0 +1,46 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Pub/index')}">新闻列表</a> > 批量生成静态</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">文章列表</a>
+        <a class='btn' href="{:Url('add')}">发布新文章</a>
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('News/Pub/html?op=run')}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">生成选项</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">栏目</th>
+						<td>
+                            <select name="catid">
+                                <option value="0">更新所有</option>
+								<volist id="cate" name="cateList">
+                                <option value="{$cate.catid}">{$cate.name}</option>
+								</volist>
+							</select>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">起始时间</th>
+                        <td><input type="text" size="30" name="btime" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">结束时间</th>
+                        <td><input type="text" size="30" name="etime" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">每次生成文章数</th>
+                        <td><input type="text" size="30" name="limit" value="10" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

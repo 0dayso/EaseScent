@@ -1,0 +1,36 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">排名</th>
+                    <th>分辨率</th>
+                    <th width="200">新增用户数</th>
+                    <th width="200">新增用户占比</th>
+                    <th width="200">启动次数</th>
+                    <th width="200">启动次数占比</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+            <tr>
+                <td>{$i}</td>
+                <td>{$vo.model}</td>
+                <td>{$vo.new_users}</td>
+                <td>{$vo.new_user_ratio|round=###,2}%</td>
+                <td>{$vo.starts}</td>
+                <td>{$vo.start_ratio|round=###,2}%</td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

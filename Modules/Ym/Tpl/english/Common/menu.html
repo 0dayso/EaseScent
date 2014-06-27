@@ -1,0 +1,34 @@
+<!--处理菜单选中-->
+<script type="text/javascript">
+var url = window.location.href;
+$(function(){
+    if(url.indexOf("Company")>=0){
+        $("#m_company").attr("class","active");
+    }else if(url.indexOf("Setface")>=0){
+        $("#m_face").attr("class","active");    
+    }else if(url.indexOf("editpass")>=0){
+        $("#m_pass").attr("class","active");    
+    }else if(url.indexOf("bphoto")>=0){
+        $("#m_bphoto").attr("class","active");    
+    }else if(url.indexOf("emailing")>=0){
+        $("#m_email").attr("class","active");    
+    }
+})
+</script>
+<div class="re_main_l">
+        	<div class="re_main_lBox">
+            	<h3>Account Management</h3>
+                <ul class="clear">
+                	<li id="m_company" class="ddd"><a href="/index.php/Company">Profile</a></li>
+                    <li id="m_face"><a href="/index.php/Setface">Image</a></li>
+                    <li id="m_pass"><a href="/index.php/Index/editpass">Change Password</a></li>
+                </ul>
+            </div>
+            <div class="re_main_lBox">
+            	<h3>Security Center</h3>
+                <ul class="clear">
+                	<li id="m_bphoto"><a href="/index.php/Confirm/sssing">ID Verification</a></li>
+                    <li id="m_email"><a href="/index.php/Confirm/emailing">E-mail Verification</a></li>
+                </ul>
+            </div>
+ </div>

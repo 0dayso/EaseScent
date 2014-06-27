@@ -1,0 +1,146 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'再次添加',callback:function(){window.location.href = window.location.href;}},
+                    {name:'复制添加'}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+    /*日期控件*/
+    $( "#datepicker" ).datetimepicker({
+        timeText: '时间',
+        hourText: '时',
+        minuteText: '分',
+        secondText: '秒',
+        currentText: '当前时间',
+        closeText: '关闭',
+        changeMonth: true,
+        changeYear: true,
+        timeFormat: 'HH:mm:ss',
+        dateFormat: 'yy-mm-dd'
+    });
+});
+//agents_internet_wine_autocomplete
+$(function(){
+    $("#wine_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('getAgentsInternetWine')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:'['+item.agents_cname+']  '+item.fname+' '+item.cname,data:item}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('readonly',true);
+            $("#wine_id").val(ui.item.id);
+            $("#wine_s").css('z-index',-1);
+            $("#wine_x").css('z-index',1);
+            var html = '购买链接：'+ui.item.data.url+'<br>促销价格：'+ui.item.data.price+'<input name="wine_id" type="hidden" value="'+ui.item.data.wine_caname_id+'">';
+            $("#wine_desc").html(html);
+        },
+    });
+});
+function wine_s(){
+    $("#wine_text").focus();
+    $("#wine_text").autocomplete("search", "");
+}
+function wine_x(){
+    $("#wine_id").val(0);
+    $("#wine_text").val('').attr('readonly',false);
+    $("#wine_x").css('z-index',-1);
+    $("#wine_s").css('z-index',1);
+    $("#wine_desc").html('');
+}
+//agents_internet_wine_autocomplete/
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">大众酒评管理</a> >
+        <a href="{:Url('index')}">广告管理</a> >
+        <a href="{:Url('recomwineIndex')}">推荐酒款列表</a> >
+        添加推荐酒款
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('recomwineAdd')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="150">关联代理商网络销售酒款</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="wine_text" name="wine_text" type="text" size="100" value="" class="measure-input" />
+                                <input id="wine_id" name="agents_wine_id" type="text" value="0" readonly/>
+                                <span id="wine_s" class="autocomplete-sel" onclick="wine_s();"></span>
+                                <span id="wine_x" class="autocomplete-del" onclick="wine_x();"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>网络销售酒款信息</th>
+                        <td id="wine_desc"></td>
+                    </tr>
+                    <tr>
+                        <th>原价</th>
+                        <td><input name="origin_price" type="text" size="20" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>已售数量</th>
+                        <td><input name="sales_num" type="text" size="20" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>促销内容</th>
+                        <td><input name="promotion_content" type="text" size="80" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>关闭时间</th>
+                        <td><input id="datepicker" name="outofdate_time" class="measure-input" type="text" size="30" readonly/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="1" />开启</label>
+                <label><input type="radio" name="status" value="0" checked/>关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

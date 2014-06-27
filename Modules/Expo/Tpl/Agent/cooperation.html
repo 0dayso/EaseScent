@@ -1,0 +1,62 @@
+<include file="Common:header" />
+      <include file="Agent:header" />
+        <div class="z_aWrap clear">
+            <include file="Common:godos_leftSide" />
+            <div class="z_aWrap_r">
+               <form action="{:U('Agent/cooperation')}" method="post">
+                   <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td align="right" class="td1" width="20%">
+                                    栏目显示设置：
+                                </td>
+                                <td>
+                                <label>
+                                    <input type="radio" name="tinyint" <if condition="$data['tinyint']==1"> checked</if> value="1"/> 显示
+                                </label>
+                                <label style=" padding-left:20px;">
+                                    <input type="radio" name="tinyint" <if condition="$data['tinyint']==0"> checked</if>  value="0" /> 隐藏
+                                </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" class="td1" width="20%">
+                                     SEO 关键词：
+                                </td>
+                                <td>
+                                    <input class="w290" type="text" name="varchar" value="{$data['varchar']}" /> <span class="table_tip">多个关键词用","隔开</span>
+                                </td>
+                            </tr>
+
+                            <!--<tr>
+                                <td align="right" class="td1" width="20%">
+                                    模板选择：
+                                </td>
+                                <td>
+                                    <label><input type="radio" name="1" /> 自定义编辑</label>
+                                    <label style=" padding-left:20px;"><input type="radio" name="1" /> 模板1</label>
+                                </td>
+                            </tr>-->
+
+                            <tr>
+                                <td align="right" class="td1" valign="top"> 文本编辑器：</td>
+                                <td>
+                                    <?php $description = $data['text'];?>
+                                    <include file="Common:editor" />
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td align="right" class="td1">&nbsp;
+                                </td>
+                                <td>
+                                  <input type="submit" name="submit_add" class="form-submit" value="发         布" style="width:606px;">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+       </div>
+<include file="Common:footer" />

@@ -1,0 +1,27 @@
+    *{margin:0;padding:0;list-style-type:none;}
+    a,img{border:0;}
+    body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+    /*焦点图*/
+    .mod18{width:312px;height:240px;margin:0px auto;position:relative;background:#fff;}
+    .mod18 .btn{position:absolute;width:15px;height:70px;top:245px;cursor:pointer;z-index:99;font-size:50px;font-weight:bold;}
+    .mod18 .prev{left:0;background:url(../images/prevBtn.png) no-repeat;}
+    .mod18 #prevTop,.mod18 #nextTop{top:100px;width:46px;height:48px;}/*不启用*/
+    .mod18 #prevTop{background:url(../images/prevBtnTop.png) 0 0 no-repeat;}
+    .mod18 #nextTop{background:url(../images/nextBtnTop.png) 0 0 no-repeat;}
+    .mod18 .next{right:0;background:url(../images/nextBtn.png) no-repeat;}
+    .mod18 li{float:left;}
+    .mod18 .cf li{position:relative;color:#fff;}
+    .mod18 .cf a{display:block;width:312px;height:240px;color:#fff;}
+    .mod18 .cf li span{display:block;width:312px;position:absolute;left:0;bottom:0;padding:1px 2px;line-height:2px;text-align:left;background:#F5F5F5;filter:progid:DXImageTransform.Microsoft.gradient( GradientType = 0,startColorstr = "#60000000",endColorstr = "#60000000");}
+    .mod18 .picBox{height:240px;position:relative;overflow:hidden;}
+    .mod18 .picBox ul{height:240px;position:absolute;}
+    .mod18 .picBox li{width:312px;height:240px; vertical-align: middle;text-align:center;}
+    .mod18 .listBox{width:280px;height:70px;margin:0 auto;position:relative;padding:6px 0px 10px 5px;overflow:hidden;}
+    .mod18 .listBox ul{height:70px;position:absolute;}
+    .mod18 .listBox li{width:70px;height:70px;cursor:pointer;position:relative;text-align: center;}
+    .mod18 .listBox li i{display:none;}
+    .mod18 .listBox li a{display:block;width:70px;height:70px;}
+    .mod18 .listBox li img{max-width:67px;_width:expression((this.offsetWidth > 67) ? "67" : "px");    /*_width: expression(Math.min(this.offsetWidth, 67) + "px");*/height:68px;}
+    .mod18 .listBox .on img{max-width:58px;_width:expression((this.offsetWidth > 58) ? "58" : "auto" );    /*_width: expression(Math.min(this.offsetWidth, 58) + "px");*/ height:65px;border:2px solid #ff6600;margin-left:5px; }
+    .mod18 .listBox .on i{display:block;}
+    .picBox img {max-width: 310px; max-height:230px; width: expression(this.width>310 && this.width>this.height ? 310:auto);}

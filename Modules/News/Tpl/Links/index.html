@@ -1,0 +1,42 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Links/index')}">友情链接管理</a></div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('cate')}">链接分类管理</a>
+        <a class='btn' href="{:Url('add')}">增加友情链接</a>
+    </div>
+    <div class="list-menu">
+        查看相应分类: 
+        <a href="{:Url('index')}">全部</a> &nbsp;&nbsp;&nbsp;&nbsp;
+        <volist id="c" name="cate">
+        <a <if condition="($cid neq '' or $cid eq '0') and $c.id eq $cid">style="font-weight:bold;"</if> href="{:Url('index?cid='.$c['id'])}">{$c.name}</a> &nbsp;&nbsp;&nbsp;&nbsp;
+        </volist>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="80">Links ID</th>
+                    <th>链接名称</th>
+                    <th>分类</th>
+                    <th>链接描述</th>
+                    <th>Url</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="links">
+            <tr>
+				<td>{$vo.id}</td>
+                <td>{$vo.name}</td>
+                <td>{$cate[$vo['cid']]['name']}</td>
+                <td>{$vo.title}</td>
+                <td>{$vo.url}</td>
+                <td><a href="{:Url('edit?id='.$vo['id'])}">编辑</a> <a href="{:Url('del?id=' . $vo['id'])}" title="是否删除<b>“{$vo.title}”</b>友情链接?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

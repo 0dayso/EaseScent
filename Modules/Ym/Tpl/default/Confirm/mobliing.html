@@ -1,0 +1,32 @@
+<include file="Common:header" />
+<div class="main">
+	<include file="Common:menu" />
+	<div class="confirm-box">
+		<h3 class="confirm-h3">手机认证</h3>
+		<div class="email-r">
+			<div class="email-con-c">
+				<div style="margin-bottom:24px;font-size:14px">
+					<var>手机号码：</var>
+					<em>{$userinfo.moblie}</em>
+					<em> (<if condition="$userinfo.moblie_valid eq 1">已认证<else/>未认证</if>)</em> 
+					<a href="/index.php/Confirm/update_moblie">更换手机</a>
+				</div>
+				<dl class="auth-code">
+					<dd>
+						<if condition="$userinfo.moblie_valid eq 1">
+							<input type="button" value="返回" onclick="window.location.href='/index.php'" class="login-sub" hidefocus="">
+						<else/>
+							<input type="button" value="下一步" onclick="window.location.href='/index.php/Confirm/mobliing_next'" class="login-sub" hidefocus="">
+						</if>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="t-model">
+			<p class="t-model-t">手机认证成功，您可以享受以下服务：</p>
+			<p><span>▪</span>您可以使用手机账号登陆逸香企业会员中心</p>
+			<p><span>▪</span>通过手机认证可以更有效的保障您的账户安全</p>
+		</div>
+	</div>
+</div>
+<include file="Common:footer" />

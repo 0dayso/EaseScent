@@ -1,0 +1,76 @@
+<include file="Common:header" />
+<div class="login-mian">
+	<div class="login-reg">
+		<span>注册逸香企业账号</span>
+		已有逸香企业账号？<a href="/index.php/User/login" hidefocus>请直接登录</a>
+	</div>
+	<div class="reg-box">
+		<form id="register" action="/index.php/User/add" method="POST">
+		<div class="login-div">
+			<span class="l-span">邮箱/手机:</span>
+			<input name="username" id="username" type="text" class="login-ipt1"/>
+			<img src="__IMG__/i1.jpg" class="login-i"/>
+			<span></span>
+		</div>
+		<div class="login-div">
+			<span class="l-span">设置密码:</span>
+			<input type="password" id="password" name="password" class="login-ipt1"/>
+			<img src="__IMG__/i2.jpg" class="login-i"/>
+			<em></em>
+		</div>
+		<div class="login-div">
+			<span class="l-span">确认密码:</span>
+			<input type="password" id="repassword" name="repassword" class="login-ipt1"/>
+			<img src="__IMG__/i2.jpg" class="login-i"/>
+			<em></em>
+		</div>
+		<!--
+        <div class="login-div">
+			<span class="l-span">企业简称:</span>
+			<input type="text" name="nickname" maxlength="20" id="nickname" class="login-ipt1"/>
+			<img src="__IMG__/i2.jpg" class="login-i"/>
+			<em></em>
+		</div>
+        -->
+		<div class="login-div">
+			<span class="l-span">企业全称:</span>
+			<input type="text" name="company_name" maxlength="20" id="company_name" class="login-ipt1"/>
+			<img src="__IMG__/i2.jpg" class="login-i"/>
+			<em></em>
+		</div>
+		<div class="login-div">
+			<span class="l-span">企业电话:</span>
+			<input type="text"  name="company_tel" id="company_tel"  class="login-ipt1"/>
+		<!--	<input type="text" value="电话/手机" class="login-ipt2"/>
+			<input type="text" value="分机号" class="login-ipt3"/>-->
+			<img src="images/i2.jpg" class="login-i"/>
+			<em></em>
+		</div>
+		<div class="login-div">
+			<span class="l-span">验证码:</span>
+			<input type="text" name="verify" id="verify" class="login-ipt2"/>
+			<img style="cursor:pointer" src="__HOST__/index.php/User/verify" id="verify" class="ver-code" onclick="this.src='__HOST__/index.php/User/verify/'+Math.random()"/>
+			<img src="__IMG__/i2.jpg" class="login-i"/>
+			<em></em>
+		</div>
+		<div class="login-div2">
+			<input type="checkbox" checked id="remb" />
+			<label for="remb"  hidefocus>
+                <a href="/index.php/User/service" style="color:#625B5F" target="_blank">
+                我接受逸香通行证注册协议
+                </a>
+            </label>
+		</div>
+		<div class="login-div2">
+			<input type="button" id="reg" value="注 册" class="login-sub" hidefocus/>
+		</div>
+	</form>
+	</div>
+</div>
+<script src="__JS__/user.js" type="text/javascript"></script>
+<div class="footer">
+	©1998 - 2012 EaseScent. All Rights Reserved 
+    <a style="color:#00749e;" href="/index.php/User/register/t/english/l/ym-en">English</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$title}</title>
+<link rel="stylesheet" type="text/css" href="__CSS__/z_base.css" />
+<link rel="stylesheet" type="text/css" href="__CSS__/z_register.css" />
+</head>
+<body class="bgFFF">
+	<div class="re_headBg">
+        <div class="re_head clear">
+            <h2 class="re_head_h2">Ease Scent</h2>
+            <p class="re_head_r">
+                <a href="/index.php/User/login/t/default/l/ym-zh"><img src="__IMG__/english/chinaIco.gif"> 中文版</a>
+                <a href="/index.php/User/login/t/english/l/ym-en"><img src="__IMG__/english/EnglishIco.gif"> English</a>
+            </p>
+        </div>
+    </div>
+    <div class="registerBox clear">
+    	<p class="pic">
+        	<img src="__IMG__/english/pic_04.jpg" />
+        </p>
+        <div class="nr">
+        	<h3 class="registerBoxNr_h3">Log In</h3>
+			<form id="login" action="/index.php/User/doLogin" method="POST">
+            <div class="mt10">
+            	<p>
+                    <input type="text" name="l_username" id="l_username" value="{$username}" class="txt" value="" /> 
+                    <!--<img src="__IMG__/english/ok.png" />-->
+                </p>
+                <p style="margin:4px 10px;">&nbsp;</p>
+            </div>
+            <div>
+            	<p><input type="password"" name="l_password" id="l_password" class="txt" value="" /></p>
+                <p style="margin:4px 10px;">&nbsp;</p>
+            </div>
+            <div id="login-verify" class="mt-12" style="display:none;">
+            	<p><input type="text" name="l_verify" id="l_verify"  class="txt w104" value="" /> <img style="width:75px;" id="l-fresh-img" src="__ROOT__/index.php/User/verify"  onclick="this.src='__ROOT__/index.php/User/verify/'+Math.random()" class="authCodeImg" /> <span class="authCodeSpan">Plese enter <br />the code  <a id="l-fresh" href="javascript:document.getElementById('l-fresh-img').click();">Refresh</a></span></p>
+                <p style="margin:4px 10px;">&nbsp;</p>
+            </div>
+            <div>
+            	<p class="agree"><label><input type="checkbox" checked="checked" /> Remember me</label></p>
+            </div>
+            <div>
+            	<p class="submitBox">
+                    <a href="#" id="s-login" class="pinkBtn"><span>Log In</span></a> 
+                   <!-- <a href="#" class="a">Forgot password?</a>-->
+                </p>
+            </div>
+			</form>
+        </div>
+    </div>
+</body>
+<script src="__CJS__/jquery.min.js" type="text/javascript"></script>
+<script src="__JS__/user_en.js" type="text/javascript"></script>
+</html>

@@ -1,0 +1,179 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+//wine_autocomplete
+$(function(){
+    $("#wine_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#wine_id").val(ui.item.id);
+            $("#wine_s").css('z-index',-1);
+            $("#wine_x").css('z-index',1);
+        },
+    });
+});
+function wine_s(){
+    $("#wine_text").focus();
+    $("#wine_text").autocomplete("search", "");
+}
+function wine_x(){
+    $("#wine_id").val(0);
+    $("#wine_text").val('').attr('disabled',false);
+    $("#wine_x").css('z-index',-1);
+    $("#wine_s").css('z-index',1);
+}
+//wine_autocomplete/
+<if condition="$wine_res">
+var wine_id = {$wine_res.id};
+art.dialog({
+    id: 'loading',
+    content: '初始化...',
+    lock: true,
+    esc: false,
+    cancel: false
+});
+function getdata(){
+    art.dialog.list['loading'].content('数据获取中...');
+    $.post("{:Url('getData')}",{'wine_id':wine_id},function(data){
+        if(data.error == 0){
+            art.dialog.list['loading'].content('<span style="color:#0c0;">' + data.msg + '</span>');
+            insertdata(data.result);
+        }else{
+            art.dialog.list['loading'].content('<span style="color:#c00;">' + data.msg + '</span>').button(
+                {name:'返回初始页',callback:function(){window.location.href = data._backurl;}}
+            );
+        }
+    },'json');
+}
+function insertdata(data){
+    art.dialog.list['loading'].content('数据填充中...');
+    if(data){
+        $.each(data,function(i,n){
+            $("#id_year-"+n.year).text(n.id);
+            if(n.price > 0){
+                $("#price_year-"+n.year).val(n.price);
+            }else{
+                $("#price_year-"+n.year).val('');
+            }
+            if(n.eval_res){
+                $.each(n.eval_res,function(ii,nn){
+                    $("#score_year-"+n.year+"_evalpartyid-"+nn.evalparty_id).val(nn.score);
+                });
+            }
+        });
+    }
+    art.dialog.list['loading'].content('<span style="color:#0c0;">填充成功！</span>');
+    setTimeout(function(){art.dialog.list['loading'].hide()},5)
+}
+function updatescore(this1,year,evalparty_id){
+    art.dialog.list['loading'].content('数据更新中...').show();
+    var score = $(this1).val();
+    $.post("{:Url('updateData')}",{'type':'score','wine_id':wine_id,'year':year,'evalparty_id':evalparty_id,'score':score},function(data){
+        if(data.error == 0){
+            art.dialog.list['loading'].content('<span style="color:#0c0;">' + data.msg + '</span>');
+            getdata();
+        }else{
+            art.dialog.list['loading'].content('<span style="color:#c00;">' + data.msg + '</span>').button(
+                {name:'刷新当前页面',callback:function(){window.location.href = window.location.href;}}
+            );
+        }
+    },'json');
+}
+function updateprice(this1,year){
+    art.dialog.list['loading'].content('数据更新中...').show();
+    var price = $(this1).val();
+    $.post("{:Url('updateData')}",{'type':'price','wine_id':wine_id,'year':year,'price':price},function(data){
+        if(data.error == 0){
+            art.dialog.list['loading'].content('<span style="color:#0c0;">' + data.msg + '</span>');
+            getdata();
+        }else{
+            art.dialog.list['loading'].content('<span style="color:#c00;">' + data.msg + '</span>').button(
+                {name:'刷新当前页面',callback:function(){window.location.href = window.location.href;}}
+            );
+        }
+    },'json');
+}
+$(function(){
+    getdata();
+});
+</if>
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库源数据管理</a> >
+        年份酒款列表
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td>
+                        选择酒款：
+                        <div class="autocomplete-div">
+                            <if condition="$wine_res">
+                            <input id="wine_text" type="text" size="40" value="{$wine_res.fname} {$wine_res.cname}" class="measure-input" disabled />
+                            <input id="wine_id" name="wine_id" type="hidden" value="{$wine_res.id}"/>
+                            <span id="wine_s" class="autocomplete-sel" onclick="wine_s();" style="z-index:-1;"></span>
+                            <span id="wine_x" class="autocomplete-del" onclick="wine_x();" style="z-index:1;"></span>
+                            <else/>
+                            <input id="wine_text" type="text" size="40" value="" class="measure-input" />
+                            <input id="wine_id" name="wine_id" type="hidden" value="0"/>
+                            <span id="wine_s" class="autocomplete-sel" onclick="wine_s();"></span>
+                            <span id="wine_x" class="autocomplete-del" onclick="wine_x();"></span>
+                            </if>
+                        </div>
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="确定" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <if condition="$wine_res">
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="45">ID</th>
+                    <th>年份</th>
+                    <th>参考价格</th>
+                    <th>评分</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="years">
+                <tr>
+                    <td><span id="id_year-{$vo}"></span></td>
+                    <td>{$vo}</td>
+                    <td>￥<input id="price_year-{$vo}" class="measure-input" type="text" size="8" onblur="updateprice(this,'{$vo}')" /></td>
+                    <td>
+                        <volist name="evalpartys" id="voe">
+                            <span title="{$voe.fname}&#10;{$voe.cname}">{$voe.sname}</span>
+                            <input id="score_year-{$vo}_evalpartyid-{$voe.id}" class="measure-input" type="text" size="8" onblur="updatescore(this,'{$vo}',{$voe.id})" />
+                        </volist>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </div>
+    </if>
+</div>
+<include file="Common:cpfooter" />

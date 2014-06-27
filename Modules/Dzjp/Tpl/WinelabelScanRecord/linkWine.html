@@ -1,0 +1,209 @@
+<include file="Common:cpheader" />
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script>
+$(function(){
+    $("#country_filter_input").autocomplete({
+        minLength: 1,
+        source: function(request,response){
+            $.post("{:Url('Jiuku/OutAcCountry/ajaxKeywordSearchCountry')}",{'kw':request.term,'st':1},function(msg){
+                var msg = eval("("+msg+")");
+                if(msg.errorCode != 0){msg.result.res = [];}
+                if(msg.result.res == null){msg.result.res = [];}
+                response($.map(msg.result.res,function(item){
+                    return{id:item.id,value:item.fname+' ╱ '+item.cname}
+                }));
+            });
+        },
+        select: function( event, ui) {
+            $("#country_filter_input").val(ui.item.value).attr("disabled",true);
+            $("#country_filter_img").show();
+            $("#country_filter_val").val( ui.item.id );
+            return;
+        }
+    });
+    $("#country_filter_img").click(function(){
+        $("#country_filter_input").val('').attr("disabled",false);
+        $("#country_filter_img").hide();
+        $("#country_filter_val").val(0);
+        return;
+    });
+    $("#region_filter_input").autocomplete({
+        minLength: 1,
+        source: function(request,response){
+            $.post("{:Url('Jiuku/OutAcRegion/ajaxKeywordSearchRegion')}",{'kw':request.term,'st':1},function(msg){
+                var msg = eval("("+msg+")");
+                if(msg.errorCode != 0){msg.result.res = [];}
+                if(msg.result.res == null){msg.result.res = [];}
+                response($.map(msg.result.res,function(item){
+                    return{id:item.id,value:item.fname+' ╱ '+item.cname}
+                }));
+            });
+        },
+        select: function( event, ui) {
+            $("#region_filter_input").val(ui.item.value).attr("disabled",true);
+            $("#region_filter_img").show();
+            $("#region_filter_val").val( ui.item.id );
+            return;
+        }
+    });
+    $("#region_filter_img").click(function(){
+        $("#region_filter_input").val('').attr("disabled",false);
+        $("#region_filter_img").hide();
+        $("#region_filter_val").val(0);
+        return;
+    });
+    $("#winery_filter_input").autocomplete({
+        minLength: 1,
+        source: function(request,response){
+            $.post("{:Url('Jiuku/OutAcWinery/ajaxKeywordSearchWinery')}",{'kw':request.term,'st':1},function(msg){
+                var msg = eval("("+msg+")");
+                if(msg.errorCode != 0){msg.result.res = [];}
+                if(msg.result.res == null){msg.result.res = [];}
+                response($.map(msg.result.res,function(item){
+                    return{id:item.id,value:item.fname+' ╱ '+item.cname}
+                }));
+            });
+        },
+        select: function( event, ui) {
+            $("#winery_filter_input").val(ui.item.value).attr("disabled",true);
+            $("#winery_filter_img").show();
+            $("#winery_filter_val").val( ui.item.id );
+            return;
+        }
+    });
+    $("#winery_filter_img").click(function(){
+        $("#winery_filter_input").val('').attr("disabled",false);
+        $("#winery_filter_img").hide();
+        $("#winery_filter_val").val(0);
+        return;
+    });
+    $("#grape_filter_input").autocomplete({
+        minLength: 1,
+        source: function(request,response){
+            $.post("{:Url('Jiuku/OutAcGrape/ajaxKeywordSearchGrape')}",{'kw':request.term,'st':1},function(msg){
+                var msg = eval("("+msg+")");
+                if(msg.errorCode != 0){msg.result.res = [];}
+                if(msg.result.res == null){msg.result.res = [];}
+                response($.map(msg.result.res,function(item){
+                    return{id:item.id,value:item.fname+' ╱ '+item.cname}
+                }));
+            });
+        },
+        select: function( event, ui) {
+            $("#grape_filter_input").val(ui.item.value).attr("disabled",true);
+            $("#grape_filter_img").show();
+            $("#grape_filter_val").val( ui.item.id );
+            return;
+        }
+    });
+    $("#grape_filter_img").click(function(){
+        $("#grape_filter_input").val('').attr("disabled",false);
+        $("#grape_filter_img").hide();
+        $("#grape_filter_val").val(0);
+        return;
+    });
+});
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Dzjp/Index/index')}">大众酒评管理</a> > <a href="{:Url('Dzjp/WinelabelScanRecord/index')}">酒标扫描记录列表</a> > 关联酒标扫描记录</div>
+    <div class="list-menu"></div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="table-form">
+        <form action="{:Url('linkWine')}&backpage={$bbackpage}&scan_record_id={$scan_record_id}" method="post">
+            <input type="hidden" name="backpage" value="{$backpage}" />
+            <tbody>
+                <tr>
+                    <th width="130">关键字：</th>
+                    <td><input name="keywords" type="text" size="60" value="{$_REQUEST['keywords']}" class="input-text" title="填写外文名、英文名或中文名" /></td>
+                    <td width="200" rowspan="10"><img src="{:C('SCAN_WINE_LABEL_URL_PATH')}{$scan_record_res.filename}" style="max-height:300px;max-width:150px;" onmouseover="showing(this,'{:C('SCAN_WINE_LABEL_URL_PATH')}{$scan_record_res.filename}');" onmouseout="clearing();" /></td>
+                </tr>
+                <tr>
+                    <th>酒款类型：</th>
+                    <td>
+                        <select name="winetype">
+                            <option value="0">不限制</option>
+                            <volist name="winetype_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$_REQUEST['winetype'] eq $vo['id']">selected="selected"</if>>{$vo.cname}</option>
+                            </volist>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>所属国家：</th>
+                    <td>
+                        <input id="country_filter_input" class="input-text" type="text" size="70" <if condition="$country_res">value="{$country_res.fname} ╱ {$country_res.cname}" disabled="disabled"</if> title="填写ID或关键字后选择合适的一项" />
+                        <input id="country_filter_val" name="country" type="hidden" value="{$country_res.id}" />
+                        <img id="country_filter_img" src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-27px;cursor:pointer;<if condition="!$country_res">display:none;</if>" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>所属产区：</th>
+                    <td>
+                        <input id="region_filter_input" class="input-text" type="text" size="70" <if condition="$region_res">value="{$region_res.fname} ╱ {$region_res.cname}" disabled="disabled"</if> title="填写ID或关键字后选择合适的一项" />
+                        <input id="region_filter_val" name="region" type="hidden" value="{$region_res.id}" />
+                        <img id="region_filter_img" src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-27px;cursor:pointer;<if condition="!$region_res">display:none;</if>" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>所属庄园：</th>
+                    <td>
+                        <input id="winery_filter_input" class="input-text" type="text" size="70" <if condition="$winery_res">value="{$winery_res.fname} ╱ {$winery_res.cname}" disabled="disabled"</if> title="填写ID或关键字后选择合适的一项" />
+                        <input id="winery_filter_val" name="winery" type="hidden" value="{$winery_res.id}" />
+                        <img id="winery_filter_img" src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-27px;cursor:pointer;<if condition="!$winery_res">display:none;</if>" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>所关联的葡萄品种：</th>
+                    <td>
+                        <input id="grape_filter_input" class="input-text" type="text" size="70" <if condition="$grape_res">value="{$grape_res.fname} ╱ {$grape_res.cname}" disabled="disabled"</if> title="填写ID或关键字后选择合适的一项" />
+                        <input id="grape_filter_val" name="grape" type="hidden" value="{$grape_res.id}" />
+                        <img id="grape_filter_img" src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-27px;cursor:pointer;<if condition="!$grape_res">display:none;</if>" />
+                    </td>
+                </tr>
+                <tr><th></th><td><input type="submit" name="search" class="btn" value="筛选" /></td></tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <form action="{:Url('del')}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>外文名</th>
+                    <th>中文名</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.fname}</td>
+                    <td>{$vo.cname}</td>
+                    <td>
+                        <a href="{:Url('linkWine')}&bbackpage={$bbackpage}&scan_record_id={$scan_record_id}&wine_id={$vo.id}">建立关联</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </form>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<div style="position:absolute;border:solid 1px red;z-index:2;visibility:hidden;top:10%;left:200px;" id="popup"></div>
+<script type="text/javascript">
+function showing(this1,imgpath){
+    /*var top = $(this1).offset().top;
+    var left = $(this1).offset().left;*/
+    $("#popup").html('<img src="'+imgpath+'" width=400 height=70% />');
+    document.getElementById("popup").style.visibility="visible";
+}
+function clearing(){
+    document.getElementById("popup").style.visibility="hidden";
+}
+</script>
+<include file="Common:cpfooter" />

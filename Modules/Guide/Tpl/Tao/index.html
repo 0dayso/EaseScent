@@ -1,0 +1,86 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Guide/Goods/index')}">逸香导购</a> > <a href="{:Url('Guide/Goods/index')}">酒款管理</a> > 酒款列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Guide/Goods/add')}">添加酒款</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">用户组：
+                        <select name="gid">
+                            <option value='' selected>全部</option>
+                            <volist id="g" name="group">
+                            <option value="{$g.gid}" <if condition="$g['gid'] eq $_REQUEST['gid']" >selected</if>  >{$g.name}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        用户名：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+						昵称：
+                        <input name="nickname" type="text" value="{$_REQUEST['nickname']}" class="input-text" />
+                        &nbsp;&nbsp;
+						真实姓名：
+                        <input name="truename" type="text" value="{$_REQUEST['truename']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">正常</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">锁定</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>UID</th>
+                    <th>用户名</th>
+                    <th>昵称</th>
+					<th>真实姓名</th>
+                    <th>用户组</th>
+                    <th>创建时间</th>
+                    <th>创建者</th>
+                    <th>上次登录</th>
+                    <th>上次登录IP</th>
+                    <th>状态</th>
+                    <th>联系电话</th>
+                    <th>Administrator</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="list">
+            <tr>
+				<td>{$vo.uid}</td>
+				<td>{$vo.username}</td>
+				<td>{$vo.nickname}</td>
+				<td>{$vo.truename}</td>
+				<td>{$group[$vo['gid']]['name']}</td>
+				<td>{$vo.createtime|date='Y-m-d H:i:s', ###}</td>
+				<td>{$vo.createuser}</td>
+				<td>{$vo.logintime|date="Y-m-d H:i:s", ###}</td>
+				<td>{$vo.loginip}</td>
+				<td><if condition="$vo['status'] eq 1"><a href="{:Url('chgStatus', array('uid' => $vo['uid'], 'status' => '-1'))}" title="将状态改为锁定" style="color:#008000">正常</a><else/><a href="{:Url('chgStatus', array('uid' => $vo['uid'], 'status' => '1'))}" title="状态改为正常" style="color:#cc0000">锁定</a></if></td>
+				<td>{$vo.tel}</td>
+                <td><if condition="$vo['adminer'] eq 1"><font color="green">是</font><else />否</if></td>
+				<td><a href="{:Url('edit?uid='.$vo['uid'])}">编辑</a> <a href="{:Url('del?uid=' . $vo['uid'])}" title="是否删除" {$vo.username} "用户?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

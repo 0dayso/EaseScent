@@ -1,0 +1,13 @@
+<php>  ${ACTION_NAME} = 'class="active"'; </php>
+<div class="z_nav">
+    <ul class="z_nav_nr clear">
+        <li><a href="{:U('Inland/index?agent_id=')}{$_GET['agent_id']}"      <present name="index">{$index}         </present>> 首 页</a></li>
+        <li><a href="{:U('Inland/product?agent_id=')}{$_GET['agent_id']}"    <present name="product">{$product}     </present>> 企业产品</a></li>
+        <li><a href="{:U('Inland/info?agent_id=')}{$_GET['agent_id']}"       <present name="info">{$info}           </present>> 企业介绍</a></li>
+        <li><a href="{:U('Inland/integrity?agent_id=')}{$_GET['agent_id']}"  <present name="integrity">{$integrity} </present>> 诚信档案</a></li>
+        <li><a href="{:U('Inland/contact?agent_id=')}{$_GET['agent_id']}"    <present name="contact">{$contact}     </present>> 联系方式</a></li>
+
+        <li><a href="{:U('Inland/company_view?agent_id=')}{$_GET['agent_id']}"<present name="company_view">{$company_view}</present>> 企业形象</a></li>
+        <li><a href="{:U('Inland/cooperation?agent_id=')}{$_GET['agent_id']}"<present name="cooperation">{$cooperation}  </present>> 招商代理</a></li>
+    </ul>
+</div>

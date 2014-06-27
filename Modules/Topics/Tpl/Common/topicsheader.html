@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="{$seo_keywords}" /> 
+<meta name="description" content="{$seo_description}" /> 
+<title>{$seo_title}</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/topics/css/topicfrontendbase.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/topics/css/topicheaderfooter.css">
+<volist name="loadcss" id="vo">
+<link href="__TOPIC__/{$dirnm}/css/{$vo}" rel="stylesheet" type="text/css" />
+</volist>
+<script type="text/javascript" src="__PUBLIC__/common/js/jquery.min.js"></script>
+</head>
+
+<body>
+
+<div class="head-box" style="background-color:#fff;">
+	<div class="TONG">
+		<div class="head-index">
+			<h1><a href="http://www.wine.cn" hidefocus><img src="http://www.wine.cn/news/Common/images/topicshf/z-1.jpg"/></a></h1>
+            <span style="float:left;margin-top: 10px;">
+			<a href="http://www.wine.cn" hidefocus>首页</a>
+			<var>|</var>
+			<a href="http://news.wine.cn" hidefocus>新闻</a>
+			<var>|</var>
+			<a href="http://expo.wine.cn" hidefocus>博览</a>
+			<var>|</var>
+			<a href="http://column.wine.cn" hidefocus>专家专栏</a>
+			<var>|</var>
+			<a href="http://www.wine.cn/liejiu" hidefocus>烈酒</a>
+			<var>|</var>
+			<a href="http://wineshow.wine.cn/" hidefocus>展会</a>
+			<var>|</var>
+			<a href="http://jiuhui.wine.cn/" hidefocus>酒会</a>
+			<var>|</var>
+			<a href="http://activity.wine.cn/" hidefocus>活动</a>
+			<var>|</var>
+			<a href="http://hao.wine.cn/" hidefocus>网址导航</a>
+			<var>|</var>
+			<a href="http://job.wine.cn" hidefocus>人才</a>
+			<var>|</var>
+			<a href="http://www.wine.cn/Topics" hidefocus>专题</a>
+            </span>
+            <span style="float:right;margin-top: 10px;" id="loginDiv">
+			<a href="javascript:void(0);" onClick="location.href='http://user.wine.cn/member/auth?continue='+window.location.href" class="head-index-a" hidefocus>登录</a>
+			<var>|</var>
+			<a href="javascript:void(0);" onClick="location.href='http://user.wine.cn/member/signup?continue='+window.location.href" class="head-index-a" hidefocus>注册</a>
+			<var>|</var>
+			<a href="http://user.wine.cn/member/remember" target="_blank" class="head-index-a" hidefocus>忘记密码</a>
+            </span>
+		</div>
+	</div>
+</div>
+<!-- end of header -->

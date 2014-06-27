@@ -1,0 +1,95 @@
+<include file="Common:header" />
+    <include file="Common:agentHeader" />
+    <include file="Common:agentTopNav" />
+    <div class="z_main">
+        <div class="z_main_nr">
+            <div class="z_det_nrBox1 clear">
+                <div class="z_det_nrBox1_l clear">
+                     <include file="Common:imageShow" />
+                </div>
+                <div class="z_det_nrBox1_r">
+                    <h3 class="z_main_nrBox1_rH3">
+                            {$goodsData['goodsInfo']['fname']} {$goodsData['goodsInfo']['cname']}
+                    </h3>
+                    <div class="z_main_nrBox1_rNr">
+                        <div class="z_main_nrBox1_rNr_l">
+
+                           <if condition="$goodsData['goodsInfo']['variety']">
+                               <p>葡萄品种/比例：<span> {:str_ireplace(",","%   &nbsp;  ",$goodsData['goodsInfo']['variety'])}%</span> </p>
+                           </if>
+                           <if condition="$goodsData['goodsInfo']['price_type'] eq 1">
+                                <p> <i>代理价格：</i> <span>面 议</span> </p>
+                           <else/>
+                               <if condition="$goodsData['goodsInfo']['currency'] eq 0 && $goodsData['goodsInfo']['goods_price'] gt 0">
+                                    <p><i>代理价格：</i><span>{$goodsData['goodsInfo']['goods_price']}RMB</span></p>
+                               <elseif condition="$goodsData['goodsInfo']['currency'] eq 1 && $goodsData['goodsInfo']['goods_price'] gt 0"/>
+                                    <p><i>代理价格：</i><span>{$goodsData['goodsInfo']['goods_price']}$</span> </p>
+                               </if>
+                           </if>
+
+                            <div class="z_main_nrBox1_rNr_l_bot">
+                                <p>联系代理商：</p>
+                                <p>
+                                    <span class="contactBox">
+                                    <if condition="$Ym_UserInfo['email'] neq ''">
+                                        <a href="mailto:{$Ym_UserInfo['email']}">
+                                            <img src="__PUBLIC__/Expo/img/z_ico_mail18x15.png" />
+                                        </a>
+                                    </if>
+
+                                    <if condition="$Ym_UserInfo['qy_skype'] neq ''">
+                                       <a href="callto://{$Ym_UserInfo['qy_skype']}"><img src="__PUBLIC__/Expo/img/z_ico_skype20x20.png" border="0"></a>
+                                    </if>
+
+                                    <if condition="$Ym_UserInfo['qy_qq'] neq ''">
+                                      <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$Ym_UserInfo['qy_qq']}&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:272761906:52" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+                                    </if>
+
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="z_main_nrBox1_rNr_r">
+                        <p>
+                            代&nbsp;理&nbsp;商：
+                            <span>{$Ym_UserInfo['qy_name']}</span>
+                        </p>
+                        <p>
+                            地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：
+                            <span>{$Ym_UserInfo['qy_address']}</span>
+                        </p>
+                        <p>
+                            E-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mail：
+                            <span>{$Ym_UserInfo['email']}</span>
+                        </p>
+                        <p>
+                            电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：
+                            <span>{$Ym_UserInfo['qy_moblie']}</span>
+                        </p>
+                        <if condition="$Ym_UserInfo['qy_web_address']">
+                            <p>
+                                官&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;网：
+                                    <a target="_blank" style="color:#555555;"  href="http://{:str_replace('http\:\/\/','',$Ym_UserInfo['qy_web_address'])}">点击查看官网</a>
+                            </p>
+                        </if>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="z_main_nrBotBg978x4_one"></div>
+        <h2 class="z_main_tit">
+            <img src="__PUBLIC__/Expo/img/z_main_tit_cpjs.gif" />
+        </h2>
+        <div class="z_det_nrBox3">
+            <div class="clear">
+                <div class="nr"><p>{$goodsData['description']}</p></div>
+            </div>
+            <p class="tip">联系我们时，请注明逸香商机 上看到的，谢谢！～～</p>
+        </div>
+        <div class="z_main_nrBotBg978x4_one"></div>
+    </div>
+<include file="Common:footer" />
+
+

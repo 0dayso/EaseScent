@@ -1,0 +1,35 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/imageShow.css" />
+<div class="mod18">
+	<span class="btn prev" id="prev"></span>
+	<span class="btn next" id="next"></span>
+	<span class="btn_ prev" id="prevTop"></span>
+	<span class="btn_ next" id="nextTop"></span>
+	<!--上图-->
+	<div class="picBox" id="picBox">
+		<ul class="cf">
+			<volist id="img" name="goodsData['imgs_url']">
+				<li>
+					<a target="_blank" href="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images{$img.img_url}">
+						<php> $ex= explode(".",$img['img_url']); $img = $ex[0].'_400_thumb.'.$ex[1]; </php>
+						<img  alt="" src="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images{$img}" style="height:240px;">
+					</a>
+					<span></span>
+				</li>
+			</volist>
+		</ul>
+	</div>
+	<!--下图-->
+	<div class="listBox" id="listBox">
+		<ul class="cf">
+ 			<volist id="vo" name="goodsData['imgs_url']">
+ 				<php> $ex= explode(".",$vo['img_url']); $img = $ex[0].'_100_thumb.'.$ex[1]; </php>
+				<li class=""><i class="arr2"></i><img  alt="" src="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images{$img}"></li>
+			</volist>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/js/goodsShow.js"></script>
+
+
+
+

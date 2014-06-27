@@ -1,0 +1,74 @@
+<include file="Common:header" />
+<include file="Common:wine_city" />
+<script src="__PUBLIC__/party/common/js/lang/zh-cn.js" type="text/javascript"></script>
+<link href="__PUBLIC__/party/common/css/datepicker.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/party/common/js/WdatePicker.js" type="text/javascript"></script>
+<link href="__PUBLIC__/party/common/css/dialog.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/party/common/js/dialog.js" type="text/javascript"></script>
+<script type="text/javascript" src="__PUBLIC__/party/common/js/swfobject.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/party/common/js/jquery.uploadify.v2.1.4.min.js"></script>
+<style>
+.uploadifyQueue{
+	float:left;
+}
+</style>
+<div class="wine_main">
+	<h3 class="i_h3">
+		<span>[<a href="/index.php/Detail/index/id/{$partyInfo.id}" >{$partyInfo.title}</a>] 的全部照片</span>   
+		<var>(共<em id="photo_sum">{$photoCount}</em>张)</var>
+        <if condition="$uid eq $partyInfo['add_user']">
+		<input type="file" id="partyImg" class="i_img_up" hidefocus/>
+        </if>
+	</h3>
+	<ul class="i_img_list">
+		<volist name="photos" id="photo">
+		<li>
+			<a href="/index.php/Img/img/id/{$partyInfo.id}/page/{$i}">
+				<img  src="__ROOT__/Common/images/partyImg/{$partyInfo.id}/{$photo.image}_s.{$photo.description}" />
+			</a>
+			<if condition="$uid eq $partyInfo['add_user']">
+			<span onclick="deleteimg({$photo.id},this)"  style="position:absolute;margin-left:163px;margin-top:-95px;"><img style="width:8px;" src="/images/btn_close.png"></span>
+			 </if>
+			<span><var>{$photo.count}</var>评论</span>
+		</li>
+		</volist>
+	</ul>
+</div>
+<script>
+$(function(){
+    $('#partyImg').uploadify({
+	    'uploader'  : 'http://public.wine-cn.com/party/Common/images/uploadify.swf',
+	    // 'script'    : 'index.php/Img/createImg/sid/'+$("#sid").val()+'/id/'+$('#partyId').val(),
+	    // 'cancelImg' : 'http://public.wine-cn.com/party/Common/images/cancel.png',
+	    // 'buttonImg' : 'http://public.wine-cn.com/party/Common/images/w_dia_bg1.jpg',
+	    // 'folder'    : '/upload/uploads',
+	    // 'fileExt'   : '*.jpg',
+	    // 'fileDesc'  : 'Image Files',
+	    // 'auto'      :  true,  //true自动上传
+	    // 'sizeLimit' :  1*1024*1024,   //上传文件大小
+	    'onError'   :  function(event,ID,fileObj,errorObj){console.log(errorObj)}, 
+	    'onComplete' : function(event,queueId,fileObj,response,data){
+	        //alert(response);return;
+            console.log(response);
+	        //上传后操作的方法;
+	        if(response==110){
+	        	alert("请先登录!");
+	        	return;
+	        }else{
+		     	if(response == 10001){
+		     	    wine.alert('上传成功');
+                    window.location.reload();
+                }else{
+		     		wine.alert('上传失败');
+		     		return;
+		     	}
+	        }
+	     },
+	    'onCancel' : function(){
+	    }
+	});
+ });
+</script>
+<input type="hidden" id="sid" value="{$uid}">
+<input type="hidden" id="partyId" value="{$partyInfo.id}">
+<include file="Common:footer" />

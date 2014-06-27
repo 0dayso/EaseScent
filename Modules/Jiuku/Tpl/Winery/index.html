@@ -1,0 +1,64 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > 酒庄列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add', array('rpp' => $page_parameter_base64))}">添加新酒庄</a>
+        <a class='btn' href="{:Url('html', array('rpp' => $page_parameter_base64))}">批量生成静态页</a>
+        <a class='btn' href="{:Url('merge')}">合并酒庄</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键字：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="0">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">开启</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <form action="{:Url('del')}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectAll('ids[]');"></th>
+                    <th width="30">ID</th>
+                    <th>外文名</th>
+                    <th>中文名</th>
+                    <th width="60">状态</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td><input type="checkbox" value="{$vo.id}" name="ids[]"></td>
+                    <td>{$vo.id}</td>
+                    <td><span title="{$vo.fname}">{$vo.fname}</span></td>
+                    <td><span title="{$vo.cname}">{$vo.cname}</span></td>
+                    <td><if condition="$vo['status'] eq 1"><a href="{:Url('chgStatus', array('id' => $vo['id'], 'status' => -1))}" title="将状态改为关闭" style="color:#00cc00">开启</a><else/><a href="{:Url('chgStatus', array('id' => $vo['id'], 'status' => 1))}" title="将状态改为开启" style="color:#cc0000">关闭</a></if></td>
+                    <td><a href="{:Url('edit', array('id' => $vo['id'], 'rpp' => $page_parameter_base64))}">编辑</a> <a href="{:Url('del?id='.$vo['id'])}" target="delete" title='确定要删除ID为“{$vo.id}”的产区吗？'>删除</a></td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+
+        <div class="footer"><label for="check_box" style="margin-right:10px;cursor:pointer;">全选/取消</label> <input type="submit" class="btn" name="dosubmit" value="删除" onclick="return confirm('您确定要删除吗？')"></div>
+        </form>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

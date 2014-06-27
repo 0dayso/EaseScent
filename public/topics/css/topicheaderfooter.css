@@ -1,0 +1,33 @@
+
+@charset "utf-8";
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, pic, section, span {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "宋体";
+    font-size: 14px;
+}
+ul {
+    list-style: none outside none;
+}
+a {
+    text-decoration: none;
+}
+img {
+    border: 0 none;
+}
+h3 {
+    color: #000000;
+    font-size: 14px;
+    line-height: 28px;
+}
+.clear {
+}
+.clear:after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}

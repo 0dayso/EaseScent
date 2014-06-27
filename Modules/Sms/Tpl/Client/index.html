@@ -1,0 +1,39 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Sms/Client/index')}">短信发送客户端管理</a> > CLIENT列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Sms/Client/add')}">增加客户端</a>
+    </div>
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>客户端ID</th>
+                    <th>客户端名称</th>
+                    <th>短信平台</th>
+                    <th>短信后缀签名</th>
+                    <th>skey</th>
+                    <th>修改人</th>
+                    <th>修改时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="list">
+            <tr>
+				<td>{$vo.id}</td>
+				<td>{$vo.client_name}</td>
+				<td>{$platforms[$vo['platform_id']]['name']}</td>
+				<td>{$vo.text_suffix}</td>
+                <td>{$vo.skey}</td>
+				<td>{$vo.update_user}</td>
+				<td>{$vo.update_time|date='Y-m-d H:i:s', ###}</td>
+				<td><a href="{:Url('edit?cid='.$vo['id'])}">编辑</a> <a href="{:Url('del?cid=' . $vo['id'])}" title="是否删除“ {$vo.client_name} ”客户端?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

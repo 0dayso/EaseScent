@@ -1,0 +1,92 @@
+
+<include file="Admin:header"/>
+    <include file="Admin:theme_change"/>
+        <include file="Admin:header_nav" />
+        <!-- content -->
+        <div id="content">
+           <include file="Admin:left" />
+            <!-- content / right -->
+            <div id="right">
+
+                <!-- forms -->
+                <div class="box">
+                    <!-- box / title -->
+                    <div class="title">
+                        <h5>权限管理</h5>
+                    </div>
+                    <!-- end box / title -->
+                    <form id="form" action="{:U('AdminPower/powerSubmit')}" method="post">
+                    <div class="form">
+                        <div class="fields">
+                           <volist id="vo"  name="power_data">
+                                <div class="field">
+                                    <div class="label label-checkbox">
+                                        <label>{$vo[0]['value']}</label>
+                                    </div>
+                                    <div class="checkboxes">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <volist id="v" name="vo">
+                                                        <if condition="$v['fid'] neq 0">
+                                                         <td class="selected last">
+                                                          <input type="checkbox" id="checkbox-{$v['id']}" name="user_power[{$v[name]}]" value="{$v['id']}"
+                                                           <if condition="$condition['all']"> checked </if>
+                                                           <php> if(in_array($v['id'],$condition['user_checked_powers'])){ echo "checked"; }</php>
+                                                           />
+                                                          <label for="checkbox-{$v['id']}">{$v['value']}</label>
+                                                         </td>
+                                                        </if>
+                                                    </volist>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                 </div>
+                            </volist>
+
+                            <table style="margin-top:20px;">
+                                <tbody>
+                                    <td class="selected last" >
+                                        <input type="checkbox" id="checkbox" name="checkall"  class="checkall" value="1" />
+                                        <input type="hidden" value="{$_GET['uid']}" name="uid">
+
+                                        <label for="checkbox"><font color="#BF5757">选择全部</font> </label>
+                                    </td>
+                                </tbody>
+                            </table>
+
+
+                            <div class="buttons">
+                                <div class="highlight">
+                                <input type="submit" name="submit" value="提交" />
+                                <input type="reset" name="reset" value="重置" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <!-- end forms -->
+
+            </div>
+            <!-- end content / right -->
+        </div>
+
+
+        <style type="text/css">
+            #content div.box table td{border-bottom:0px;}
+            #content div.box table tr.selected td {background:#FFF;}
+        </style>
+
+        <script type="text/javascript">
+        var  showHeight = "200px";
+            $(document).ready(function () {
+                style_path = "__PUBLIC__/Expo/Expo_admin/resources/css/colors";
+                $("#date-picker").datepicker();
+                $("#box-tabs, #box-left-tabs").tabs();
+            });
+        </script>
+
+<include file="Admin:footer"/>

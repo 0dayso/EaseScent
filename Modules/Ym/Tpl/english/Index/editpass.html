@@ -1,0 +1,76 @@
+<include file="Common:header" />
+    <div class="re_main clear">
+        <include file="Common:menu" />
+        <div class="re_main_r">
+        	<h3 class="re_main_r_h3">Change Password</h3>
+            <div class="bb1cccccc"></div>
+            <p class="col959595">Complicated password could ensure your account safety</p>
+            <div class="changePassword">
+            	<table width="100%" cellpadding="0" cellspacing="0">
+                	<tbody>
+                    	<tr>
+                        	<td width="54%"><input type="password" id="oldpass" class="w358Inp" value="" /></td>
+                            <td width="46%"><p class="tip" style="display:none;"></p></td>
+                        </tr>
+                        <tr>
+                        	<td><input type="password" class="w358Inp" id="newpass" value="" /></td>
+                            <td><p class="tip" style="display:none;"> </p></td>
+                        </tr>
+                        <tr>
+                        	<td><input type="password" class="w358Inp" id="repass" value="" /></td>
+                            <td><p class="tip" style="display:none;"></p></td>
+                        </tr>
+                        <tr>
+                        	<td>
+                                <a href="#" id="editpass" class="pinkBtn"><span>Submit</span></a> 
+                                <a href="#" class="pinkBtn"><span>Cancel</span></a>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="okBox">Your password has been updated!</div>-->
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+$(function(){
+	$("#editpass").click(function(){
+		var oldpass = $("#oldpass").val();
+		var newpass = $("#newpass").val();
+		var repass = $("#repass").val();
+		if(oldpass==""){
+			ep_error("oldpass","Please enter the valid password!");
+			return;
+		}
+		if(newpass==""){
+			ep_error("newpass","Please enter a valid password!");
+			return;
+		}
+		if(newpass.length<5||newpass.length>21){
+			alert("Password must be at least 6 characters long.");
+			return;
+		}
+		if(newpass!=repass){
+			alert("Please enter the same value again!");
+			return;
+		}
+		$.post("/index.php/Index/updatepass",{oldpass:oldpass,newpass:newpass},function(result){
+			if(result.status==1){
+				alert(result.message);
+				window.location.href=result.jumpUrl;
+			}else{
+				alert(result.message);
+			}
+		},"json");
+		
+	})
+})
+function ep_error(id,msg){
+    var obj = $("#"+id).parent().next().children();
+    obj.show();
+    obj.html(msg);
+}
+</script>
+</html>

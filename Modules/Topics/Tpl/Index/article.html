@@ -1,0 +1,42 @@
+<include file="Common:header" />
+ <table id="articleList">
+    <tr><th></th><th><input type="checkbox" id="selAllBtn"></th><th>文章ID</th><th>标题</th><th>分类[ID]</th></tr>
+    <volist name="articlelist" id="vo">
+    <tr><td>{$i}</td><td><input type="checkbox" name="selects[]" /></td><td>{$vo.article_id}</td><td title="{$vo.title}">{$vo.title}</td><td>{$vo.sort_name} [<span style="color:green; min-width:20px; display:inline-block;">{$vo.sort_id}</span>]</td></tr>
+    </volist>
+    <tr><td colspan="7">{$pagebar}</td></tr>
+ </table>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $('table').css({width:'100%',height:'auto'});
+        $('table td').css('textAlign','center');
+    	parent.document.getElementById("ifrm").style.height = document.body.scrollHeight +"px";//iframe auto height
+        $('#so',parent.document.body).click(function(){
+        	parent.document.getElementById("ifrm").style.height = document.body.scrollHeight +"px";
+        });
+
+    // 全选/反选                                                                                                                                                          
+        $('#selAllBtn').change(function(){
+            var st = $(this).prop('checked');//alert(st);return;
+            var oIpt = $('input[name="selects[]"]');
+            oIpt.prop('checked',st);
+            if(st){
+            	oIpt.closest('tr').css('backgroundColor','#E8B36D');
+    		}else{
+    			oIpt.closest('tr').css('backgroundColor','');
+    		}
+        });
+    	$('input[name="selects[]"]').each(function(){
+    		$(this).change(function(){
+        		var st = $(this).prop('checked');
+    			if(st){
+        			$(this).closest('tr').css('backgroundColor','#E8B36D');
+        		}else{
+        			$(this).closest('tr').css('backgroundColor','');
+        		}
+    		});
+    	});
+    });
+</script>

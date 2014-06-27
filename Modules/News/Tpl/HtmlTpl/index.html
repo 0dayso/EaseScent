@@ -1,0 +1,505 @@
+<include file="HtmlTpl:header" />
+<!--引入头部文件-->
+<?php
+//闪购
+if(!$shangou = json_decode(CurlGet(C('TMPL_PARSE_STRING.__TUAN__').'/?mod=openapi&code=eswine',3),true))	$GLOBALS['makehtml'] = false;
+//专题
+if(!$zhuanti = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"index_zhuanti"}',3),true))	$GLOBALS['makehtml'] = false;
+if($zhuanti['response'] != 0)	$GLOBALS['makehtml'] = false;
+//导购
+if(!$daogou = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"index_daogou"}',3),true))	$GLOBALS['makehtml'] = false;
+if($daogou['response'] != 0)	$GLOBALS['makehtml'] = false;
+//酒会
+if(!$jiuhui = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"index_jiuhui"}',3),true))	$GLOBALS['makehtml'] = false;
+if($jiuhui['response'] != 0)	$GLOBALS['makehtml'] = false;
+//展会
+if(!$zhanhui = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"index_zhanhui"}',3),true))	$GLOBALS['makehtml'] = false;
+if($zhanhui['response'] != 0)	$GLOBALS['makehtml'] = false;
+//培训
+if(!$peixun = json_decode(CurlGet(C('TMPL_PARSE_STRING.__WWW__').'Api/index/project_id/5/parameter/{"get":"index_peixun"}',3),true))	$GLOBALS['makehtml'] = false;
+if($peixun['response'] != 0)	$GLOBALS['makehtml'] = false;
+//酒评
+if(!$jiuping_get = json_decode(CurlGet(C('TMPL_PARSE_STRING.__I__').'?m=api/client/index.jiuping',3),true))	$GLOBALS['makehtml'] = false;
+if($jiuping_get['errno'] != 0)	$GLOBALS['makehtml'] = false;
+foreach($jiuping_get['rst'] as $key=>$val){
+    $jiuping[] = array(
+                      'url' => C('TMPL_PARSE_STRING.__I__').'?m=detail&tid='.$val['tid'],
+                      'wine_pic' => C('TMPL_PARSE_STRING.__I__').'var/uploads/tmpindeximg/'.$val['img'],
+                      'wine_cname' => $val['wine_name'],
+                      'wine_scname' => A('Common')->mystrcut($val['wine_name'],10),
+                      'wine_fname' => $val['wine_e_name'],
+                      'wine_sfname' => A('Common')->mystrcut($val['wine_e_name'],10),
+                      'wine_year' => $val['wine_year'],
+                      'user_pic' => $val['avatar_url'],
+                      'user_name' => $val['nickname'],
+                      'user_score' => (1 <= $val['wine_score'] && $val['wine_score'] <= 5) ? C('TMPL_PARSE_STRING.__PUBLIC__').'front/index/images/index/x'.$val['wine_score'].'.jpg' : '',
+                      'user_comment' => A('Common')->mystrcut($val['content'],30,'...'),
+                      'user_url' => C('TMPL_PARSE_STRING.__I__').'User/u/'.$val['uid'],
+                      );
+}
+//人才招聘
+if(!$zhaopin_get = json_decode(CurlGet(C('TMPL_PARSE_STRING.__JOB__').'job_api.php?method=new_recruitment&num=3'),true))	$GLOBALS['makehtml'] = false;
+foreach($zhaopin_get as $key=>$val){
+    $zhaopin[] = array(
+                      'url' => C('TMPL_PARSE_STRING.__JOB__').'companyjob.php?id='.$val['id'],
+                      'jobs' => $val['jobs'],
+                      'sjobs' => A('Common')->mystrcut($val['jobs'],7),
+                      'post' => $val['post'],
+                      'spost' => A('Common')->mystrcut($val['post'],13),
+                      );
+}
+//人才求职
+if(!$qiuzhi_get = json_decode(CurlPost(C('TMPL_PARSE_STRING.__JOB__').'job_api.php?method=new_jobs&num=3'),true))	$GLOBALS['makehtml'] = false;
+foreach($qiuzhi_get as $key=>$val){
+    $qiuzhi[] = array(
+                      'url' => C('TMPL_PARSE_STRING.__JOB__').'resumeview.php?uid='.$val['uid'],
+                      'name' => $val['name'],
+                      'sex' => $val['sex'],
+                      'edu' => $val['edu'],
+                      'job1_son' => $val['job1_son'],
+                      );
+}
+//葡萄酒产区
+$chanqu = D()->table('jiuku_country')->field('id,fname,cname')->where(array('status'=>'1','is_del'=>'-1'))->order('queue ASC')->select();
+foreach($chanqu as $key=>$val){
+	$chanqu[$key]['url'] = C('TMPL_PARSE_STRING.__REGION__').'c'.$val['id'].'.shtml';
+	$img = D()->table('jiuku_country_img')->where(array('country_id'=>$val['id'],'status'=>'1','is_del'=>'-1'))->order('queue ASC')->getfield('filename');
+    $chanqu[$key]['img'] = $img ? C('TMPL_PARSE_STRING.__UPLOAD__').'Jiuku/Country/images/'.$img : '';
+}
+//封面页数据获取
+$data1 = D('BlockData')->getData(1);//幻灯片
+$data2 = D('BlockData')->getData(2);//置顶大字新闻
+$data3 = D('BlockData')->getData(3);//置顶普通新闻
+$data4 = D('BlockData')->getData(4);//导购
+$data5 = D('BlockData')->getData(5);//商机/营销
+$data6 = D('BlockData')->getData(6);//专家
+$data7 = D('BlockData')->getData(7);//产品招商 - 知名酒商
+$data8 = D('BlockData')->getData(8);//产品招商 - 热门产品
+?>
+    <div class="z_main">
+    	<div class="z_main_lr_column mt0 clear">
+        	<div class="l">
+            	<div class="flashPlay">
+                	<div class="big_img">
+                    	<volist name="data1" id="vo" key="k">
+                        <a href="{$vo.url}" target="_blank" title="{$vo.title}" <if condition="$k eq 1">style="display:block;"</if>><img src="{$vo.image}" alt="{$vo.title}" height="460"></a>
+                        </volist>
+                    </div>
+                    <div class="img_shadow"></div>
+                    <div class="img_intro">
+                    	<volist name="data1" id="vo" key="k">
+                        <p <if condition="$k eq 1">class="img_intro_show"</if>>
+                            <span class="img_title"><a href="{$vo.url}" target="blank" title="{$vo.title}">{$vo.title}</a></span>
+                            <a href="{$vo.url}" target="blank">{$vo.description}</a>
+                        </p>
+                        </volist>
+                     </div>
+                    <ul class="img_num">
+                    	<volist name="data1" id="vo" key="k"><li <if condition="$k eq 1">class="img_num_red"</if>>{$k}</li></volist>
+                    </ul>
+                </div>
+                <div class="newsList">
+                	<volist name="data2" id="vo" key="k">
+                	<h2 title="{$vo.title}"><a href="{$vo.url}" target="_blank">{$vo.title}</a></h2>
+                    <p class="newsList_p">{$vo.description}</p>
+                    </volist>
+                    <ul class="bt1do">
+                    	<volist name="data3" id="vo" key="k">
+                    	<li <if condition="$k eq 1">class="mt10"</if>>
+                            <a href="{$vo.url}" target="_blank" <if condition="$k%3 eq 1">style="color:#c00000;"</if>><!--<span></span><i> | </i>--><span title="{$vo.title}">{$vo.title}</span></a>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+            <div class="r z_maintoprbox">
+                <div class="z_r_tab">
+                	<div class="z_r_tab_tit clear">
+                    	<ul class="z_r_tab_titmenu">
+                        	<li class="active">逸香应用</li>
+                            <li class="nbr">逸香产品</li>
+                        </ul>
+                    </div>
+                    <div class="z_r_tab_nr" style="display: block;">
+                    	<ul class="chplist2">
+                            <li class="w90">
+                                <p class="icoBtn"><a href="__WWW__Grandcru/adpage" target="_blank"><img src="__PUBLIC__front/index/images/index/yxProductTit_ico01.gif"></a></p>
+                                <div class="nr"><h4><a href="__WWW__Grandcru/adpage" target="_blank">逸香名庄</a></h4></div>
+                            </li>
+                            <li>
+                                <p class="icoBtn"><a href="__WWW__TastingNote/downpage" target="_blank"><img src="__PUBLIC__front/index/images/index/yxProductTit_ico02.gif"></a></p>
+                                <div class="nr"><h4><a href="__WWW__TastingNote/downpage" target="_blank">逸香品酒笔记</a></h4></div>
+                            </li>
+                            <li class="w90">
+                                <p class="icoBtn"><a href="__I__index.php?m=about&c=iphone" target="_blank"><img src="__PUBLIC__front/index/images/index/yxProductTit_ico03.gif"></a></p>
+                                <div class="nr"><h4><a href="__I__index.php?m=about&c=iphone" target="_blank">逸香酒评</a></h4></div>
+                            </li>
+                            <li>
+                                <p class="icoBtn"><a href="http://itunes.apple.com/cn/app/id588285528?mt=8" target="_blank"><img src="__PUBLIC__front/index/images/index/yxProductTit_ico04.gif"></a></p>
+                                <div class="nr"><h4><a href="http://itunes.apple.com/cn/app/id588285528?mt=8" target="_blank">品酒人生</a></h4></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="z_r_tab_nr" style="display: none;">
+                    	<p class="chplist">
+                            <a href="__MINGZHUANG__" target="_blank">名庄</a>
+                            <a href="__REGION__" target="_blank">产区</a>
+                            <a href="__CIDIAN__" target="_blank">词典</a>
+                            <a href="__LUNTAN__" target="_blank">论坛</a>
+                            <a href="__WWW__Video/show" target="_blank">视频</a>
+                            <a href="__DAOHANG__" target="_blank">网址导航</a>
+                            <a href="__WWW__pinzhong" target="_blank">葡萄品种</a>
+                            <a href="__WWW__Magazine/show" target="_blank">手机杂志</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="r_sgBox">
+                	<div class="r_sgBox_tit"><span class="fl" style="float: left;">逸香闪购</span> <span><img src="__PUBLIC__front/index/images/index/z_r_top_lbtn.gif" onclick="toMove2('r')"> <img src="__PUBLIC__front/index/images/index/z_r_top_rbtn.gif" onclick="toMove2('l')"></span></div>
+                    <div class="r_sgBoxShowbox" id="SeamlessHandover2">
+                        <ul class="r_sgBox_list lasttime" style="width: 1310px; left: 0px;">
+                            <volist name="shangou" id="vo">
+                            <li>
+                            	<p class="r_sgBox_pic"><a href="{$vo.url}" target="_blank"><img src="{$vo.img}"></a></p>
+                                <div class="nr">
+                                    <em><if condition="$vo['no_price'] eq 1">保密<else/>￥{$vo.nowprice}</if></em>
+                                    <span></span>
+                                    <input type="hidden" value="{$vo.overtime}" />
+                                    <strong><a href="{$vo.url}" target="_blank"><if condition="$vo['surplus'] eq 0"><img src="__PUBLIC__front/index/images/index/z_r_top_gobuybtn01.gif"><else/><img src="__PUBLIC__front/index/images/index/z_r_top_gobuybtn.gif"></if></a></strong>
+                                </div>
+                            </li>
+                            </volist>
+                        </ul>
+                    </div>
+                    <script type="text/javascript" src="__PUBLIC__front/index/js/shangou.js"></script>
+                </div>
+                <div class="r_ggBox">
+                    <!-- 广告位：首页第一屏右侧（上） banner -->
+                    <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614248";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+                </div>
+            </div>
+        </div>
+        <div class="z_main_lr_column clear">
+        	<div class="l">
+            	<div class="main_tab clear">
+                	<div class="main_tab_tit clear">
+                    	<ul>
+                        	<li class="active">专题</li>
+                            <li class="nbr">博览</li>
+                        </ul>
+                        <p class="more j_tabmore" style="display:block;"><a href="__WWW__/Topics" target="_blank">More></a></p>
+                        <p class="more j_tabmore"><a href="__EXPO__" target="_blank">More></a></p>
+                    </div>
+                    <div class="main_tab_nr" style="display:block;">
+                    	<ul class="picnewlist clear">
+                        	<volist name="zhuanti.data" id="vo">
+                        	<li>
+                            	<p><a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.img}" alt="{$vo.stitle}" /></a></p>
+                                <h3><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.stitle}</a></h3>
+                                <p class="nr">{$vo.description}</p>
+                            </li>
+                            </volist>
+                        </ul>
+                    </div>
+                    <div class="main_tab_nr">
+                    	<div class="newsList newsList_lBox">
+                            <ul>
+                            	<volist name="expo_none_news" id="vo">
+                                <li><a href="{$vo.html}" target="_blank"><span title="{$vo.sort_name}">{$vo.ssort_name}</span><i> | </i><span title="{$vo.title}">{$vo.title}</span></a>{$vo.original_html}</li>
+                                </volist>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="newsList">
+                	<h2><a href="__DAOGOU__" target="_blank"><img src="__PUBLIC__front/index/images/index/newsListTit01.gif" /></a></h2>
+                    <ul>
+                    	<volist name="data4" id="vo" key="k">
+                    	<li><a href="{$vo.url}" target="_blank" <if condition="$k%3 eq 1">style="color:#c00000;"</if>><span title="{$vo.title}">{$vo.title}</span></a></li>
+                        </volist>
+                    </ul>
+                    <h2 class="mt10"><a href="__SHANGJI__"><img src="__PUBLIC__front/index/images/index/newsListTit02.gif" /></a></h2>
+                    <ul>
+                    	<volist name="data5" id="vo" key="k">
+                        <li><a href="{$vo.url}" target="_blank" <if condition="$k%3 eq 1">style="color:#c00000;"</if>><span title="{$vo.title}">{$vo.title}</span></a></li>
+                        </volist>
+                    </ul>
+                    <h2 class="mt10"><a href="__COLUMN__" target="_blank"><img src="__PUBLIC__front/index/images/index/newsListTit03.gif" /></a></h2>
+                    <ul class="expertlist">
+                    	<volist name="data6" id="vo" key="k">
+                    	<li><a href="{$vo.url}" target="_blank" <if condition="$k%4 eq 1">style="color:#c00000;"</if>><span title="{$vo.title}">{$vo.title}</span></a></li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+            <div class="r">
+                <div class="mt12 adsboxh89">
+                    <!-- 广告位：首页第一屏右侧（下） banner -->
+                    <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614249";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+                </div>
+                <div class="mt12 adsboxh89">
+                    <!-- 广告位：首页第二屏右侧（一）banner -->
+                    <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614252";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+                </div>
+                <div class="mt12 adsboxh89">
+                    <!-- 广告位：首页第二屏右侧（二）banner -->
+                    <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614253";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+                </div>
+                <div class="mt12 adsboxh89">
+                    <!-- 广告位：首页第二屏右侧（三）banner -->
+                    <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614254";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+                </div>
+            </div>
+        </div>
+        <div class="z_main_lr_column clear">
+        	<div class="l adsw720">
+            	<!-- 广告位：首页 第二屏左侧半通栏 -->
+				<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614268";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+            <div class="r adsh102">
+            	<!-- 广告位：首页第二屏右侧（四） banner -->
+				<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614271";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+        </div>
+        <div class="z_main_column">
+        	<div class="z_main_column_tit"><h2><a href="__DAOGOU__" target="_blank"><img src="__PUBLIC__front/index/images/index/index_tit1.gif" /></a><img src="__PUBLIC__front/index/images/index/index_tit1_a.gif" /></h2> <a href="__DAOGOU__" target="_blank" class="more">更多>></a></div>
+            <ul class="z_main_column_6list">
+            	<volist name="daogou.data" id="vo" mod="2">
+            	<li <eq name="mod" value="1">class="bgf2"</eq>>
+                	<p class="pic"><a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.pic}" /></a><span class="picbotBg"></span></p>
+                    <div class="nr">
+                    	<h3 style="font-size:12px;line-height:18px;"><a href="{$vo.url}" target="_blank" title="{$vo.title}" style="color:#333;">{$vo.title_s}</a></h3>
+                    	<h3 style="font-size:12px;line-height:18px;font-weight:normal;"><a href="{$vo.url}" target="_blank" title="{$vo.title2}" style="color:#666;">{$vo.title2_s}</a></h3>
+                        <p class="price">￥<span>{$vo.price}</span></p>
+                        <div class="int">
+                        	 <p>推荐指数: <span class="c_ff6600 fs20 fsi">{$vo.score}</span> 分</p>
+                             <p><i>推荐理由:</i></p>
+                             <p class="mt0" title="{$vo.desc1}&#10;{$vo.desc2}&#10;{$vo.desc3}">
+                             	<span class="reason">{$vo.desc1}</span>
+                                <span class="reason">{$vo.desc2}</span>
+                                <!--<span class="reason">{$vo.desc3}</span>-->
+                             </p>
+                        </div>
+                    </div>
+                </li>
+                </volist>
+            </ul>
+        </div>
+        <div class="z_main_lr_column clear">
+        	<div class="l adsw720">
+            	<!-- 广告位：首页 第三屏左侧半通栏 -->
+				<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614281";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+            <div class="r adsh102">
+            	<!-- 广告位：首页第三屏右侧（一） banner -->
+				<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614288";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+        </div>
+        <div class="z_main_column">
+        	<div class="z_main_column_tit"><h2><a href="__SHANGJI__" target="_blank"><img src="__PUBLIC__front/index/images/index/index_tit2.gif" /></a><img src="__PUBLIC__front/index/images/index/index_tit2_a.gif" /></h2> <a href="__SHANGJI__" target="_blank" class="more">更多>></a></div>
+            <div class="z_business">
+            	<div class="l">
+                	<h2 class="z_business_tit"><a href="__SHANGJI__" target="_blank">知名酒商</a></h2>
+                    <ul class="z_business_list">
+                    	<volist name="data7" id="vo">
+                    	<li>
+                        	<p class="pic"><a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" /></a></p>
+                            <p class="tit"><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></p>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+                <div class="r">
+                	<h2 class="z_business_tit"><a href="__SHANGJI__" target="_blank">热门产品</a></h2>
+                    <ul class="z_business_list">
+                    	<volist name="data8" id="vo">
+                    	<li>
+                        	<p class="pic"><a href="{$vo.url}" target="_blank" title="{$vo.title}"><img src="{$vo.image}" /></a></p>
+                            <p class="tit"><a href="{$vo.url}" target="_blank" title="{$vo.title}">{$vo.title}</a></p>
+                        </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="z_main_lr_column clear">
+        	<div class="l">
+            	<div class="z_main_column_tit"><h2><a href="__JIUHUI__" target="_blank"><img src="__PUBLIC__front/index/images/index/index_tit3.gif" /></a></h2> <a href="__JIUHUI__" target="_blank" class="more">更多>></a></div>
+                <div class="z_reception mt20">
+                	<div class="z_reception_l">
+                    	<p class="pic"><a href="__JIUHUI__/Detail/index/id/{$jiuhui.data.img.id}" target="_blank" title="{$jiuhui.data.img.city} | {$jiuhui.data.img.title}"><img src="{$jiuhui.data.img.pic}" width="332" height="222" /></a></p>
+                        <p class="tit"><a href="__JIUHUI__/Detail/index/id/{$jiuhui.data.img.id}" target="_blank" title="{$jiuhui.data.img.city} | {$jiuhui.data.img.title}">{$jiuhui.data.img.stitle}</a></p>
+                    </div>
+                    <div class="newsList" style="margin-left:4px; width:376px;">
+                    	<ul class="mt0">
+                        	<li><a href="__JIUHUI__/Detail/index/id/{$jiuhui.data.top.id}" target="_blank" title="{$jiuhui.data.top.city} | {$jiuhui.data.top.title}"><span class="colared">{$jiuhui.data.top.city}</span><i> | </i><span class="colared">{$jiuhui.data.top.stitle}</span></a></li>
+                            <volist name="jiuhui.data.list" id="vo">
+                        	<li><a href="__JIUHUI__/Detail/index/id/{$vo.id}" target="_blank" title="{$vo.city} | {$vo.title}"><span>{$vo.city}</span><i> | </i><span>{$vo.stitle}</span></a></li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="r">
+            	<div class="z_main_column_tit"></div>
+                <div class="z_r_tab">
+                	<div class="z_r_tab_tit clear">
+                    	<ul class="z_r_tab_titmenu">
+                        	<li class="active">展会</li>
+                            <li class="nbr">培训及讲座</li>
+                        </ul>
+                        <div class="more">
+                        	<a href="__WINESHOW__" target="_blank" class="j_tabmore" style="display:block;">更多>></a>
+                            <a href="__PEIXUN__" target="_blank" class="j_tabmore">更多>></a>
+                        </div>
+                    </div>
+                    <div class="z_r_tab_nr" style="display:block;">
+                    	<p class="pic"><a href="__ZHANHUI__theshow/sid/{$zhanhui.data.pic.id}" target="_blank" title="{$zhanhui.data.pic.title} {$zhanhui.data.pic.date}"><img src="{$zhanhui.data.pic.pic}" alt="{$zhanhui.data.pic.title}" width="238" height="116" /></a></p>
+                        <p class="pictit"><a href="__ZHANHUI__theshow/sid/{$zhanhui.data.pic.id}" target="_blank" title="{$zhanhui.data.pic.title} {$zhanhui.data.pic.date}">{$zhanhui.data.pic.stitle}</a></p>
+                        <ul class="z_r_tab_nrlist">
+                        	<volist name="zhanhui.data.none" id="vo">
+                        	<li><a href="__ZHANHUI__theshow/sid/{$vo.id}" target="_blank" title="[{$vo.city}] {$vo.title} {$vo.date}"><span><em>[{$vo.city}]</em><var>{$vo.stitle}</var></span><i>{$vo.date}</i></a></li>
+                            </volist>
+                        </ul>
+                    </div>
+                    <div class="z_r_tab_nr">
+                        <ul class="z_r_tab_nrlist" style="margin-top:4px;">
+                        	<volist name="peixun.data" id="vo">
+                        	<li><a href="__PEIXUN__Detail/index/id/{$vo.id}" target="_blank" title="[{$vo.city}] {$vo.title} {$vo.date}"><span><em>[{$vo.city}]</em><var>{$vo.stitle}</var></span><i>{$vo.date}</i></a></li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="z_main_lr_column clear">
+        	<div class="l">
+            	<div class="linel clear">
+                	<div class="winecon">
+                    	<div class="winecon_tit">
+                        	<h2><a href="__I__" target="_blank"><img src="__PUBLIC__front/index/images/index/index_tit4.gif" /></a></h2>
+                            <p class="more"><a href="__I__" target="_blank">更多>></a></p>
+                        </div>
+                        <div class="winecon_nr">
+                        	<ul class="winecon_nrlist">
+                            	<volist name="jiuping" id="vo">
+                            	<li>
+                                	<p class="pic"><a href="{$vo.url}" target="_blank"><img src="{$vo.wine_pic}" width="120" height="182" /></a><span class="picbotBg"></span></p>
+                                    <div class="nr">
+                                    	<h3><a href="{$vo.url}" target="_blank"><if condition="$vo['wine_cname']"><var title="{$vo.wine_cname}">{$vo.wine_scname}</var><br /></if><if condition="$vo['wine_fname']"><var title="{$vo.wine_fname}">{$vo.wine_sfname}</var></if></a></h3>
+                                        <if condition="$vo['wine_year']"><p class="year">年份：<span>{$vo.wine_year}</span></p></if>
+                                        <div class="user">
+                                        	<p class="userlogo"><a href="{$vo.user_url}" target="_blank"><img src="{$vo.user_pic}" width="45" height="45" /></a></p>
+                                            <div class="userinfo">
+                                            	<h4><a href="{$vo.user_url}" target="_blank" class="username">{$vo.user_name}</a></h4>
+                                                <p><i>TA </i>的评分：</p>
+                                                <p><img src="{$vo.user_score}" width="63" height="10" /></p>
+                                            </div>
+                                        </div>
+                                        <p class="about">{$vo.user_comment}<a href="{$vo.url}" target="_blank">[全文]</a></p>
+                                    </div>
+                                </li>
+                                </volist>
+                            </ul>
+                            <ol class="winecon_nrlistbtn">
+                            	<li class="active"></li>
+                                <li></li>
+                                <li></li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="talents">
+                    	<h2><a href="__JOB__" target="_blank"><img src="__PUBLIC__front/index/images/index/index_tit5.gif" /></a></h2>
+                        <div class="talents_nr">
+                        	<div class="talents_nrtit clear">
+                            	<h3 class="talents_h3"><a href="__JOB__search.php" target="_blank">最新招聘</a></h3>
+                                <p class="more"><a href="__JOB__search.php" target="_blank">更多>></a></p>
+                            </div>
+                            <ul class="talents_nrlist">
+                            	<volist name="zhaopin" id="vo">
+                            	<li><a href="{$vo.url}" target="_blank"><span title="{$vo.jobs}">{$vo.sjobs}</span> <i>|</i> <span title="{$vo.post}">{$vo.spost}</span></a></li>
+                                </volist>
+                            </ul>
+                            <div class="talents_nrtit clear">
+                            	<h3 class="talents_h3"><a href="__JOB__userjob.php" target="_blank">个人求职</a></h3>
+                                <p class="more"><a href="__JOB__userjob.php" target="_blank">更多>></a></p>
+                            </div>
+                            <ul class="talents_nrlist">
+                            	<volist name="qiuzhi" id="vo">
+                            	<li><a href="{$vo.url}" target="_blank"><span>{$vo.name}&nbsp;{$vo.sex}&nbsp;{$vo.edu}</span> <i>|</i> <span>{$vo.job1_son}</span></a></li>
+                                </volist>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="r">
+            	<div class="adsboxh89">
+                	<!-- 广告位：首页第三屏右侧（二） banner -->
+					<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614291";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+				</div>
+                <div class="mt6 adsboxh89">
+                	<!-- 广告位：首页第三屏右侧（三） banner -->
+					<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614292";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+                </div>
+                <div class="mt6 adsboxh89">
+                	<!-- 广告位：首页第三屏右侧（四） banner -->
+					<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614293";</script>
+                    <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+                </div>
+            </div>
+        </div>
+        <div class="z_main_lr_column clear">
+        	<div class="l">
+            	<div class="linel">
+                	<div class="winecon_tit clear">
+                        <h2><a href="__REGION__" target="_blank"><img src="__PUBLIC__front/index/images/index/index_tit6.gif" /></a></h2>
+                        <p class="more"><a href="__REGION__" target="_blank">更多>></a></p>
+                    </div>
+                    <div class="winecon_nrbox clear">
+                    	<div class="winecon_nrbox_lbtn"></div>
+                        <div class="winecon_nrbox_show">
+                        	<ul class="j_winecon_nrbox_tabUl" style="display:block;">
+                            	<volist name="chanqu" id="vo">
+                            	<li>
+                                	<p class="pic"><a href="{$vo.url}" target="_blank" title="{$vo.cname} {$vo.fname}"><img src="{$vo.img}" alt="{$vo.cname} {$vo.fname}" width="118" /></a></p>
+                                    <p><a href="{$vo.url}" target="_blank" title="{$vo.cname} {$vo.fname}">{$vo.cname}</a></p>
+                                </li>
+                                </volist>
+                            </ul>
+                        </div>
+                        <div class="winecon_nrbox_rbtn"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="r adsh239">
+            	<!-- 广告位：首页第三屏右侧（五） banner -->
+				<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614294";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+        </div>
+        <div class="z_main_lr_column clear">
+        	<div class="l adsw720">
+            	<!-- 广告位：首页底部左侧半通栏 -->
+				<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614295";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+            <div class="r adsh102">
+            	<!-- 广告位：首页底部右侧banner -->
+				<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614296";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+        </div>
+    </div>
+<!--引入尾部文件-->
+<include file="HtmlTpl:footer" />

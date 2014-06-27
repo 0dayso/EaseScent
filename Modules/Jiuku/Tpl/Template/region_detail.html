@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="keywords" content="{$seo_k}" />
+<meta name="description" content="{$seo_d}" />
+<title>{$seo_t}</title>
+<!--逸香网头部引用文件--><!--#include virtual="/_Block/6.html"-->
+<script type="text/javascript">
+var __upload_domain = "{:C('DOMAIN.UPLOAD')}";
+var __region_domain = "{:C('DOMAIN.REGION')}";
+var type = "<?php echo $type;?>";
+var id = <?php echo $res['id'];?>;
+if(type == 'region' && id == 1){
+    window.location.href="http://www.wine.cn/TopicsCalifornia";
+}
+if(type == 'country' && id == 3){
+    window.location.href="http://www.wine.cn/TopicsArgentina";
+}
+if(type == 'country' && id == 6){
+    window.location.href="http://www.wine.cn/TopicsAustria";
+}
+if(type == 'country' && id == 34){
+    window.location.href="http://www.wine.cn/TopicsPortugal";
+}
+if(type == 'region' && id == 1160){
+    window.location.href="http://www.wine.cn/TopicsRioja";
+}
+</script>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}Jiuku/js/region/detail.js"></script>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}common/js/jquery.chackTextarea.js"></script>
+<link href="{:C('DOMAIN.PUBLIC')}Jiuku/css/region/detail.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<!--逸香网头部html--><!--#include virtual="/_Block/7.html"-->
+<div class="w_adv">
+	<!-- 广告位：产区终端页 顶部通栏 -->
+<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "445281";</script>
+<script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+</div>
+<div class="w_main">
+	<div class="w_a1">
+		<div class="w_part1">
+			<div class="w_con1">
+				<!--<div class="w_search">
+                	<form id="myform2" target="_blank" action="__REGION__/RegionList" name="myform2" method="post">
+            			<input type="image" src="__P_IMAGES__/region/pic_5.jpg" style="float:right;height:26px;width:54px;padding:0;margin:0;"  onclick="return check_submit()"/>
+						<input name="region_name" id="region_name" type="text" style="padding-left:10px;height:24px;border:1px #C7C9C8 solid;"/>
+                    </form>
+				</div>-->
+				<div class="w_select1">
+                    <em>快速进入：</em>
+                    <a href="javascript:jumpr();">&nbsp;</a>
+                    <select id="region_2" name="region_2" style="width:200px;" disabled="disabled"></select>
+                    <select id="region_1" name="region_1" style="width:200px;" disabled="disabled" onchange="getnr(this.value,2)"></select>
+                    <select style="width:160px;" onchange="getr(this.value)" type="c">
+                      <option value="0">请选择</option>
+                      <volist name="clist" id="vo">
+                      <option value="{$vo.id}">{$vo.cname}({$vo.fname})</option>
+                      </volist>
+                    </select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="w_part2">
+		<div class="w_colblue">
+		<h3>
+        	<input name="region_id" id="region_id" type="hidden" value="{$res.id}" />
+			<strong>{$res.cname}<!--&nbsp;<font style="font-size:14px;">{$res.english_name}</font>--></strong>
+			<a href="{:C('DOMAIN.REGION')}">产区</a><span>&nbsp;&gt;&nbsp;</span>
+            <if condition="$res['belong']['country']">
+            <a href="{:C('DOMAIN.REGION')}c{$res.belong.country.id}.shtml">{$res.belong.country.cname}&nbsp;{$res.belong.country.fname}</a><span>&nbsp;&gt;&nbsp;</span>
+            </if>
+            <if condition="$res['belong']['region']">
+            <a href="{:C('DOMAIN.REGION')}{$res.belong.region.id}.shtml">{$res.belong.region.cname}&nbsp;{$res.belong.region.fname}</a><span>&nbsp;&gt;&nbsp;</span>
+            </if>
+            </volist>
+		</h3>
+		<!--<ul class="w_share">
+			<li>分享到：</li>
+			<li class="sina"><a href="javascript:window.open('http://v.t.sina.com.cn/share/share.php?title='+encodeURIComponent(document.title.substring(0,76))+'&url='+encodeURIComponent(location.href)+'&appkey=3363841683&rcontent=','_blank','scrollbars=no,width=600,height=450,left=75,top=20,status=no,resizable=yes'); void 0"   title="分享到新浪微博">新浪微博</a></li>
+			<li class="qq"><a title="分享到腾讯微博" href="javascript:void(0)" onclick="postToWb();return false;">腾讯微博</a>
+			<script type="text/javascript">
+			function postToWb(){
+				var _t = encodeURI(document.title);
+				var _url = encodeURIComponent(document.location);
+				var _appkey = encodeURI("54c0b0b5a71e47af948b7ed340251b74");//你从腾讯获得的appkey
+				var _pic = encodeURI('');//（例如：var _pic='图片url1|图片url2|图片url3....）
+				var _site = 'http://'+window.location.host;//你的网站地址
+				var _u = 'http://v.t.qq.com/share/share.php?url='+_url+'&appkey='+_appkey+'&site='+_site+'&pic='+_pic+'&title='+_t;
+				window.open( _u,'', 'width=700, height=680, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+				}
+                </script>
+            </li>
+			<li class="souhu"><a title="分享到搜狐微博" href="javascript:void((function(s,d,e,r,l,p,t,z,c){var f='http://t.sohu.com/third/post.jsp?',u=z||d.location,p=['&url=',e(u),'&title=',e(t||d.title),'&content=',c||'gb2312','&pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=660,height=470,left=',(s.width-660)/2,',top=',(s.height-470)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','','','','utf-8'));">搜狐微博</a></li>
+		</ul>-->
+        </div>
+        <empty name="res.region"><!--没有子产区的情况-->
+        <div class="w_add"></div>
+        <else /><!--有子产区的情况-->
+		<h4 class="w_list1">热门子产区</h4>
+		<div id="w_box">
+			<div id="oid">
+				<ul class="w_show1">
+                  <volist name="res.region" id="vo">
+                  <li>
+                      <a href="{:C('DOMAIN.REGION')}{$vo.id}.shtml" target="_blank" title="{$vo.cname}({$vo.fname})">
+                          <img src="{:C('DOMAIN.UPLOAD')}Jiuku/Region/images/{$vo.img.filename}.80.60" alt="{$vo.img.alt}" onerror="imgError(this);"/>
+                          <span>{$vo.cname}</span>
+                          <span>{$vo.fname}</span>
+                      </a>
+                  </li>
+                  </volist>
+				</ul>
+			</div>
+		</div>
+        <if condition="count($res['region']) gt 10">
+		<div class="w_part3">
+			<div class="w_select2" id="oid2">
+            	<div class="w_left">
+					<div class="w_right">
+                    	<volist name="res.region" id="vo" key="k" mod="10">
+        				<if condition="$mod eq 0"><if condition="$k eq 1"><span class="w_botton1"><var>&nbsp;</var></span><else/><span>&nbsp;</span></if></if>
+                        </volist>
+					</div>
+				</div>
+			</div>
+		</div>
+        </if>
+        </empty>
+	</div>
+</div>
+<div class="w_int">
+	<div class="w_intl">
+		<div class="w_int2">
+			<div class="w_int22">
+            	<if condition="count($res['img']) gt 0">
+                <div class="w_imgsize">
+                	<if condition="$type eq 'country'">
+                	<img src="{:C('DOMAIN.UPLOAD')}Jiuku/Country/images/{$res.img.0.filename}" alt="{$res.img.0.alt}" onerror="imgError(this);"/>
+                    <else/>
+                	<img src="{:C('DOMAIN.UPLOAD')}Jiuku/Region/images/{$res.img.0.filename}.260.195" alt="{$res.img.0.alt}" onerror="imgError(this);"/>
+                    </if>
+                </div>
+                </if>
+                <p><strong>&nbsp;&nbsp;&nbsp;{$res.cname}&nbsp;{$res.fname}</strong></p>{$res.content}
+			</div>
+        </div>
+        <if condition="count($res['img']) gt 0">
+        <if condition="count($res['img']) lt 5">
+        <div class="w_picshowsp">
+			<div class="w_title2">相关图片</div>
+			<div class="w_picsh">
+				<ul class="w_picshow2">
+                <volist name="res.img" id="vo">
+					<li>
+                        <if condition="$type eq 'country'">
+                        <a href="{:C('DOMAIN.UPLOAD')}Jiuku/Country/images/{$vo.filename}" title="{$vo.alt}" class="nooverlay"><img style="width:120px;height:90px;" src="{:C('DOMAIN.UPLOAD')}Jiuku/Country/images/{$vo.filename}" alt="{$vo.alt}" onerror="imgError(this);"/></a>
+                        <else/>
+                        <a href="{:C('DOMAIN.UPLOAD')}Jiuku/Region/images/{$vo.filename}" title="{$vo.alt}" class="nooverlay"><img style="width:120px;height:90px;" src="{:C('DOMAIN.UPLOAD')}Jiuku/Region/images/{$vo.filename}.260.195" alt="{$vo.alt}" onerror="imgError(this);"/></a>
+                        </if>
+                    </li>
+                </volist>
+				</ul>
+			</div>
+		</div>
+        <else/>
+		<div class="w_picshow">
+			<div class="w_title2">相关图片</div>
+			<div id="w_clilef">&nbsp;</div>
+			<div class="w_picsh">
+				<ul class="w_picshow2" id="oidul">
+                <volist name="res.img" id="vo">
+					<li>
+                        <if condition="$type eq 'country'">
+                        <a href="{:C('DOMAIN.UPLOAD')}Jiuku/Country/images/{$vo.filename}" title="{$vo.alt}" class="nooverlay"><img style="width:120px;height:90px;" src="{:C('DOMAIN.UPLOAD')}Jiuku/Country/images/{$vo.filename}" alt="{$vo.alt}" onerror="imgError(this);"/></a>
+                        <else/>
+                        <a href="{:C('DOMAIN.UPLOAD')}Jiuku/Region/images/{$vo.filename}" title="{$vo.alt}" class="nooverlay"><img style="width:120px;height:90px;" src="{:C('DOMAIN.UPLOAD')}Jiuku/Region/images/{$vo.filename}.260.195" alt="{$vo.alt}" onerror="imgError(this);"/></a>
+                        </if>
+                    </li>
+                </volist>
+				</ul>
+			</div>
+			<div id="w_clirig">&nbsp;</div>
+		</div>
+        </if>
+        </if>
+
+		<notempty name="res_grandcru_list">
+        <span id="about_grandcru">
+		<div class="w_picshow3">
+			<div class="w_picshow33">
+				<div class="w_title3">相关酒庄<span class="w_zk" onclick="grandcru('open',{$res.region_id})">&nbsp;</span></div>
+				<div class="w_picshow44">
+					<ul class="w_picshow4" id="w_showw_box">
+					<volist name="res_grandcru_list" id="vo_gl">
+						<li title="{$vo_gl.g_name}">
+							<a href="__WINERY__/detail/g_id/{$vo_gl.g_id}" target="_blank"><img src="__IMAGES__/{$vo_gl.pic}" alt="{$vo_gl.pic_alt}"/></a>
+							<a href="__WINERY__/detail/g_id/{$vo_gl.id}" target="_blank" class="w_asp">{$vo_gl.g_name}</a>
+						</li>
+					</volist>
+					</ul>
+				</div>
+			</div>
+		</div>
+        </span>
+        </notempty>
+
+	</div>
+	<div class="w_int3">
+    	<?php if(!empty($res["soil"])&&!empty($res["climate"])): ?>
+		<h4 class="w_hmod">产区特点</h4>
+		<div class="w_con6">
+        	<notempty name="res.soil">
+			<div class="w_con7">
+				<div class="w_con8"><img src="__P_IMAGES__/region/pic14.gif" alt=""/></div>
+				<p>{$res.soil}</p>
+			</div>
+            </notempty>
+        	<notempty name="res.climate">
+			<div class="w_con9">
+				<div class="w_con8"><img src="__P_IMAGES__/region/pic15.gif" alt=""/></div>
+				<p>{$res.climate}</p>
+			</div>
+            </notempty>
+		</div>
+        <?php endif; ?>
+
+        <if condition="(count($res['redgrape']) gt 0) or (count($res['whitegrape']) gt 0)">
+		<h4 class="w_hmod2">主要葡萄品种</h4>
+		<div class="w_kind">
+            <volist name="res.redgrape" id="vo" mod="2">
+            <a href="###" target="_blank" class="w_ared" style="float:<if condition="$mod eq 0">left<else/>right</if>">{$vo.cname}</a>
+            </volist>
+		</div>
+		<div class="w_kind">
+            <volist name="res.whitegrape" id="vo" mod="2">
+            <a href="###" target="_blank" class="w_ayellow" style="float:<if condition="$mod eq 0">left<else/>right</if>">{$vo.cname}</a>
+            </volist>
+		</div>
+        </if>
+        <if condition="count($res['countrylevel']) gt 0">
+		<h4 class="w_hmod">国家分级</h4>
+		<div class="w_rank2">
+        <volist name="res.countrylevel" id="vo">
+        	<span>{$vo.cname}({$vo.sname})</span>
+        </volist>
+		</div>
+        </if>
+        <if condition="$res['level']">
+        <h4 class="w_hmod">产区分级</h4>
+		<div class="w_rank2">
+        	<volist name="g_level_arr" id="vo_gle">
+			<span><a href="{$vo_gle.url}" target="_blank"><img src="__P_IMAGES__/region/w_gl{$vo_gle.extend_id}.gif" alt=""/></a></span>
+            </volist>
+		</div>
+        </if>
+        <notempty name="new_term_arr">
+		<h4 class="w_hmod">产区术语</h4>
+		<ul class="w_village">
+        <volist name="new_term_arr" id="vo_t">
+        	<li><strong>{$vo_t.e}:&nbsp;</strong>{$vo_t.c}</li>
+        </volist>
+		</ul>
+        </notempty>
+	</div>
+</div>
+<!-- 评论 -->
+<div class="comment-box">
+    <div class="n-login"><!-- 未登录显示 -->
+        <div class="comment-t">
+            <span></span>
+            <strong>网友评论</strong>
+            <var>
+                <a href="javascript:popuplogin();">登录</a>
+                |
+                <a href="javascript:jumpregistration();">注册</a>
+            </var>
+        </div>
+        <div class="n-login-c">
+            <textarea disabled="disabled">登录以后，才可以发表评论</textarea>
+        </div>
+        <!--<div class="n-login-sent">
+            <input type="button" value="发表评论" hidefocus/>
+            <a href="###" class="d-s-face">
+                <img src="__P_IMAGES__/news_static_page/d-pic10.jpg" />
+                表情
+            </a>
+        </div>-->
+    </div>
+    <div class="is-login"><!-- 登录下 -->
+        <div class="comment-t">
+            <span></span>
+            <strong>网友评论</strong>
+        </div>
+        <div class="is-login-c">
+            <div class="is-login-c-l">
+                <a href="" target="_blank">
+                    <img src="" alt="" />
+                </a>
+                <a href="" target="_blank" class="is-login-c-l-t">未知</a>
+            </div>
+            <div class="is-login-c-r">
+                <div class="is-login-text">
+                    <textarea></textarea>
+                    <div id="c_msg"><img src=""></div>
+                </div>
+                <div class="is-login-s">
+                    <input type="button" id="comment_button" value="发表评论" hidefocus/>
+                    <a href="###" class="d-tb">同步到个人空间</a>
+                    <var id="prompt"></var>
+                    <!--<a href="###" class="d-s-face">
+                        <img src="__P_IMAGES__/news_static_page/d-pic10.jpg" />
+                        表情
+                    </a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="comment-con" id="comment_list"><!-- 评论信息 -->
+    </ul>
+</div>
+<!--图片放大JS-->
+<script src="{:C('DOMAIN.PUBLIC')}fancyzoom/FancyZoom.js" language="JavaScript" type="text/javascript"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fancyzoom/FancyZoomHTML.js" language="JavaScript" type="text/javascript"></script>
+<script>
+function zoomIni(){
+	zoomImagesURI="{:C('DOMAIN.PUBLIC')}fancyzoom/images/";
+	setupZoom();
+}
+$(function(){
+	zoomIni();
+});
+</script>
+<!--图片放大end-->
+<!--逸香网尾部html--><!--#include virtual="/_Block/8.html"-->
+</body>
+</html>

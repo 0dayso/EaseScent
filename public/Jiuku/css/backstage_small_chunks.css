@@ -1,0 +1,42 @@
+/*selector_list_box*/
+.selector_list_box{
+	margin-top:2px;
+}
+.selected_box{
+	position: relative;
+	float:left;
+	background-color:#ddd;
+	margin: 1px 5px 1px 0;
+	padding: 2px 0 2px 5px;
+}
+.selected_box img{
+	height:90px;
+	float:left;
+	margin:0 5px;
+}
+.selected_box div{
+	float:left;
+	margin-right:15px;
+}
+.selected_box input{
+	width:100px;
+	height:13px;
+	line-height:1;
+}
+.selected_box p{
+	line-height:30px;
+}
+.selected_box p var{
+	display:inline-block;
+	width:28px;
+}
+.del_selected{
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 13px;
+	width: 13px;
+	cursor: pointer;
+	background: url(../images/common/x.jpg) 0 0 no-repeat;
+	margin: 0;
+}

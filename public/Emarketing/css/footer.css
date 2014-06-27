@@ -1,0 +1,6 @@
+
+/*底部*/
+.foot{ margin-top:20px; margin-bottom:10px;}
+.foot_nav{ background:#b30101; height:36px; line-height:36px; text-align:center; color:#FFF; margin-bottom:10px;}
+.foot_nav a{ color:#FFF;}
+.foot_copyRight{ text-align:center; color:#666666; height:24px; line-height:24px;}

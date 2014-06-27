@@ -1,0 +1,60 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Block/index')}">区块管理</a> > 区块数据编辑</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">区块数据列表</a>
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('News/Block/edit')}" method="post">
+            <input type="hidden" name="bid" value="{$vo.bid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑区块</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">区块名称</th>
+                        <td><input type="text" size="80" name="name" value="{$vo.name}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">区块类型</th>
+						<td>
+							<select name="type">
+                                <option <if condition="$vo['type'] eq 'static'">selected</if> value="static">静态区块</option>
+                                <option <if condition="$vo['type'] eq 'dynamic'">selected</if> value="dynamic">动态区块</option>
+							</select>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">更新周期</th>
+                        <td><input type="text" size="20" name="cycle" value="{$vo.cycle}" class="measure-input"/> 仅对动态区块起作用,静态区块仅在编辑推送文章后更新</td>
+                    </tr>
+                    <tr>
+                        <th width="130">PHP语句</th>
+                        <td><textarea style="width:60%;height:80px" name="php">{$vo.php}</textarea> 仅对动态区块起作用</td>
+                    </tr>
+                    <tr>
+                        <th width="130">模板</th>
+                        <td><textarea style="width:60%;height:120px" name="tpl">{$vo.tpl}</textarea> 区块模板HTML（支持TP模板解析）</td>
+                    </tr>
+                    <tr>
+                        <th width="130">上次更新时间</th>
+                        <td>{$vo.updatetime|date='Y-m-d H:i:s', ###} 动态区块上次更新时间</td>
+                    </tr>
+                    <tr>
+                        <th width="130">静态页面引用</th>
+                        <td><input id="htmlpath" type="text" size="40" value="" class="measure-input"/> 静态页面引用</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var htmlpath = '<!--#include file="' + '{' + ':' + "C('BLOCK_PATH')" + '}' + '{$vo.htmlpath}' + '"-->';
+    $('#htmlpath').val(htmlpath);
+</script>
+<include file="Common:cpfooter" />

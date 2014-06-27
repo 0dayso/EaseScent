@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="{$keywords}" />
+    <meta name="description" content="{$description}" />
+    <title>{$title}</title>
+    <script type="text/javascript" src="__PUBLIC__front/common/jquery.min.js"></script>
+    <script type="text/javascript">
+    var __ajax_domain   = "__AJAX__";
+    var __public_domain = "__PUBLIC__";
+    var __i_domain      = "__I__";
+    var __user_domain   = "__USER__";
+    </script>
+    <script type="text/javascript" src="__PUBLIC__front/header/js/header.js"></script>
+    <link href="__PUBLIC__front/header/css/header.css" rel="stylesheet" type="text/css" />
+    {$head}
+</head>
+<body>
+    <div class="z_head_top">
+        <input name="_islogin" type="hidden" value="0" />
+        <div class="z_head_topnav clear">
+            <p class="z_head_topnav_l" id="loginDiv"></p>
+            <div class="z_head_topnav_r">
+                <a href="http://weibo.com/eswinesino" title="逸香网新浪官方微博" target="_blank">逸香网新浪官方微博</a> |
+                <a href="javascript:addFavorites();" title="收藏">收藏</a> |
+                <a href="__WWW__Rss/feed" target="_blank" title="订阅RSS">订阅RSS</a> |
+                <a href="__WWW_ESWINE__" target="_blank">逸香教育</a> |
+                <a href="__EN__" target="_blank">English</a>
+            </div>
+        </div>
+    </div>
+    <iframe style="display:none;" onload="isLogin()" src="__AJAX__?action=a0hUSlQOc0RQVERSVXRSRFNgUUgORkRVckhFY0RHTlNE"></iframe>
+    <div class="z_head">
+        <div class="z_head_search clear">
+            <h1><a href="__WWW__"><img src="__PUBLIC__front/header/images/logo.png" /></a></h1>
+            <div class="z_head_gg">
+                <!-- 广告位：首页顶部广告位 -->
+                <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614297";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+            <div class="z_head_searchbox">
+                <div class="z_head_searchbox_inp">
+                    <form name="myform" id="myform" method="post" action="__WWW__Search/show" target="_blank">
+                    <div class="z_head_searchbox_select">
+                        <p class="j_pbox">产区</p>
+                        <ul class="j_ulbox">
+                            <li><a href="#" val="1">资讯</a></li>
+                            <li><a href="#" val="2">产区</a></li>
+                            <li><a href="#" val="3">酒庄</a></li>
+                            <li><a href="#" val="4">展会</a></li>
+                            <li><a href="#" val="5">酒会</a></li>
+                            <li><a href="#" val="6">视频</a></li>
+                            <!--<li><a href="#">商机</a></li>
+                            <li><a href="#">导购</a></li>-->
+                        </ul>
+                    </div>
+                    <input type="text" name="searchkey" class="inp_txt" />
+                    <input type="submit" class="inp_sub" value=" "  />
+                    <input type="hidden" name="type" value="2" />
+                    </form>
+                </div>
+                <p class="z_head_searchbox_p">
+                    <a href="__WWW__Tags/getHotTagsList/tagId/1385" target="_blank">香槟</a>
+                    <a href="__WWW__Tags/getHotTagsList/tagId/1312" target="_blank">波尔多</a>
+                    <a href="__WWW__Tags/getHotTagsList/tagId/1470" target="_blank">起泡酒</a>
+                    <a href="__WWW__Tags/getHotTagsList/tagId/663" target="_blank">精品葡萄酒</a>
+                    <a href="__WWW__Tags/getHotTagsList/tagId/661" target="_blank">美乐</a>
+                </p>
+            </div>
+
+        </div>
+        <ul class="z_headnav">
+            <li>
+                <h2><img src="__PUBLIC__front/header/images/z_headNavTit01.gif" /></h2>
+                <p>
+                    <a href="__NEWS__" target="_blank" class="colared">新闻</a>
+                    <a href="__WWW__liejiu" target="_blank">烈酒</a>
+                    <a href="__NEWS__showList/id/192" target="_blank">访谈</a>
+                    <a href="__COLUMN__" target="_blank">专家</a>
+                    <br />
+                    <a href="__NEWS__depth" target="_blank">深度</a>
+                    <a href="__WWW__Topics" target="_blank">专题</a>
+                    <a href="__EXPO__ent" target="_blank">娱乐</a>
+                    <a href="__EXPO__marketing" target="_blank">营销</a>
+                </p>
+            </li>
+            <li>
+                <h2><img src="__PUBLIC__front/header/images/z_headNavTit02.gif" /></h2>
+                <p>
+                    <a href="__58__" target="_blank" class="colared">商机</a>
+                    <br />
+                    <a href="__JOB__" target="_blank">人才</a>
+                </p>
+            </li>
+            <li>
+                <h2><img src="__PUBLIC__front/header/images/z_headNavTit03.gif" /></h2>
+                <p style="position:relative;">
+                    <a href="__BUY__" target="_blank" class="colared">导购</a>
+                    <a href="__TUAN__" target="_blank" class="colared">闪购</a><span style="position:absolute;height:9px;width:15px;top:1px;left:64px;background:__PUBLIC__front/header/images/hot.gif) 0 0 no-repeat;"></span>
+                    <br />
+                    <a href="__I__" target="_blank">酒评</a>
+                    <a href="__JIUHUI__" target="_blank">酒会</a>
+                </p>
+            </li>
+            <li>
+                <h2><img src="__PUBLIC__front/header/images/z_headNavTit04.gif" /></h2>
+                <p>
+                    <a href="__WWW__Topics/tasting" target="_blank" class="colared">逸香评分</a>
+                    <br />
+                    <a href="__WINESHOW__" target="_blank">赛事展览</a>
+                </p>
+            </li>
+            <li class="nbr">
+                <h2><img src="__PUBLIC__front/header/images/z_headNavTit05.gif" /></h2>
+                <p>
+                    <a href="__MINGZHUANG__" target="_blank" class="colared">名庄</a>
+                    <a href="__REGION__" target="_blank">产区</a>
+                    <a href="__BOOK__" target="_blank">读书</a>
+                    <br />
+                    <a href="__D__" target="_blank">词典</a>
+                    <a href="__BBS__" target="_blank">论坛</a>
+                    <a href="__WWW__pinzhong" target="_blank">葡萄品种</a>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div class="z_userLiongeBoxBg"></div>
+    <a href="javascript:popuplogin()" style="display:none;">弹出登录1</a>

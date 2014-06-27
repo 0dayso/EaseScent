@@ -1,0 +1,13 @@
+<include file="Common:header" />
+    <div class="re_main clear">
+        <include file="Common:menu" />
+        <div class="re_main_r">
+        	<h3 class="re_main_r_h3">Email Verification</h3>
+            <div class="bb1cccccc"></div>
+            <p class="colf5793d fs14">Your email has <if condition="$userinfo.email_valid neq 1">not</if> been verified. </p>
+            <p class="col959595">Complicated password could ensure your account safety</p>
+            <p class="re_main_r_p01">Account：<span>{$userinfo.email}</span>   <a href="/index.php/Confirm/emailing_next" class="nbg">Validate now?</a> <a class="nbg" href="/index.php/Confirm/update_email">  Change email address?</a></p>
+        </div>
+    </div>
+</body>
+</html>

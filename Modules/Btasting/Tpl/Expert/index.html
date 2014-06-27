@@ -1,0 +1,52 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Btasting/Expert/index')}">品酒会专家管理</a> > 专家列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Btasting/Expert/add')}">增加新成员</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        专家姓名：
+                        <input name="truename" type="text" value="{$_REQUEST['truename']}" class="input-text" />
+                        &nbsp;&nbsp;
+						帐号：
+                        <input name="nickname" type="text" value="{$_REQUEST['nickname']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="5%"><input type="checkbox"></th>
+                    <th width="5%">ID</th>
+                    <th width="20%">专家姓名</th>
+					<th width="">登录帐号</th>
+                    <th width="10%">操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="volist">
+            <tr>
+                <td><input type="checkbox"></td>
+                <td>{$vo.id}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.account}/{$vo.mid}</td>
+				<td><a href="{:Url('edit?id='.$vo['id'])}">编辑</a> <a href="{:Url('del?id=' . $vo['id'])}" title="是否删除“ {$vo.name} ”专家?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

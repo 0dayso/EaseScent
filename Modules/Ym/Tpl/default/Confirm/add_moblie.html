@@ -1,0 +1,66 @@
+<include file="Common:header" />
+<div class="main">
+	<include file="Common:menu" />
+	<div class="confirm-box">
+		<h3 class="confirm-h3">手机认证</h3>
+			<div class="email-r">
+			<div class="email-con-c">
+				<div class="email-con-c">
+					<p class="change-email-inf">
+						<em>手机号码：</em>
+						<input type="text" id="change_moblie" class="login-ipt1">
+						<var>请输入要添加的手机帐号</var>
+					</p>
+				</div>
+				<div class="email-change-sub" style="padding-left:70px;">
+					<input type="button" value="下一步" id="update_mobile_btn" class="login-sub">
+					<input type="button" value="返 回" onclick="window.history.go(-1);" class="login-sub2">
+				</div>
+			</div>
+		</div>
+		<div class="t-model">
+			<p class="t-model-t">没有收到验证码？您可以：</p>
+			<p><span>▪</span>网络繁忙，请您稍等几分钟</p>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#change_moblie").focusout(function(){
+		var moblie = $.trim($("#change_moblie").val());
+		if(moblie==""){
+			$(this).next().text("手机不能为空");
+			$(this).next().css({color:"red"});
+		}else{
+			$.post("/index.php/User/check_moblie",{moblie:moblie},function(result){
+				if(result.status==1){
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"#555"});
+				}else{
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"red"});
+				}
+			},"json");
+		}
+	});
+	$("#update_mobile_btn").click(function(){
+		var moblie = $.trim($("#change_moblie").val());
+		if(moblie==""){
+			$("#change_moblie").next().text("邮箱不能为空");
+			$("#change_moblie").next().css({color:"red"});
+		}else{
+			$.post("/index.php/Confirm/update_moblie_do",{moblie:moblie},function(result){
+				if(result.status==1){
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"#555"});
+					window.location.href = result.jumpUrl;
+				}else{
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"red"});
+				}
+			},"json")
+		}
+	})
+})
+</script>
+<include file="Common:footer" />

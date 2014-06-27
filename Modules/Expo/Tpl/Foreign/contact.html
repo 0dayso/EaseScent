@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>contact</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_mainStyle.css" />
+    </head>
+
+    <body>
+        <include file="Foreign:header" /> 
+        <div class="z_nav">
+            <ul class="z_nav_nr clear">
+                <li><a href="{:U('Foreign/index?winery_id='.$winery_id)}">Home</a></li>
+                <li><a href="{:U('Foreign/product?winery_id='.$winery_id)}" >Wine Supplies</a></li>
+                <li><a href="{:U('Foreign/honor?winery_id='.$winery_id)}">File Integrity</a></li>
+                <li><a href="{:U('Foreign/info?winery_id='.$winery_id)}">Chateau Introduction</a></li>
+                <li><a href="{:U('Foreign/contact?winery_id='.$winery_id)}" class="active">Contact</a></li>
+            </ul>
+        </div>
+        <div class="z_main">
+            <div class="z_con_nr">
+                <h3 class="z_main_nr_l_titH3"><img src="__PUBLIC__/Expo/img/z_tit_lxfs_E.gif" /></h3>
+                <h4 class="z_con_nr_h4">{$qy_info['qy_name']}</h4>
+                <div class="z_con_nr_box">
+                    <p>Nation：<span>{$qy_info['qy_country']}</span></p>
+                    <p>Status：<span>{$winery_info['honor']}</span></p>
+                    <p>Add：<span>{$qy_info['qy_address']}</span></p>
+                    <p>skype：<span>{$qy_info['qy_skype']}</span></p>
+                    <p>E-mail：<span>{$winery_info['email']}</span></p>
+                    <p>Tel：<span>{$qy_info['qy_moblie']}</span></p>
+                    <p>Website：<span>{$qy_info['qy_web_address']}</span></p>
+                </div>
+                <div class="z_main_nrBotBg978x4_one"></div>
+            </div>
+        </div>
+        <include file="Foreign:foot" /> 
+    </body>
+</html>

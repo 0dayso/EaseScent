@@ -1,0 +1,133 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+//wine_autocomplete
+$(function(){
+    $("#wine_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getWineForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('readonly',true);
+            $("#wine_id").val(ui.item.id);
+            $("#wine_s").css('z-index',-1);
+            $("#wine_x").css('z-index',1);
+        },
+    });
+});
+function wine_s(){
+    $("#wine_text").focus();
+    $("#wine_text").autocomplete("search", "");
+}
+function wine_x(){
+    $("#wine_id").val(0);
+    $("#wine_text").val('').attr('readonly',false);
+    $("#wine_x").css('z-index',-1);
+    $("#wine_s").css('z-index',1);
+}
+//wine_autocomplete/
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库源数据管理</a> >
+        酒款中文别名列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}&_backurl={$_listurl}">添加酒款中文别名</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td>
+                        所属酒款：
+                        <div class="autocomplete-div">
+                            <if condition="$_GET['wine_id']">
+                            <input id="wine_text" name="wine_text" type="text" size="40" value="{$_GET.wine_text}" class="measure-input" readonly />
+                            <input id="wine_id" name="wine_id" type="hidden" value="{$_GET.wine_id}"/>
+                            <span id="wine_s" class="autocomplete-sel" onclick="wine_s();" style="z-index:-1;"></span>
+                            <span id="wine_x" class="autocomplete-del" onclick="wine_x();" style="z-index:1;"></span>
+                            <else/>
+                            <input id="wine_text" name="wine_text" type="text" size="40" value="" class="measure-input" />
+                            <input id="wine_id" name="wine_id" type="hidden" value="0"/>
+                            <span id="wine_s" class="autocomplete-sel" onclick="wine_s();"></span>
+                            <span id="wine_x" class="autocomplete-del" onclick="wine_x();"></span>
+                            </if>
+                        </div>
+                        &nbsp;&nbsp;
+                        关键字：
+                        <input name="keyword" class="input-text" type="text" value="{$_GET.keyword}" size="20" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option value="3" <if condition="$_GET['status'] eq 3">selected</if>>开启</option>
+                            <option value="2" <if condition="$_GET['status'] eq 2">selected</if>>关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>中文别名</th>
+                    <th>所属酒款</th>
+                    <th>是否为主别名</th>
+                    <th width="30">状态</th>
+                    <th width="30">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.cname}</td>
+                    <td>
+                        <if condition="$vo['wine_res']">
+                        {$vo.wine_res.fname}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['iskey'] eq 1">
+                        是
+                        <else/>
+                        否
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 3"><span style="color:green;">开启</span></if>
+                        <if condition="$vo['status'] eq 2"><span style="color:orange;">关闭</span></if>
+                    </td>
+                    <td>
+                        <a href="{:Url('edit')}&id={$vo.id}&_backurl={$_listurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

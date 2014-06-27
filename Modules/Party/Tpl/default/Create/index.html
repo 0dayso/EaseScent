@@ -1,0 +1,382 @@
+<include file="Common:header" />
+<script src="__PUBLIC__/party/Common/js/lang/zh-cn.js" type="text/javascript"></script>
+<link href="__PUBLIC__/party/Common/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/party/Common/css/dialog.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/party/Common/js/dialog.js" type="text/javascript"></script>
+<script type="text/javascript" src="__PUBLIC__/party/Common/js/swfobject.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/party/Common/js/jquery.uploadify.v2.1.4.min.js"></script>
+<script src="__PUBLIC__/party/Common/js/jquery.Jcrop.js"></script>
+<script src="__PUBLIC__/party/Common/js/form.js"></script>
+<div class="wine_nav">
+	<h2>
+		<a href="/" title="返回酒店首页"><img src="__PUBLIC__/party/Common/images/wine_logo.jpg"/></a>
+	</h2> 
+	<div class="c_h2">发布酒会</div>
+</div>
+
+<!-- 主体 -->
+<div class="wine_main">
+	<div class="c_main_l">
+		<form id="upc" action="index.php?m=Create&a=update" method="POST">
+			<ul class="c_form_mod">
+				<li class="c_form_li">
+					<span class="c_form_span">活动标题</span>
+					<input type="text" id="title" name="title" maxlength="30" class="c_party_t" <if condition="info.title"> value="{$info.title}"<else/>value="最多32个中文字"</if>/>
+					<div class="c_ts">最多32个中文字</div>
+				</li>
+				<!--<li>
+					<span class="c_form_span">活动分类</span>
+					<select name="type" class="c_select_w1" style="width:102px;">
+						<option <if condition="$info.p_type eq 0"> selected </if> value="0">酒会</option>
+						<option <if condition="$info.p_type eq 1"> selected </if> value="1">培训</option>
+					</select>
+				</li>-->
+				<li class="c_form_li" id="c_ts2">
+					<span  class="c_form_span">活动时间 </span>
+					<select name="date_type" id="party_date" style="float:left;width:102px;">
+						<option <if condition="$info.date_type eq 1"> selected </if> value="1">当天结束</option>
+						<option <if condition="$info.date_type eq 2"> selected </if> value="2">连续多天</option>
+					</select>
+					<div id="onedate" <if condition="$info.date_type eq ''"> style="*display:inline;" <elseif condition="$info.date_type eq 1"/> style="display:block;"<else/> style="display:none;height:30px;" </if> class="c_date_box"><!-- 日期控件位置  -->
+						<input class="Wdate" type="text" name="party_start1_date" id="party_start1_date" style="width:100px;*height:20px;float:left;_float:none;padding-left:0px;margin-right:8px;" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" readonly  <if condition="$info.date_type eq 1"> value="{$info.party_start1_date}" </if>>
+						&nbsp;
+						
+						<select id="party_start1_time" name="party_start1_time" class="c_select_w1" style="float:left;_float:none;width:100px;">
+						<option <if condition="$info.party_start_time eq '08:00'"> selected </if> value="08:00">08:00</option>
+						<option <if condition="$info.party_start_time eq '08:30'"> selected </if> value="08:30">08:30</option>
+						<option <if condition="$info.party_start_time eq '09:00'"> selected </if> value="09:00">09:00</option>
+						<option <if condition="$info.party_start_time eq '09:30'"> selected </if> value="09:30">09:30</option>
+						<option <if condition="$info.party_start_time eq '10:00'"> selected </if> value="10:00">10:00</option>
+						<option <if condition="$info.party_start_time eq '10:30'"> selected </if> value="10:30">10:30</option>
+						<option <if condition="$info.party_start_time eq '11:00'"> selected </if> value="11:00">11:00</option>
+						<option <if condition="$info.party_start_time eq '11:30'"> selected </if> value="11:30">11:30</option>
+						<option <if condition="$info.party_start_time eq '12:00'"> selected </if> value="12:00">12:00</option>
+						<option <if condition="$info.party_start_time eq '12:30'"> selected </if> value="12:30">12:30</option>
+						<option <if condition="$info.party_start_time eq '13:00'"> selected </if> value="13:00">13:00</option>
+						<option <if condition="$info.party_start_time eq '13:30'"> selected </if> value="13:30">13:30</option>
+						<option <if condition="$info.party_start_time eq '14:00'"> selected </if> value="14:00">14:00</option>
+						<option <if condition="$info.party_start_time eq '14:30'"> selected </if> value="14:30">14:30</option>
+						<option <if condition="$info.party_start_time eq '15:00'"> selected </if> value="15:00">15:00</option>
+						<option <if condition="$info.party_start_time eq '15:30'"> selected </if> value="15:30">15:30</option>
+						<option <if condition="$info.party_start_time eq '16:00'"> selected </if> value="16:00">16:00</option>
+						<option <if condition="$info.party_start_time eq '16:30'"> selected </if> value="16:30">16:30</option>
+						<option <if condition="$info.party_start_time eq '17:00'"> selected </if> value="17:00">17:00</option>
+						<option <if condition="$info.party_start_time eq '17:30'"> selected </if> value="17:30">17:30</option>
+						<option <if condition="$info.party_start_time eq '18:00'"> selected </if> value="18:00">18:00</option>
+						<option <if condition="$info.party_start_time eq '18:30'"> selected </if> value="18:30">18:30</option>
+						<option <if condition="$info.party_start_time eq '19:00'"> selected </if> value="19:00">19:00</option>
+						<option <if condition="$info.party_start_time eq '19:30'"> selected </if> value="19:30">19:30</option>
+						<option <if condition="$info.party_start_time eq '20:00'"> selected </if> value="20:00">20:00</option>
+						<option <if condition="$info.party_start_time eq '20:30'"> selected </if> value="20:30">20:30</option>
+						<option <if condition="$info.party_start_time eq '21:00'"> selected </if> value="21:00">21:00</option>
+						<option <if condition="$info.party_start_time eq '21:30'"> selected </if> value="21:30">21:30</option>
+						<option <if condition="$info.party_start_time eq '22:00'"> selected </if> value="22:00">22:00</option>
+						<option <if condition="$info.party_start_time eq '22:30'"> selected </if> value="22:30">22:30</option>
+						<option <if condition="$info.party_start_time eq '23:00'"> selected </if> value="23:00">23:00</option>
+						</select>
+						<!--<input type="text" name="party_start1_time" id="party_start1_time" style="width:100px;float:none;" onClick="WdatePicker({dateFmt:'H:m:s'})" <if condition="$info.date_type eq 1"> value="{$info.party_start_time}" </if> readonly>-->
+						<em style="float:left;_float:none;margin-right:8px;line-height:30px;_line-height:20px;">至</em>
+						<select id="party_end1_time" name="party_end1_time" class="c_select_w1" style="float:left;width:100px;_float:none;">
+						<option <if condition="$info.party_end_time eq '08:00'"> selected </if> value="08:00">08:00</option>
+						<option <if condition="$info.party_end_time eq '08:30'"> selected </if> value="08:30">08:30</option>
+						<option <if condition="$info.party_end_time eq '09:00'"> selected </if> value="09:00">09:00</option>
+						<option <if condition="$info.party_end_time eq '09:30'"> selected </if> value="09:30">09:30</option>
+						<option <if condition="$info.party_end_time eq '10:00'"> selected </if> value="10:00">10:00</option>
+						<option <if condition="$info.party_end_time eq '10:30'"> selected </if> value="10:30">10:30</option>
+						<option <if condition="$info.party_end_time eq '11:00'"> selected </if> value="11:00">11:00</option>
+						<option <if condition="$info.party_end_time eq '11:30'"> selected </if> value="11:30">11:30</option>
+						<option <if condition="$info.party_end_time eq '12:00'"> selected </if> value="12:00">12:00</option>
+						<option <if condition="$info.party_end_time eq '12:30'"> selected </if> value="12:30">12:30</option>
+						<option <if condition="$info.party_end_time eq '13:00'"> selected </if> value="13:00">13:00</option>
+						<option <if condition="$info.party_end_time eq '13:30'"> selected </if> value="13:30">13:30</option>
+						<option <if condition="$info.party_end_time eq '14:00'"> selected </if> value="14:00">14:00</option>
+						<option <if condition="$info.party_end_time eq '14:30'"> selected </if> value="14:30">14:30</option>
+						<option <if condition="$info.party_end_time eq '15:00'"> selected </if> value="15:00">15:00</option>
+						<option <if condition="$info.party_end_time eq '15:30'"> selected </if> value="15:30">15:30</option>
+						<option <if condition="$info.party_end_time eq '16:00'"> selected </if> value="16:00">16:00</option>
+						<option <if condition="$info.party_end_time eq '16:30'"> selected </if> value="16:30">16:30</option>
+						<option <if condition="$info.party_end_time eq '17:00'"> selected </if> value="17:00">17:00</option>
+						<option <if condition="$info.party_end_time eq '17:30'"> selected </if> value="17:30">17:30</option>
+						<option <if condition="$info.party_end_time eq '18:00'"> selected </if> value="18:00">18:00</option>
+						<option <if condition="$info.party_end_time eq '18:30'"> selected </if> value="18:30">18:30</option>
+						<option <if condition="$info.party_end_time eq '19:00'"> selected </if> value="19:00">19:00</option>
+						<option <if condition="$info.party_end_time eq '19:30'"> selected </if> value="19:30">19:30</option>
+						<option <if condition="$info.party_end_time eq '20:00'"> selected </if> value="20:00">20:00</option>
+						<option <if condition="$info.party_end_time eq '20:30'"> selected </if> value="20:30">20:30</option>
+						<option <if condition="$info.party_end_time eq '21:00'"> selected </if> value="21:00">21:00</option>
+						<option <if condition="$info.party_end_time eq '21:30'"> selected </if> value="21:30">21:30</option>
+						<option <if condition="$info.party_end_time eq '22:00'"> selected </if> value="22:00">22:00</option>
+						<option <if condition="$info.party_end_time eq '22:30'"> selected </if> value="22:30">22:30</option>
+						<option <if condition="$info.party_end_time eq '23:00'"> selected </if> value="23:00">23:00</option>
+						</select>
+						<!--<input type="text" name="party_end1_time" id="party_end1_time" style="width:100px;float:none;" onClick="WdatePicker({dateFmt:'H:m:s'})" <if condition="$info.date_type eq 1"> value="{$info.party_end_time}"</if> readonly>-->
+					</div>
+					<div id="moredate" <if condition="$info.date_type eq ''"> style="display:none;" <elseif condition="$info.date_type eq 2"/> style="display:block;"<else/> style="display:none;" </if> class="c_date_box"><!-- 日期控件位置  -->
+						<div style="height:30px;clear:both;">
+							<em style="line-height:28px;height:28px;float:left;">起始日期：</em><input class="Wdate" name="party_start2_date" id="party_start2_date" type="text" style="width:100px;float:left;padding-left:0px;margin-right:8px;" readonly onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" <if condition="$info.date_type eq 2"> value="{$info.party_start1_date}"</if>>
+							<em style="float:left;margin-right:8px;line-height:30px;">至</em><input class="Wdate" type="text" name="party_end2_date" id="party_end2_date" style="width:100px;float:left;padding-left:0px;" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly <if condition="$info.date_type eq 2"> value="{$info.party_end1_date}"</if>>
+						</div>
+
+						</script>
+						<div style="margin-top:5px;height:30px;clear:both;">
+							<em style="line-height:28px;height:28px;float:left;">活动时间：</em>
+							<select id="party_start2_time" name="party_start2_time" class="c_select_w1" style="float:left;width:102px;">
+							<option <if condition="$info.party_start_time eq '08:00'"> selected </if> value="08:00">08:00</option>
+						<option <if condition="$info.party_start_time eq '08:30'"> selected </if> value="08:30">08:30</option>
+						<option <if condition="$info.party_start_time eq '09:00'"> selected </if> value="09:00">09:00</option>
+						<option <if condition="$info.party_start_time eq '09:30'"> selected </if> value="09:30">09:30</option>
+						<option <if condition="$info.party_start_time eq '10:00'"> selected </if> value="10:00">10:00</option>
+						<option <if condition="$info.party_start_time eq '10:30'"> selected </if> value="10:30">10:30</option>
+						<option <if condition="$info.party_start_time eq '11:00'"> selected </if> value="11:00">11:00</option>
+						<option <if condition="$info.party_start_time eq '11:30'"> selected </if> value="11:30">11:30</option>
+						<option <if condition="$info.party_start_time eq '12:00'"> selected </if> value="12:00">12:00</option>
+						<option <if condition="$info.party_start_time eq '12:30'"> selected </if> value="12:30">12:30</option>
+						<option <if condition="$info.party_start_time eq '13:00'"> selected </if> value="13:00">13:00</option>
+						<option <if condition="$info.party_start_time eq '13:30'"> selected </if> value="13:30">13:30</option>
+						<option <if condition="$info.party_start_time eq '14:00'"> selected </if> value="14:00">14:00</option>
+						<option <if condition="$info.party_start_time eq '14:30'"> selected </if> value="14:30">14:30</option>
+						<option <if condition="$info.party_start_time eq '15:00'"> selected </if> value="15:00">15:00</option>
+						<option <if condition="$info.party_start_time eq '15:30'"> selected </if> value="15:30">15:30</option>
+						<option <if condition="$info.party_start_time eq '16:00'"> selected </if> value="16:00">16:00</option>
+						<option <if condition="$info.party_start_time eq '16:30'"> selected </if> value="16:30">16:30</option>
+						<option <if condition="$info.party_start_time eq '17:00'"> selected </if> value="17:00">17:00</option>
+						<option <if condition="$info.party_start_time eq '17:30'"> selected </if> value="17:30">17:30</option>
+						<option <if condition="$info.party_start_time eq '18:00'"> selected </if> value="18:00">18:00</option>
+						<option <if condition="$info.party_start_time eq '18:30'"> selected </if> value="18:30">18:30</option>
+						<option <if condition="$info.party_start_time eq '19:00'"> selected </if> value="19:00">19:00</option>
+						<option <if condition="$info.party_start_time eq '19:30'"> selected </if> value="19:30">19:30</option>
+						<option <if condition="$info.party_start_time eq '20:00'"> selected </if> value="20:00">20:00</option>
+						<option <if condition="$info.party_start_time eq '20:30'"> selected </if> value="20:30">20:30</option>
+						<option <if condition="$info.party_start_time eq '21:00'"> selected </if> value="21:00">21:00</option>
+						<option <if condition="$info.party_start_time eq '21:30'"> selected </if> value="21:30">21:30</option>
+						<option <if condition="$info.party_start_time eq '22:00'"> selected </if> value="22:00">22:00</option>
+						<option <if condition="$info.party_start_time eq '22:30'"> selected </if> value="22:30">22:30</option>
+						<option <if condition="$info.party_start_time eq '23:00'"> selected </if> value="23:00">23:00</option>
+							</select>
+							<!--<input type="text" style="width:100px;float:none" name="party_start2_time" id="party_start2_time" onClick="WdatePicker({dateFmt:'H:m:s'})" readonly <if condition="$info.date_type eq 2"> value="{$info.party_start_time}"</if>>-->
+							<em style="float:left;line-height:30px;margin-right:8px;">至</em>
+							<select id="party_end2_time" name="party_end2_time" class="c_select_w1" style="float:left;width:102px;">
+							<option <if condition="$info.party_end_time eq '08:00'"> selected </if> value="08:00">08:00</option>
+						<option <if condition="$info.party_end_time eq '08:30'"> selected </if> value="08:30">08:30</option>
+						<option <if condition="$info.party_end_time eq '09:00'"> selected </if> value="09:00">09:00</option>
+						<option <if condition="$info.party_end_time eq '09:30'"> selected </if> value="09:30">09:30</option>
+						<option <if condition="$info.party_end_time eq '10:00'"> selected </if> value="10:00">10:00</option>
+						<option <if condition="$info.party_end_time eq '10:30'"> selected </if> value="10:30">10:30</option>
+						<option <if condition="$info.party_end_time eq '11:00'"> selected </if> value="11:00">11:00</option>
+						<option <if condition="$info.party_end_time eq '11:30'"> selected </if> value="11:30">11:30</option>
+						<option <if condition="$info.party_end_time eq '12:00'"> selected </if> value="12:00">12:00</option>
+						<option <if condition="$info.party_end_time eq '12:30'"> selected </if> value="12:30">12:30</option>
+						<option <if condition="$info.party_end_time eq '13:00'"> selected </if> value="13:00">13:00</option>
+						<option <if condition="$info.party_end_time eq '13:30'"> selected </if> value="13:30">13:30</option>
+						<option <if condition="$info.party_end_time eq '14:00'"> selected </if> value="14:00">14:00</option>
+						<option <if condition="$info.party_end_time eq '14:30'"> selected </if> value="14:30">14:30</option>
+						<option <if condition="$info.party_end_time eq '15:00'"> selected </if> value="15:00">15:00</option>
+						<option <if condition="$info.party_end_time eq '15:30'"> selected </if> value="15:30">15:30</option>
+						<option <if condition="$info.party_end_time eq '16:00'"> selected </if> value="16:00">16:00</option>
+						<option <if condition="$info.party_end_time eq '16:30'"> selected </if> value="16:30">16:30</option>
+						<option <if condition="$info.party_end_time eq '17:00'"> selected </if> value="17:00">17:00</option>
+						<option <if condition="$info.party_end_time eq '17:30'"> selected </if> value="17:30">17:30</option>
+						<option <if condition="$info.party_end_time eq '18:00'"> selected </if> value="18:00">18:00</option>
+						<option <if condition="$info.party_end_time eq '18:30'"> selected </if> value="18:30">18:30</option>
+						<option <if condition="$info.party_end_time eq '19:00'"> selected </if> value="19:00">19:00</option>
+						<option <if condition="$info.party_end_time eq '19:30'"> selected </if> value="19:30">19:30</option>
+						<option <if condition="$info.party_end_time eq '20:00'"> selected </if> value="20:00">20:00</option>
+						<option <if condition="$info.party_end_time eq '20:30'"> selected </if> value="20:30">20:30</option>
+						<option <if condition="$info.party_end_time eq '21:00'"> selected </if> value="21:00">21:00</option>
+						<option <if condition="$info.party_end_time eq '21:30'"> selected </if> value="21:30">21:30</option>
+						<option <if condition="$info.party_end_time eq '22:00'"> selected </if> value="22:00">22:00</option>
+						<option <if condition="$info.party_end_time eq '22:30'"> selected </if> value="22:30">22:30</option>
+						<option <if condition="$info.party_end_time eq '23:00'"> selected </if> value="23:00">23:00</option>
+							</select>
+							<!--<input type="text" id="party_end2_time" name="party_end2_time" style="width:100px;float:none" onClick="WdatePicker({dateFmt:'H:m:s'})" readonly <if condition="$info.date_type eq 2"> value="{$info.party_end_time}" </if>>-->
+						</div>
+					</div>
+				</li>
+				<li class="c_form_li">
+					<if condition="$regionAll">
+					<div style="height:30px;line-height:30px;margin-left:64px;">
+						<a href="javascript:;;" id="commonaddress" style="color:red">使用常用地址</a>
+					</div>
+					<div id="myaddresslist" style="height:30px;line-height:30px;margin-left:64px;display:none;">
+						<volist name="regionAll" id="row">
+							<div><input type="radio" style="float:none;" item="{$row.id}"> <em>{$row.province_name}-{$row.city_name}-{$row.area_name}，{$row.address_info}</em></div>
+						</volist>
+					</div>
+					</if>
+					<span class="c_form_span">活动地点 </span>
+					<span id="address-l">
+						{$province}
+							<span class="rad">
+								{$city}
+								<span class="rad">
+									{$area}
+								</span>
+							</span>
+					</span>
+					<div class="c_date_box">
+						<div class="c_adr">
+							<input type="text" id="address_info" name="address_info" class="c_party_t" value="{$info.address_info}"/>
+						</div>
+						<div class="c_adr">
+							<input type="hidden" id="mapaddress" name="mapaddress">
+							<a id="map" href="javascript:;;">标注地图</a>
+							<!--<a href="javascript:;;">设置乘车路线</a>-->
+                            <span id="infoMap" style="width:100px;margin-left:12px;"></span>
+                            <input type="hidden" id="address_last" name="address_last" />
+						</div>
+						<!--<div class="c_adr">
+							<input type="text" class="c_party_input"/>
+							<a href="javascript:;;" class="c_adr_del"></a>
+						</div>-->
+					</div>
+				</li>
+				<li>
+					<span class="c_form_span">联系人</span>
+					<input id="contactperson" name="contactperson" type="text" value="{$info.contactperson}" class="c_party_n"/>
+					<b class="c_ts4"></b>
+				</li>
+				<li>
+					<span class="c_form_span">联系电话</span>
+					<input id="contactphone" name="contactphone" value="{$info.contactphone}" type="text" class="c_party_n"/>
+					<b class="c_ts3"></b>
+				</li>
+			</ul>
+			<ul class="c_form_mod2">
+				<li>
+					<span class="c_form_span">活动介绍</span>
+					<textarea id="introduce" name="introduce"  class="c_form_text" style="overflow:auto;"><if condition="$info.introduce neq ''">{$info.introduce}<else/>5000字以内</if></textarea>
+                    <em style="float:right;">还可以输入5000字</em>
+				</li>
+				<li>
+					<span class="c_form_span">活动图片</span><br/>
+					<input type="button" class="c_button" id="dialog_img_show" hidefucos/>
+					<input type="hidden" id="pictype" name="pictype" value="{$info.pic_type}" hidefucos/>
+					<em class="c_button_t">建议图片不超过1M，比例为3：2，例如 600x400 大小</em>
+					
+					 
+					<div class="c_date_box">
+					<div class="pic_show_upload">
+					<if condition="$info.partypic neq ''">
+					<img id="showupload" src="__PUBLIC__/Common/images/{$info.partypic}" class="c_act_img"/>
+						<!--<img id="showupload" src="__PUBLIC__/Common/images/partycreate/{$info.partypic}" class="c_act_img"/>-->
+					<else/>
+						<img id="showupload" src="__PUBLIC__/party/Common/images/c_img.jpg" class="c_act_img"/>
+					</if>
+					</if>
+					</div>
+					</div>
+				</li>
+				<li style="position:relative;">
+					<span class="c_form_span">活动费用 </span>
+					<div class="c_ra_list">
+						<input type="radio" name="ismoney" <if condition="$info.ismoney eq 2"> checked </if>  value="2" id="c_ra1"/>
+						<label for="c_ra1">收费</label>
+						<input type="radio" name="ismoney" <if condition="$info.ismoney eq 1"> checked </if>  value="1" id="c_ra2"/>
+						<label for="c_ra2">免费</label>
+					</div>
+					<div id="moneyconf" <if condition="$info.ismoney eq 2">style="display:block;" </else> style="display:none;"</if> class="c_date_box2">
+						<div class="c_pri">
+							<span>价　格</span>
+							<input type="text" id="markprice" name="markprice" value="{$info.markprice}"  class="c_input_p"/>
+							<span>元</span>
+							<em>（价格不允许有小数）</em>
+						</div>
+						<div class="c_pri">
+							<span>会员价</span>
+							<input type="text" id="lowerprice" name="lowerprice" value="<if condition='$info.lowerprice eq -1'><else/>{$info.lowerprice}</if>" class="c_input_p"/>
+							<span>元</span>
+							<em>（可选项）</em>
+						</div>
+					</div>
+					<div class="c_ts5" style="position:absolute;left:200px;top:0px;padding-top:0px;*left:220px;*margin-top:-2px;" >请选择活动费用</div>
+				</li>
+			</ul>
+			<div class="c_sim">
+				<div class="c_sum">
+					<input type="text" name="verify_qt" id="verify_qt" value="验证码"/>
+					<img src="__APP__/Create/verify" id="verify" onclick="this.src='__APP__/Create/verify/'+Math.random()"/>
+					<a href="javascript:;" onclick="document.getElementById('verify').src='__APP__/Create/verify/'+Math.random()">换一张</a>
+					<b class="c_ts2"></b>
+				</div>
+				<div class="c_sum_up">
+					<input type="hidden" id="sid" value="{$UcSid}">
+					<input type="hidden" name="id" value="{$id}">
+					<!--<a href="javascript:;;">发布</a>-->
+					<!-- <input type="submit" style="width:78px;height:30px;" value="发布" />
+					<input type="reset" style="width:78px;height:30px;" value="取消" id="cancel"/> -->
+					<input type="submit" id='fabu' style="width:78px;height:30px;" value="发布" />
+			        <input type="reset" style="width:78px;height:30px;" value="取消" id="cancel"/>
+				</div>
+			</div> 
+			
+		</form>
+	</div>
+	<div class="c_main_r">
+		<dl class="c_emp">
+			<dt>重要提示</dt>
+			<dd>
+            <font style="color:#AE061D">
+            [酒会]信息发布成功并有用户报名关注之后不可修改，请您在发布之前仔细斟酌，如确有修改需求，请先删除旧的酒会信息之后重新发布（建议您一次发布成功，尽量不删除，因为可能给您带来不必要的信誉损失)。
+            </font>
+            <br/>
+            逸香[酒会]频道本着方便广大用户的原则，推出自助发布相关活动的功能，望您善用并请严格遵守国家法律法规，如有必要，我们会向公安机关提供您的相关信息。</dd>
+		</dl>
+		<dl class="c_emp2">
+			<dt>如何才能让你的活动更吸引人？</dt>
+			<dd>标题简单明了</dd>
+			<dd>活动内容和特点介绍详细</dd>
+			<dd>活动海报吸引人眼球</dd>
+			<dd>更重要的是，邀请好友们都来参与！</dd>
+		</dl>
+	</div>
+</div>
+<script src="__PUBLIC__/Party/Common/js/create.js" type="text/javascript"></script> 
+<div class="c-img-up" id="dialog_img"  style="width:550px;height:200px;">
+	  <a href="javascript:;;" class="c-img-up-hide" id="dialog_img_close">关闭</a>
+	  <form></form>
+			<form id="frame" action="index.php?m=Create&a=uploadpicture&t=Math.random()" method="post" enctype="multipart/form-data">
+			<input type="file" name="file" id="file"/>
+				<h4 id="hintp" style="display:none;color:red" >上传成功</h4>
+			</form>
+
+			</style>
+	<!--<div class="c-up-set">
+		<span>活动封面</span>
+		<var>建议图片大小不超过2M，模版图片为佳</var>
+		<input type="file" name="uploadify" id="uploadify" />	
+	</div>
+	<div class="c-up-set-img">
+		<div class="c-up-set-img-l"></div>
+		<div class="c-up-set-img-r">
+                <div class="c-up-w">这是您创建的活动的封面</div>
+                <div class="c-up-m"><img src="__PUBLIC__/party/Common/images/v-mr.jpg" id="preview" alt="Preview"></div>
+			<div class="c-up-b">
+				
+				<div class="c-up-s-t">随意拖拽或调整大图中的虚线区域，预览小图即为裁切后的效果</div>
+			</div>
+		</div>
+	</div>
+	<div class="c-up-s-c">
+		<a href="javascript:;;" id="save_img"></a>
+		<a href="javascript:;" class="c-up-quit" ></a>
+	</div>  -->
+</div>
+       <script>
+		$(document).ready(function(){
+			$("#file").change(function(){
+				 $("#frame").ajaxSubmit(function(data){ 
+						$("#pictype").val(data);
+						$("#hintp").show();
+						var str="<img id='showupload' src='__UPLOAD__/party/images/temp/s_"+data+"' />";
+						$('.pic_show_upload').empty();
+						$('.pic_show_upload').html(str);
+				   });
+			});
+			$("#fabu").clcik(function(){
+				 $("#upc").ajaxForm();
+			});
+		});
+					 </script>
+<input type="hidden" id="img" />
+<input type="hidden" id="uid" value="{$uid}" />
+<include file="Common:footer" />

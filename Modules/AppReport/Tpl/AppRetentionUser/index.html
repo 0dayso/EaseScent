@@ -1,0 +1,90 @@
+<include file="Common:cpheader" />
+<script type="text/javascript">
+$(function() {
+    $("input[name='statime']").datepicker({
+        changeYear: true,
+        changeMonth: true,
+        maxDate: "{$_maxdata}",
+        onClose: function( selectedDate ) {
+            $("input[name='endtime']" ).datepicker( "option", "minDate", selectedDate );
+        }
+    });
+    $("input[name='endtime']").datepicker({
+        changeYear: true,
+        changeMonth: true,
+        maxDate: "{$_maxdata}",
+        onClose: function( selectedDate ) {
+            $("input[name='statime']" ).datepicker( "option", "maxDate", selectedDate );
+        }
+    });
+});
+</script>
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('AppReport/Index/index')}">终端报表</a> >
+        应用-存留用户
+    </div>
+    <div class="div-box-default">
+        <select id="apptype">
+            <volist name="_applist" id="vo">
+            <option value="{$vo.id}">{$vo.name}</option>
+            </volist>
+        </select>
+        <input type="hidden" name="apptype" value="1">
+    </div>
+    <div class="div-box-default">
+            <div class="search">
+                <table width="100%" cellspacing="0" class="search-form">
+                    <tbody>
+                        <tr>
+                            <td>存留用户：
+                                <a href="javascript:;" class="days" day="7">近7日</a>
+                                <a href="javascript:;" class="days" day="30">近30日</a>
+                                <a href="javascript:;" class="days" day="0">全部</a>
+                                <input type="hidden" name="timesection" value="">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        <iframe id="ratetable" src="/index.php?app=AppReport&m=AppRetentionUser&a=verlist" width="100%" height="500px"></iframe>
+    </div>
+</div>
+<include file="Common:cpfooter" />
+<script>
+$(function(){
+    // 1 ~ 20  #5adfea
+    // 21-40   #45c8d7
+    // >41     #33b2c5
+    $('tbody#rate td[class!="except"]').each(function(){
+        var text = parseInt($(this).text());
+        // alert(text);
+        var color = '';
+        if ((text > 0) && (text < 21)) {
+            color = '#5adfea';
+        } else if ((text > 20) && (text < 41)) {
+            color = '#45c8d7';
+        } else if (text > 40) {
+            color = '#33b2c5';
+        };
+        $(this).css({'backgroundColor':color});
+    });
+
+    $('#apptype').change(function(){
+        var type = $(this).val();
+        var ifr = $('#ratetable');
+        var fixSrc = '/index.php?app=AppReport&m=AppRetentionUser&a=verlist';
+        ifr.attr('src',fixSrc+'&type='+type);
+    });
+    // 7/30/all days
+    $('.days').each(function(){
+        $(this).on('click',function(){
+            var type = $('#apptype').val();
+            var fixSrc = '/index.php?app=AppReport&m=AppRetentionUser&a=verlist';
+            var ifr = $('#ratetable');
+            ifr.attr('src',fixSrc+'&type='+type+'&timesection='+$(this).attr('day'));
+        });
+    });
+});
+</script>

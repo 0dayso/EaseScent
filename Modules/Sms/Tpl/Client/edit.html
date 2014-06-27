@@ -1,0 +1,42 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Sms/Client/index')}">短信发送客户端管理</a> > 编辑客户端</div>
+    <div class="form">
+		<form name="myform" action="{:Url('Sms/Client/edit')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="client_id" value="{$vo.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on">编辑客户端</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">客户端ID</th>
+                        <td> {$vo.id} </td>
+                    </tr>
+                    <tr>
+                        <th width="130">客户端名称</th>
+                        <td><input type="text" size="30" name="client_name" value="{$vo.client_name}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">所属第三方短信平台</th>
+						<td>
+							<select name="platform_id">
+								<volist id="platform" name="platforms">
+                                <option <if condition="$platform['id'] eq $vo['platform_id']">selected</if> value="{$platform.id}">{$platform.name}</option>
+								</volist>
+							</select>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">短信后缀签名</th>
+                        <td><input type="text" size="30" name="text_suffix" value="{$vo.text_suffix}" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<include file="Common:cpfooter" />

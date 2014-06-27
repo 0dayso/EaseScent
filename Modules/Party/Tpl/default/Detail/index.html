@@ -1,0 +1,129 @@
+<include file="Common:header" />
+<include file="Common:wine_city" />
+<div class="wine_main">
+	<div class="wine_list_l">
+		<div class="wine_list_con1">
+			<div class="list_con1_img">
+                <notempty name="partyInfo.pictype"> 
+				<if condition="$partyInfo.id eq 220">
+				<img src="__UPLOAD__/party/images/nopartyimg.jpg"/>
+                <else />
+				<img src="__UPLOAD__/party/images/{$partyInfo.id}/d_.{$partyInfo.pictype}"/>
+				</if>
+				</notempty>
+				<!-- 推荐小图标 -->
+                <if condition="$partyInfo.isbar eq 1">
+				<span></span>
+                </if>
+			</div>
+			<dl class="list_con1_con">
+				<dt><em>[{$partyInfo.cityName.region_name}]</em>{$partyInfo.title}</dt>
+				<dd>时间：<var>{$partyInfo.start.data} {$partyInfo.start.hour} - {$partyInfo.end.data} {$partyInfo.end.hour}</var></dd>
+				<dd><em>地点：</em><span class="list_con1_con_adr">{$partyInfo.address_info}</span></dd>
+				<dd>类型：<span>{$partyInfo.pType}</span></dd>
+				<dd>费用：<span>{$partyInfo.markprice}</span>　<span><if condition="$partyInfo.lowerprice neq '无'">会员价：{$partyInfo.lowerprice}</if></span></dd>
+				<if condition="$partyInfo.contactperson neq ''">
+				<dd style="height:20px;overflow:hidden;">联系人：<span>{$partyInfo.contactperson}</span></dd>
+				</if>
+				<if condition="$partyInfo.contactphone neq ''">
+				<dd>电话：<img src="__ROOT__/Detail/getPhone/phone/{$partyInfo.contactphone}"/></dd>
+				</if>
+				<dd><span id="insert_user_num"><em>{$joincount}</em>人关注</span></dd>
+				<dd>
+                <if condition="$partyInfo['is_end'] eq 0">
+                <if condition="$is_insert eq 1">
+                <a href="###" class="wine_join" id="unregist">取消关注</a> 
+                <else/>
+                <a href="###" class="wine_join" id="regist">关注</a>
+                </if>
+                <else/>
+                <span class="wine_end"></span>
+                </if>
+                </dd><!-- 点击关注之后文字变为“取消参加” -->
+			</dl>
+		</div>
+		<div class="wine_list_con2">
+			<h3 class="wine_list_h3">活动介绍</h3>
+			<div class="wine_list_p_box">
+				<div class="wine_list_p">
+					<p>
+						<strong>{$partyInfo.title}</strong>
+				        {$partyInfo.introduce}  
+                    </p>
+				</div>
+				<div class="wine_list_p_show"><a href="javascript:;;" class="wine_list_p_more" id="show">展开</a></div><!-- 点击这里的时候把“wine_list_p”的高度去掉 -->
+			</div>
+		</div>
+		<div class="wine_list_con3">
+			<h3 class="wine_list_h3">
+				<span>活动照片(共{$photoCount}张)</span>
+				<a href="/index.php/Img/index/id/{$partyInfo.id}">查看全部</a>
+			</h3>
+			<div class="wine_list_con3_con">
+				<ul class="wine_list_con3_list">
+                <volist name="photoInfo" id="photo">
+					<li >
+						<a href="/index.php/Img/img/id/{$partyInfo.id}/page/{$i}">
+							<img src="__ROOT__/Common/images/partyImg/{$partyInfo.id}/{$photo.image}_s.{$photo.description}"/>
+						</a>
+						<if condition="$uid eq $partyInfo['add_user']">
+						<span onclick="deleteimg({$photo.id},this)" style="position:absolute;margin-left:150px;margin-top:-95px;"><img style="width:8px;" src="/images/btn_close.png"></span>
+						 </if>
+						<span><em>{$photo.count}</em>评论</span>
+					</li>
+                </volist>
+				</ol>
+			</div>
+		</div>
+		<include file="Common:comment" />
+	</div>
+	<div class="wine_list_r">
+		<div class="wine_list_con4">
+			<h3 class="wine_list_h3">
+				<span>活动地图</span>
+                        
+                 <notempty name="partyInfo.mapaddress">
+				<a href="###" id="big_map">查看大图</a>
+                </notempty>
+			</h3>
+			<div class="wine_map">
+                 <empty name="partyInfo.mapaddress">
+                 <div style="padding-top:76px;height:86px;line-height:20px;">
+                    {$partyInfo.contactperson}忘记传地图了，请您手动搜索一下吧！
+                 </div>
+                 <else/>
+                    
+				<img src="{$partyInfo.mapaddress}" width="258px" height="172px"/>
+                </empty>
+			</div>
+		</div>
+		<div class="wine_list_con5">
+			<h3 class="wine_list_h3">
+				<span>关注此活动的用户</span>
+                <notempty name="userInfo">
+				<a href="/index.php/Detail/insertUser/id/{$partyInfo.id}">查看全部</a>
+                </notempty>
+			</h3>
+            <empty name="userInfo">
+            <div class="no_person">还木有人关注哦，快来抢个沙发吧！</div>
+            </empty>
+			<ul class="wine_join_p">
+            <notempty name="userInfo">
+            <volist name="userInfo" id="user">
+				<li id="insert_user_{$user.uid}">
+					<a href="__ROOT__/User/otherInsert/uid/{$user.uid}"><img src="{$user.avater}"/></a>
+					<span><a href="__ROOT__/User/otherInsert/uid/{$user.uid}">{$user.nickname}</a></span>
+				</li>
+            </volist>
+            </notempty>
+			</ul>
+		</div>
+		<div class="wine_list_adv1">
+			<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "445564";</script>
+			<script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+		</div>
+	</div>
+    <input type="hidden" value="{$partyInfo.id}" id="partyId">
+</div>
+	
+<include file="Common:footer" />

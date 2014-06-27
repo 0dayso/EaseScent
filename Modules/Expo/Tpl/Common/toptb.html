@@ -1,0 +1,14 @@
+<div class="z_headTop">
+    <p class="z_headTop_p">
+        <a target="_blank" href="http://www.wine.cn" style="float:left;">逸香网</a>
+        <if condition="($Expo_userInfo['id']) ">
+            <a href="index.php?m=Inland&a=index&agent_id={$Expo_userInfo['agent_id']}" class="col_9b2521">{$Expo_userInfo['qy_name']}</a> |
+            <a href="{:C('YM_DOMAIN')}/index.php">账号管理</a> |
+            <a href="{:U('Agent/index')}">我的Expo</a> |
+            <a href="{:C('YM_DOMAIN')}/index.php/User/loginout">退出</a>
+        <else />
+            <a href="{:C('YM_DOMAIN')}/index.php/User/register">免费注册</a> |
+            <a href="{:C('YM_DOMAIN')}/index.php/User/login">登录</a>
+        </if>
+    </p>
+</div>

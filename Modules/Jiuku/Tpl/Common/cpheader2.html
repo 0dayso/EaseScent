@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>逸香网文章发布平台</title>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}common/js/jquery-2.0.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{:C('DOMAIN.PUBLIC')}admin/css/admin.css" />
+
+<!-- jqueryui -->
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}jquery-ui-1.9.2.custom/development-bundle/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
+<link rel="stylesheet" href="{:C('DOMAIN.PUBLIC')}jquery-ui-1.9.2.custom/development-bundle/themes/base/jquery.ui.all.css">
+<!-- /jqueryui -->
+<!-- artdialog -->
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}artDialog4.1.7/artDialog.js"></script>
+<link rel="stylesheet" href="{:C('DOMAIN.PUBLIC')}artDialog4.1.7/skins/default.css">
+<!-- /artdialog -->
+<!-- fileupload -->
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.iframe-transport.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.fileupload.js"></script>
+<!-- /fileupload -->
+<!-- kindeditor -->
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}editor/kindeditor-min.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}editor/zh_CN.js"></script>
+<!-- /kindeditor -->
+<script language="javascript">
+$(document).ready(function(){
+    //监听span-icons
+    $("span[class='-icons']").each(function(){
+        var x = $(this).attr('x');
+        var y = $(this).attr('y');
+        var top = $(this).attr('top');
+        var bottom = $(this).attr('bottom');
+        var left = $(this).attr('left');
+        var right = $(this).attr('right');
+        $(this).parent().css("position","relative");
+        $(this).css("position","absolute");
+        $(this).css("backgroundImage","url({:C('DOMAIN.PUBLIC')}Jk/images/ui-icons_888888_256x240.png)");
+        $(this).css("backgroundPosition",x+"px "+y+"px");
+        $(this).css({"height":"16px","width":"16px"});
+        $(this).css({"top":top,"bottom":bottom,"left":left,"right":right,});
+    });
+});
+/**
+ * tab 切换控制
+ */
+function SwapTab(id1, id2) {
+    $(".tab-nav").each(function(){
+            $(this).css('display','none');
+    });
+    $(".on").each(function(){
+        $(this).removeClass('on');
+    });
+    $("#" + id1).addClass('on');
+    $("#" + id2).css('display', 'block');
+}
+</script>
+<style type="text/css">
+.selbox{
+position: relative;
+float: left;
+margin: 5px 5px 0 0;
+border: 1px solid #d0d0d0;
+padding-right: 15px;
+}
+.selbox img{
+height:90px;
+float: left;
+}
+.selbox div{
+padding: 2px;
+float: left;
+}
+.del-selbox{
+position: absolute;
+top: 0;
+right: 0;
+height: 16px;
+width: 16px;
+cursor: pointer;
+background: url({:C('DOMAIN.PUBLIC')}Jk/images/ui-icons_888888_256x240.png) -80px -128px no-repeat;
+}
+.autocomplete-div{
+display: inline-block;
+position: relative;
+}
+.autocomplete-loading{
+position:absolute;
+height: 16px;
+width: 16px;
+right:21px;
+top:5px;
+background: url({:C('DOMAIN.PUBLIC')}Jiuku/images/common/loading.gif);
+z-index: -1;
+}
+.autocomplete-sel,
+.autocomplete-del{
+position:absolute;
+height: 16px;
+width: 16px;
+right:8px;
+top:4px;
+cursor:pointer;
+background: url({:C('DOMAIN.PUBLIC')}Jk/images/ui-icons_888888_256x240.png);
+}
+.autocomplete-sel{
+z-index: 1;
+background-position: -64px -16px;
+}
+.autocomplete-del{
+z-index: -1;
+background-position: -80px -128px;
+}
+.msg_span{
+    color:red;
+    vertical-align: middle;
+}
+.symbol-add{
+position:relative;
+display:inline-block;
+height: 16px;
+width: 16px;
+top: 4px;
+cursor:pointer;
+background: url({:C('DOMAIN.PUBLIC')}Jk/images/ui-icons_888888_256x240.png);
+background-position: -16px -128px;
+margin-right:5px;
+}
+</style>
+</head>
+<body>

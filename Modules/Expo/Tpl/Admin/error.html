@@ -1,0 +1,61 @@
+
+<include file="Admin:header"/>
+    <include file="Admin:theme_change"/>
+        <include file="Admin:header_nav" />
+        <!-- content -->
+        <div id="content">
+           <include file="Admin:left" />
+
+               <!-- content / right -->
+                <div id="right" >
+
+                    <div id="box-tabs" class="box" >
+                        <!-- box / title -->
+                        <div class="title">
+                            <h5>信息提示</h5>
+                        </div>
+                        <!-- box / title -->
+                        <div id="box-messages" style="height:320px;">
+                            <div class="messages" >
+                                <div id="message-error" class="message message-error"style="height:300px;"  >
+                                    <div class="image">
+                                        <img src="__PUBLIC__/Expo/Expo_admin/resources/images/icons/error.png" alt="error" height="32" />
+                                    </div>
+                                    <div class="text">
+                                        <div class="system-message">
+                                            <present name="message">
+                                                <p class="error"><h2><?php echo($message); ?></h2></p>
+                                            <else/>
+                                                <p class="error"><h2><?php echo($error); ?></h2></p>
+                                            </present>
+                                            <p class="detail"></p>
+                                            <p class="jump">
+                                            页面自动
+                                            <a id="href" href="<?php echo($jumpUrl); ?>">跳转</a>
+                                            等待时间： <b id="wait"><?php  $time = ($waitSecond > 3)? $waitSecond : 3;  echo($time); ?></b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="dismiss">
+                                        <a href="#message-error"></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+               <!-- end content / right -->
+        </div>
+
+        <script type="text/javascript">
+            (function(){
+            var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+            var interval = setInterval(function(){
+                var time = --wait.innerHTML;
+                (time == 0) && (location.href = href);
+            }, 1000);
+            })();
+        </script>
+
+<include file="Admin:footer"/>

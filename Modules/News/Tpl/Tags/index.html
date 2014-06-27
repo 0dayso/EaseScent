@@ -1,0 +1,75 @@
+<include file="Common:cpheader" />
+<script src="__TagsLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__TagsLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__TagsLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__TagsLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__TagsLIC__/calendar/css/calendar-win2k.css" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('News/Tags/index')}">标签管理</a> > 标签列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}">添加新标签</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('News/Tags/index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        标签名：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <form action="{:Url('News/Tags/del')}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectAll('tag_ids[]');"></th>
+                    <th width="40">ID</th>
+                    <th width="300">标签名</th>
+                    <th width="100">文章关联数</th>
+                    <th width="100">热门标签</th>
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="taglist">
+            <tr>
+                <td><input type="checkbox" value="{$vo.tag_id}" name="tag_ids[]"></td>
+                <td>{$vo.tag_id}</td>
+                <td>{$vo.name}</td>
+                <td>
+                    <if condition="$vo.tags_count gt 10">
+                    <font color="red">{$vo.tags_count}</font>
+                    <else />
+                    {$vo.tags_count}
+                    </if>
+                </td>
+                <td>
+                    <if condition="$vo.via eq 0"><font color="red">热门标签</font>
+                    <elseif condition="$vo.via neq 0" />
+                        <a href="{:Url('News/Tags/inhot?id='. $vo['tag_id'].'&n='.$vo['name'].'&count='.$vo['tags_count'])}">加入热门标签</a>
+                    </if>
+                </td>
+                <td>
+                    <a href="{:Url('News/Tags/edit?tag_id='. $vo['tag_id'])}">编辑</a>
+                    <a href="{:Url('News/Tags/del?tag_id='.$vo['tag_id'])}" target="delete" title='确定要删除ID为“{$vo.tag_id}”的标签吗？'>删除</a>
+                </td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+
+        <div class="footer"><label for="check_box">全选/取消</label> <input type="submit" class="btn" name="dosubmit" value="删除" onclick="return confirm('您确定要删除吗？')"></div>
+    </form>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>status</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_admin.css" />
+        <script type="text/javascript" src="__PUBLIC__/Expo/js/jquery-1.7.2.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/Expo/js/z_aMain.js"></script>
+        <script language="javascript" src="__PUBLIC__/editor/kindeditor-min.js"></script>
+        <script language="javascript" src="__PUBLIC__/editor/zh_CN.js"></script>
+        <script type="text/javascript">
+            var imgnum = 0;
+            var tunnel_num = 2; // 默认显示图片框个数
+            var imgbtn;
+            var number=0;
+
+            function submit(myform,id){
+                $('#parameter').val(id);//关联酒款放入表单
+                javascript:document.getElementById('myform').submit();
+            }
+            
+            function add(){
+                 var len = $("#honor tbody tr").length;
+                if(len <5){
+                    //var len = $(".uploadBtn_E").length;
+                    var len = $("#honor tbody tr").length;
+                    imgnum = len+1;
+                    tunnel_num ++;
+                    var tr = $('<tr><td align="right" class="td1">'
+                        +'<div class="uploadBtn_E" name="cc" id="imglist'+imgnum+'"></div>'
+                        +'</td><td valign="top" class="pl20"> <input class="w452" type="text" name="status['+imgnum+']"/>'
+                        +'<textarea class="uploadTexta" name="description['+imgnum+']"></textarea> </td></tr>');
+
+                    _this =  tr.find("div");
+                   // console.log(_this.get(0));
+                    _this.bind("click",function(){
+                        bill = new domcc(_this.get(0));
+                        $("input[name=imgFile]").click();
+                    })
+                    var honor = $("#honor > tbody");
+                    honor.append(tr);
+                    //imgnum++;
+                }
+                if(tunnel_num ==5){
+                       $('#add').hide();
+                }
+            }
+
+
+            KindEditor.ready(function(K) {
+                imgbtn = K.uploadbutton({
+                    button : K('#imgbtn'),
+                    fieldName : 'imgFile',
+                    url : "{:U('upload')}&type=Status/images",
+                    afterUpload : function(data) {
+                        number++;
+                        if (data.error === 0){
+                            dom = bill.cc
+                            var domid = 0;
+                           if(number ==2){
+                               $('#add').show();
+                           }
+                            if( tunnel_num > 2 ) {
+                                domid = $(dom).attr("id").replace(/imglist/, "");
+                                
+                            }else{
+                              
+                                var domidstr = dom.attr("id");
+                                domid = domidstr.replace(/imglist/, "");
+
+                                /**
+                                 *   添加前两个认证图片status状态值
+                                 **/
+                                $("#honor tbody tr").each(function(index){
+
+                                    if((index+1) == domid) {
+                                        var re_oldid = $(this).find("td").last().find("#id_oldid_"+domid).val();
+                                        var re_statusinfo = $(this).find("td").last().find("#id_statusinfo_"+domid).val();
+                                        var re_status = $(this).find("td").last().find("#id_status_"+domid).val();
+
+                                        console.log(re_oldid);
+                                        $(this).find("td").last().html(
+                                         '<input class="w452" name="status['+domid+']" value="'+re_status+'" type="text">'
+                                         +'<input name="oldid['+domid+']" value="'+re_oldid+'" type="hidden">'
+                                         +'<textarea class="uploadTexta" name="description['+domid+']">'+re_statusinfo+'</textarea>');
+                                    }
+
+                                });
+
+
+
+                            }
+
+                            var html ='<div id="item"><input name="img_file['+domid+']" type="hidden" value="'+data.url+'" />'+
+                            '<input name="img_queue['+domid+']"type=hidden value="'+domid+'"/><img src="'+data.url+'" width="100%" height="100%" /></div>';
+
+                            $(dom).html(html);
+                        }
+                    }
+                });
+
+                imgbtn.fileBox.change(function(e) {
+                    imgbtn.submit();
+                });
+            });
+        function domcc(cc){
+          this.cc  = cc;
+        }
+        $(function(){
+            $("div[name=cc]").each(function(){
+                $(this).click(function(){
+                    bill = new domcc($(this));
+                    $("input[name=imgFile]").click();
+            })
+        });
+       
+        </script>
+    </head>
+
+    <body>
+        <include file="Winery:header" /> 
+        <div class="z_aWrap clear">
+            <div class="z_aWrap_l">
+                <h2>My Wineries</h2>
+                <ul>
+                    <li><a href="{:U('Winery/info?winery_id='.$winery_id)}">Basic Info<em></em></a></li>
+                    <li class="active"><a href="{:U('Winery/status?winery_id='.$winery_id)}">Status</a></li>
+                    <li><a href="{:U('Winery/introduce?winery_id='.$winery_id)}">Introduction</a></li>
+                    <li><a href="{:U('Winery/release?winery_id='.$winery_id)}">Wines Release</a></li>
+                    <li><a href="{:U('Winery/manage?winery_id='.$winery_id)}">Management</a></li>
+                </ul>
+            </div>
+            <div class="z_aWrap_r z_aWrap_r_E">
+                <form action="{:U('Winery/status?winery_id='.$winery_id)}" method="post" id="myform">
+                    <div class="uploadBtn_E" style="display:none;"><span  id="imgbtn"></span></div>
+                    <table width="100%" cellpadding="0" cellspacing="0" id="honor">
+                        <tbody>
+                            <tr>
+                                <td align="right" class="td1">
+                                    <div class="uploadBtn_E" name="cc"  id="imglist1">
+                                        <if condition="$statusInfo[0][pic_url] neq ''">
+                                        <img src="{:C('UPLOAD_WWWPATH')}{$statusInfo[0][pic_url]}"  width="100%" height="100%">
+                                        </if>
+                                    </div>
+
+                                </td>
+                                <td valign="top" class="pl20">
+                                    <input class="w452" id="id_status_1" type="text" name="status[]" value="{$statusInfo[0][brief]}"/>
+                                     <input type="hidden" id="id_oldid_1" name="oldid[]" value="{$statusInfo[0][id]}">
+                                    <textarea class="uploadTexta" id="id_statusinfo_1" name="description[]">{$statusInfo[0][description]}</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" class="td1">
+                                        <div class="uploadBtn_E" name="cc"  id="imglist2">
+                                            <if condition="$statusInfo[1][pic_url] neq ''">
+                                            <img src="{:C('UPLOAD_WWWPATH')}{$statusInfo[1][pic_url]}"  width="100%" height="100%">
+                                            </if>
+                                        </div>
+                                </td>
+                                <td valign="top" class="pl20">
+                                    <input class="w452" id="id_status_2" type="text" name="status[]" value="{$statusInfo[1][brief]}"/>
+                                      <input type="hidden" id="id_oldid_2" name="oldid[]" value="{$statusInfo[1][id]}">
+                                    <textarea class="uploadTexta" id="id_statusinfo_2" name="description[]">{$statusInfo[1][description]}</textarea>
+                                </td>
+                            </tr>
+                            <if condition="$statusInfo['2']['pic_url'] neq ''">
+                            <tr>
+                                <td align="right" class="td1">
+                                        <div class="uploadBtn_E" name="cc" id="imglist3">
+                                             <if condition="$statusInfo[2][pic_url] neq ''">
+                                            <img src="{:C('UPLOAD_WWWPATH')}{$statusInfo[2][pic_url]}"  width="100%" height="100%">
+                                             </if>
+                                        </div>
+                                </td>
+                                <td valign="top" class="pl20">
+                                    <input class="w452" id="id_status_3" type="text" name="status[]" value="{$statusInfo[2][brief]}"/>
+                                      <input type="hidden" id="id_oldid_3" name="oldid[]" value="{$statusInfo[2][id]}">
+                                    <textarea class="uploadTexta" id="id_statusinfo_3" name="description[]">{$statusInfo[2][description]}</textarea>
+                                </td>
+                            </tr><else/></if>
+                             <if condition="$statusInfo['3']['pic_url'] neq ''">
+                               <tr>
+                                <td align="right" class="td1">
+                                        <div class="uploadBtn_E" name="cc" id="imglist4">
+                                              <if condition="$statusInfo[3][pic_url] neq ''">
+                                            <img src="{:C('UPLOAD_WWWPATH')}{$statusInfo[3][pic_url]}"  width="100%" height="100%">
+                                              </if>
+                                        </div>
+                                </td>
+                                <td valign="top" class="pl20">
+                                    <input class="w452" id="id_status_4" type="text" name="status[]" value="{$statusInfo[3][brief]}"/>
+                                      <input type="hidden" id="id_oldid_4" name="oldid[]" value="{$statusInfo[3][id]}">
+                                    <textarea class="uploadTexta" id="id_statusinfo_4" name="description[]" >{$statusInfo[3][description]}</textarea>
+                                </td>
+                            </tr><else/></if>
+                        <if condition="$statusInfo['4']['pic_url'] neq ''">
+                               <tr>
+                                <td align="right" class="td1">
+                                        <div class="uploadBtn_E" name="cc" id="imglist5">
+                                                <if condition="$statusInfo[4][pic_url] neq ''">
+                                            <img src="{:C('UPLOAD_WWWPATH')}{$statusInfo[4][pic_url]}"  width="100%" height="100%">
+                                                </if>
+                                        </div>
+                                </td>
+                                <td valign="top" class="pl20">
+                                    <input class="w452" id="id_status_5" type="text" name="status[]" value="{$statusInfo[4][brief]}"/>
+                                      <input type="hidden" id="id_oldid_5" name="oldid[]" value="{$statusInfo[4][id]}">
+                                    <textarea class="uploadTexta" id="id_statusinfo_5" name="description[]" >{$statusInfo[4][description]}</textarea>
+                                </td>
+                            </tr><else/></if>
+
+                        </tbody>
+                    </table>
+
+                    <div class="td1">
+                        <if condition="$statusInfo['1']['pic_url'] neq '' && $statusInfo['4']['pic_url'] eq ''">
+                        <a href="javascript:void(0)" class="pinkBtn" onclick="submit(myform,0)"><span>Save</span></a>                    
+                        <span id="add" style="display:inline"><a href="javascript:void(0)" class="pinkBtn" onclick="add()"><span>Add more</span></a></span>
+                        <else/>
+                          <a href="javascript:void(0)" class="pinkBtn" onclick="submit(myform,0)"><span>Save</span></a>
+                         <span id="add" style="display:none"><a href="javascript:void(0)" class="pinkBtn" onclick="add()"><span>Add more</span></a></span>
+                        </if>
+                        <input type="hidden" name="parameter" id="parameter">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="z_aFoot">
+            <div class="z_aFoot_main">
+                <p class="fl">
+                    <a href="{:U('Index/contact')}" class="aboutUsHref">About us</a>
+                    <a href="{:U('Index/cooperation')}" class="cooperationHref">Business Cooperation</a>
+                </p>
+                <p class="fr">wine.cn © 2011 email:bd@wine.cn</p>
+            </div>
+        </div>
+    </body>
+</html>

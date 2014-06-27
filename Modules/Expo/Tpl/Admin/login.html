@@ -1,0 +1,120 @@
+<include file="Admin:login_header" />
+
+
+        <div id="login">
+            <!-- login_title -->
+            <div class="title">
+                <h5>逸香后台管理中心</h5>
+                <div class="corner tl"></div>
+                <div class="corner tr"></div>
+            </div>
+
+
+            <!--错误信息提示-->
+            <if condition="$login_error">
+            	<div class="messages">
+                <div id="message-error" class="message message-error">
+                    <div class="image">
+                        <img src="__PUBLIC__/Expo/Expo_admin/resources/images/icons/error.png" alt="Error" height="32" />
+                    </div>
+                    <div class="text">
+                        <h6>Sorry 账号/密码错误</h6>
+                        <span>请重新登陆.</span>
+                    </div>
+                    <div class="dismiss">
+                        <a href="#message-error"></a>
+                    </div>
+                </div>
+            	</div>
+            <else/>
+				<div class="messages">
+	                <div id="message-success" class="message message-success">
+	                    <div class="image">
+	                        <img src="__PUBLIC__/Expo/Expo_admin/resources/images/icons/success.png" alt="Error" height="32" />
+	                    </div>
+	                    <div class="text">
+	                        <h6>因为专注 所以更专业 逸香国际专注红酒营销24年...</h6>
+	                        <span>逸香商务管理中心.</span>
+	                    </div>
+	                    <div class="dismiss">
+	                        <a href="#message-success"></a>
+	                    </div>
+	                </div>
+            	</div>
+        	</if>
+
+
+            <div class="inner">
+                <form action={:U("Admin/logining")}  method="post" id="logining">
+	                <div class="form">
+	                    <!-- fields -->
+	                    <div class="fields">
+	                        <div class="field">
+	                            <div class="label">
+	                                <label for="username">账号:</label>
+	                            </div>
+	                            <div class="input">
+	                                <input type="text" id="username" name="username" size="40" value="admin" class="focus" />
+	                            </div>
+	                        </div>
+	                        <div class="field">
+	                            <div class="label">
+	                                <label for="password">密码:</label>
+	                            </div>
+	                            <div class="input">
+	                                <input type="password" id="password" name="password" size="40" value="password" class="focus" />
+	                            </div>
+	                        </div>
+	                        <div class="field">
+	                            <div class="checkbox">
+	                                <input type="checkbox" id="remember" name="remember" />
+	                                <label for="remember">Remember me</label>
+	                            </div>
+	                        </div>
+	                        <div class="buttons">
+	                            <input type="submit" value="登陆..."  />
+	                        </div>
+	                    </div>
+	                    <!-- end fields -->
+	                    <!-- links -->
+	                    <div class="links">
+	                        <a href="{:U('Admin/forgot_password')}"> 忘记密码 / Forgot your password?</a>
+	                    </div>
+	                    <!-- end links -->
+	                </div>
+                </form>
+            </div>
+            <!-- end login -->
+            <div id="colors-switcher" class="color">
+                <a href="" class="blue" title="Blue"></a>
+                <a href="" class="green" title="Green"></a>
+                <a href="" class="brown" title="Brown"></a>
+                <a href="" class="purple" title="Purple"></a>
+                <a href="" class="red" title="Red"></a>
+                <a href="" class="greyblue" title="GreyBlue"></a>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                style_path = "__PUBLIC__/Expo/Expo_admin/resources/css/colors";
+
+                $("input.focus").focus(function () {
+                    if (this.value == this.defaultValue) {
+                        this.value = "";
+                    }
+                    else {
+                        this.select();
+                    }
+                });
+
+                $("input.focus").blur(function () {
+                    if ($.trim(this.value) == "") {
+                        this.value = (this.defaultValue ? this.defaultValue : "");
+                    }
+                });
+
+                $("input:submit, input:reset").button();
+            });
+        </script>
+<include file="Admin:footer">

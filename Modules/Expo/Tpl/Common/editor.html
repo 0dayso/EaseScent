@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="__WEBSITE__/plug/kindeditor/themes/default/default.css" />
+    <link rel="stylesheet" href="__WEBSITE__/plug/kindeditor/plugins/code/prettify.css" />
+    <script charset="utf-8" src="__WEBSITE__/plug/kindeditor/kindeditor.js"></script>
+    <script charset="utf-8" src="__WEBSITE__/plug/kindeditor/lang/zh_CN.js"></script>
+    <script charset="utf-8" src="__WEBSITE__/plug/kindeditor/plugins/code/prettify.js"></script>
+    <script>
+        KindEditor.ready(function(K) {
+            var editor1 = K.create('textarea[name="description"]', {
+                cssPath : '__WEBSITE__/plug/kindeditor/plugins/code/prettify.css',
+                uploadJson : '__WEBSITE__/index.php/Editor/index',
+                fileManagerJson : '__WEBSITE__/index.php/Editor/fileManagerJson',
+                allowFileManager : false,
+                afterCreate : function() {
+                    var self = this;
+                    K.ctrl(document, 13, function() {
+                        self.sync();
+                        K('form[name=myform]')[0].submit();
+                    });
+                    K.ctrl(self.edit.doc, 13, function() {
+                        self.sync();
+                        K('form[name=myform]')[0].submit();
+                    });
+                }
+            });
+            prettyPrint();
+        });
+    </script>
+</head>
+<body>
+   <textarea name="description" style="width:600px;height:500px;visibility:hidden;">
+      <present name="description">{:htmlspecialchars_decode($description)}</present>
+   </textarea>
+</body>
+</html>
+

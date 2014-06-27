@@ -1,0 +1,241 @@
+<include file="Common:cpheader" />
+<!-- <link rel="stylesheet" href="{:C('DOMAIN.PUBLIC')}editor/themes/default/default.css" />
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}editor/kindeditor-min.js"></script> -->
+<script src="{:C('DOMAIN.PUBLIC')}common/js/jquery.min.js" type="text/javascript"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.iframe-transport.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.fileupload.js"></script>
+<script>
+<if condition="$_GET['pid']">
+var pid = {$_GET.pid};
+var dbpath = '{$pres.path}';
+var dburl = '{$pres.domain}';
+var subpath = '{$subpath}';
+function folder(){
+    var iframe_src = "{:Url('folder')}"+'&pid='+pid+'&subpath='+subpath+'&type=select';
+    var baidumapdialog = art.dialog({
+        id : 'folder',
+        lock: true,
+        background: _DIALOG_BG_COLOR,
+        OPACITY: _DIALOG_BG_OPACITY,
+        content: '<iframe src="'+iframe_src+'" width="600px" height="400px"></iframe>',
+    });
+}
+function select_folder(subpath){
+    art.dialog({id:'folder'}).close();
+    location.href = "{:Url('index')}"+'&pid='+pid+'&subpath='+subpath;
+}
+/*KindEditor.ready(function(K) {
+    var upd_file = K.uploadbutton({
+        button : K('#upd_file')[0],
+        fieldName : 'upd_file',
+        url : "{:Url('upload')}"+'&path='+dbpath+subpath,
+        afterUpload : function(msg) {
+            console.log(msg);
+            if(msg.error == 1){
+                art.dialog({content:msg.msg,lock: true,}).time(3000);
+            }else{
+                get_file();
+            }
+        },
+        afterError : function(str) {
+            console.log(str);
+        }
+    });
+    upd_file.fileBox.change(function(e) {
+        upd_file.submit();
+    });
+});*/
+function get_file(){
+    $("#html_list").html('<span>文件列表获取中...</span>');
+    $("#data_list").html('<span>文件列表获取中...</span>');
+    $("#img_list").html('<span>文件列表获取中...</span>');
+    $("#css_list").html('<span>文件列表获取中...</span>');
+    $("#js_list").html('<span>文件列表获取中...</span>');
+    $.post("{:Url('getfiles')}",{'path':dbpath+subpath},function(msg){
+        var msg = eval("("+msg+")");
+        if(msg.errorCode != 0){
+            return;
+        }
+        var html_html = '';
+        $.each(msg.result.html,function(i,n){
+            html_html += '<div><a href="'+dburl+subpath+n.name+'" target="_blank">'+n.name+'</a></div>';
+        });
+        if(!html_html) html_html = '<span style="color:red;">没有文件</span>';
+        $("#html_list").html(html_html);
+        var data_html = '';
+        $.each(msg.result.data,function(i,n){
+            data_html += '<div><a href="'+dburl+subpath+'_data/'+n.name+'" target="_blank">'+n.name+'</a></div>';
+        });
+        if(!data_html) data_html = '<span style="color:red;">没有文件</span>';
+        $("#data_list").html(data_html);
+        var img_html = '';
+        $.each(msg.result.img,function(i,n){
+            img_html += '<div><a href="'+dburl+subpath+'_img/'+n.name+'" target="_blank">'+n.name+'</a></div>';
+        });
+        if(!img_html) img_html = '<span style="color:red;">没有文件</span>';
+        $("#img_list").html(img_html);
+        var css_html = '';
+        $.each(msg.result.css,function(i,n){
+            css_html += '<div><a href="'+dburl+subpath+'_css/'+n.name+'" target="_blank">'+n.name+'</a></div>';
+        });
+        if(!css_html) css_html = '<span style="color:red;">没有文件</span>';
+        $("#css_list").html(css_html);
+        var js_html = '';
+        $.each(msg.result.js,function(i,n){
+            js_html += '<div><a href="'+dburl+subpath+'_js/'+n.name+'" target="_blank">'+n.name+'</a></div>';
+        });
+        if(!js_html) js_html = '<span style="color:red;">没有文件</span>';
+        $("#js_list").html(js_html);
+    });
+}
+$(function(){
+    get_file();
+    $('#upd_file').fileupload({
+        url : "{:Url('upload')}"+'&dbsubpath='+dbpath+subpath,
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#progress").text(progress + '%');
+            if(progress == 100){
+                get_file();
+            }
+        },
+        done: function (e, data) {
+            var fumsg = data.result.file.name + ' ' + data.result.msg + "\\n";
+            $("#fu_msg").text(fumsg + $("#fu_msg").text());
+        }
+    });
+});
+</if>
+</script>
+<style>
+.porject{
+    display: inline-block;
+    margin: 0 4px;
+    padding: 0 4px;}
+.use_porject{
+    border: 1px green solid;
+    font-weight: bold;
+    display: inline-block;
+    margin: 0 4px;
+    padding: 0 4px;}
+.file_list{
+}
+.file_list div{
+    display: inline-block;
+    margin: 4px 8px;
+    border-bottom: 1px solid #ccc;
+}
+.file_list div:hover{
+    border-bottom: 1px solid #499;
+}
+</style>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Article/Index/index')}">文章发布管理</a> > 文章发布管理1</div>
+
+    <div class="search">
+        选择域名：
+        <volist name="upac" id="vo">
+            <if condition="$_GET['pid'] eq $vo['id']">
+            <span class="use_porject">{$vo.domain}</span>
+            <else/>
+            <a href="{:Url('index')}&pid={$vo.id}" class="porject">{$vo.domain}</a>
+            </if>
+        </volist>
+    </div>
+    <if condition="$_GET['pid']">
+     <div class="form">
+        <form name="myform" action="{:Url('add')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="rpp" value="{$rpp}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');"></li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="200">确认<span style="color:#949;">项目目录</span></th>
+                        <td>
+                            <b>./{$pres.path}<span id="subpath">{$subpath}</span></b>
+                            <a href="javascript:folder()" style="margin-left:10px;">添加或选择子目录</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span style="color:#949;">url</span></th>
+                        <td>{$pres.domain}<span id="suburl">{$subpath}</span></td>
+                    </tr>
+                    <tr>
+                        <th>上传文件</th>
+                        <td>
+                            <!-- <input type="button" id="upd_file" value="选择文件" /> -->
+                            <input id="upd_file" type="file" name="upd_file[]" multiple />
+                            <span id="progress"></span>
+                            <div style="color:red;">
+                                <p>* 上传文件名只能包含 数字、字母、下划线“_”</p>
+                                <p>* 上传文件将会根据不同后缀存放至指定子目录，</p>
+                                <p>* 当上传文件后缀为xls或xlsx时将会自动生成一份后缀为json的数据文件到相同目录</p>
+                                <p>* IE内核浏览器不支持批量上传功能</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>上传记录</th>
+                        <td><textarea id="fu_msg" style="width:400px;height:100px;"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span style="color:#c94;">页面文件</span>列表<br>
+                            后缀限制（<span style="color:#499;">html,shtml</span>）<br>
+                            存放位置（<span style="color:#949;">项目目录</span>/）
+                        </th>
+                        <td>
+                            <div class="file_list" id="html_list"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span style="color:#c94;">数据文件</span>列表<br>
+                            后缀限制（<span style="color:#499;">xls,xlsx,json</span>）<br>
+                            存放位置（<span style="color:#949;">项目目录</span>/_data/）
+                        </th>
+                        <td>
+                            <div class="file_list" id="data_list"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span style="color:#c94;">图片文件</span>列表<br>
+                            后缀限制（<span style="color:#499;">jpg,jpeg,png,bmp,gif</span>）<br>
+                            存放位置（<span style="color:#949;">项目目录</span>/_img/）
+                        </th>
+                        <td>
+                            <div class="file_list" id="img_list"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span style="color:#c94;">CSS文件</span>列表<br>
+                            后缀限制（<span style="color:#499;">css</span>）<br>
+                            存放位置（<span style="color:#949;">项目目录</span>/_css/）
+                        </th>
+                        <td>
+                            <div class="file_list" id="css_list"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span style="color:#c94;">JS文件</span>列表<br>
+                            后缀限制（<span style="color:#499;">js</span>）<br>
+                            存放位置（<span style="color:#949;">项目目录</span>/_js/）
+                        </th>
+                        <td>
+                            <div class="file_list" id="js_list"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+    </if>
+</div>
+<include file="Common:cpfooter" />

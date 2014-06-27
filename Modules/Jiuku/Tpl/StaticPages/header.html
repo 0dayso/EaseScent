@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="keywords" content="{$seo_keywords}" /> 
+<meta name="description" content="{$seo_description}" />
+<title>{$seo_title}</title>
+<link href="/public/Jiuku/css/header.css" rel="stylesheet" type="text/css" />
+<volist name="loadcss" id="vo">
+<link href="/public/Jiuku/css/{$vo}" rel="stylesheet" type="text/css" />
+</volist>
+<script type="text/javascript" src="/public/common/js/jquery.min.js"></script>
+<script type="text/javascript" src="/public/Jiuku/js/header.js"></script>
+<script type="text/javascript">
+//判断是否登录
+check=0;
+function init(){
+	$.post("/Uc/checklogin",function(data){
+		if(data!="null"){
+			var	userinfo = eval("(" + data + ")");
+			if(userinfo.online==1){
+				var loginOut = $("#loginOutUrl").val();
+				bann = $("<span>你好，欢迎来到逸香网</span><span>&nbsp;"+userinfo.nickname+"</span><span>|</span><a href='"+loginOut+"?continue="+window.location.href+"'>退出</a><span>|</span><a href='__ACCOUNT__/member/home'>我的逸香网</a>");
+				var url = $("#uc_url").val()+"/api/auth?sid="+userinfo.sid;
+				$("#accessLogin").html("<iframe style='display:none' src="+url+"></iframe>");
+				$("#loginDiv").html(bann);
+				var lottery = $(".login-box").html();
+				if(lottery!=null){
+					window.location.reload();
+				}
+				return ;
+			}else{
+				if(check==0){
+					var url = $("#checkUc").attr("src");
+					var thisUrl = url+"http://"+window.location.host+"/ucUrlSend.php"
+					$("#checkUc").attr("src",thisUrl);
+					check =1;
+				}
+			}
+		}
+	});
+}
+init();
+//跳转登录
+function jumplogin(){
+	var url='__ACCOUNT__/member/auth?continue=http://'+window.location.host+'/ucUrlSend.php?goto='+window.location.href.replace('http://','').replace(/\//g,'-');
+	window.location.href = url;
+}
+//弹出框登录
+function popuplogin(){
+	$("#jumplogin").click();
+}
+//跳转注册
+function jumpregistration(){
+	var url ='__ACCOUNT__/member/signup?continue='+window.location.href;
+	window.location.href = url;
+}
+
+</script>
+</head>
+<body>
+<if condition="$top_ad['is_open'] eq 1">
+<!-- 头部弹出广告 -->
+<div id="adv_top" style="width:1003px;margin:10px auto;display:none;position:relative;">
+	<a href="{$top_ad.ad_url}" target="_blank"><img id="adv_top_img" src="{$top_ad.ad_path}" alt="{$top_ad.ad_customer}" width="100%"/></a>
+	<a href="javascript:;;" style="position:absolute;height:17px;width:17px;right:6px;top:6px;background:url(/public/Jiuku/images/header/del.png) 0 0 no-repeat;" onclick="$('#adv_top').hide()"></a>
+</div>
+<script>
+document.getElementById("adv_top_img").onload=function(){
+	$("#adv_top").slideDown(1000,function(){
+		var TT=setTimeout(function(){
+			$("#adv_top").slideUp();TT=null},15000);
+	})
+}
+</script>
+<!-- 结束 -->
+</if>
+<div class="header">
+	<div class="header_l" id="loginDiv">
+        <span>你好，欢迎来到逸香网</span>
+        <a href="###" onclick="jumplogin();" id="username">登录</a>
+        <!--<a href="javascript:void(0);" onclick="location.href='__ACCOUNT__/member/auth?continue='+window.location.href" id="username">登录</a>-->
+        <span>|</span>
+		<a href="javascript:jumpregistration();">注册</a>
+        <span>|</span>
+        <a href="__ACCOUNT__/member/remember" target="_blank" style="color:red;">忘记密码</a>
+	</div>
+	<ul class="header_r">
+		<li>
+			<a href="http://weibo.com/eswinesino" target="_blank" rel="nofollow" class="es_weibo">逸香网官方微博</a>
+			<a href="http://weibo.com/eswinesino" target="_blank" rel="nofollow" class="att">关注</a>
+			<span class="spacing">|</span>
+		</li>		
+		<li class="es_email">
+			<a href="__WWW__/Rss/feed" target="_blank">RSS</a>
+			<!--<a href="###" target="_blank">邮件订阅</a>-->
+			<a href="__WWW__/Magazine/show" target="_blank" class="phone">手机杂志</a>
+			<span class="spacing">|</span>
+		</li>
+		<li>
+			<a href="javascript:;;" onclick="setHomepage();">设为首页</a>
+			<a href="javascript:;;" onclick="addFavorites();">收藏本站</a>
+			<a href="__WWW__/sitemap.html" target="_blank">网站地图</a>
+		</li>
+	</ul>
+</div>
+<if condition="!$UcSid">
+	<!--<iframe style="display:none;" onload="init()" src="__ACCOUNT__/api/auth?continue=http://__HOST__/ucUrlSend.php"></iframe>-->
+	<iframe id="checkUc" style="display:none;" onload="init()" src="__ACCOUNT__/api/auth?continue="></iframe>
+	
+</if>
+<input type="hidden" id="loginOutUrl" value="__ACCOUNT__/member/logout">
+<input type="hidden" id="uc_url" value="__ACCOUNT__"><div id="accessLogin" style="display:none;"></div>
+<div class="nav">
+	<h1>
+		<a href="__WWW__"><img alt="逸香网" src="/public/Jiuku/images/header/logo.jpg"/></a>
+	</h1>
+	<div class="nav_tab">
+		<ul class="nav_list" id="nav_list">
+			<li id="Home"><a href="__WWW__" hidefocus>首页</a></li><!--class="nav_list_hover"-->
+			<li id="News"><a href="__NEWS__" hidefocus>新闻</a></li>
+			<li id="Grandcru"><a href="__WINERY__" hidefocus>名庄</a></li>
+			<li id="Region"><a href="__REGION__" hidefocus>产区</a></li>
+			<li><a href="__JIUHUI__" class="exp" id="exp2" hidefocus>酒会</a></li>
+			<li id="Book"><a href="__BOOK__" hidefocus>读书</a></li>
+			<li><a href="__HAO__" hidefocus>网址导航</a></li>
+			<li><a href="__JOB__" hidefocus>人才</a></li>
+			<li id="Expo"><a href="__EXPO__" hidefocus>博览</a></li>
+            <li style="position:relative;"><a href="http://i.wine.cn" hidefocus>酒评</a><span style="position:absolute;height:18px;width:26px;top:-13px;left:46px;background:url(/public/Jiuku/images/header/nav_new.gif) 0 0 no-repeat;"></span></li>
+			<li id="Expo"><a href="http://bbs.wine.cn" hidefocus>论坛</a></li>
+		</ul>
+		<!-- 酒会下拉单 -->
+		<div class="sub_more" id="sub_more2" style="right:366px;">
+			<a href="__JIUHUI__" hidefocus>酒会信息</a>
+			<a href="__PEIXUN__" hidefocus>培训及讲座</a>
+		</div>
+		<!-- 博览下拉单 -->
+		<!--<div class="sub_more" id="sub_more">
+		</div>-->
+	</div>
+	<div class="nav_tab2">
+		<a href="http://www.eswine.com" target="_blank">逸香教育</a>
+		<span>|</span>
+		<a href="__ENNEWS__" target="_blank">English</a>
+	</div>
+</div>
+<div class="main_serch">
+	<div class="eshao" id="eshao">
+	</div>
+	<div class="serch_m" style="width:367px;">
+    	<form name="myform" id="myform" method="post" action="__WWW__/Search/show" target="_blank">
+		<!--<select id="searchType" name="searchType" style="display:">
+			<option value="1">新闻</option>
+			<option value="2">名庄</option>
+			<option value="3">产区</option>
+			<option value="4">读书</option>
+		</select>-->
+		<input type="text" id="searchkey" name="searchkey" class="serch_c"/>
+		<input type="submit" class="serch_b" value="" hidefocus/>
+        </form>
+		<!-- 清IE6下浮动造成的影响 -->
+		<div style="clear:both;height:0;overflow:hidden;"></div>
+	</div>
+    <div class="serch_other" style="float: right;padding: 14px 12px 0 0;font-weight: bold; color:black;"><a href="__SOMMELIER__" target="_blank" style="color:black;">侍酒师</a></div>
+	<div class="serch_tab" id="hot-keywords">
+	</div>
+</div>
+
+<script>
+$(function(){
+	$.ajax({
+		type:			"get",
+		async:			true,
+		url:			"__WWW__/Common/getPageCommonData/callback/header2",
+		dataType:		"jsonp",
+		jsonp:			"callback",
+		jsonpCallback:	"header2",
+		success:		function(data){
+			$("#eshao").html(data.b);
+			$("#hot-keywords").html(data.c);
+		},
+		error:			function(){
+		}
+	});
+});
+$(function(){
+	var url=window.location.href;
+	$("#nav_list>li>a").removeClass("nav_list_hover");
+	if(url.indexOf("news.")>=0){
+		$("#News").addClass("nav_list_hover");
+	}else if(url.indexOf("Grandcru")>=0){
+		$("#Grandcru").addClass("nav_list_hover");
+	}else if(url.indexOf("region.")>=0){
+		$("#Region").addClass("nav_list_hover");
+	}else if(url.indexOf("book.")>=0){
+		$("#Book").addClass("nav_list_hover");
+	}else if(url.indexOf("expo.")>=0){
+		$("#Expo").addClass("nav_list_hover");
+	}else{
+		$("#Home").addClass("nav_list_hover");
+	}
+})
+</script>
+<a href="javascript:void(null)" id="jumplogin" style="display:none;">弹出登录</a>
+<!--灰背景-->
+<div class="z_userLiongeBoxBg" style="display:none;" ></div>
+<script type="text/javascript">
+$("#jumplogin").click(function(){
+	var gtop=$(document).scrollTop();
+	$(".z_userLiongeBoxBg").height(gtop);
+	$(".z_userLiongeBoxBg").show(); 
+	$(".z_userLiongeBoxBg").after('<div id="pop-box" class="jump-box">	<div class="lump-title">    	<var>登录逸香通行证</var>        <em id="lg-close">关闭</em>    </div>    <div class="login-index">    	<div class="login-index-left" id="login-panel">        	<ul class="login-index-ul">            	<li><span>邮箱/手机：</span><input type="text" id="user" name="user" value=""><var></var></li>                <li><span>密码：</span><input type="password" id="pass" name="pass" value=""><var></var></li>            </ul>            <a href="__ACCOUNT__/member/remember" class="login-index-a" hidefocus="">忘记密码？</a>            <p><label class="login-label"><input type="checkbox"><var>两周内自动登录</var></label></p>            <input type="button" class="login-index-but" id="login" name="login" value="立即登录" hidefocus="">        </div>        <div class="login-index-right">            <h2>您还没有逸香通行证？</h2>            <input class="login-index-but" type="button" value="马上注册" hidefocus="">            <a href=__ACCOUNT__/oauth/qq?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="__P_IMAGES__/poplogin/login-j7.jpg"><em>用QQ账号登录</em></a>            <a href="__ACCOUNT__/oauth/sina?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="__P_IMAGES__/poplogin/login-j8.jpg"><em>用新浪微博账号登录</em></a>            <a href="__ACCOUNT__/oauth/douban?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="__P_IMAGES__/poplogin/login-j10.jpg"><em>用豆瓣帐号登录</em></a>            <a href="__ACCOUNT__/oauth/tianya?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="__P_IMAGES__/poplogin/login-j11.jpg"><em>用天涯帐号登录</em></a>            <a href="__ACCOUNT__/oauth/renren?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="__P_IMAGES__/poplogin/login-j9.jpg"><em>用人人帐号登录</em></a>        </div>    </div></div>');	
+	$("#lg-close").click(function(){
+		$("#pop-box").remove();
+		$(".z_userLiongeBoxBg").hide();
+	});
+	$("#user").focus(function(){
+		$(this).next().html('请输入您的邮箱或手机号');
+	});
+	$("#pass").focus(function(){
+		$(this).next().html('请输入您的密码');
+	});
+	$("#user").blur(function(){
+		if(!(/^([a-z0-9+_]|\-|\.)+@(([a-z0-9_]|\-)+\.)+[a-z]{2,6}$/.test(this.value)) && !(/^(13|15|18)\d{9}$/i.test(this.value))){
+			$(this).next().html('请输入正确的手机或邮箱地址').css({"color":"#B10304"});
+		}else{
+			$(this).next().html('')
+		}
+	});
+	$("#pass").blur(function(){
+		$(this).next().html('');
+	});
+	$("#login").click(function(){
+		if($("#user").val() == ''){
+			return false;
+		}
+		if($("pass").val() == ''){
+			return false;
+		}
+		this.value = "登录中...";
+		$.post("/Uc/login",{ username:$("#user").val(), password:$("#pass").val()},function(data){
+			if(data){
+				var userinfo = eval("("+data+")");
+				if(userinfo.online == 1){
+					this.value = '登录成功';
+					setTimeout(function(){window.location.reload();}, 3000);
+				}else{
+					$("#user").next().html('用户名或密码错误').css({"color":"#B10304"});
+					this.value = '立即登录';
+					return false;
+				}
+			}
+		});
+	});
+});
+
+</script>

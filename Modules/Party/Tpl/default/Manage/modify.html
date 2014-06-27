@@ -1,0 +1,104 @@
+<html>
+<head>
+<script type="text/javascript" src="__PUBLIC__/party/common/js/jquery-1.7.1.js"></script>
+<script language="javascript" type="text/javascript" src="__PUBLIC__/party/common/js/My97DatePicker/WdatePicker.js"></script>
+<script  src="__PUBLIC__/party/common/js/kindeditor/kindeditor.js"></script>
+<script  src="__PUBLIC__/party/common/js/kindeditor/lang/zh_CN.js"></script>
+<style type="text/css">
+body{
+	margin: 10px 0 0 20px;
+}
+textarea{
+	width: 680px;
+	height: 300px;
+}
+</style>
+<script type="text/javascript">
+window.onload=function(){
+  $.ajax({
+			   type: "POST",
+			   url: "index.php?app=Party&m=Manage&a=privoce",
+			   dataType:"JSON",
+			  success:function(msg){
+			  	var num=msg.length;
+		         for(var i = 0;i < num; i++){
+		          var str =str+'<option value='+msg[i].AreaID+'>'+msg[i].AreaName+'</option>';
+		         }
+		         //alert(str);
+		         $(".privoce").append(str);
+			  }
+			});
+  // 在这里写你的代码...
+};
+
+
+$(function(){
+	
+  $(".privoce").change(function(){
+      var $data=$(".privoce").val();
+     $.post("index.php?app=Party&m=Manage&a=getcity", {id:$data},function(msg){  
+        var num=msg.length;
+         for(var i = 0;i < num; i++){
+          var str =str+'<option value='+msg[i].AreaID+'>'+msg[i].AreaName+'</option>';
+         }
+      $(".city").html(str); 
+     },"JSON"); 
+  });
+  
+  $('.city').change(function(){
+      var $data=$(".city").val();
+     $.post("index.php?app=Party&m=Manage&a=getcity", {id:$data},function(msg){  
+        var num=msg.length;
+         for(var i = 0;i < num; i++){
+          var str =str+'<option value='+msg[i].AreaID+'>'+msg[i].AreaName+'</option>';
+         }
+      $(".county").html(str); 
+     },"JSON"); 
+  });
+
+ KindEditor.ready(function(K) {
+                window.editor = K.create('#editor_id');
+        });
+
+});
+
+</script>
+</head>
+<body>
+	<span>---酒会信息修改---</span><br/>
+	<form action="index.php?app=Party&m=Manage&a=check" method="post">
+	<input type="hidden" value="{$data.id}" name="id" />
+	<label>酒会主题：</label><input type='text' name="title" id="title" value="{$data.title}" /><br/>
+	  <label>开始时间：</label><input type='text' name="party_start" id="party_start" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="{$data.party_start|date="Y-m-d H:i:s",###}" /><span>点击文本框选择日期</span><br/>
+	  <label>结束时间：</label><input type='text' name="party_end" id="party_end" value="{$data.party_end|date="Y-m-d H:i:s",###}"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/><span>点击文本框选择日期</span><br/>
+	  地区选择：<select class="privoce" name="privoce"><option value="{$data.province_id}">{$data.privoce}</option></select>
+	  			<select class="city" name="city"><option value="{$data.city_id}">{$data.city}</option></select>
+	  			<select class="county" name="county"><option value="{$data.area_id}">{$data.county}</option></select><br/>
+	  是需要费用：<select class="ismoney" name="ismoney"><option value="1">
+						<if condition="$data.ismoney eq 1">需要<else/>不需要</if></option>
+	  					<option value="1">不需要</option>
+						<option value="2">需要</option>  
+	  			</select><br/>
+	  联系人：<input type="text" name="contactperson" value="{$data.contactperson}" /> <br/>   
+	  联系电话：<input type="text" name="contactphone" value="{$data.contactphone}"><br/>
+	  酒会市场价：<input type="test" name="markprice" value="{$data.markprice}" />元<br/>
+	  酒会优惠价：<input type="test" name="lowerprice" value="{$data.lowerprice}" />元<br/>
+	  是否推荐：<select class="isbar" name="isbar"><option value="1">
+						<if condition="$data.isbar eq 1">推荐<else/>不推荐</if></option>
+	  					<option value="1">推荐</option>
+						<option value="2">不推荐</option>  
+	  			</select><br/>
+
+	  是否显示：<select class="is_show" name="is_show"><option value="1">
+						<if condition="$data.is_show eq 1">显示<else/>不显示</if></option>
+	  					<option value="1">显示</option>
+						<option value="2">不显示</option>  
+	  			</select><br/>
+	  酒会人数：<input type="text" name="number" value="{$data.puser_num}"/>人<br/>
+	  详细地址：<input type="text" name="address_info" value="{$data.address_info}"><br/>
+	  酒会介绍：<br/><textarea name="introduce" class="introduce" id="editor_id">{$data.introduce}</textarea><br/>
+	  <input type="submit" value="确认修改"><a href="index.php?app=Party&m=Manage&a=index"><input type="button" value="返回列表"></a>
+    </form>
+    
+</body>
+</html>

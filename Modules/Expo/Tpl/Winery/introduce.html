@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>introduce</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_admin.css" />
+        <script language="javascript" src="__PUBLIC__/editor/kindeditor-min.js"></script>
+        <script language="javascript" src="__PUBLIC__/editor/zh_CN.js"></script>
+        <script language="javascript" src="__PUBLIC__/jquery-ui-1.9.1.custom/js/jquery-1.8.2.js"></script>
+        <script type="text/javascript">
+            var editor;
+            KindEditor.ready(function(K) {
+
+                editor = K.create("#content", {
+                    uploadJson : "{:U('upload')}&type=Wintroduce/images",
+                    allowFileManager : false
+                });
+            });
+            $(document).ready(function(){
+                $(".pinkBtn").click(function(){
+                    editor.sync();
+                    $("#myform").submit();
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+       <include file="Winery:header" /> 
+        <div class="z_aWrap clear">
+            <div class="z_aWrap_l">
+                <h2>My Wineries</h2>
+                <ul>
+                     <li ><a href="{:U('Winery/info?winery_id='.$winery_id)}">Basic Info<em></em></a></li>
+                    <li ><a href="{:U('Winery/status?winery_id='.$winery_id)}">Status</a></li>
+                    <li class="active"><a href="{:U('Winery/introduce?winery_id='.$winery_id)}">Introduction</a></li>
+                    <li><a href="{:U('Winery/release?winery_id='.$winery_id)}">Wines Release</a></li>
+                    <li><a href="{:U('Winery/manage?winery_id='.$winery_id)}">Management</a></li>
+                </ul>
+            </div>
+            <div class="z_aWrap_r">
+                <form name="myform" id="myform" action="{:U('introduce')}" method="post" enctype="multipart/form-data">
+                    <textarea style="width:90%; height:400px;" name="content" id="content">
+                     {$description}
+                    </textarea>
+                    <p class="mt15 mb50"><a href="#" class="pinkBtn"><span>Submit</span></a></p>
+                </form>
+            </div>
+        </div>
+        <div class="z_aFoot">
+            <div class="z_aFoot_main">
+                <p class="fl">
+                 <a href="{:U('Index/contact')}" class="aboutUsHref">About us</a>
+                    <a href="{:U('Index/cooperation')}" class="cooperationHref">Business Cooperation</a>
+                </p>
+                <p class="fr">wine.cn © 2011 email:bd@wine.cn</p>
+            </div>
+        </div>
+    </body>
+</html>

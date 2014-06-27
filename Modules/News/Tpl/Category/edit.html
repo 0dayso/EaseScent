@@ -1,0 +1,66 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Category/index')}">分类管理</a> >  编辑分类 <b>“{$vo.name}”</b></div>
+    <div class="form">
+		<form name="myform" action="{:Url('News/Category/edit')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="catid" value="{$vo.catid}">
+			<input type="hidden" name="updatetime" value="{:time()}">
+			<input type="hidden" name="updateuser" value="Administrator">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑分类</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">SEO设置</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">分类名称</th>
+						<td><input type="text" size="20" name="name" value="{$vo.name}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">英文名称</th>
+						<td><input type="text" class="measure-input" name="ename" value="{$vo.ename}" size="20"></td>
+                    </tr>
+                    <tr>
+                        <th width="130">目录前缀</th>
+                        <td><input type="text" class="measure-input" name="path_prefix" value="{$vo.path_prefix}" size="30"> (结尾带‘/’)</td>
+                    </tr>
+                    <tr>
+                        <th width="130">Url前缀</th>
+                        <td><input type="text" class="measure-input" name="url_prefix" value="{$vo.url_prefix}" size="60"> (结尾带‘/’)</td>
+                    </tr>
+                    <tr>
+                        <th width="130">上级分类</th>
+						<td>
+							<select name="pid">
+								<option value="0">根分类</option>
+								<volist id="cate" name="cateList">
+								<option <if condition="$cate['catid'] eq $vo['pid']" >selected</if> value="{$cate.catid}">{$cate.name}</option>
+								</volist>
+							</select>
+						</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130"> SEO Title</th>
+						<td><input type="text" style="width:400px;" name="seo_title" value="{$vo.seo_title}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130"> SEO Keywords</th>
+						<td><textarea style="width:90%;height:40px" name="seo_keywords">{$vo.seo_keywords}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th width="130"> SEO Description</th>
+						<td><textarea style="width:90%;height:40px" name="seo_description">{$vo.seo_description}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

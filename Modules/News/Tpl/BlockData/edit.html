@@ -1,0 +1,44 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('News/Index/index')}">资讯管理</a> > <a href="{:Url('News/Block/index')}">推荐位管理</a> > <a href="{:Url('BlockData/index')}">数据管理</a> > 编辑</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">推荐位数据列表</a>
+    </div>
+    <div class="form">
+        <form name="myform" action="{:Url('News/BlockData/edit')}" method="post">
+            <input type="hidden" name="id" value="{$vo.id}">
+            <input type="hidden" name="bid" value="{$vo.bid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">编辑推荐数据</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标题</th>
+                        <td><input type="text" size="80" name="title" value="{$vo.title}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">排序</th>
+                        <td><input type="text" size="20" name="display" value="{$vo.display}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">URL</th>
+                        <td><input type="text" size="40" name="url" value="{$vo.url}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">推送时间</th>
+                        <td>{$vo.dateline|date='Y-m-d H:i:s', ###}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var htmlpath = '<!--#include file="' + '{' + ':' + "C('BLOCK_PATH')" + '}' + '{$vo.htmlpath}' + '"-->';
+    $('#htmlpath').val(htmlpath);
+</script>
+<include file="Common:cpfooter" />

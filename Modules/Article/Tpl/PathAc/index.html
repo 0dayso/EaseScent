@@ -1,0 +1,41 @@
+<include file="Common:cpheader" />
+<script>
+</script>
+<style>
+</style>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Article/Index/index')}">文章发布管理</a> > 用户上传目录权限设定</div>
+    <div class="form">
+        <form name="myform" action="{:Url('index')}" method="post" enctype="multipart/form-data">
+        <ul class="tabBut cu-li">
+            <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">权限设定</li>
+        </ul>
+        <div class="tab-nav" id="tab_1">
+            <table width="100%" cellspacing="0" class="table-form">
+                <tr>
+                    <th width="130">选择用户</th>
+                    <td>
+                        <select name="uid" onchange="self.location.href='{:Url('index')}&uid='+options[selectedIndex].value">
+                            <volist name="ulist" id="vo">
+                            <option value="{$vo.uid}" <if condition="$_GET['uid'] eq $vo['uid']">selected</if>>{$vo.username}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo.truename}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$vo.nickname}</option>
+                            </volist>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="130">设定权限</th>
+                    <td>
+                        <select multiple="true" name="pid[]" style="height:200px;">
+                            <volist name="plist" id="vo">
+                            <option value="{$vo.id}" <if condition="in_array($vo['id'],$upac)">selected</if>>URL：{$vo.domain}&nbsp;&nbsp;&nbsp;&nbsp;路径：./{$vo.path}</option>
+                            </volist>
+                        </select>
+                        <span>*按Ctrl可选择多个选项</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="bottom"><input type="submit" class="btn" value="提交" /></div>
+        </form>
+    </div>
+</div>

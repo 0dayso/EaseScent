@@ -1,0 +1,76 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/User/index')}">用户管理</a> > 增加用户</div>
+    <div class="form">
+		<form name="myform" action="{:Url('Admin/User/add')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="createtime" value="{:time()}">
+            <input type="hidden" name="createuser" value="{$admin_username}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加用户</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">更多信息</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">用户名</th>
+                        <td><input type="text" size="30" name="username" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">所属用户组</th>
+						<td>
+							<select name="gid">
+								<volist id="ug" name="userGroup">
+								<option value="{$ug.gid}">{$ug.name}</option>
+								</volist>
+							</select>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">昵称</th>
+                        <td><input type="text" size="30" name="nickname" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">真实姓名</th>
+                        <td><input type="text" size="30" name="truename" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">密码</th>
+                        <td><input type="password" size="30" name="password" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">确认密码</th>
+                        <td><input type="password" size="30" name="password2" value="" class="measure-input"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">邮箱</th>
+                        <td><input type="text" size="30" name="email" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">性别</th>
+                        <td><input type="radio" name="sex" value="1"> 男 <input type="radio" name="sex" value="2">女</td>
+                    </tr>
+                    <tr>
+                        <th width="130">联系电话</th>
+                        <td><input type="text" size="30" name="tel" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">状态</th>
+                        <td><input type="radio" checked name="status" value="1"> 正常 <input type="radio" name="status" value="-1">锁定</td>
+                    </tr>
+                    <tr>
+                        <th width="130">是否管理员</th>
+                        <td><input type="radio" name="adminer" value="1"> 是 <input type="radio" checked name="adminer" value="0">否</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<include file="Common:cpfooter" />

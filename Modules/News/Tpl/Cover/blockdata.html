@@ -1,0 +1,92 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Cover/index')}">封面页管理</a> > 区块数据管理 </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">返回封面页列表</a>
+        <a class='btn' href="{:Url('blockitem?cid='.$cover['id'])}">返回区块列表</a>
+        <a class='btn' href="{:Url('blockdata?op=add&blockid='.$block['id'].'&cid='.$cover['id'])}">增加新数据</a>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>封面ID</th>
+                    <th>标题</th>
+                    <th>物理目录</th>
+                    <th>模板文件</th>
+                    <th>添加时间</th>
+                    <th>添加者</th>
+                    <th>修改时间</th>
+                    <th>修改者</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+            <tr>
+				<td>{$cover.id}</td>
+                <td>{$cover.title}</td>
+                <td>{$cover.path}</td>
+                <td>{$cover.template}</td>
+				<td>{$cover.addtime|date="Y-m-d H:i:s", ###}</td>
+				<td>{$cover.adduser}</td>
+				<td>{$cover.updatetime|date="Y-m-d H:i:s", ###}</td>
+				<td>{$cover.updateuser}</td>
+                <td>
+                    <a href="{:Url('update?id='.$cover['id'])}">更新静态页</a>
+                    <a href="{:Url('edit?id='.$cover['id'])}">编辑</a>
+                    <if condition="$_SESSION['admin_adminer'] eq 1"><a href="{:Url('del?id=' . $cover['id'])}" title="是否删除<b>“{$cover.title}”</b>封面页?" target="delete">删除</a></if>
+                </td>
+			</tr>
+        </tbody>
+        </table>
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="80">BlockID</th>
+                    <th>Block名称</th>
+                    <th width="200">数据条数</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{$block.id}</td>
+                <td>{$block.name}</td>
+                <td>{$block.number}</td>
+                <td>
+                    <a href="{:Url('blockedit?id='.$block['id'])}">编辑</a>
+                    <if condition="$_SESSION['admin_adminer'] eq 1"><a href="{:Url('blockdel?id='.$block['id'].'&cid='.$cover['id'])}" title="确认删除‘{$block.name}’区块吗？" target="delete">删除</a><if condition="$_SESSION['admin_adminer'] eq 1">
+                </td>
+            </tr>
+        </tbody>
+        </table>
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="80">DataID</th>
+                    <th width="50">排序</th>
+                    <th>标题</th>
+                    <th>图片</th>
+                    <th>描述</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <volist id="data" name="blockdata">
+            <tr>
+                <td>{$data.id}</td>
+                <td>{$data.display}</td>
+                <td>{$data.title}</td>
+                <td>{$data.image}</td>
+                <td>{$data.description}</td>
+                <td>
+                    <a href="{:Url('blockdata?op=edit&cid='.$cover['id'].'&blockid='.$block['id'].'&id='.$data['id'])}">编辑</a>
+                    <if condition="$_SESSION['admin_adminer'] eq 1"><a href="{:Url('blockdata?op=del&id='.$data['id'].'&cid='.$cover['id'].'&blockid='.$block['id'])}" title="确认删除‘{$block.name}’？" target="delete">删除</a></if>
+                </td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

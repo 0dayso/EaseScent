@@ -1,0 +1,125 @@
+<include file="Common:cpheader" />
+<script>
+function change_agents_select(){
+    $("#store_sales_id_span").html('');
+    if($("select[name='agents_id']").val() != 0){
+        $.post("{:Url('Agents/Public/getStoreSalesListForAgentsId')}",{'id':$("select[name='agents_id']").val()},function(msg){
+            if(msg.errorCode != 0){
+                art.dialog({
+                    content: msg.errorStr,
+                });
+            }else{
+                var html = '所属实体渠道：<select name="store_sales_id"><option value="0">请选择</option>';
+                $.each(msg.result,function(i,n){
+                    html += '<option value="'+n.id+'">'+n.name+'</option>';
+                })
+                html += '</select>&nbsp;&nbsp;';
+                $("#store_sales_id_span").html(html);
+            }
+        },'json');
+    }
+}
+</script>
+<style>
+</style>
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Agents/Index/index')}">代理商管理</a> >
+        实体酒款列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}<if condition="$_GET['agents_id']">&agents_id={$_GET.agents_id}</if><if condition="$_GET['store_sales_id']">&store_sales_id={$_GET.store_sales_id}</if>&_backpage={$_pageurl}">添加实体酒款</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        所属代理商：
+                        <select name="agents_id" onchange="change_agents_select();">
+                            <option value="0">请选择</option>
+                            <volist name="agents_list" id="vo">
+                            <option value="{$vo.id}" <if condition="$_GET['agents_id'] eq $vo['id']">selected="selected"</if>>{$vo.cname}&nbsp;╱&nbsp;{$vo.fname}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        <span id="store_sales_id_span">
+                            <if condition="$store_sales_list">
+                            所属实体渠道：
+                            <select name="store_sales_id">
+                                <option value="0">请选择</option>
+                                <volist name="store_sales_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$_GET['store_sales_id'] eq $vo['id']">selected="selected"</if>>{$vo.name}</option>
+                                </volist>
+                            </select>
+                            &nbsp;&nbsp;
+                            </if>
+                        </span>
+                        关键字：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" placeholder="外文名、中文名" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_REQUEST['status']" >selected</if> value="1">开启</option>
+                            <option <if condition="-1 eq $_REQUEST['status']" >selected</if> value="-1">关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="35">ID</th>
+                    <th width="250">酒款名</th>
+                    <th width="35">年份</th>
+                    <th width="50">价格</th>
+                    <th width="120">代理商</th>
+                    <th width="80">实体渠道</th>
+                    <th width="250">关联酒款</th>
+                    <th width="60">状态</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td><span title="{$vo.cname}&#10;{$vo.fname}">{$vo.cname}</span></td>
+                    <td>{$vo.year}</td>
+                    <td>{$vo.price}</td>
+                    <td style="color:#06F;">
+                        <if condition="$vo['agents_res']">{$vo.agents_res.fname}&nbsp;/&nbsp;{$vo.agents_res.cname}<else/>-</if>
+                    </td>
+                    <td style="color:#06F;">
+                        <if condition="$vo['store_sales_res']">{$vo.store_sales_res.name}<else/>-</if>
+                    </td>
+                    <td style="color:#900;">
+                        <if condition="$vo['wine_res']"><span title="{$vo.wine_res.fname}&#10;{$vo.wine_res.cname}">{$vo.wine_res.fname}</span><else/>-</if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 1">
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=-1&_backpage={$_pageurl}" title="将状态改为关闭" style="color:#00cc00">开启</a>
+                        <else/>
+                        <a href="{:Url('chgStatus')}&id={$vo.id}&status=1&_backpage={$_pageurl}" title="将状态改为开启" style="color:#cc0000">关闭</a>
+                        </if>
+                    </td>
+                    <td>
+                        <a href="{:Url('edit')}&id={$vo.id}&_backpage={$_pageurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

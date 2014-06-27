@@ -1,0 +1,118 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+function generate_winery_html(how,what){
+	if(how === 'ini'){
+		$("#"+what+"_msg").html('<span>初始化中...</span>');
+		$.post('?app=Jiuku&m=Winery&a=html',{'how':how,'what':what},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				$("#"+what+"_schedule").html('<span title="待生成静态详情页"><var>0</var>/'+msg.result.ycount+'</span>&nbsp;&nbsp;&nbsp;<span title="待生成静态首页"><var>0</var>/1</span>&nbsp;&nbsp;&nbsp;<span title="检查清理不需生成的静态详情页"><var>0</var>/'+msg.result.ncount+'</span>');
+				$("#"+what+"_yid").val(msg.result.yid);
+				$("#"+what+"_nid").val(msg.result.nid);
+				$("#"+what+"_msg").html('<span>开始生成静态详情页...</span>');
+				generate_winery_html('yid',what);
+			}else{
+				$("#"+what+"_msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how === 'yid'){
+		var yid = $("#"+what+"_yid").val().split(',',1).join(',');
+		$.post('?app=Jiuku&m=Winery&a=html',{'how':how,'what':what,'id':yid},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.fcount > 0){
+					$("#"+what+"_msg").html('<span>终止生成!静态详情页生成错误。</span>'); return false;
+				}
+				$("#"+what+"_schedule var:eq(0)").text(parseInt($("#"+what+"_schedule var:eq(0)").text())+parseInt(msg.result.scount))
+				$("#"+what+"_yid").val($("#"+what+"_yid").val().substr(msg.result.sid.length+1))
+				if($("#"+what+"_yid").val() == ''){
+					$("#"+what+"_msg").html('<span>开始生成静态首页...</span>');
+					generate_winery_html('index',what);
+				}else{
+					generate_winery_html('yid',what);
+				}
+			}else{
+				$("#"+what+"_msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how == 'index'){
+		$.post('?app=Jiuku&m=Winery&a=html',{'how':how,'what':what},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.is_exist == 0){
+					$("#"+what+"_msg").html('<span>终止生成!静态首页生成错误。</span>'); return false;
+				}
+				$("#"+what+"_schedule var:eq(1)").text('1')
+				$("#"+what+"_msg").html('<span>开始检查清理不需生成的静态详情页...</span>');
+				generate_winery_html('nid',what);
+				
+			}else{
+				$("#"+what+"_msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else if(how == 'nid'){
+		var nid = $("#"+what+"_nid").val().split(',',100).join(',');
+		$.post('?app=Jiuku&m=Winery&a=html',{'how':how,'what':what,'id':nid},function(msg){
+			var msg = eval("("+msg+")");
+			if(msg.errorCode == 0){
+				if(msg.result.fcount > 0){
+					$("#"+what+"_msg").html('<span>终止清理!静态详情页清理错误。</span>'); return false;
+				}
+				$("#"+what+"_schedule var:eq(2)").text(parseInt($("#"+what+"_schedule var:eq(2)").text())+parseInt(msg.result.scount))
+				$("#"+what+"_nid").val($("#"+what+"_nid").val().substr(msg.result.sid.length+1))
+				if($("#"+what+"_nid").val() == ''){
+					$("#"+what+"_msg").html('<span>静态详情页生成完成。</span>'); return false;
+				}else{
+					generate_winery_html('nid',what);
+				}
+			}else{
+				$("#"+what+"_msg").html('<span>error</span>'); return false;
+			}
+		});
+	}else{
+		$("#"+what+"_msg").html('<span>error</span>'); return false;
+	}
+}
+</script>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/checkSubmit.js"></script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">酒庄列表</a> > 批量生成静态页</div>
+    <div class="form">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">批量生成静态页</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="170"><a href="javascript:;;" class="btn" onclick="generate_winery_html('ini','mingzhuang')">开始生成名庄静态页</a></th>
+                        <td><p id="mingzhuang_msg"></p><p id="mingzhuang_schedule"></p><textarea id="mingzhuang_yid" style="display:none"></textarea><textarea id="mingzhuang_nid" style="display:none"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th><a href="javascript:;;" class="btn" onclick="generate_winery_html('ini','ordinary')">开始生成普通酒庄静态页</a></th>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+            </div>
+        </form>
+    </div>
+</div>
+<script language="javascript">
+$("#gmap").click(function(){
+	var iframe_src = "{:Url('Jiuku/Common/gmap')}";
+	var gmapdialog = art.dialog({
+								id : 'google_map',
+								lock: true,
+								background: _DIALOG_BG_COLOR,
+								OPACITY: _DIALOG_BG_OPACITY,
+								content: '<iframe src="'+iframe_src+'" width="600px" height="400px"></iframe>',
+								});
+})
+function closegmap(){
+	art.dialog({id:'google_map'}).close();
+}
+</script>
+<include file="Common:cpfooter" />

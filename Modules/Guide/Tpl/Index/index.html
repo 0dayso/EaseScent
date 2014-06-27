@@ -1,0 +1,118 @@
+<include file="Common:front_header" />
+
+<div class="shoppers-rotation-box">
+
+	<div class="shoppers-rotation-img" id="flashPlayer">
+		<div>
+        <volist name="img_data" id="item" key='k'>
+			<span <if condition="$k eq 1"> class="rotation-img-current" </if> >{$k}</span>
+        </volist>
+		</div>
+		<ul>
+            <volist name="img_data" id="vo">
+			 <li>
+                <a href="{$vo.img_url}"><img src="{$vo.yuan_url}"/></a>
+            </li>
+            </volist>
+		</ul>
+	</div>
+	<img src="__PUBLIC__/guide/images/d3.jpg" style="float:right;"/>
+</div>
+<div class="shoppers-classification">
+	<span>酒款筛选</span>
+
+    <!--fdasdf-->
+    <a href="/cat_id_0-1" class="shoppers-classification-a">全部</a>|
+    <volist name="cat_list" id="ca" key="ke">
+        <if condition="$ca['children'] neq '' ">
+        	<em class="dayEat">
+                <var class="dayEatBtn">{$ca.cat_name}</var>
+                <div class="shoppers-classification-none">
+                	<volist name="ca['children']" id="c" key="k">
+                    	<a href="/cat_id_{$c.cat_id}-1" style="margin-left:4px;">{$c.cat_name}</a><if condition="$k neq 4"><em>|</em></if>
+					</volist>
+                </div>
+	        </em>
+        <else/>
+        	<a href="/cat_id_{$ca.cat_id}-1" class="shoppers-classification-a">{$ca.cat_name}</a>|
+        </if>
+    </volist>
+</div>
+<div class="shoppers-index-box">
+    <!--contentEnd1-->
+    <div class="winedg">
+     <volist name="goods_list" id="g">
+        <div class="daogou">
+            <div class="daogou_left">
+                <a href="product_id_{:$g['goods_id']}" target="_blank">
+                    <if condition="$g['img_from'] eq 1">
+                        <img src="__UPLOAD__{$g.goods_img}" alt="{$g.goods_name}"/>
+                    <else/>
+                        <img src="{$g.goods_img}" height="294" alt="{$g.goods_name}"/>
+                    </if>
+                </a>
+            </div>
+            <div class="daogou_right">
+                <h1><a href="product_id_{:$g['goods_id']}" target="_blank" >{$g.goods_name}</a></h1>
+                <h2>
+                    <if condition="$g['fname']">
+                      <a href="product_id_{:$g['goods_id']}" target="_blank">{$g.fname}</a>
+                    </if>
+                </h2>
+                <h3><var>￥{$g.price_integer}.{$g.price_decimal}</var><span onclick='vote({$g.goods_id});'><em class="vote_count_{$g.goods_id}">{$g.vote_count}</em></span></h3>
+                <h4><a href="product_id_{:$g['goods_id']}"><img src="__PUBLIC__/guide/images/winepic02.jpg" alt=""></a></h4>
+                 <ul class="winelist clear">
+                <if condition="$g.category neq ''">
+                    <li>
+                        <span>类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</span>
+                        <p>{$g.category}</p>
+                    </li>
+                </if>
+                <if condition="$g.category neq ''">
+                    <li>
+                        <span>国家/产区：</span>
+                        <p>{$g.country}</p>
+                    </li>
+                </if>
+                <if condition="$g.jiuzhang neq ''">
+                    <li>
+                        <span>酒&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;庄：</span>
+                        <p>{$g.jiuzhang}</p>
+                    </li>
+                </if>   
+                <if condition="$g.pinzhong neq ''">
+                    <li>
+                        <span>葡萄品种&nbsp;：</span>
+                        <p>{$g.pinzhong}</p>
+                    </li>
+                </if>
+                    <li>
+                        <span>推荐理由&nbsp;：</span>
+                        <volist name="g.goods_recommend_list" id="grl">
+                        <p>{$grl}</p>
+                       </volist>
+                    </li>                
+                </ul>
+            </div>
+        </div>
+        </volist>
+    </div>
+</div>
+    <!--contentEnd-->
+
+<div class="shoppers-paging">
+{$page}
+</div>
+<script type='text/javascript'>
+    function vote(id){
+        $.post('__APP__/Vote',{goods_id:id},function(data){
+            if(data.errors=='1'){
+                alert(data.message);
+            }else{
+                $(".vote_count_"+ id).html(data.vote_count);
+            }
+
+        },'json');
+    }
+</script>
+<include file="Common:front_footer" />

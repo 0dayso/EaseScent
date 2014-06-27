@@ -1,0 +1,49 @@
+<include file="Common:header" />
+    <div class="re_main clear">
+        <include file="Common:menu" />
+        <div class="re_main_r">
+        	<div class="re_main_r_nr01 clear">
+            	<p class="fl">	<if condition="$userinfo.face_type neq ''"><img src="__UPLOAD__/face/u_{$userinfo.id}/s_myface.{$userinfo.face_type}?id={$random}" /><else/><img src="__IMG__/english/pic_01.jpg" /></if></p>
+                <div class="nr">
+                	<h3>{$front_ym_user.qy_name}</h3>
+                    <p>Account Security Strength：
+                    <if condition="$level eq 1">
+                        Low
+                    <elseif condition="$level eq 2" />
+                        Middle
+                    <else/>
+                        Strong
+                    </if>
+                    </p>
+                    <p class="colbebebe"><a href="#" class="mail_verified">verified</a> | <a href="#" class="name_verified">verified</a></p>
+                </div>
+            </div>
+            <div class="re_main_r_nr02">
+            	<h3>Ease Scent Service</h3>
+                <ul class="nr clear">
+                	<li>
+                    	<div class="clear">
+                        	<p class="fl"><img src="__IMG__/english/pic_01.jpg" width="105" /></p>
+                            <div class="li_nr">
+                            	<h3>Ease Scent Expo</h3>
+                                <p>It's a party strategy that many people use, but few discuss: Start the evening with a pricey wine., then when the party shifts into high gears.</p>
+                            </div>
+                        </div>
+                        <p class="p2">release supply and demand information enter <a href="__EXPO_HOST__/index.php?m=Select&a=index">here</a></p>
+                    </li>
+                    <li>
+                    	<div class="clear">
+                        	<p class="fl"><img src="__IMG__/english/pic_01.jpg" width="105" /></p>
+                            <div class="li_nr">
+                            	<h3>Ease Scent Expo</h3>
+                                <p>It's a party strategy that many people use, but few discuss: Start the evening with a pricey wine., then when the party shifts into high gear.</p>
+                            </div>
+                        </div>
+                        <p class="p2">release supply and demand information enter <a href="#">here</a></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

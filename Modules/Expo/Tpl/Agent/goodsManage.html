@@ -1,0 +1,172 @@
+<include file="Common:header" />
+<include file="Agent:header" />
+<div class="z_aWrap clear">
+    <include file="Common:godos_leftSide" />
+    <div class="z_aWrap_r">
+        <!--Search-->
+
+    <form action="{:U('Agent/goodsManage')}" method="post" >
+       <p class="z_aWrap_searchBox">
+            <input type="text" class="txt" value="<present name="_REQUEST['keyword']">{$_REQUEST['keyword']}</present>" id="keyword" name="keyword"  />
+            <input type="button" class="btn" id="search" onclick="this.form.submit()"/>
+        </p>
+    </form>
+
+    <!--sreach page-->
+    <div class="z_aWrap_tableListChangeBox clear">
+        <form action="" method="post" id="myForm">
+            <p class="fl">
+                <a href="javascript:void(0)" class="grayBtn" onclick="changeAction(0)">上架</a>
+                <a href="javascript:void(0)" class="grayBtn" onclick="changeAction(1)">下架</a>
+            </p>
+            <p class="pageNum">{$page}</p>
+        </div>
+
+        <div class="z_aWrapTableList">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="nbb">
+                        <th width="2%">
+                            <input type="checkbox" id="checkall"/>
+                        </th>
+                        <th width="34%">酒款名</th>
+                        <th width="20%">酒款图片</th>
+                        <th width="18%">类型</th>
+                        <th width="12%">参考价格</th>
+                        <th class="tac" width="24%" align="right" >操作</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <if condition="!$Expo_userInfo['grade'] && !cookie('close_prompt')">
+                        <tr id="grade">
+                            <td colspan="6" class="z_freetip">
+                                <div class="clear">
+                                    <p class="z_freetip_pl">
+                                    您是未付费用户，已经发布 <strong> {$agent_init['goods_num']}   </strong>个商品，
+                                    已上架                   <strong> {$agent_init['goodsUp_num']} </strong>个，
+                                    还可以上架               <strong> {:C('goodsUp_num')-$agent_init['goodsUp_num']} </strong>个。</p>
+                                    <p class="z_freetip_pr"><a href="javascript:void(0);" onclick="hidden_grade()"><img src="__PUBLIC__/Expo/img/closeBtn.gif"></a></p>
+                                </div>
+                            </td>
+                        </tr>
+                    </if>
+                    <volist id="vo" name="list">
+
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="{$vo.goods_id}" name="goods_ids[]"/>
+                                    </td>
+                                    <td>
+                                        <p style="word-wrap: break-word;">
+                                            <a href="{:U('Goods/goodsShow')}&goods_id={$vo.goods_id}&agent_id={$vo.agent_id}">
+                                                <if condition="$vo['fname'] eq $vo['cname']">
+                                                    {$vo.fname}
+                                                <else/>
+                                                    {$vo.fname}
+                                                    {$vo.cname}
+                                                </if>
+                                            </a>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <a href="{:U('Goods/goodsShow')}&goods_id={$vo.goods_id}&agent_id={$vo.agent_id}">
+                                            <img src="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images{$vo.pic_url}" width="75" height="75"/>
+                                        </a>
+                                    </td>
+                                    <td>{$vo.typename}</td>
+                                    <td align="center">
+                                        <if condition="$vo.price_type eq '1' ">
+                                            面议
+                                            <else />
+                                            <if condition="$vo.currency eq '0'">
+                                                {$vo.goods_price}RMB
+                                                <else/>
+                                                {$vo.goods_price}$
+                                            </if>
+                                        </if>
+                                    </td>
+                                    <td class="tac">
+                                        <a href="{:U('Goods/editGoods?goods_id=')}{$vo.goods_id}">编辑</a>
+                                        <a href="{:U('Agent/GoodsDel?goods_id=')}{$vo.goods_id}" onclick="return confirm('该确定要删除产品?');">删除</a>
+                                                <if condition="($vo.sale_status eq 1)">
+                                                      <a href="{:U('changeGoodsStatus?goods_ids=')}{$vo.goods_id}&status=0" >下架
+                                                  <else/>
+                                                      <a href="{:U('changeGoodsStatus?goods_ids=')}{$vo.goods_id}&status=1" >上架
+                                                </if>
+                                            </a>
+                                        </td>
+                                    </td>
+                                </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="z_aWrap_tableListChangeBox bg38Gray clear">
+                    <p class="fl">
+                        <label><input type="checkbox" id="checkall2"/> 全选</label></label>
+                        <label><a href="javascript:void(0)" id="cancel">取消</a></label>
+
+                    </p>
+                    <p class="pageNum">{$page}</p>
+                </div>
+                <div class="z_aWrap_tableListChangeBox mb20 clear">
+                      <a href="javascript:void(0)" class="grayBtn" onclick="changeAction(0)">上架</a>
+                      <a href="javascript:void(0)" class="grayBtn" onclick="changeAction(1)">下架</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript" src="__PUBLIC__/Expo/js/jquery.cookie.js"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready(function(){
+            $("#checkall").click(function(){
+                var opt = $(this).attr('checked');
+                if(opt == 'checked') {
+                    $("input[type=checkbox]").attr('checked', 'checked');
+                } else {
+                    $("input[type=checkbox]").removeAttr('checked');
+                }
+            });
+
+            $("#checkall2").click(function(){
+                var opt = $(this).attr('checked');
+                if(opt == 'checked') {
+                    $("input[type=checkbox]").attr('checked', 'checked');
+                } else {
+                    $("input[type=checkbox]").removeAttr('checked');
+                }
+            });
+
+            $("#cancel").click(function(){
+                var opt = $(this).attr('checked');
+                $("input[type=checkbox]").removeAttr('checked');
+            });
+        });
+
+
+
+        /**上下架操作**/
+        function changeAction(up){
+            if(up ==0){
+                $("#myForm").attr("action", "{:U('changeGoodsStatus')}&status=1");
+            }else{
+                $("#myForm").attr("action", "{:U('changeGoodsStatus')}&status=0");
+            }
+            $("#myForm").submit();
+        }
+
+
+
+        /*message隐藏提示*/
+        function hidden_grade(){
+            $.cookie('close_prompt', '1',{ expires: 1, path: '/' });
+            $("#grade").remove();
+        }
+
+
+    </script>
+<include file="Common:footer" />
+

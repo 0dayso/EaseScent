@@ -1,0 +1,99 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/calendar/js/calendar-jscal2.js"></script>
+<script src="__PUBLIC__/calendar/js/calendar-cn.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-jscal2.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-border-radius.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/calendar/css/calendar-win2k.css" />
+<script>
+    $(function(){
+        var forUi = function(data){
+            var ht = "";
+            for(i in data){
+                var d = data[i];
+                ht += '<tr><td>'+ (parseInt(i)+1) +'</td><td>'+ d.channel +'</td><td>'+ d.start+'</td><td>'+d.start_users+'</td><td>'+d.new_users+'</td><td>'+d.use_long+'</td></tr>';
+            }
+            $('.list table tbody').html(ht);
+        }
+        //版本切换
+         $("#type").change(function(){
+            var type=$("#type option:selected").val();
+            $.ajax({
+                url : '/index.php?app=AppReport&m=Channel&a=ajax',
+                data: 'type='+type,
+                type : 'get',
+                dataType : 'json',
+                success : function(data){
+                    forUi(data);           
+                }
+            }); 
+        });
+        //日期
+        $(".ck").click(function(){
+            var val=$(this).attr('value');
+            var type=$("#type option:selected").val();
+            
+            $.ajax({
+                url : '/index.php?app=AppReport&m=Channel&a=ajaxclick',
+                data: 'type='+type+'&t='+val,
+                type : 'get',
+                dataType : 'json',
+                success : function(data){
+                    forUi(data);
+                }
+            });
+        });
+    });
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('AppReport/Channel/index')}">终端报表</a> > 渠道分析</div>
+    <div class="div-box-default">
+        <select name="type" id="type">
+            <option value='1'>大众酒评 Android</option>
+            <option value='2'>大众酒评 IOS</option>
+        </select>
+    </div> 
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tbody>
+                <tr>
+                    <td width="">
+                        渠道数据：
+                        <a href="javascript:void(0)" value="1" class="ck">昨天</a>
+                        &nbsp;&nbsp;
+                        <a href="javascript:void(0)" value="7" class="ck">近7日</a>
+                        &nbsp;&nbsp;
+                        <a href="javascript:void(0)" value="30" class="ck">近30日</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">排序</th>
+                    <th>渠道</th>
+                    <th width="200">启动次数</th>
+                    <th width="200">启动用户数</th>
+                    <th width="200">新增用户数</th>
+                    <th width="200">平均使用时长</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+            <tr>
+                <td>{$i}</td>
+                <td>{$vo.channel}</td>
+                <td>{$vo.start}</td>
+                <td>{$vo.start_users}</td>
+                <td>{$vo.new_users}</td>
+                <td>{$vo.use_long}</td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

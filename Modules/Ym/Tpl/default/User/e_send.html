@@ -1,0 +1,27 @@
+<include file="Common:header" />
+<div class="common-mian">
+	<div class="c-tit">
+		找回密码
+	</div>
+	<div class="email-r">
+		<div class="email-img">
+			<img src="__IMG__/yes-r.jpg" />
+		</div>
+		<div class="email-con">
+			<div class="email-con-t">
+				重置密码的邮件，已经发送置 {$username}，请查收 。 
+			</div>
+			<div class="email-con-c">点击邮箱内的链接即可重置密码</div>
+			<div class="email-sub">
+				<input type="button" value="登录邮箱" onclick="window.location.href='{$myemail}'" class="login-e"/>
+				<input type="button" value="返 回" class="login-sub" hidefocus>
+			</div>
+		</div>
+	</div>
+	<div class="t-model">
+		<p class="t-model-t">没有收到邮件？您可以：</p>
+		<p><span>▪</span>到邮箱中的垃圾邮件，广告目录找找</p>
+		<p><span>▪</span>如果确认没有收到，可以点此<a href="###">重发验证邮件</a></p>
+	</div>
+</div>
+<include file="Common:footer" />

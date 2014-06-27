@@ -1,0 +1,172 @@
+<include file="Common:cpheader" />
+<script src="{:C('DOMAIN.PUBLIC')}jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.iframe-transport.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fileupload/js/jquery.fileupload.js"></script>
+<script language="javascript">
+$(function(){
+    $('#upd_img').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#upd_progress").text(progress + '%');
+        },
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html ='<div class="selected_box" title="可进行拖拽排序"><input name="img_filename[]" type="hidden" value="'+data.result.filename+'" /><img src="'+data.result.url+'" /><div><p><var>描述</var><input name="img_description[]" type="text" /></p><p><var>ALT</var><input name="img_alt[]" type="text" /></p></div><span class="del_selected" onclick="imgbox_del(this);"></span></div>';
+                $("#img_box").append(html);
+            }
+            //拖拽排序
+            $( "#img_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+            $( "#img_box" ).disableSelection();
+            //拖拽排序end
+        }
+    });
+});
+function imgbox_del(this1){
+    $(this1).parent().remove();
+}
+function oc_time_change(this1){
+    if($("select[name='open_time']").val() == 1440){
+        $("select[name='open_time']").val(1440);
+        $("select[name='close_time']").val(1440).hide();
+    }else{
+        if($("select[name='close_time']").css("display") == 'none'){
+            $("select[name='close_time']").val(1200).show();
+        }
+    }
+}
+function arealevel_cn(mark){
+    var iframe_src = "{:Url('Agents/Common/arealevelCn')}"+'&showlev=3&selectlev=3&mark='+mark;
+    var baidumapdialog = art.dialog({
+        id : 'arealevel_cn',
+        lock: true,
+        background: _DIALOG_BG_COLOR,
+        OPACITY: _DIALOG_BG_OPACITY,
+        content: '<iframe src="'+iframe_src+'" width="320px" height="300px"></iframe>',
+    });
+}
+function close_arealevel_cn(mark,id,text){
+    $("#area_id").val(id);
+    $("#area_text").text(text);
+    art.dialog({id:'arealevel_cn'}).close();
+}
+function baidumap(mark){
+    var iframe_src = "{:Url('Agents/Common/baidumap')}"+'&id='+mark;
+    var baidumapdialog = art.dialog({
+        id : 'baidu_map',
+        lock: true,
+        background: _DIALOG_BG_COLOR,
+        OPACITY: _DIALOG_BG_OPACITY,
+        content: '<iframe src="'+iframe_src+'" width="600px" height="500px"></iframe>',
+    });
+}
+function close_baidumap(mark,lng,lat){
+    $("#lng").val(lng);
+    $("#lat").val(lat);
+    var baidusitemap = 'http://api.map.baidu.com/staticimage?center='+lng+','+lat+'&width=300&height=200&zoom=12&markers='+lng+','+lat;
+    var baidusitemap_l = 'http://api.map.baidu.com/staticimage?center='+lng+','+lat+'&width=900&height=600&zoom=16&markers='+lng+','+lat;
+    $("#map_img>img").attr('src',baidusitemap);
+    $("#map_img").attr({href:baidusitemap_l,target:'_blank',title:'点击查看详细'}).show()
+    art.dialog({id:'baidu_map'}).close();
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Agents/Index/index')}">代理商管理</a> >
+        <a href="{:Url('index')}">实体渠道列表</a> >
+        添加实体渠道</div>
+    <div class="form">
+		<form name="myform" action="{:Url('add')}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="_backpage" value="{$_REQUEST._backpage}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">添加实体渠道</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">所属代理商</th>
+                        <td>
+                            <select name="agents_id">
+                                <option value="0">请选择</option>
+                                <volist name="agents_list" id="vo">
+                                <option value="{$vo.id}" <if condition="$_REQUEST['agents_id'] eq $vo['id']">selected="selected"</if>>{$vo.fname}&nbsp;/&nbsp;{$vo.cname}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">店铺名称</th>
+                        <td><input name="name" type="text" size="80" class="measure-input" value="" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">选择所在城市</th>
+                        <td>
+                            <a href="javascript:arealevel_cn();">选择所在城市</a>
+                            <span id="area_text"></span>
+                            <input id="area_id" name="area_id" type="hidden" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">详细地址</th>
+                        <td><input name="address" type="text" size="80" class="measure-input"/></td></td>
+                    </tr>
+                    <tr>
+                        <th width="130">标注地图</th>
+                        <td>
+                            <a href="javascript:baidumap();">标注地图</a>
+                            <input id="lat" name="lat" type="hidden" />
+                            <input id="lng" name="lng" type="hidden" />
+                            <a id="map_img" style="display:none;"><img /></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">电话</th>
+                        <td><input name="tel" type="text" size="80" class="measure-input" value="" /></td>
+                    </tr>
+                    <tr>
+                        <th width="130">营业时间</th>
+                        <td>
+                            <select name="open_time" onchange="oc_time_change();">
+                                <option value="1440" style="color:blue;">24小时营业</option>
+                                <for start="0" end="24">
+                                <option value="{$i*60}" <if condition="$i eq 8">selected</if>>{$i}:00<if condition="$i eq 0">(24:00)</if></option>
+                                </for>
+                            </select>
+                            ~
+                            <select name="close_time" onchange="oc_time_change();">
+                                <for start="0" end="24">
+                                <option value="{$i*60}" <if condition="$i eq 20">selected</if>>{$i}:00<if condition="$i eq 0">(24:00)</if></option>
+                                </for>
+                            </select>
+                            <label for="weekend_rest" style="cursor:pointer;"><input id="weekend_rest" name="weekend_rest" type="checkbox" value="1">&nbsp;周六、周日不营业</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">销售方式</th>
+                        <td>
+                            <label for="is_sales_1" style="cursor:pointer;"><input id="is_sales_1" name="is_sales_1" type="checkbox" value="1">&nbsp;门店零售</label>&nbsp;
+                            <label for="is_sales_2" style="cursor:pointer;"><input id="is_sales_2" name="is_sales_2" type="checkbox" value="1">&nbsp;送货上门</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">店铺照片</th>
+                        <td>
+                            <input id="upd_img" type="file" name="upd_img" multiple /><span id="upd_progress"></span>
+                            <div id="img_box"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">店铺简介</th>
+                        <td><textarea name="description" style="width:50%;height:50px"></textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

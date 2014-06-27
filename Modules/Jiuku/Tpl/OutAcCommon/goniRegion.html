@@ -1,0 +1,49 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+function save(this1,id){
+	var oid = $("#oid_"+id).val();
+	$.post('?app=Jiuku&m=OutAcCommon&a=goniRegionbtn',{'id':id,'oid':oid},function(msg){
+		if(msg == 1001){
+			alert('old region id 为空');	return false;
+		}
+		if(msg == 1002){
+			alert('old region id 不是数字');	return false;
+		}
+		if(msg == 1002){
+			alert('old region id 不存在');	return false;
+		}
+		if(msg == 0){
+			alert('异常');	return false;
+		}
+		if(msg == 1){
+			$(this1).val('保存成功！')
+		}
+	});
+}
+</script>
+<div id="table">
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">id</th>
+                    <th>name</th>
+                    <th>old region id</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+            <tr>
+                <td>{$vo.id}</td>
+                <td><span style="margin:0 10px;color:#00F;">{$vo.fname}</span><span style="margin:0 10px;color:#303;">{$vo.ename}</span><span style="margin:0 10px;color:#F00;">{$vo.cname}</span></td>
+                <td><input id="oid_{$vo.id}" type="text" value="{$vo.oid}" /></td>
+                <td><input type="button" value="保存" onclick="save(this,{$vo.id});" /></td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

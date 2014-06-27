@@ -1,0 +1,79 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">酒库源数据管理</a> >
+        <a href="{:Url('index')}">其他信息</a> >
+        酒庄荣誉列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('wineryhnrAdd')}&_backurl={$_listurl}">添加酒庄荣誉</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('wineryhnrIndex')}" method="post">
+            <tbody>
+                <tr>
+                    <td>
+                        关键字：
+                        <input name="keyword" class="input-text" type="text" value="{$_GET.keyword}" size="20" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option value="3" <if condition="$_GET['status'] eq 3">selected</if>>开启</option>
+                            <option value="2" <if condition="$_GET['status'] eq 2">selected</if>>关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>外文名</th>
+                    <th>中文名</th>
+                    <th>所属父荣誉</th>
+                    <th width="30">状态</th>
+                    <th width="30">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.fname}</td>
+                    <td>{$vo.cname}</td>
+                    <td>
+                        <if condition="$vo['pid'] eq 0">
+                        ----顶级荣誉，没有所属父荣誉----
+                        <elseif condition="$vo['p_res']"/>
+                        {$vo.p_res.fname} {$vo.p_res.cname}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 3"><span style="color:green;">开启</span></if>
+                        <if condition="$vo['status'] eq 2"><span style="color:orange;">关闭</span></if>
+                    </td>
+                    <td>
+                        <a href="{:Url('wineryhnrEdit')}&id={$vo.id}&_backurl={$_listurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

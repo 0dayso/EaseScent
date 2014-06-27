@@ -1,0 +1,80 @@
+<include file="Common:cpheader" />
+<link rel="stylesheet" href="__PUBLIC__/ztree/css/ztreestyle.css" type="text/css">
+<script type="text/javascript" src="__PUBLIC__/ztree/js/jquery.ztree.core-3.4.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/ztree/js/jquery.ztree.excheck-3.4.min.js"></script>
+<script language="javascript">
+    var setting = {
+            check:{
+                enable:true
+            }, 
+            data:{
+                simpleData:{
+                    enable:true
+                }
+            },
+            view:{
+                selectedMulti: false,
+                showIcon:false
+            },
+    };
+    var zNode = [
+        <volist name="aclist" id="vo">
+        { id:{$vo.acid}, pId:{$vo.pid}, name:"{$vo.name}"},
+        </volist>
+    ];
+
+    $(document).ready(function(){
+        $.fn.zTree.init($("#zTree"), setting, zNode);
+        $("form").submit(function(){
+            var treeObj = $.fn.zTree.getZTreeObj("zTree");
+            var nodes = treeObj.getCheckedNodes(true);
+            var node = '';
+            var nodedot = '';
+            for(var n in nodes) {
+                node += nodedot + nodes[n].id;
+                nodedot = ',';
+            }
+            $("input[name='ac']").val(node);
+            return true
+        });
+    });
+
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/UserGroup/index')}">用户组管理</a> > 增加用户组</div>
+    <div class="form">
+        <form id="myform" action="{:Url('Admin/UserGroup/add')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="ac">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加用户组</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">权限设定</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">用户组名</th>
+                        <td><input type="text" size="30" name="name" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">排序</th>
+                        <td><input type="text" size="30" name="display" value="10" class="measure-input"/> 数值越小排序越靠前</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">权限树</th>
+                        <td>
+                        <ul id="zTree" class="ztree"></ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<include file="Common:cpfooter" />

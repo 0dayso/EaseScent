@@ -1,0 +1,38 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Category/index')}">分类管理</a></div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add')}">增加新分类</a>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>CatID</th>
+                    <th>名称</th>
+                    <th>生成目录</th>
+                    <th>创建时间</th>
+                    <th>创建者</th>
+                    <th>修改时间</th>
+                    <th>修改者</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="list">
+            <tr>
+				<td>{$vo.catid}</td>
+                <td>{$vo.name}&nbsp;&nbsp;<a href="{:Url('News/Pub/add?catid='.$vo['catid'])}">发布..</a></td>
+                <td><span title="url路径：{$vo.url_prefix}">{$vo.path_prefix}</span></td>
+				<td>{$vo.createtime|date="Y-m-d H:i:s", ###}</td>
+				<td>{$vo.createuser}</td>
+				<td>{$vo.updatetime|date="Y-m-d H:i:s", ###}</td>
+				<td>{$vo.updateuser}</td>
+				<td><a href="{:Url('edit?catid='.$vo['catid'])}">编辑</a> <a href="{:Url('del?catid=' . $vo['catid'])}" title="是否删除<b>“ {$vo.name} ”</b>新闻分类?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

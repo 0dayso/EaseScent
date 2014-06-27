@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>manage</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/gwcss/admin/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/gwcss/admin/z_admin.css" />
+        <script language="javascript" src="__PUBLIC__/jquery-ui-1.9.1.custom/js/jquery-1.8.2.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#checkall").click(function(){
+                    var opt = $(this).attr('checked');
+                    if(opt == 'checked') {
+                        $("input[type=checkbox]").attr('checked', 'checked');
+                    } else {
+                        $("input[type=checkbox]").removeAttr('checked');
+                    }
+                });
+                $("#cancel").click(function(){
+                    var opt = $(this).attr('checked');
+                    $("input[type=checkbox]").removeAttr('checked');
+                });
+
+            });
+
+            $("#checkall2").click(function(){
+                var opt = $(this).attr('checked');
+                if(opt == 'checked') {
+                    $("input[type=checkbox]").attr('checked', 'checked');
+                } else {
+                    $("input[type=checkbox]").removeAttr('checked');
+                }
+            });
+            $("#cancel").click(function(){
+                var opt = $(this).attr('checked');
+                $("input[type=checkbox]").removeAttr('checked');
+            });
+           
+            function prompt(){
+                $(".al_delBox").show();
+            }
+            function hideprompt(){
+                $(".al_delBox").hide();
+            }
+            function changeAction(up){
+                if(up ==0){
+                    $("#myForm").attr("action", "{:U('up?winery_id='.$winery_id)}");
+                }else{
+                    $("#myForm").attr("action", "{:U('down?winery_id='.$winery_id)}");
+                }
+                $("#myForm").submit();
+            }
+        </script>
+    </head>
+
+    <body>
+      <include file="Winery:header" /> 
+        <div class="z_aWrap clear">
+            <div class="z_aWrap_l">
+                <h2>My Wineries</h2>
+                <ul>
+                    <li><a href="{:U('Winery/info?winery_id='.$winery_id)}">Basic Info<em></em></a></li>
+                    <li><a href="{:U('Winery/status?winery_id='.$winery_id)}">Status</a></li>
+                    <li><a href="{:U('Winery/introduce?winery_id='.$winery_id)}">Introduction</a></li>
+                    <li><a href="{:U('Winery/release?winery_id='.$winery_id)}">Wines Release</a></li>
+                    <li class="active"><a href="{:U('Winery/manage?winery_id='.$winery_id)}">Management</a></li>
+                </ul>
+            </div>
+            <div class="z_aWrap_r z_aWrap_r_E">
+                 <if condition="$pageNum elt 1">
+                  <else/>
+                <form action="{:U('Agent/manage')}" method="post" >
+                    <p class="z_aWrap_searchBox z_aWrap_searchBox_E">                       
+                            <input type="text" class="txt" value="{$_REQUEST['keyword']}" id="keyword" name="keyword"/>
+                            <input type="button" class="btn"id="search" onclick="this.form.submit()" <if condition="$pageNum elt 1">disabled="disabled"</if>/>
+                        </if>
+                    </p>
+                </form>
+                <div class="z_aWrap_tableListChangeBox clear">
+                    <form action="" method="post" id="myForm">
+                        <p class="fl">
+                            <a href="javascript:void(0)" class="grayBtn grayBtn_E" onclick="changeAction(0)">on-shelf</a>
+                            <a href="javascript:void(0)" class="grayBtn grayBtn_E" onclick="changeAction(1)">off-shelf</a>
+                        </p>
+                        <p class="pageNum">
+                            {$page}
+                        </p>
+                </div>
+                <div class="z_aWrapTableList">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="nbb">
+                                <th width="2%"><input type="checkbox"/></th>
+                                <th width="34%">Name of Wines</th>
+                                <th width="14%">Pictures</th>
+                                <th width="10%">Style</th>
+                                <th width="16%">Reference price </th>
+                                <th class="tac" width="24%">Operation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <volist id="vo" name="list">
+                                <tr>
+                                    <td><input type="checkbox" value="{$vo.id}" name="ids[]"/></td>
+                                    <td>
+                                        <if condition="$vo['fname'] eq $vo['cname']">
+                                            <p>{$vo.fname}</p>
+                                            <else/>
+                                            <p>{$vo.fname}</p><p>{$vo.cname}</p>
+
+                                        </if>
+                                    </td>
+                                    <td>
+                                        <img src="{$vo.img}" width="75" height="75"/>
+                                    </td>
+                                    <td>
+                        	{$vo.typeName}
+                                    </td>
+                                    <td>
+                                        <if condition="$vo.inital_price eq '-1' && $vo.price eq '-1'">
+                                            face<else/>
+                                            <if condition="$vo.money_type eq '$'">
+                        	{$vo.inital_price}$<else/>
+                                                {$vo.price}RMB
+                                            </if></if>
+                                    </td>
+
+                                    <td class="tac">
+                                        <a href="{:U('Winery/edit?id='.$vo['id'].'&winery_id='.$winery_id)}">Edit</a> |
+                                        <a href="javascript:void(0)" onclick="prompt()">Delete</a> |
+                                        <if condition="($vo.down_shelf eq 0)"><a href="{:U('Winery/down?id='.$vo['id'].'&winery_id='.$winery_id)}" >Out of Stock</a>
+                                            <else/><a href="{:U('Winery/up?id='.$vo['id'].'&winery_id='.$winery_id)}" >Up of Stock</a>
+                                        </if></td>
+                                    </td>
+                                </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="z_aWrap_tableListChangeBox bg38Gray clear">
+                    <p class="fl">
+                        <label><input type="checkbox" id="checkall2"/> All</label>
+                        <a href="javascript:void(0)" id="cancel">Cancel</a>
+                    </p>
+                    <p class="pageNum">
+                        {$page}
+                    </p>
+                </div>
+                <div class="z_aWrap_tableListChangeBox mb20 clear">
+                    <a href="javascript:void(0)" class="grayBtn grayBtn_E" onclick="changeAction(0)">on-shelf</a>
+                    <a href="javascript:void(0)" class="grayBtn grayBtn_E" onclick="changeAction(1)">off-shelf</a>
+                </div>
+            </div>
+            </form>
+
+        </div>
+        <div class="z_aFoot">
+            <div class="z_aFoot_main">
+                <p class="fl">
+                    <a href="{:U('Index/contact')}" class="aboutUsHref">About us</a>
+                    <a href="{:U('Index/cooperation')}" class="cooperationHref">Business Cooperation</a>
+                </p>
+                <p class="fr">wine.cn © 2011 email:bd@wine.cn</p>
+            </div>
+        </div>
+        <div class="al_delBox" style="display:none">
+            <p class="closeBtn"><img src="__PUBLIC__/Expo/img/closeBtn.gif" /></p>
+            <p>Are you sure you'll delete this?</p>
+            <p><a href="{:U('Winery/del?id='.$vo['id'].'&winery_id='.$winery_id)}" class="grayBtn">Yes</a> <a href="javascript:void(0)" class="grayBtn" onclick="hideprompt()">No</a></p>
+        </div>
+    </body>
+</html>
+

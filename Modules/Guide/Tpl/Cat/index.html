@@ -1,0 +1,48 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Guide/Goods/index')}">逸香导购</a> > <a href="{:Url('Guide/Cat/index')}">标签管理</a> > 标签列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Guide/Cat/add')}">添加标签</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        标签名称：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>标签id </th>
+                    <th>标签名称</th>
+                    <th>父级标签名称</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="list">
+            <tr>
+				<td>{$vo.cat_id}</td>
+				<td>{$vo.cat_name}</td>
+                <td>{$vo.p_name}</td>
+				<td><a href="{:Url('add?cat_id='.$vo['cat_id'])}">编辑</a> <a href="{:Url('del?cat_id=' . $vo['cat_id'])}" title="是否删除" {$vo.username} "标签?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

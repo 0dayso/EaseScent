@@ -1,0 +1,31 @@
+<include file="Common:header" />	
+<div class="main">
+	<include file="Common:menu" />
+	<div class="confirm-box">
+			<h3 class="confirm-h3">身份认证</h3>
+			<div class="email-r">
+				<div class="email-con" style="font-size:14px;">
+                    <div class="email-con-t">
+                    {$message}
+                    </div>
+					<div class="email-con-c">
+						<p>公司简称：{$userinfo.nick}</p>
+						<p>企业全称：{$userinfo.qy_name}（<if condition="$userinfo.comany_valid eq 2">已认证<else/>未认证</if>）</p>
+						<p>企业类别：{$userinfo.qy_hangye}</p>
+					</div>
+					<div class="email-sub">
+                    <if condition="$userinfo.comany_valid eq 3">
+						<input type="button" onclick="window.location.href='/index.php/Confirm/bphoto'" value="重新申请" class="login-sub"/>
+                    </if>
+						<input type="button" onclick="window.history.go(-1);" value="返 回" class="login-sub"/>
+					</div>
+				</div>
+			</div>
+			<div class="t-model">
+				<p class="t-model-t">身份认证成功，您可以享受以下服务：</p>
+				<p><span>▪</span>增加企业的曝光几率，有助于提升企业的知名度</p>
+				<p><span>▪</span>通过身份认证可以更有效的保障您的账户安全</p>
+			</div>
+	</div>
+</div>
+<include file="Common:footer" />

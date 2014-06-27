@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表</title>
+    <style>
+        html,body,h1,h2,h3,h4,h5,h6,div,table,a,img,span,dl,dt,dd {
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 850px;
+        }
+        table,thead,tbody,tfoot,td {
+            border: 1px solid #CCCCCC;
+        }
+        td {
+            min-width: 120px;
+            padding: 3px;
+            overflow-y: hidden;
+            overflow-x: scroll;
+        }
+        #page-num {
+            float: right;
+            font-family: Helvetica,'Hiragino Sans GB','Microsoft Yahei','微软雅黑',Arial,sans-serif;
+        }
+        #page-num a {
+            padding: 0 5px;
+            color:#333333;
+            text-decoration: none;
+            border: 1px solid #CCCCCC;
+            display: inline-block;
+            min-width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+        }
+        #page-num a:visited {
+            text-decoration: none;
+            color:#333333;
+        }
+        .current {
+            margin:0 5px;
+            padding: 0 5px;
+            text-decoration: none;
+            border: 1px solid #CCCCCC;
+            display: inline-block;
+            min-width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <table id="content-list">
+        <thead>
+            <tr>
+                <td class="column-title column-title1">酒款名</td>
+                <td class="column-title column-title2">酒评</td>
+                <td class="column-title column-title3">酒评图片</td>
+                <td class="column-title column-title4">创建者</td>
+                <td class="column-title column-title5">创建时间</td>
+                <td class="column-title column-title6">关联标准酒款名称</td>
+                <td class="column-title column-title7">操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="list" id="vo">
+                <tr>
+                    <td>
+                        {$vo.wine_name}<br/><br/>{$vo.wine_e_name}
+                        <input type="hidden" name="expid" value="{$vo.id}"/>
+                        <input type="hidden" name="wid" value="{$vo.wine_id}"/>
+                        <input type="hidden" name="res" value="{$vo.result}"/>
+                        <input type="hidden" name="fname" value="{$vo.wine_e_name}"/>
+                        <input type="hidden" name="cname" value="{$vo.wine_name}"/>
+                        <input type="hidden" name="wyear" value="{$vo.wine_year}"/>
+                        <input type="hidden" name="aimg" value="{$vo.jp_all_image|htmlspecialchars}"/>
+                    </td>
+                    <td>{$vo.jp_content|msubstr=0,100,'utf-8',true}<a href="http://i.wine.cn/index.php?m=detail&tid={$vo.tid}" target="_blank">详情</a></td>
+                    <if condition="$vo.jp_image NEQ FALSE">
+                    <td><img src="http://img.9p.eswine.com/{$vo.jp_image}" alt="酒评图片" width="120" height="200"></td>
+                    <else/>
+                    <td><img src="" alt="酒评图片(空)"></td>
+                    </if>
+                    <td>{$vo.jp_creater}</td>
+                    <td class="timeago" title="{$vo.jp_create_time}"> </td>
+                    <td>{$vo.jp_cname}</td>
+                    <if condition="$vo.wine_id EQ 0">
+                        <if condition="$vo.result EQ 'ignored'">
+                            <td><p style="color:#0000FF;" set="modify">修改</p></td>
+                        <else/>
+                            <td>
+                                <p style="color:#0000FF;" set="related">关联酒款</p>
+                                <p style="color:#0000FF;" set="ignored">资料不清晰，忽略</p>
+                            </td>
+                        </if>
+                    <else/>
+                        <td><p style="color:#0000FF;" set="modify">修改</p></td>
+                    </if>
+                </tr>
+            </volist>
+        </tbody>
+        <tfoot id="page-bar"><tr><td colspan="7"><div id="page-num">{$page}</div></td></tr></tfoot>
+    </table>
+</body>
+</html>
+<script src="__PUBLIC__common/js/jquery.min.js"></script>
+<script src="__PUBLIC__common/js/jquery.timeago.js"></script>
+<script>
+
+    $(document).ready(function() {
+        $("td.timeago").timeago();
+        var actionArea = $('#action-area',parent.document);
+        $('tbody tr').each(function(index, el) {
+            $(this).children('td:nth-child(7)').children('p:first').css({
+                'cursor': 'pointer'
+            }).click(function(event) {
+                actionArea.hide();
+                var firstTd = $(this).parent('td').siblings('td').eq(0);
+                var wineFname = '',wineCname = '',wineYear = '';
+                var prefix = 'http://img.9p.eswine.com/';
+                wineFname = firstTd.find('input[name="fname"]').val();
+                wineCname = firstTd.find('input[name="cname"]').val();
+                wineYear = firstTd.find('input[name="wyear"]').val();
+                var expid = firstTd.find('input[name="expid"]').val();
+                wineAllImage = firstTd.find('input[name="aimg"]').val();
+                wineAllImage = $.parseJSON(wineAllImage);
+                actionArea.children('div.compare').eq(1).find('dd').eq(0).find('b').text(wineFname);
+                actionArea.children('div.compare').eq(1).find('dd').eq(1).find('b').text(wineCname);
+                actionArea.children('div.compare').eq(1).find('dd').eq(2).find('b').text(wineYear);
+                $('#img-box',parent.document).html('');
+                for(x in wineAllImage){
+                    $('div#img-box',parent.document).append($('<img src="'+prefix+wineAllImage[x]+'" />'));
+                }
+                actionArea.find('#exp-id').attr('expid',expid);
+                actionArea.show();
+            });;
+            $(this).children('td:nth-child(7)').children('p').eq(1).css({
+                'cursor': 'pointer'
+            }).click(function(event) {
+                var firstTd = $(this).parent('td').siblings('td').eq(0);
+                var data = {relate: 'ignored',expid: firstTd.find('input[name="expid"]').val()};
+                $.ajax({
+                    url: '{:Url("Dzjp/RelateCommentToWine/doRelate")}',
+                    type: 'POST',
+                    dataType: 'text',
+                    data: data,
+                    success: function(res){
+                        if (res == 'SUCCESS!') {
+                            alert('已忽略！');
+                        } else {
+                            alert(res);
+                        };
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+    });
+</script>

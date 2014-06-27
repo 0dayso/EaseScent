@@ -1,0 +1,99 @@
+<include file="Common:cpheader" />
+<link rel="stylesheet" href="__PUBLIC__/ztree/css/ztreestyle.css" type="text/css">
+<script type="text/javascript" src="__PUBLIC__/ztree/js/jquery.ztree.core-3.4.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/ztree/js/jquery.ztree.excheck-3.4.min.js"></script>
+<script language="javascript">
+    var setting = {
+            check:{
+                enable:false,
+            }, 
+            data:{
+                simpleData:{
+                    enable:true
+                },
+                key:{
+                    title : 'title'
+                },
+            },
+            view:{
+                selectedMulti: false,
+                showIcon:false,
+                nameIsHTML: true,
+            },
+    };
+    var zNode = [
+        <volist name="aclist" id="voac">
+        { id:{$voac.acid}, title:'{$voac.name}', pId:{$voac.pid}, name:"{$voac.name} <in name="voac['acid']" value="$acgid"><font style='color:#00cc00;font-weight:bold;font-size:16px'>√</font><else /><font style='color:#cc0000;font-weight:bold;font-size:16px'>×</font></in>" <in name="voac['acid']" value="$acgid">,checked: true, open: true</in>},
+        </volist>
+    ];
+
+    $(document).ready(function(){
+        $.fn.zTree.init($("#zTree"), setting, zNode);
+    });
+
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > 个人信息</div>
+    <div class="form">
+		<form name="myform" action="{:Url('myInfo')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="uid" value="{$admin_uid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">个人信息</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">查看权限</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">当前用户名</th>
+                        <td>{$admin_username}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">所属用户组</th>
+                        <td>{$admin_gname}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">昵称</th>
+                        <td><input type="text" size="30" name="nickname" value="{$user.nickname}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">真实姓名</th>
+                        <td><input type="text" size="30" name="truename" value="{$user.truename}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">邮箱</th>
+                        <td><input type="text" size="30" name="email" value="{$user.email}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">性别</th>
+                        <td><input type="radio" name="sex" <if condition="$user['sex'] eq 1">checked</if> value="1"> 男 <input type="radio" name="sex" <if condition="$user['sex'] eq 2">checked</if> value="2">女</td>
+                    </tr>
+                    <tr>
+                        <th width="130">电话</th>
+                        <td><input type="text" size="30" name="tel" value="{$user.tel}" class="measure-input"/></td>
+                    </tr>
+                    <if condition="$user['adminer'] eq 1">
+                    <tr>
+                        <th width="130">超级管理员</th>
+                        <td>是 (超级管理员拥有所有权限，且不受用户组权限限制)</td>
+                    </tr>
+                    </if>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">权限</th>
+                        <td>
+                            <ul id="zTree" class="ztree"></ul>
+                            ("<font style="color:#00cc00;font-weight:bold;font-size:16px;">√</font>"代表有权进行的操作；"<font style="color:#cc0000;font-weight:bold;font-size:16px;">×</font>"代表无权进行的操作)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="更新个人信息" />
+            <div>
+        </form>
+    <div>
+</div>
+<include file="Common:cpfooter" />

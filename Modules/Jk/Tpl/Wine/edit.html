@@ -1,0 +1,392 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+KindEditor.ready(function(K) {
+    var editor = K.create("#content", {
+        uploadJson:         "{:Url('upload')}",
+        allowFileManager:   false,
+        afterBlur:          function(){this.sync()}
+    });
+});
+$(function() {
+    $("form").submit(function(){
+        art.dialog({
+            id: 'loading',
+            content: '数据验证中...',
+            lock: true,
+            esc: false,
+            cancel: false
+        });
+        var self = $(this);
+        console.log(self.serialize());
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+            if(data.error == 0){
+                art.dialog.list['loading'].content(
+                    '<span style="color:#0c0;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}}
+                );
+            }else{
+                art.dialog.list['loading'].content(
+                    '<span style="color:#c00;">' + data.msg + '</span>'
+                ).button(
+                    {name:'返回列表页',callback:function(){window.location.href = data._backurl;}},
+                    {name:'关闭'}
+                );
+            }
+        }
+    });
+    $('#updimg').fileupload({
+        url : "{:Url('upload')}",
+        dataType : 'json',
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#updimg_msg").text(progress + '%');
+        },
+        done: function (e, data) {
+            if(data.result.error == 0){
+                var html = '<div class="selbox"><input name="imgs[]" type="hidden" value="'+data.result.img+'" /><img src="{:C(\'UPLOAD_URL\')}Wine/images/'+data.result.img+'" /><div><select name="imgs_type[]" size="3"><option value="1">正标</option><option value="2">副标</option><option value="3">其他</option></select></p></div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#updimg_box").append(html);
+            }
+            //拖拽排序
+            $( "#updimg_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+            $( "#updimg_box" ).disableSelection();
+            //拖拽排序end
+        }
+    });
+    //拖拽排序
+    $( "#updimg_box" ).sortable({opacity:0.6,tolerance:'pointer'});
+    $( "#updimg_box" ).disableSelection();
+    //拖拽排序end
+});
+
+//country_autocomplete
+$(function(){
+    $("#country_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getCountryForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#country_id").val(ui.item.id);
+            $("#country_s").css('z-index',-1);
+            $("#country_x").css('z-index',1);
+        },
+    });
+});
+function country_s(){
+    $("#country_text").focus();
+    $("#country_text").autocomplete("search", "");
+}
+function country_x(){
+    $("#country_id").val(0);
+    $("#country_text").val('').attr('disabled',false);
+    $("#country_x").css('z-index',-1);
+    $("#country_s").css('z-index',1);
+}
+//country_autocomplete/
+//region_autocomplete
+$(function(){
+    $("#region_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getRegionForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#region_id").val(ui.item.id);
+            $("#region_s").css('z-index',-1);
+            $("#region_x").css('z-index',1);
+        },
+    });
+});
+function region_s(){
+    $("#region_text").focus();
+    $("#region_text").autocomplete("search", "");
+}
+function region_x(){
+    $("#region_id").val(0);
+    $("#region_text").val('').attr('disabled',false);
+    $("#region_x").css('z-index',-1);
+    $("#region_s").css('z-index',1);
+}
+//region_autocomplete/
+//winery_autocomplete
+$(function(){
+    $("#winery_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getWineryForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            $(this).attr('disabled',true);
+            $("#winery_id").val(ui.item.id);
+            $("#winery_s").css('z-index',-1);
+            $("#winery_x").css('z-index',1);
+        },
+    });
+});
+function winery_s(){
+    $("#winery_text").focus();
+    $("#winery_text").autocomplete("search", "");
+}
+function winery_x(){
+    $("#winery_id").val(0);
+    $("#winery_text").val('').attr('disabled',false);
+    $("#winery_x").css('z-index',-1);
+    $("#winery_s").css('z-index',1);
+}
+//winery_autocomplete/
+//grape_autocomplete
+$(function(){
+    $("#grape_text").autocomplete({
+        minLength: 0,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        source: function(request, response){
+            $.post("{:Url('OutAcAjax/getGrapeForKw')}",{'kw':request.term},function(msg){
+                if(msg.error == 0){
+                    response($.map(msg.result,function(item){
+                        return{id:item.id,label:item.fname+' '+item.cname}
+                    }));
+                }
+            },'json');
+        },
+        select: function(event, ui){
+            if($("#grape_box").find("input[value='"+ui.item.id+"']").length == 0){
+                var html = '<div class="selbox"><input name="grapes[]" type="hidden" value="'+ui.item.id+'" /><div><span>'+ui.item.label+'</span>&nbsp;<input name="grapes_percent[]" type="text" size="2" class="measure-input"/>%</div><span class="del-selbox" onclick="$(this).parent().remove();"></span></div>';
+                $("#grape_box").append(html);
+            }
+        },
+        close: function(event, ui){
+            $(this).val('');
+        }
+    });
+});
+function grape_s(){
+    $("#grape_text").focus();
+    $("#grape_text").autocomplete("search", "");
+}
+//grape_autocomplete/
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Jk/Index/index')}">酒库源数据管理</a> >
+        <a href="{:Url('index')}">酒款列表</a> >
+        修改酒款
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('edit')}" method="post" enctype="multipart/form-data">
+            <input name="_backurl" type="hidden" value="{$_GET._backurl}">
+            <input name="id" type="hidden" value="{$res.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">关联属性</li>
+                <li id="tab_setting_3" onclick="SwapTab('tab_setting_3','tab_3');">seo相关</li>
+                <li id="tab_setting_4" onclick="SwapTab('tab_setting_4','tab_4');">相关图片</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">外文名</th>
+                        <td>
+                            <input name="fname" type="text" size="80" value="{$res.fname}" class="measure-input"/>
+                            <span class="msg_span">[唯一]</span>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>英文名</th>
+                        <td>
+                            <input name="ename" type="text" size="80" value="{$res.ename}" class="measure-input"/>
+                            <span class="msg_span">[必填]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>年产量</th>
+                        <td><input name="yield" type="text" size="80" value="{$res.yield}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>简介</th>
+                        <td><textarea name="description" style="width:500px; height:50px;">{$res.description}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>内容</th>
+                        <td><textarea id="content" name="content" style="width:700px; height:400px;">{$res.content}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">酒款类型</th>
+                        <td>
+                            <select name="winetype_id">
+                                <option value="0"></option>
+                                <volist name="winetype_treelist" id="vo">
+                                <option value="{$vo.id}" <if condition="$vo['id'] eq $res['winetype_id']">selected</if>>{$vo.prefix}{$vo.value}</option>
+                                </volist>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属国家</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <if condition="$res['country_res']">
+                                <input id="country_text" type="text" size="80" value="{$res.country_res.fname} {$res.country_res.cname}" class="measure-input" disabled />
+                                <input id="country_id" name="country_id" type="hidden" value="{$res.country_id}"/>
+                                <span id="country_s" class="autocomplete-sel" onclick="country_s();" style="z-index:-1;"></span>
+                                <span id="country_x" class="autocomplete-del" onclick="country_x();" style="z-index:1;"></span>
+                                <else/>
+                                <input id="country_text" type="text" size="80" value="" class="measure-input" />
+                                <input id="country_id" name="country_id" type="hidden" value="0"/>
+                                <span id="country_s" class="autocomplete-sel" onclick="country_s();"></span>
+                                <span id="country_x" class="autocomplete-del" onclick="country_x();"></span>
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属产区</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <if condition="$res['country_res']">
+                                <input id="region_text" type="text" size="80" value="{$res.region_res.fname} {$res.region_res.cname}" class="measure-input" disabled />
+                                <input id="region_id" name="region_id" type="hidden" value="{$res.region_id}"/>
+                                <span id="region_s" class="autocomplete-sel" onclick="region_s();" style="z-index:-1;"></span>
+                                <span id="region_x" class="autocomplete-del" onclick="region_x();" style="z-index:1;"></span>
+                                <else/>
+                                <input id="region_text" type="text" size="80" value="" class="measure-input" />
+                                <input id="region_id" name="region_id" type="hidden" value="0"/>
+                                <span id="region_s" class="autocomplete-sel" onclick="region_s();"></span>
+                                <span id="region_x" class="autocomplete-del" onclick="region_x();"></span>
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所属酒庄</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <if condition="$res['winery_res']">
+                                <input id="winery_text" type="text" size="80" value="{$res.winery_res.fname} {$res.winery_res.cname}" class="measure-input" disabled />
+                                <input id="winery_id" name="winery_id" type="hidden" value="{$res.winery_id}"/>
+                                <span id="winery_s" class="autocomplete-sel" onclick="winery_s();" style="z-index:-1;"></span>
+                                <span id="winery_x" class="autocomplete-del" onclick="winery_x();" style="z-index:1;"></span>
+                                <else/>
+                                <input id="winery_text" type="text" size="80" value="" class="measure-input" />
+                                <input id="winery_id" name="winery_id" type="hidden" value="0"/>
+                                <span id="winery_s" class="autocomplete-sel" onclick="winery_s();"></span>
+                                <span id="winery_x" class="autocomplete-del" onclick="winery_x();"></span>
+                                </if>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>相关葡萄品种（多选）</th>
+                        <td>
+                            <div class="autocomplete-div">
+                                <input id="grape_text" type="text" size="80" value="" class="measure-input" />
+                                <span id="grape_s" class="autocomplete-sel" onclick="grape_s();"></span>
+                            </div>
+                            <div id="grape_box">
+                                <volist name="res.grape_res" id="vo">
+                                <div class="selbox">
+                                    <input name="grapes[]" type="hidden" value="{$vo.id}" />
+                                    <div><span>{$vo.fname} {$vo.cname}</span>&nbsp;<input name="grapes_percent[]" type="text" size="2" value="{$vo.percent}" class="measure-input"/>%</div>
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                                </volist>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_3" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">seo 标题</th>
+                        <td><input name="seo_t" type="text" size="80" value="{$res.seo_t}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th>seo 关键字</th>
+                        <td><textarea name="seo_k" style="width:500px; height:50px;">{$res.seo_k}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>seo 描述</th>
+                        <td><textarea name="seo_d" style="width:500px; height:50px;">{$res.seo_d}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_4" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">相关图片（多选）</th>
+                        <td>
+                            <input id="updimg" name="updimg" type="file" multiple />
+                            <span id="updimg_msg"></span>
+                            <div id="updimg_box">
+                                <volist name="res.img_res" id="vo">
+                                <div class="selbox">
+                                    <input name="imgs[]" type="hidden" value="{$vo.img}" />
+                                    <img src="{:C('UPLOAD_URL')}Wine/images/{$vo.img}" />
+                                    <div>
+                                        <select name="imgs_type[]" size="3">
+                                            <option value="1" <if condition="$vo['type'] eq 1">selected</if>>正标</option>
+                                            <option value="2" <if condition="$vo['type'] eq 2">selected</if>>副标</option>
+                                            <option value="3" <if condition="$vo['type'] eq 3">selected</if>>其他</option>
+                                        </select>
+                                    </div>
+                                    <span class="del-selbox" onclick="$(this).parent().remove();"></span>
+                                </div>
+                                </volist>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input class="btn" type="submit" value="提交" />&nbsp;&nbsp;
+                <label><input type="radio" name="status" value="3" <if condition="$res['status'] eq 3">checked</if> />开启</label>
+                <label><input type="radio" name="status" value="2" <if condition="$res['status'] eq 2">checked</if> />关闭</label>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

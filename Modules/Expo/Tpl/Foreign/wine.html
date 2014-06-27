@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>wine</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_base.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Expo/css/z_mainStyle.css" />
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.img-flash').click(function(){
+                    $('#img-flash').attr('src', $(this).attr('src'));
+                    $('.z_main_nrBox1_l_ul > li').attr('class', '');
+                    $(this).parent().attr('class', 'active');
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+       <include file="Foreign:header" /> 
+        <div class="z_nav">
+            <ul class="z_nav_nr clear">
+                <li><a href="{:U('Foreign/index?winery_id='.$winery_id)}" >Home</a></li>
+                <li><a href="{:U('Foreign/product?winery_id='.$winery_id)}">Wine Supplies</a></li>
+                <li><a href="{:U('Foreign/honor?winery_id='.$winery_id)}">File Integrity</a></li>
+                <li><a href="{:U('Foreign/info?winery_id='.$winery_id)}">Chateau Introduction</a></li>
+                <li><a href="{:U('Foreign/contact?winery_id='.$winery_id)}">Contact</a></li>
+            </ul>
+        </div>
+        <div class="z_main">
+            <div class="z_main_nr">
+                <div class="z_det_nrBox1 clear">
+                    <div class="z_det_nrBox1_l clear">
+                        <p class="z_det_nrBox1_l_bigPic"><a href="#"><img src="{$img[0]['url']}" width="319" height="240" id="img-flash"/></a></p>
+                        <ul class="z_det_nrBox1_l_ul">
+                            <li class="active"><img src="{$img[0]['url']}" width="77" height="57" class="img-flash"/></li>
+                            <li><img src="{$img[1]['url']}" width="77" height="57"   class="img-flash"/></li>
+                            <li><img src="{$img[2]['url']}" width="77" height="57"  class="img-flash"/></li>
+                            <li><img src="{$img[3]['url']}" width="77" height="57"  class="img-flash"/></li>
+                        </ul>
+                    </div>
+                    <div class="z_det_nrBox1_r">
+                        <h3 class="z_main_nrBox1_rH3">{$wine_list['fname']} {$wine_list['cname']}</h3>
+                        <div class="z_main_nrBox1_rNr">
+                            <div class="z_main_nrBox1_rNr_l">
+                                <p>Nation/Region：<span>{$allCountry[$wine_list['country_id']]['fname']}/{:$allRegion[$wine_list['region_id']]['fname']}{:$allRegion[$wine_list['regionsub_id']]['fname']}</span></p>
+                                <p>Style：<span>{:$allType[$wine_list['type_id']]['fname']}{:$allType[$wine_list['typesub_id']]['fname']}</span></p>
+                                <p>Grape Variety：<span>{$wine_list['variety']}</span></p>
+                                <if condition="$wine_list['price'] eq -1 && $wine_list['inital_price'] eq -1">
+                                    <p><i>Agent Price：</i><span>face</span></p>
+                                    <else/>
+                                    <if condition="$wine_list['money_type'] eq '$'">
+                                        <p><i>Agent Price：</i><span>{$wine_list['inital_price']}$</span></p>
+                                        <else/>
+                                        <p><i>Agent Price：</i><span>{$wine_list['price']}RMB</span></p>
+                                    </if>
+                                </if>
+
+                                <div class="z_main_nrBox1_rNr_l_bot">
+                                    <p>Contact Supplier:</p>
+                                    <p>
+                                        <span class="contactBox">
+                                            <if condition="$winery_info['email'] neq ''">
+                                                <a href="mailto:{$winery_info['email']}"><img src="__PUBLIC__/Expo/img/z_ico_mail18x15.png" /></a>
+                                            </if>
+                                            <if condition="$qy_info['qy_skype'] neq ''">
+                                                <a href="skype:{$qy_info['qy_skype']}?call" onclick="return skypeCheck();"><img src="__PUBLIC__/Expo/img/z_ico_skype20x20.png" /></a>
+                                                <else/>
+                                            </if>
+                                            <if condition="$qy_info['qy_qq'] neq ''">
+                                                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$qy_info['qy_qq']}&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:{$qy_info['qy_qq']}:45" alt="点击这里给我发消息" title="点击这里给我发消息"></a>
+                                                <else/>
+                                            </if>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="z_main_nrBox1_rNr_r">
+                                <p>Winery:<span>{$qy_info['qy_name']}</span></p>
+                                <p>Add:<span>{$qy_info['qy_address']}</span></p>
+                                <p>E-mail:<span>{$winery_info['email']}</span></p>
+                                <p>Tel:<span>{$qy_info['qy_moblie']}</span></p>
+                                <p>Website:<span>{$qy_info['qy_web_address']}</span></p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="z_main_nrBotBg978x4_one"></div>
+                <h2 class="z_main_tit"><img src="__PUBLIC__/Expo/img/z_main_tit_jkxq_E.gif" /></h2>
+                <div class="z_det_nrBox2">
+                    <div class="z_det_nrBox2_top">
+                        <p><i>Style：</i><span>{$allType[$wine_list['type_id']]['fname']}{:$allType[$wine_list['typesub_id']]['fname']}</span></p>
+                        <p><i>Grape Variety：</i><span>{$wine_list['variety']}</span></p>
+                    </div>
+                    <div class="z_det_nrBox2_main">
+                        <div class="z_det_nrBox2_main_l">
+                            <p><i>Country：</i><span>{:$allCountry[$wine_list['country_id']]['fname']}  </span></p>
+                            <p><i>Status：</i><span>{$winery_info['honor']}</span></p>
+                            <if condition="$wine_list['volume'] == '-1'">
+                             <p><i>Volume：</i><span></span></p>
+                             <else/>
+                            <p><i>Volume：</i><span>{$wine_list['volume']} </span></p>
+                            </if>
+                            <p><i>Minimum Buying：</i><span>{$wine_list['lowest_buy_amount']}</span></p>
+                        </div>
+                        <div class="z_det_nrBox2_main_r">
+                            <p><i>Region：</i><span>{:$allRegion[$wine_list['region_id']]['fname']}{:$allRegion[$wine_list['regionsub_id']]['fname']}</span></p>
+                            <p><i>Alcohol：</i><span>{$wine_list['degree']}%</span></p>
+                            <if condition="$wine_list['price'] eq -1 && $wine_list['inital_price'] eq -1">
+                                    <p><i>Agent Price：</i><span>face</span></p>
+                                    <else/>
+                                    <if condition="$wine_list['money_type'] eq '$'">
+                                        <p><i>Agent Price：</i><span>{$wine_list['inital_price']}$</span></p>
+                                        <else/>
+                                        <p><i>Agent Price：</i><span>{$wine_list['price']}RMB</span></p>
+                                    </if>
+                                </if>
+             
+                        </div>
+                    </div>
+                </div>
+                <div class="z_main_nrBotBg978x4_one"></div>
+                <h2 class="z_main_tit"><img src="__PUBLIC__/Expo/img/z_main_tit_cpjs_E.gif" /></h2>
+                <div class="z_det_nrBox3">
+                    <div class="clear">
+
+                        <div class="nr nr_E">
+                            <p>{$wine_list['description']}</p>
+                        </div>
+                    </div>
+                    <p class="tip">Contact us and please note "expo.wine.cn"！</p>
+                </div>
+                <div class="z_main_nrBotBg978x4_one"></div>
+            </div>
+        </div>
+      <include file="Foreign:foot" /> 
+    </body>
+</html>

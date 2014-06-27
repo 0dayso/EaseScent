@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="keywords" content="{$res.seo_k}" />
+<meta name="description" content="{$res.seo_d}" />
+<title>{$res.seo_t}</title>
+<!--逸香网头部引用文件--><!--#include virtual="/_Block/6.html"-->
+<script type="text/javascript">
+var __id = "<?php echo $res['id'];?>";
+var __wine_idstr = "<?php echo $res['wine_idstr'];?>";
+var __page_limit = 10;
+</script>
+<script type="text/javascript" src="{:C('DOMAIN.PUBLIC')}Jiuku/js/mingzhuang/detail.js"></script>
+<link href="{:C('DOMAIN.PUBLIC')}Jiuku/css/mingzhuang/detail.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<!--逸香网头部html--><!--#include virtual="/_Block/7.html"-->
+<div class="mz-nav">
+	<!--<div class="v-my-wine">
+		<a href="###" target="_blank">我关注的名庄</a>
+		<a href="###" target="_blank" class="v-my-wine-a">我发表过的酒评</a>
+	</div>-->
+	<p class="weizhi"><a href="{:C('DOMAIN.WWW')}">首页</a> &gt; <a href="{:C('DOMAIN.MINGZHUANG')}">名庄频道</a> &gt; <span> {$res.cname} {$res.fname} </span></p>
+</div>
+<div class="detailspage-box clear">
+	<!-- 左侧开始 -->
+	<div class="detailspage-left">
+        <div class="z_wineInfo_l">
+        	<h3 class="z_mz_h3">酒评：{$res.cname} {$res.fname} <a href="{:C('DOMAIN.MINGZHUANG')}{$res.id}.shtml">[查看原文]</a></h3>
+            <div class="z_mz_page">
+                <h4 class="z_mz_page_h4">全部发言</h4>
+                <p class="z_mz_page_refresh"><span onclick="get_comment();" style="cursor:pointer;">刷新酒评</span></p>
+                <p class="z_mz_page_write"><a href="{:C('DOMAIN.I')}User/topic/mz/id/{$res.id}" target="_blank">我要写酒评</a></p>
+                <ul class="z_mz_page_ul">{$res.comment.pageHtml}</ul>
+            </div>
+            <ul class="z_wineInfoList">
+            	<volist name="res.comment.rst.data" id="vo">
+                <li class="clear">
+                	<p class="z_wineInfoList_userPic"><a href="{:C('DOMAIN.I')}User/u/{$vo.uid}" target="__blank"><img src="{$vo.avatar_url}" /></a></p>
+                    <div class="z_wineInfoList_userSay">
+                    	<p class="z_wineInfo_userInfo"><span class="clear"><a href="{:C('DOMAIN.I')}User/u/{$vo.uid}" target="__blank" class="z_wineInfo_userInfo_userName">{$vo.nickname}</a><!--<i class="levelIco_16x16 cioV_16x16 mt4"></i> <i class="levelIco_16x16 cioLevel1_16x16 mt4" ></i>--></span>  ：{$vo.content}</p>
+                        <div class="z_wineInfo_transmit_wineInfo clear w488">
+                            <if condition="$vo['image']"><p class="pic"><a href="{$vo.image_big}" title="{$vo.wine_name}"><img src="{$vo.image_200}" /></a></p></if>
+                            <div class="nr">
+                                <p>中文名：<i>{$vo.wine_name}</i></p>
+                                <p>英文名：<i>{$vo.wine_e_name}</i></p>
+                                <p class="col_959595">年份：<i>{$vo.wine_year}</i></p>
+                                <if condition="in_array($vo['wine_score'],array(1,2,3,4,5))"><p class="col_959595"><span>{$vo.nickname}</span>的评价：<i><img src="{:C('DOMAIN.I')}User/Template/Default/images/x{$vo.wine_score}.jpg" /></i></p></if>
+                            </div>
+                        </div>
+                        <div class="z_wineInfo_sendwine clear">
+                            <p class="z_wineInfo_sendwine_time"><a href="{:C('DOMAIN.I')}index.php?m=detail&tid={$vo.tid}" target="__blank">{$vo.format_time}</a> 来自 <a href="{$vo.from_url}" target"__blank">{$vo.from}</a></p>
+                            <div class="z_wineInfo__sendwineBtn">
+                                <span><a href="{:C('DOMAIN.I')}index.php?m=detail&tid={$vo.tid}" target="__blank">转发（<i>{$vo.forwards}</i>）</a> | <a href="{:C('DOMAIN.I')}index.php?m=detail&tid={$vo.tid}" target="__blank">收藏（<i>0</i>）</a> | <a href="{:C('DOMAIN.I')}index.php?m=detail&tid={$vo.tid}" target="__blank">评论（<i>{$vo.replys}</i>）</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                </volist>
+            </ul>
+            <!-- 动态列表-->
+        </div>
+	</div>
+	<!-- 左侧结束 -->
+	<!-- 右侧开始 -->
+	<div class="attention-right">
+    	<if condition="$res['g_map']">
+		<h2 class="attention-right-h2">
+			<span>名庄地图</span>
+            <a href="{:C('DOMAIN.UPLOAD')}Jiuku/Winery/map/{$res.g_map}" title="{$res.g_name}地图">查看大图</a>
+		</h2>
+		<div class="map-box">
+			 <a href="{:C('DOMAIN.UPLOAD')}Jiuku/Winery/map/{$res.g_map}" title="{$res.g_name}地图"><img src="{:C('DOMAIN.UPLOAD')}Jiuku/Winery/map/{$res.g_map}" alt="{$res.g_name}地图"/></a>
+		</div>
+		</if>
+        <if condition="1 neq 1">
+		<h2 class="attention-right-h2">
+			<span>相关资讯</span>
+		</h2>
+		<ul class="attention-right-ul">
+        	<volist name="res.article" id="vo">
+			<li><a href="{$vo.html}" target="_blank" title="{$vo.title}">{$vo.title}</a></li>
+            </volist>
+		</ul>
+        </if>
+        <if condition="1 neq 1">
+		<h2 class="attention-right-h2">
+			<span>关注此庄的人正在参加的活动</span>
+		</h2>
+        <volist name="res.party" id="vo">
+		<ul class="attention-right-ul2">
+			<li><a href="__JIUHUI__/Detail/index/id/{$vo.id}" target="_blank">{$vo.title}</a></li>
+			<li>时间：{$vo.time}</li>
+			<li>城市：{$vo.city}</li>
+		</ul>
+        </volist>
+        </if>
+	</div>
+	<!-- 右侧结束 -->
+</div>>
+<!--图片放大JS-->
+<script src="{:C('DOMAIN.PUBLIC')}fancyzoom/FancyZoom.js" language="JavaScript" type="text/javascript"></script>
+<script src="{:C('DOMAIN.PUBLIC')}fancyzoom/FancyZoomHTML.js" language="JavaScript" type="text/javascript"></script>
+<script>
+function zoomIni(){
+	zoomImagesURI="{:C('DOMAIN.PUBLIC')}fancyzoom/images/";
+	setupZoom();
+}
+$(function(){
+	zoomIni();
+});
+</script>
+<!--图片放大end-->
+<!--逸香网尾部html--><!--#include virtual="/_Block/8.html"-->
+</body>
+</html>

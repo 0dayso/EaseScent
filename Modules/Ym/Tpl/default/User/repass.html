@@ -1,0 +1,36 @@
+<include file="Common:header" />
+<div class="common-mian">
+	<div class="c-tit">
+		找回密码
+	</div>
+	<div class="email-r">
+        <form  action="/index.php/User/repassword_do" method="post">
+		<div class="email-con-c">
+			<div>
+				填写您注册时使用的邮箱或者手机账号
+			</div>
+			<dl class="auth-code">
+				<dd class="auth-code-num" style="margin-left:-70px;">
+					<em>邮箱/手机:</em>
+					<input type="text" name="username" class="login-ipt1"/>
+				</dd>
+				<dd class="auth-code-num">
+					<em>&nbsp;验证码:</em>
+					<input type="text" name="verify"  class="login-ipt2"/>
+				</dd>
+				<dd class="auth-code-img">
+					请按下图输入验证码，看不清
+					<a href="javascript:;" onclick="document.getElementById('verify').click()">刷新验证码</a>
+					<img id="verify" src="__HOST__/index.php/User/verify" onclick="this.src='__HOST__/index.php/User/verify/'+Math.random()"/>
+				</dd>
+			</dl>
+			<div class="email-sub">
+				<input type="submit" value="立即找回" class="login-e">
+				<input type="button" value="返 回" class="login-sub2">
+			</div>
+            </form>
+		</div>
+	</div>
+</div>
+<include file="Common:footer" />
+

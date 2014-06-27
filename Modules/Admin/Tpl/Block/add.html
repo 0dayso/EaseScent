@@ -1,0 +1,77 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/Block/index')}">区块列表</a> > 增加新区块</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">区块列表</a>
+    </div>
+    <div class="list-menu">
+        动态区块数据由程序自动生成，定时更新；<br/>
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('Admin/Block/add')}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">增加区块</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">区块名称</th>
+                        <td><input type="text" size="80" name="name" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">存放位置</th>
+						<td>
+                            <volist name="domainpath" id="vo">
+                                <label for="dir_{$key}" style="display:block;cursor:pointer;"><input type="checkbox" name="dir[]" id="dir_{$key}" value="{$vo.id}" />&nbsp;&nbsp;<b>./{$vo.path}_Block/</b>&nbsp;&nbsp;({$vo.domain}_Block/)</label>
+                            </volist>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">区块类型</th>
+						<td>
+							<select name="type" id="type">
+                                <option value="static">静态区块</option>
+                                <option value="dynamic">动态区块</option>
+							</select>
+						</td>
+                    </tr>
+                    <tr id="cycle" style="display:none">
+                        <th width="130">更新周期</th>
+                        <td><input type="text" size="20" name="cycle" value="7200" class="measure-input"/> 仅对动态区块起作用,静态区块不会更新</td>
+                    </tr>
+                    <tr id="php" style="display:none">
+                        <th width="130">PHP语句</th>
+						<td><textarea style="width:60%;height:80px" name="php"></textarea> 仅对动态区块起作用</td>
+                    </tr>
+                    <tr>
+                        <th width="130">模板</th>
+						<td><textarea style="width:60%;height:120px" name="tpl"></textarea> 区块模板HTML（支持TP模板解析）</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<script language="javascript">
+$(document).ready(function(){
+    $("#type").change(function(){
+        var type = $(this).val();
+        typeChange(type);
+    });
+});
+function typeChange(type) {
+    var cycle = $("#cycle");
+    var php = $("#php");
+    if(type == 'static') {
+        cycle.hide();
+        php.hide();
+    } else if(type == 'dynamic') {
+        cycle.show();
+        php.show();
+    }
+}
+</script>
+<include file="Common:cpfooter" />

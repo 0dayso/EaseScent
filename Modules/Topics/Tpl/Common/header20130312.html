@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{$seo_keywords}" /> 
+<meta name="description" content="{$seo_description}" />
+<title>{$seo_title}</title>
+<link href="http://www.wine.cn/news/Common/css/header20130507.css" rel="stylesheet" type="text/css" />
+<link href="http://www.wine.cn/news/Common/css/global.css" rel="stylesheet" type="text/css" />
+<link href="http://www.wine.cn/news/Common/css/bottom.css" rel="stylesheet" type="text/css" />
+<link href="http://www.wine.cn/news/Common/css/layout.css" rel="stylesheet" type="text/css" />
+<volist name="loadcss" id="vo">
+<link href="__TOPIC__/{$dirnm}/css/{$vo}" rel="stylesheet" type="text/css" />
+</volist>
+<script type="text/javascript" src="http://www.wine.cn/news/Common/js/jquery.js"></script>
+<script type="text/javascript" src="http://www.wine.cn/news/Common/js/header20130312.js"></script>
+<volist name="loadjs" id="vo">
+<script type="text/javascript" src="__TOPIC__/{$dirnm}/js/{$vo}"></script>
+</volist>
+<script type="text/javascript">
+var _tdn = window.location.host.replace(/(\w+).(\w+).(\w+)/,'http://www.$2.$3');
+//判断是否登录
+check=0;
+function init(){
+	$.post("/Uc/checklogin",function(data){
+		if(data!="null"){
+			var	userinfo = eval("(" + data + ")");
+			if(userinfo.online==1){
+				$("#loginDiv").html('<a href="http://user.wine.cn/member/home">'+userinfo.nickname+'</a>	<a href="http://user.wine.cn/member/logout?continue='+window.location.href+'">退出</a>	<a href="http://user.wine.cn/member/home">我的逸香通行证</a>	<a href="#">设为首页</a><iframe style="display:none" src="http://user.wine.cn/api/auth?sid='+userinfo.sid+'"></iframe>');
+				return ;
+			}else{
+				if(check==0){
+					var url = $("#checkUc").attr("src");
+					var thisUrl = url+"http://"+window.location.host+"/ucUrlSend.php"
+					$("#checkUc").attr("src",thisUrl);
+					check =1;
+				}
+			}
+		}
+	});
+}
+init();
+//跳转登录
+function jumplogin(){
+	var url='http://user.wine.cn/member/auth?continue=http://'+window.location.host+'/ucUrlSend.php?goto='+window.location.href.replace('http://','').replace(/\//g,'-');
+	window.location.href = url;
+}
+//跳转注册
+function jumpregistration(){
+	var url ='http://user.wine.cn/member/signup?continue='+window.location.href;
+	window.location.href = url;
+}
+//弹出框登录
+function popuplogin(){
+	$(".z_userLiongeBoxBg").height($(document).height()).show();
+	$(".z_userLiongeBoxBg").after('<div id="pop-box" class="jump-box">	<div class="lump-title">    	<var>登录逸香通行证</var>        <em id="lg-close">关闭</em>    </div>    <div class="login-index">    	<div class="login-index-left" id="login-panel">        	<ul class="login-index-ul">            	<li><span>邮箱/手机：</span><input type="text" id="user" name="user" value=""><var></var></li>                <li><span>密码：</span><input type="password" id="pass" name="pass" value=""><var></var></li>            </ul>            <a href="http://user.wine.cn/member/remember" class="login-index-a" hidefocus="">忘记密码？</a>            <p><label class="login-label"><input type="checkbox"><var>两周内自动登录</var></label></p>            <input type="button" class="login-index-but" id="login" name="login" value="立即登录" hidefocus="">        </div>        <div class="login-index-right">            <h2>您还没有逸香通行证？</h2>            <input class="login-index-but" type="button" value="马上注册" hidefocus="">            <a href=http://user.wine.cn/oauth/qq?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="http://www.wine.cn/news/Common/images/poplogin/login-j7.jpg"><em>用QQ账号登录</em></a>            <a href="http://user.wine.cn/oauth/sina?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="http://www.wine.cn/news/Common/images/poplogin/login-j8.jpg"><em>用新浪微博账号登录</em></a>            <a href="http://user.wine.cn/oauth/douban?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="http://www.wine.cn/news/Common/images/poplogin/login-j10.jpg"><em>用豆瓣帐号登录</em></a>            <a href="http://user.wine.cn/oauth/tianya?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="http://www.wine.cn/news/Common/images/poplogin/login-j11.jpg"><em>用天涯帐号登录</em></a>            <a href="http://user.wine.cn/oauth/renren?r=1&continue='+window.location.href+'" class="other-log" hidefocus=""><img src="http://www.wine.cn/news/Common/images/poplogin/login-j9.jpg"><em>用人人帐号登录</em></a>        </div>    </div></div>');	
+	$("#lg-close").click(function(){
+		$("#pop-box").remove();
+		$(".z_userLiongeBoxBg").hide();
+	});
+	$("#user").focus(function(){
+		$(this).next().html('请输入您的邮箱或手机号');
+	});
+	$("#pass").focus(function(){
+		$(this).next().html('请输入您的密码');
+	});
+	$("#user").blur(function(){
+		if(!(/^([a-z0-9+_]|\-|\.)+@(([a-z0-9_]|\-)+\.)+[a-z]{2,6}$/.test(this.value)) && !(/^(13|15|18)\d{9}$/i.test(this.value))){
+			$(this).next().html('请输入正确的手机或邮箱地址').css({"color":"#B10304"});
+		}else{
+			$(this).next().html('')
+		}
+	});
+	$("#pass").blur(function(){
+		$(this).next().html('');
+	});
+	$("#login").click(function(){
+		if($("#user").val() == ''){
+			return false;
+		}
+		if($("pass").val() == ''){
+			return false;
+		}
+		this.value = "登录中...";
+		$.post("/Uc/login",{ username:$("#user").val(), password:$("#pass").val()},function(data){
+			if(data){
+				var userinfo = eval("("+data+")");
+				if(userinfo.online == 1){
+					this.value = '登录成功';
+					setTimeout(function(){window.location.reload();}, 3000);
+				}else{
+					$("#user").next().html('用户名或密码错误').css({"color":"#B10304"});
+					this.value = '立即登录';
+					return false;
+				}
+			}
+		});
+	});
+}
+</script>
+</head>
+
+<body>
+    <!--二维码-->
+<div class="z_twoCode_tip"><a href="javascript:;" class="closebtn" onclick="$(this).parent().hide()"></a></span><img src="http://www.wine.cn/news/Common/images/header20130507/winesino_weixin.jpg" /></div>
+<style type="text/css">
+	.z_twoCode_tip{width:122px; height:142px;left:20px; z-index:999;cursor: pointer; position:fixed; bottom:20px; _position:absolute;}
+	.z_twoCode_tip .closebtn{ position:absolute; width:19px; height:19px; cursor:pointer; top:-9px; right:-9px; background:url(http://www.wine.cn/news/Common/images/header20130507/z_er_closeBtn.png) no-repeat 0 0;}
+	.z_twoCode_tip a.closebtn:hover{ background:url(http://www.wine.cn/news/Common/images/header20130507/z_er_closeBtn_hover.png) no-repeat 0 0;}
+</style>
+<!--[if IE 6]>
+<script type="text/javascript">
+		window.onscroll=function(){
+			$('.z_twoCode_tip').css({'top':$(document).scrollTop()+$(window).height()-162})	
+		}
+</script>
+<![endif]-->
+<!--二维码END-->
+    <div class="z_head_top">
+    	<div class="z_head_topnav clear">
+        	<p class="z_head_topnav_l" id="loginDiv">
+            	<a href="javascript:jumplogin();">登录</a>
+                <a href="javascript:jumpregistration();">注册</a>
+                <a href="javascript:setHomepage();">设为首页</a>
+                
+                <!--登录后
+                <a href="#">ChinaX</a>
+                <a href="#">退出</a>
+                <a href="#">我的逸香通行证</a>
+                <a href="#">设为首页</a>
+                -->
+            </p>
+            <div class="z_head_topnav_r">
+            	<a href="http://weibo.com/eswinesino" title="逸香网新浪官方微博" target="_blank">逸香网新浪官方微博</a> |
+                <a href="javascript:addFavorites();" title="收藏">收藏</a> |
+                <a href="http://www.wine.cn/Rss/feed" target="_blank" title="订阅RSS">订阅RSS</a> |
+                <a href="http://www.eswine.com" target="_blank">逸香教育</a> |
+                <a href="http://en.wine.cn" target="_blank">English</a>
+            </div>
+        </div>
+    </div>
+	<iframe id="checkUc" style="display:none;" onload="init()" src="http://user.wine.cn/api/auth?continue="></iframe>
+    <div class="z_head">
+    	<div class="z_head_search clear">
+        	<h1><a href="http://www.wine.cn"><img src="http://www.wine.cn/news/Common/images/header20130507/logo.png" /></a></h1>
+            <div class="z_head_gg">
+                <!-- 广告位：首页顶部广告位 -->
+                <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "614297";</script>
+                <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+            </div>
+            <div class="z_head_searchbox">
+            	<div class="z_head_searchbox_inp">
+                    <form name="myform" id="myform" method="post" action="http://www.wine.cn/Search/show" target="_blank">
+                	<div class="z_head_searchbox_select">
+                    	<p class="j_pbox">资讯</p>
+                        <ul class="j_ulbox">
+                            <li><a href="#" val="1">资讯</a></li>
+                            <li><a href="#" val="2">产区</a></li>
+                            <li><a href="#" val="3">酒庄</a></li>
+                            <li><a href="#" val="4">展会</a></li>
+                            <li><a href="#" val="5">酒会</a></li>
+                            <li><a href="#" val="6">视频</a></li>
+                            <!--<li><a href="#">商机</a></li>
+                            <li><a href="#">导购</a></li>-->
+                        </ul>
+                    </div>
+                	<input type="text" name="searchkey" class="inp_txt" />
+                    <input type="submit" class="inp_sub" value=" "  />
+                    <input type="hidden" name="type" />
+                    <input type="hidden" name="__hash__" value="b422c0f3a94eaa1c5c77a360a80afede" /></form>
+                </div>
+                <p class="z_head_searchbox_p">
+                    <a href="http://www.wine.cn/Tags/getHotTagsList/tagId/1385" target="_blank">香槟</a>
+                    <a href="http://www.wine.cn/Tags/getHotTagsList/tagId/1312" target="_blank">波尔多</a>
+                    <a href="http://www.wine.cn/Tags/getHotTagsList/tagId/1470" target="_blank">起泡酒</a>
+                    <a href="http://www.wine.cn/Tags/getHotTagsList/tagId/663" target="_blank">精品葡萄酒</a>
+                    <a href="http://www.wine.cn/Tags/getHotTagsList/tagId/661" target="_blank">美乐</a>
+                </p>
+            </div>
+            
+        </div>
+        <ul class="z_headnav">
+            <li>
+            	<h2><img src="http://www.wine.cn/news/Common/images/header20130507/z_headNavTit01.gif" /></h2>
+            	<p>
+                	<a href="http://news.wine.cn" target="_blank" class="colared">新闻</a>
+                    <a href="http://www.wine.cn/liejiu" target="_blank">烈酒</a>
+                    <a href="http://news.wine.cn/showList/id/192" target="_blank">访谈</a>
+                    <a href="http://column.wine.cn" target="_blank">专家</a>
+                    <br />
+                    <a href="http://news.wine.cn/depth" target="_blank">深度</a>
+                    <a href="http://www.wine.cn/Topics" target="_blank">专题</a>
+                    <a href="http://expo.wine.cn/ent" target="_blank">娱乐</a>
+                    <a href="http://expo.wine.cn/marketing" target="_blank">营销</a>
+                </p>
+            </li>
+            <li>
+            	<h2><img src="http://www.wine.cn/news/Common/images/header20130507/z_headNavTit02.gif" /></h2>
+            	<p>
+                	<a href="http://58.wine.cn" target="_blank" class="colared">商机</a>
+                    <br />
+                    <a href="http://job.wine.cn" target="_blank">人才</a>
+                </p>
+            </li>
+            <li>
+            	<h2><img src="http://www.wine.cn/news/Common/images/header20130507/z_headNavTit03.gif" /></h2>
+                <p style="position:relative;">
+                	<a href="http://buy.wine.cn" target="_blank" class="colared">导购</a>
+                    <a href="http://tuan.wine.cn" target="_blank" class="colared">闪购</a><span style="position:absolute;height:9px;width:15px;top:1px;left:64px;background:url(http://www.wine.cn/news/Common/images/header20130507/hot.gif) 0 0 no-repeat;"></span>
+                    <br />
+                    <a href="http://i.wine.cn" target="_blank">酒评</a>
+                    <a href="http://jiuhui.wine.cn" target="_blank">酒会</a>
+                </p>
+            </li>
+            <li>
+            	<h2><img src="http://www.wine.cn/news/Common/images/header20130507/z_headNavTit04.gif" /></h2>
+            	<p>
+                	<a href="http://www.wine.cn/Topics/tasting" target="_blank" class="colared">逸香评分</a>
+                    <br />
+                    <a href="http://wineshow.wine.cn" target="_blank">赛事展览</a>
+                </p>
+            </li>
+            <li class="nbr">
+            	<h2><img src="http://www.wine.cn/news/Common/images/header20130507/z_headNavTit05.gif" /></h2>
+            	<p>
+                	<a href="http://mingzhuang.wine.cn" target="_blank" class="colared">名庄</a>
+                    <a href="http://region.wine.cn" target="_blank">产区</a>
+                    <a href="http://book.wine.cn" target="_blank">读书</a>
+                    <br />
+                    <a href="http://d.wine.cn" target="_blank">词典</a>
+                    <a href="http://bbs.wine.cn" target="_blank">论坛</a>
+                    <a href="http://www.wine.cn/pinzhong" target="_blank">葡萄品种</a>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div class="z_userLiongeBoxBg" style="display:none;" ></div>
+    <a href="javascript:popuplogin()" style="display:none;">弹出登录</a>

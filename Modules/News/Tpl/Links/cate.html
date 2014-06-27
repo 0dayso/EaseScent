@@ -1,0 +1,28 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Links/cate')}">友情链接分类</a></div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('addCate')}">增加新分类</a>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="80">友情链接分类ID</th>
+                    <th>标题</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="cate">
+            <tr>
+				<td>{$vo.id}</td>
+                <td>{$vo.name}</td>
+                <td><a href="{:Url('editCate?id='.$vo['id'])}">编辑</a> <a href="{:Url('delCate?id=' . $vo['id'])}" title="是否删除<b>“{$vo.title}”</b>友情链接分类?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

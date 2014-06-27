@@ -1,0 +1,130 @@
+<include file="Common:cpheader" />
+<script>
+art.dialog({id:'loading',content: '请稍后...',lock: true,cancel:false});
+var wine_id = '{$res.id}';
+var y_str = "<?php echo implode(',',$list) ?>";
+$(function(){
+    get_data();
+});
+function get_data(){
+    $.post("{:Url('operate')}",{'type':'getdata','wine_id':wine_id,'y_str':y_str},function(msg){
+        if(msg.errorCode != 0){
+            art.dialog({content: '发生异常，请<a href="javascript:location=location;">刷新</a>页面',lock: true,cancel:false});
+            return;
+        }
+        if(msg.result){
+            $.each(msg.result,function(i,n){
+                $("#price_"+n.year).val(n.price);
+                if(n.status == '1'){
+                    $("#status_"+n.year).html('<a href="javascript:oc(\''+n.year+'\',\'-1\');" style="color:green;" title="点击关闭" >开启</a>');
+                }else{
+                    $("#status_"+n.year).html('<a href="javascript:oc(\''+n.year+'\',\'1\');" style="color:red;" title="点击开启">关闭</a>');
+                }
+                if(n.eval_res){
+                    $.each(n.eval_res,function(ii,nn){
+                        $("#score_"+n.year+"_"+nn.evalparty_id).val(nn.score);
+                    });
+                }
+            });
+        }
+        art.dialog({id:'loading'}).close();
+    },'json');
+}
+function oc(year,status){
+    //art.dialog({id:'loading',content: '请稍后...',lock: true,cancel:false});
+    $.post("{:Url('operate')}",{'type':'updstatus','wine_id':wine_id,'year':year,'status':status},function(msg){
+        if(msg.errorCode != 0){
+            art.dialog({content: '发生异常，请<a href="javascript:location=location;">刷新</a>页面',lock: true,cancel:false});
+            return;
+        }
+        get_data();
+    },'json');
+}
+function price_onfocus(this1){
+    this1.style.background="yellow";
+}
+function price_onblur(this1,year){
+    //art.dialog({id:'loading',content: '请稍后...',lock: true,cancel:false});
+    var price = $(this1).val();
+    $.post("{:Url('operate')}",{'type':'updprice','wine_id':wine_id,'year':year,'price':price},function(msg){
+        if(msg.errorCode != 0){
+            art.dialog({content: '发生异常，请<a href="javascript:location=location;">刷新</a>页面',lock: true,cancel:false});
+            return;
+        }
+        get_data();
+        this1.style.background="";
+    },'json');
+}
+function score_onfocus(this1){
+    this1.style.background="yellow";
+}
+function score_onblur(this1,year,evalparty_id){
+    //art.dialog({id:'loading',content: '请稍后...',lock: true,cancel:false});
+    var score = $(this1).val();
+    $.post("{:Url('operate')}",{'type':'updscore','wine_id':wine_id,'year':year,'evalparty_id':evalparty_id,'score':score},function(msg){
+        if(msg.errorCode != 0){
+            art.dialog({content: '发生异常，请<a href="javascript:location=location;">刷新</a>页面',lock: true,cancel:false});
+            return;
+        }
+        get_data();
+        this1.style.background="";
+    },'json');
+}
+</script>
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> >
+        <a href="{:Url('Jiuku/Wine/index')}">酒款列表</a> >
+        年份管理
+    </div>
+    <div class="list-menu">
+        <h4>{$res.fname} {$res.cname}的年份<input id="wine_id" type="hidden" value="{$res.id}" /></h4>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody><tr><td>
+                年份区间：
+                <volist name="plist" id="vo">
+                <if condition="$vo['page'] eq $page">
+                <strong style="margin-right:10px;" >{$vo.title}</strong>
+                <else/>
+                <a style="margin-right:10px;" href="{:Url('index')}&wine_id={$res.id}&page={$vo.page}">{$vo.title}</a>
+                </if>
+                </volist>
+            </td></tr></tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="40">年份</th>
+                    <th width="80">参考价格</th>
+                    <th>评分</th>
+                    <th width="60">状态</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist name="list" id="year">
+                <tr>
+                    <td>{$year}</td>
+                    <td><input id="price_{$year}" type="text" size="5" onfocus="price_onfocus(this)" onblur="price_onblur(this,{$year})"  /></td>
+                    <td>
+                        <volist name="evalparty_list" id="ep_vo">
+                            <span title="{$ep_vo.fname} / {$ep_vo.cname}">{$ep_vo.sname}</span>:
+                            <input id="score_{$year}_{$ep_vo.id}" type="text" size="5" onfocus="score_onfocus(this)" onblur="score_onblur(this,{$year},{$ep_vo.id})" />&nbsp;&nbsp;
+                        </volist>
+                    </td>
+                    <td id="status_{$year}"></td>
+                    <td><a href="{:Url('edit?id='. $vo['id'])}">编辑</a></td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter" />

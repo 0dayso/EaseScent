@@ -1,0 +1,213 @@
+<include file="Common:cpheader" />
+<script type="text/javascript">
+function change_type()
+{
+    var type = $("#type  option:selected").val();
+    window.location.href='index.php?app=AppReport&m=Overview&a=index&type='+type;
+}
+</script>
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('AppReport/Index/index')}">终端报表</a> >
+        概况
+    </div>
+    <div class="div-box-default">
+        <select onchange="change_type()" id="type">
+            <volist name="_applist" id="vo">
+            <option value="{$vo.id}" <if condition="$vo.id eq $type"> selected="selected" </if> >{$vo.name}</option>
+            </volist>
+        </select>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tbody>
+                <tr>
+                    <td>
+                        <span style="margin-right:100px;">今日数据：</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>     
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>新增用户</th>
+                    <th>启动次数</th>
+                    <th>活跃用户</th>
+                    <th>平均单次使用时长</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>昨日</td>
+                    <td>{$list2.new_users}</td>
+                    <td>{$list2.starts}</td>
+                    <td>{$list2.active_users}</td>
+                    <td>{$list2.use_long}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>近7天</td>
+                    <td>{$list3.new_users}</td>
+                    <td>{$list3.starts}</td>
+                    <td>{$list3.active_users}</td>
+                    <td>{$list3.use_long}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>近30天</td>
+                    <td>{$list4.new_users}</td>
+                    <td>{$list4.starts}</td>
+                    <td>{$list4.active_users}</td>
+                    <td>{$list4.use_long}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>累计</td>
+                    <td>{$list5.new_users}</td>
+                    <td>{$list5.starts}</td>
+                    <td>{$list5.active_users}</td>
+                    <td>{$list5.use_long}</td>
+                </tr>
+            </tbody>       
+        </table>
+    </div>
+    <div style="width:50%;float:left;">
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tbody>
+                <tr>
+                    <td>
+                        <span style="margin-right:100px;">周启动频率分布：</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>  
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>周启动频率</th>
+                    <th>用户量</th>
+                    <th>占比</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>只启动1次</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>2次</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>3次</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>4次</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>5次</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>6次及以上</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>    
+        </table>
+    </div> 
+    </div>
+
+    <div style="width:50%;float:left;">
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tbody>
+                <tr>
+                    <td>
+                        <span style="margin-right:100px;">用户活跃度：</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>用户量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>昨日活跃用户</td>
+                    <td>{$list2.active_users}</td>
+                </tr>
+                <tr>
+                    <td>周活跃用户</td>
+                    <td>{$list3.active_users}</td>
+                </tr>
+                <tr>
+                    <td>月活跃用户</td>
+                    <td>{$list4.active_users}</td>
+                </tr>
+                <tr>
+                    <td>日均活跃用户</td>
+                    <td>{$everyday_active_users}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>     
+    </div>
+
+    <div style="width:50%;float:left;">
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+            <tbody>
+                <tr>
+                    <td>
+                        <span style="margin-right:100px;">启动次数：</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <tbody>
+                <tr>
+                    <td>累计启动次数</td>
+                    <td>{$list5.starts}</td>
+                </tr>
+                <tr>
+                    <td>日均启动次数</td>
+                    <td>{$everyday_starts}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>     
+    </div>
+</div>
+<include file="Common:cpfooter" />

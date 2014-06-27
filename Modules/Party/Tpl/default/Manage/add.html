@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="__PUBLIC__/party/common/js/jquery-1.7.1.js"></script>
+<script language="javascript" type="text/javascript" src="__PUBLIC__/party/common/js/My97DatePicker/WdatePicker.js"></script>
+<script  src="__PUBLIC__/party/common/js/kindeditor/kindeditor.js"></script>
+<script  src="__PUBLIC__/party/common/js/kindeditor/lang/zh_CN.js"></script>
+
+<style type="text/css">
+body{
+	margin: 10px 0 0 20px;
+}
+
+#title{
+  width: 700px;
+}
+#party_start{
+  width: 250px;
+}
+#party_end{
+  width: 250px;
+}
+textarea{
+  width: 680px;
+  height: 300px;
+  margin-left: 50px;
+
+}
+</style>	
+<script type="text/javascript">
+$(function(){
+   KindEditor.ready(function(K) {
+                window.editor = K.create('#editor_id');
+        });
+  $('#privoce').change(function(){
+      var $data=$("#privoce").val();
+     $.post("index.php?app=Party&m=Manage&a=getcity", {id:$data},function(msg){  
+        var num=msg.length;
+         for(var i = 0;i < num; i++){
+          var str =str+'<option value='+msg[i].AreaID+'>'+msg[i].AreaName+'</option>';
+         }
+      $("#city").html(str); 
+     },"JSON"); 
+  });
+  
+  $('#city').change(function(){
+      var $data=$("#city").val();
+     $.post("index.php?app=Party&m=Manage&a=getcity", {id:$data},function(msg){  
+        var num=msg.length;
+         for(var i = 0;i < num; i++){
+          var str =str+'<option value='+msg[i].AreaID+'>'+msg[i].AreaName+'</option>';
+         }
+      $("#county").html(str); 
+     },"JSON"); 
+  });
+
+
+
+
+
+});
+  
+
+
+</script>
+</head>
+<body>
+<div>
+<form action="index.php?app=Party&m=Manage&a=insert" method="post">
+  <label>酒会主题：</label><input type='text' name="title" id="title" /><br/>
+  <label>开始时间：</label><input type='text' name="party_start" id="party_start" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/><span>点击文本框选择日期</span><br/>
+  <label>结束时间：</label><input type='text' name="party_end" id="party_end"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/><span>点击文本框选择日期</span><br/>
+  地区选择： <select id="privoce" name="privoce"><option>请选择</option><volist name='msg' id='data'><option value="{$data.AreaID}">{$data.AreaName}</option></volist></select>
+  <select id="city" name="city"><option>请选择</option></select><select id="county" name="county"><option>请选择</option></select><br/>
+  是否自费：<input type='radio' name='ismoney' value='2' />自费  <input type='radio' name="ismoney" value='1' />免费<br/>
+  联系人：<input type="text" name="contactperson"/> <br/>   
+  联系电话：<input type="text" name="contactphone"><br/>
+  酒会市场价：<input type="test" name="markprice"/><br/>
+  酒会优惠价：<input type="test" name="lowerprice"/><br/>
+  是否推荐：<input type="radio" name="isbar" value="1"/>推荐<input type="radio" name="isbar" value="2"/>不推荐<br/>  是否显示：<input type="radio" name="is_show" value="1"/>显示<input type="radio" name="is_show" value="2"/>不显示<br/>
+  酒会人数：<input type="text" name="number"/><br/>
+  详细地址：<input type="text" name="address_info"><br/>
+  <!-- 添加图片:<input type="hidden" id="pictype" name="pictype" value=""/>
+  <form id="frame" method="post" action="index.php?app=Party&m=Manage&a=upload" enctype="multipart/form-data"> 
+            <input type="file" name="file" id='file'>
+            <input type="button" class="up" value="uploadfile">
+            </form>  -->
+            <script>
+            //   $(document).ready(function(){
+            //   $(".file").change(function(){
+            //      $("#frame").ajaxSubmit(function(data){
+            //           $("#pictype").val(data);
+                      
+            //     });
+            //   })
+              
+            // });
+           </script>
+  酒会介绍：<br/><textarea name="introduce" id="editor_id"></textarea><br/>
+  <input type="submit" id="btn" value="添加"/>
+  </form>
+</div>	
+<div class="c-img-up" id="dialog_img">
+<!--uploadpic test-->
+  <div class="main">
+<!-- 修改头像 --><a href="javascript:;;" class="c-img-up-hide" id="dialog_img_close">关闭</a>
+<form action="index.php?app=Party&m=Manage&a=uploadImg" method="post" id="pic" class="update-pic cf" enctype="multipart/form-data">
+  <div class="upload-area">
+    <input type="file" id="user-pic">
+    <div class="file-tips">支持JPG,PNG,GIF，图片小于1MB，尺寸不小于100*100,真实高清图片更受欢迎！</div>
+    <div class="preview hidden" id="preview-hidden"></div>
+  </div>
+  <div class="preview-area">
+    <input type="hidden" id="x" name="x" />
+    <input type="hidden" id="y" name="y" />
+    <input type="hidden" id="w" name="w" />
+    <input type="hidden" id="h" name="h" />
+    <input type="hidden" id='img_src' name='src'/>
+    <div class="tcrop">图片预览</div>
+    <div class="crop crop100"><img id="crop-preview-100" src="" alt=""></div>
+    
+    <a class="uppic-btn save-pic" href="javascript:;">保存</a>
+    <a class="uppic-btn reupload-img" href="javascript:$('#user-pic').uploadify('cancel','*');">重新上传</a>
+  </div>
+</form>
+<!-- /修改头像 -->
+
+<!-- 展示头像 -->
+<div style="margin: 20px 0 10px;">
+  <h2>图片展示：</h2>
+  
+</div>
+<!-- /展示头像 -->
+</div>
+
+<script type="text/javascript">
+  $(function(){
+     $("#dialog_img").hide();
+    $(".button").click(function(){
+      $("#dialog_img").show();
+    });
+    //上传头像(uploadify插件)
+    $("#user-pic").uploadify({
+      'queueSizeLimit' : 1,
+      'removeTimeout' : 0.5,
+      'preventCaching' : true,
+      'multi'    : false,
+      'swf'       : "__PUBLIC__/party/partyup/js/uploadify-v3.1/uploadify.swf",
+      'uploader'    : 'index.php?app=Party&m=Manage&a=uploadImg',
+      //'uploader'    : "/index.php/Create/uploadpicture",
+      'buttonText'  : '<i class="userup-icon"></i>上传图片',
+      'width'     : '200',
+      'height'    : '200',
+      'fileTypeExts'  : '*.jpg; *.png; *.gif;',
+      'onUploadSuccess' : function(file, data, response){
+        var data = $.parseJSON(data);
+        if(data['status'] == 0){
+          $.ThinkBox.error(data['info'],{'delayClose':3000});
+          return;
+        }
+        var preview = $('.upload-area').children('#preview-hidden');
+        preview.show().removeClass('hidden');
+        //两个预览窗口赋值
+        $('.crop').children('img').attr('src',data['data']+'?random='+Math.random());
+        //隐藏表单赋值
+        $('#img_src').val(data['data']);
+        //绑定需要裁剪的图片
+        var img = $('<img />');
+        preview.append(img);
+        preview.children('img').attr('src',data['data']+'?random='+Math.random());
+        var crop_img = preview.children('img');
+        crop_img.attr('id',"cropbox").show();
+        var img = new Image();
+        img.src = data['data']+'?random='+Math.random();
+        //根据图片大小在画布里居中
+        img.onload = function(){
+          var img_height = 0;
+          var img_width = 0;
+          var real_height = img.height;
+          var real_width = img.width;
+          if(real_height > real_width && real_height > 200){
+            var persent = real_height / 200;
+            real_height = 200;
+            real_width = real_width / persent;
+          }else if(real_width > real_height && real_width > 200){
+            var persent = real_width / 200;
+            real_width = 200;
+            real_height = real_height / persent;
+          }
+          if(real_height < 200){
+            img_height = (200 - real_height)/2; 
+          }
+          if(real_width < 200){
+            img_width = (200 - real_width)/2;
+          }
+          preview.css({width:(200-img_width)+'px',height:(200-img_height)+'px'});
+          preview.css({paddingTop:img_height+'px',paddingLeft:img_width+'px'});     
+        }
+        //裁剪插件
+        $('#cropbox').Jcrop({
+                bgColor:'#333',   //选区背景色
+                bgFade:true,      //选区背景渐显
+                fadeTime:1000,    //背景渐显时间
+                allowSelect:false, //是否可以选区，
+                allowResize:true, //是否可以调整选区大小
+                aspectRatio: 1,     //约束比例
+                minSize : [100,100],//可选最小大小
+                boxWidth : 200,   //画布宽度
+                boxHeight : 200,  //画布高度
+                onChange: showPreview,//改变时重置预览图
+                onSelect: showPreview,//选择时重置预览图
+                setSelect:[ 0, 0, 100, 100],//初始化时位置
+                onSelect: function (c){ //选择时动态赋值，该值是最终传给程序的参数！
+                  $('#x').val(c.x);//需裁剪的左上角X轴坐标
+                  $('#y').val(c.y);//需裁剪的左上角Y轴坐标
+                  $('#w').val(c.w);//需裁剪的宽度
+                  $('#h').val(c.h);//需裁剪的高度
+              }
+            });
+        //提交裁剪好的图片
+        $('.save-pic').click(function(){
+          if($('#preview-hidden').html() == ''){
+            $.ThinkBox.error('请先上传图片！');
+          }else{
+            //由于GD库裁剪gif图片很慢，所以长时间显示弹出框
+            $.ThinkBox.success('图片处理中，请稍候……',{'delayClose':30000});
+            $('#pic').submit();
+          }
+        });
+        //重新上传,清空裁剪参数
+        var i = 0;
+        $('.reupload-img').click(function(){
+          $('#preview-hidden').find('*').remove();
+          $('#preview-hidden').hide().addClass('hidden').css({'padding-top':0,'padding-left':0});
+        });
+         }
+    });
+    //预览图
+    function showPreview(coords){
+      var img_width = $('#cropbox').width();
+      var img_height = $('#cropbox').height();
+        //根据包裹的容器宽高,设置被除数
+        var rx = 200 / coords.w;
+        var ry = 200 / coords.h; 
+        $('#crop-preview-100').css({
+          width: Math.round(rx * img_width) + 'px',
+          height: Math.round(ry * img_height) + 'px',
+          marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+          marginTop: '-' + Math.round(ry * coords.y) + 'px'
+        });
+        rx = 60 / coords.w;
+        ry = 60 / coords.h;
+        $('#crop-preview-60').css({
+          width: Math.round(rx * img_width) + 'px',
+          height: Math.round(ry * img_height) + 'px',
+          marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+          marginTop: '-' + Math.round(ry * coords.y) + 'px'
+        });
+    }
+  })
+  
+</script>
+</div>
+</body>
+</html>

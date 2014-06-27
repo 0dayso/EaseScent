@@ -1,0 +1,94 @@
+<include file="Common:header" />
+<include file="Common:toptb" />
+<include file="Common:indexHeader" />
+<div class="z_searchList_main">
+   <include file="Search:searchOption" />
+   <!--gooodsList-->
+   <div class="z_searchList_main2">
+        <div class="btodfdfdf bt0">
+            <div class="z_searchList_main2_tit"><img src="__PUBLIC__/Expo/img/z_searchList_main2_tit.gif" /></div>
+            <div class="clear">
+                <div class="z_searchList_main2_l">
+                    <volist name="list" id="vo">
+                        <div class="z_searchList_main2_l_list clear">
+                            <div class="fl">
+                                    <p class="pic imgMid">
+                                      <a  target="_blank"   href="{:U('Goods/goodsShow?goods_id='.$vo['goods_id'].'&agent_id='.$vo['agent_id'])}">
+                                          <php> $ex= explode(".",$vo['pic_url']); $img = $ex[0].'_400_thumb.'.$ex[1]; </php>
+                                          <img src="{:C('UPLOAD_DOMAIN')}/Expo/Wine/images/{$img}" style="height:200px;" />
+                                      </a>
+                                    </p>
+                            </div>
+                            <div class="nr">
+                                <div class="clear">
+                                    <div class="nr_l">
+                                        <p>
+                                            <span>
+                                              <a target="_blank"  style="color:#000;"  href="{:U('Goods/goodsShow?goods_id='.$vo['goods_id'].'&agent_id='.$vo['agent_id'])}">
+                                               {:str_replace(trim($_REQUEST['keyword']),"<font color='red'>".trim($_REQUEST['keyword'])."</font>",$vo['fname'].$vo['cname'])}
+                                              </a>
+                                            </span>
+                                        </p>
+                                        <p>酒款类型：<span>{$vo.typename}</span></p>
+                                        <if condition="$vo['variety']">
+                                            <p>酒款品种：<span>{:str_ireplace(",","%   &nbsp;  ",$vo['variety'])}%</span></p>
+                                        </if>
+                                        <if condition="$vo['price_type'] eq 1">
+                                            <p> 代理价格： <span>面 议</span> </p>
+                                        <else/>
+                                            <if condition="$vo['currency'] eq 0 && $vo['goods_price'] gt 0">
+                                                <p>代理价格：<span>{$vo['goods_price']} RMB</span></p>
+                                            <elseif condition="$vo['currency'] eq 1 && $vo['goods_price'] gt 0" />
+                                                <p>代理价格：<span>{$vo['goods_price']} $</span> </p>
+                                            </if>
+                                        </if>
+
+                                    </div>
+                                    <div class="nr_r">
+                                        <p>公司名称：
+                                            <span>
+                                               <a href="{:U('Inland/index?agent_id='.$vo['agent_id'])}">{$vo.qy_name}</a>
+                                               <if condition="$vo['agent_grade'] gt 0">
+                                                  <a href="{:U('Index/user_grade')}" ><img  src="__PUBLIC__/Expo/img/agent_grade_{$vo['agent_grade']}.gif"></a>
+                                               </if>
+                                           </span>
+                                       </p>
+                                    <!--     <p>国家:<span>{$vo.qy_country}</span></p> -->
+                                        <p>电话：<span>{$vo.qy_moblie}</span></p>
+                                        <p>地址：<span>{$vo.qy_province} {$vo.qy_city} {$vo.qy_address}</span></p>
+                                        <p class="mt16">联系供货商：
+                                            <span class="wp2">
+                                                <if condition="$vo['qy_skype'] neq ''">
+                                                 <a href="callto://{$vo['qy_skype']}"><img src="__PUBLIC__/Expo/img/z_ico_skype20x20.png" border="0"></a>
+                                                </if>
+                                                <if condition="$vo['qy_qq'] neq ''">
+                                                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$vo['qy_qq']}&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:272761906:52" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+                                                </if>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <!--判断酒款是否有代理商-->
+
+                                <div class="nr_bot">
+                                    <a href="{:U('Inland/product?agent_id='.$vo['agent_id'])}">
+                                        查看 {$vo.qy_name}供应商 提供的其他部产品 >>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </volist>
+
+                    <p class="pageNum">
+                        {$page}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+   </div>
+</div>
+<script type="text/javascript" src="http://skype.tom.com/script/skypeCheck40.js"></script>
+<include file="Common:footer" />
+

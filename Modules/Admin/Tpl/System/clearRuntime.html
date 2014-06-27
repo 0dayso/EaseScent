@@ -1,0 +1,40 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="">系统管理</a> > 清空缓存</div>
+    <div class="form">
+		<form name="myform" action="{:Url('clearRuntime')}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">清空缓存</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">清空指定项目缓存</th>
+                        <td>
+						  <input type="checkbox" id="checkall">全选 <br/>
+						<volist id="vo" name="app">
+						  <input type="checkbox" name="app[]" value="{$vo}"> {$vo} <br/>
+						</volist>
+						</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<script language="javascript">
+$(document).ready(function(){
+    $("#checkall").click(function(){
+        var opt = $(this).attr('checked');
+        if(opt == 'checked') {
+            $("input[type=checkbox]").attr('checked', 'checked');
+        } else {
+            $("input[type=checkbox]").removeAttr('checked');
+        }
+    });
+});
+</script>
+<include file="Common:cpfooter" />

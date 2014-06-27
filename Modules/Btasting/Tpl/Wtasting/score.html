@@ -1,0 +1,135 @@
+<include file="Common:cpheader" />
+<style>
+    #table th,#table td{
+        border:0px;
+        font-weight: normal;
+        height: 30px;
+        text-align:center;
+    }
+    #table .title{
+        background:#76933c;color:#FFFFFF; height:40px;
+    }
+    #table .border td{
+        border:1px solid #000;
+    }
+    #table .tr-r-border td{
+        border:0px;
+        border-right:1px solid #000;
+        border-bottom:1px solid #000;
+    }
+    #table .body1{ background:#ebf1de}
+    #table .body2{ background:#d8e4bc}
+    #table #exps td{
+    }
+    .change-score{
+        width:50px;
+        display:block;
+        text-align:center;
+    }
+</style>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Btasting/Wtasting/index')}">品酒会管理</a> > 查看成绩</div>
+    <div class="list">
+        <table cellspacing="0" class="border">
+            <tr>
+                <td width="100">
+                    <table width="100%" cellspacing="0" class="tr-r-border">
+                        <tr class="title">
+                            <td colspan="2">编号</td>
+                        </tr>
+                        <volist id="gps" name="groups">
+                        <volist id="wine" name="gps.wines">
+                        <tr>
+                            <if condition="$i eq 1">
+                            <td rowspan="{$gps.count}">{$gps.name}</td>
+                            </if>
+                            <td>{$gps.item}{$wine.item}</td>
+                        </tr>
+                        </volist>
+                        </volist>
+                    </table>
+                </td>
+                <td>
+                    <table id="exps" cellspacing="0" class="tr-r-border">
+                        <tr class="title">
+                            <volist id="exp" name="experts">
+                            <td>{$exp.name}</td>
+                            </volist>
+                        </tr>
+                        <volist id="gps" name="groups">
+                        <volist id="wine" name="gps.wines">
+                        <tr class="body1">
+                            <volist id="scs" name="wine.sc">
+                            <td><span expert="{$key}" class="change-score" score-data="{$scs}" wine-id="{$wine.id}" wp-id="{$wine.wid}">{$scs}</span></td>
+                            </volist>
+                        </tr>
+                        </volist>
+                        </volist>
+                    </table>
+                </td>
+                <td width="230">
+                    <table width="100%" cellspacing="0" class="tr-r-border">
+                        <tr class="title">
+                            <td>结果</td>
+                            <td>分组排名</td>
+                            <td>总排名</td>
+                            <td>查看酒名</td>
+                        </tr>
+                        <volist id="gps" name="groups">
+                        <volist id="wine" name="gps.wines">
+                        <tr class="body1">
+                            <td>{$wine.score}</td>
+                            <td>{$wine.gorder}</td>
+                            <td>{$wine.order}</td>
+                            <td><a class="wine-name" href="###" title="{$wine.name}">查看酒名</a></td>
+                        </tr>
+                        </volist>
+                        </volist>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    $(".wine-name").click(function(){
+        DialogBox('查看酒款名称', $(this).attr('title'));
+    });
+    $(".change-score").click(function(){
+        var obj = $(this);
+        var objBox = $("<input type='text' value='' size='3'>");
+        var wpid = obj.attr('wp-id'),
+            wineid = obj.attr('wine-id'),
+            score = obj.attr('score-data'),
+            expert = obj.attr('expert');
+        obj.html('');
+        objBox.insertAfter($(this));
+        objBox.val(score);
+        objBox.focus();
+        objBox.bind('blur', function(){
+            var newScore = objBox.val();
+            $.post("{:Url('Btasting/Wtasting/score?op=chgscore')}", {
+                wpid:wpid,wineid:wineid,score:newScore, expert:expert
+            }, function(rest){
+                if(rest == 1) {
+                    window.location.reload();
+                } else {
+                    DialogBox("提示信息", "网络异常，分数修改不成功");
+                }
+            }, 'json');
+        });
+    });
+
+    var DialogBox = function(title, content){
+        art.dialog({
+            title: title,
+            content: content,
+            lock: true,
+            ok: function () {
+                return true
+            },
+            okValue: '知道了'
+        });
+    }
+</script>
+<include file="Common:cpfooter"/>

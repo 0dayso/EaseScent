@@ -1,0 +1,339 @@
+<include file="Common:cpheader" />
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<link href="{:C('DOMAIN.PUBLIC')}/editor/themes/default/default.css" rel="stylesheet">
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/kindeditor-min.js"></script>
+<script language="javascript" src="{:C('DOMAIN.PUBLIC')}/editor/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+    var imgbtn = K.uploadbutton({
+        button : K('#imgbtn')[0],
+        fieldName : 'imgFile',
+        url : "{:Url('store_sales_wine_upload')}&type=Wine/images",
+        afterUpload : function(data) {
+            if (data.error === 0) {
+                var html ='<div class="selected_box"><input name="img_filename[]" type="hidden" value="'+data.filename+'" /><img src="'+data.url+'" /><div><p><var>描述</var><input name="img_description[]" type="text" /></p><p><var>ALT</var><input name="img_alt[]" type="text" /></p><p><var>排序</var><input name="img_queue[]" type="text" /></p></div><span class="del_selected" onclick="imgbox_del(this);"></span></div>';
+                $("#img_list_box").append(html);
+            }
+        }
+    });
+    $(":input[name='imgFile']").css('width','72px');
+    imgbtn.fileBox.change(function(e) {
+        imgbtn.submit();
+    });
+});
+function imgbox_del(this1,id){
+    if(id){
+        var idstr = $(":input[name='del_img_idstr']").val();
+        if(idstr == ''){
+            $(":input[name='del_img_idstr']").val(id);
+        }else{
+            $(":input[name='del_img_idstr']").val(idstr+','+id);
+        }
+    }
+    $(this1).parent().remove();
+}
+</script>
+<script language="javascript">
+function btn_before(){
+    if($("input[name='wine_id']").val() == 0){
+        art.dialog({content: '请选择要关联的标准酒款！',}).time(3000);    return;
+    }
+    if($("select[name='caname_id']").length == 0){
+        art.dialog({content: '请添加要关联的酒款中文别名并进行关联！',}).time(3000);    return;
+    }
+    if($("select[name='caname_id']").val() == 0){
+        art.dialog({content: '请选择要关联的酒款中文别名！',}).time(3000);    return;
+    }
+    console.log($("input[name='agents_id']").val());
+    if($("input[name='agents_id']").val() == ''){
+        art.dialog({content: '请选择所属的代理商！',}).time(3000);    return;
+    }
+    if($("input[name='store_sales_id']").length == 0){
+        art.dialog({content: '请为代理商添加实体销售并选择！',}).time(3000);    return;
+    }
+    if($("input[name='store_sales_id']").val() == ''){
+        art.dialog({content: '请选择所属的实体销售！',}).time(3000);    return;
+    }
+    if($("input[name='fname']").val() == 0){
+        art.dialog({content: '请填写酒款外文名！',}).time(3000);    return;
+    }
+    if($("input[name='cname']").val() == 0){
+        art.dialog({content: '请填写酒款中文名！',}).time(3000);    return;
+    }
+    if($("select[name='year']").val() == 0){
+        art.dialog({content: '请选择年份！',}).time(3000);    return;
+    }
+    if(!(/^(-|\+)?\d+$/.test($("input[name='price']").val())) && !(/^(-|\+)?\d+\.\d*$/.test($("input[name='price']").val()))){
+        art.dialog({content: '价格填写错误！',}).time(3000);    return;
+    }
+    return 1;
+}
+function pending_list_btn(){
+    btn_before()
+}
+function btn(){
+    if(btn_before() === 1){
+        $("form[name='storeSalesMyForm']").submit();
+    }
+}
+$(function(){
+    $(".wine_radio_input").autocomplete({
+        minLength: 1,
+        source: function(request,response){
+            $.post('?app=Jiuku&m=OAC_getAjaxData&a=searchWine',{'kw':request.term,'type':1},function(msg){
+                var msg = eval("("+msg+")");
+                if(msg.errorCode != 0){msg.result ={};}
+                response($.map(msg.result,function(item){
+                    return{id:item.id,value:item.fname+' ╱ '+item.cname}
+                }));
+            });
+        },
+        select: function(event,ui){
+            $(this).attr("disabled",true).val( ui.item.value );
+            $(this).parent().children("input[type='hidden']").val(ui.item.id);
+            $(this).parent().children("img").show();
+            get_wine_data(ui.item.id);
+            return;
+        }
+    });
+});
+function clear_wine_radio(this1){
+    $(this1).hide();
+    $(this1).parent().children("input[type='text']").attr("disabled",false).val('');
+    $(this1).parent().children("input[type='hidden']").val('0');
+    $("#wine_caname_tr").remove();
+    $("#wine_msg_tr").remove();
+}
+function get_wine_data(id){
+    $.post('?app=Jiuku&m=OutAcAgents&a=ajaxGetWineData',{'id':id},function(msg){
+        var msg = eval("("+msg+")");
+        if(msg.errorCode == 0 && msg.result != null){
+            var wine_caname_tr = '<tr id="wine_caname_tr"><th>选择酒款中文别名</th><td>';
+            if(msg.result.caname_res != null){
+                wine_caname_tr += '<select name="caname_id"><option value="0">请选择</option>';
+                $.each(msg.result.caname_res,function(i,n){
+                    wine_caname_tr += '<option value="'+n.id+'">'+n.cname+'</option>';
+                })
+                wine_caname_tr += '</select>';
+            }
+            wine_caname_tr += '<span style="margin-left:15px;"><input type="text" /><input type="button" value="添加" style="padding:4px;" onclick="add_wine_caname();" /></span>';
+            wine_caname_tr += '<br /><span style="color:red;">*1.中文别名为酒款背标的中文名 2.酒款中文别名应不包含年份</span>';
+            wine_caname_tr += '</td></tr>';
+
+            var wine_msg_tr = '<tr id="wine_msg_tr"><th>酒款属性</th><td>';
+            if(msg.result.country_res != null) wine_msg_tr += '<p>所属国家：'+msg.result.country_res.fname+'&nbsp;'+msg.result.country_res.cname+'</p>';
+            if(msg.result.region_res != null){
+                wine_msg_tr += '<p>所属产区：'
+                $.each(msg.result.region_res,function(i,n){
+                    $.each(n,function(si,sn){
+                        wine_msg_tr += sn.fname+'&nbsp;'+sn.cname+'&nbsp;╱&nbsp;';
+                    });
+                });
+                wine_msg_tr += '</p>'
+            }
+            wine_msg_tr += '</td></tr>';
+            $("#search_wine_tr").after(wine_caname_tr+wine_msg_tr);
+        }
+    });
+}
+function add_wine_caname(){
+    var id = $("input[name='wine_id']").val();
+    var name = $("#wine_caname_tr td input[type='text']").val();
+    $.post('?app=Jiuku&m=OutAcAgents&a=ajaxAddWineCaname',{'id':id,'name':name},function(msg){
+        var msg = eval("("+msg+")");
+        if(msg.errorCode != 0){
+            art.dialog({
+                content: msg.errorStr,
+            });
+        }else{
+            $("#wine_caname_tr td input[type='text']").val('');
+            if($('#wine_caname_tr td select').length == 0){
+                $("#wine_caname_tr td").prepend('<select name="caname_id"><option value="0">请选择</option><option value="'+msg.result+'">'+name+'</option></select>');
+            }else{
+                $('<option value="'+msg.result+'">'+name+'</option>').appendTo($('#wine_caname_tr td select'));
+            }
+            $("#wine_caname_tr td select").val(msg.result);
+            art.dialog({
+                content: '添加成功,并默认选择',
+            });
+        }
+    });
+}
+function store_sales_select(this1,id){
+    $(this1).parent().children('span').addClass('btn-off').removeClass('btn-on');
+    $(this1).addClass('btn-on').removeClass('btn-off');
+    $("input[name='store_sales_id']").val(id);
+}
+function agents_select(this1,id){
+    $("#store_sales_tr").remove();
+    $(this1).parent().children('span').addClass('btn-off').removeClass('btn-on');
+    $(this1).addClass('btn-on').removeClass('btn-off');
+    $("input[name='agents_id']").val(id);
+    $.post('?app=Jiuku&m=OutAcAgents&a=ajaxGetstoreSales',{'id':id},function(msg){
+        var msg = eval("("+msg+")");
+        if(msg.errorCode != 0){
+            art.dialog({
+                content: msg.errorStr,
+            });
+        }else{
+            var html = '<tr id="store_sales_tr"><th>选择所属实体销售</th><td><input name="store_sales_id" type="hidden" />';
+            $.each(msg.result,function(i,n){
+                html += '<span class="btn-off" onclick="store_sales_select(this,'+n.id+');">'+n.name+'</span>';
+            })
+            html += '</td></tr>';
+            $("#agents_tr").after(html);
+        }
+    });
+}
+</script>
+<style>
+.btn-off{
+    display:inline-block;
+    background:#fff;
+    border:1px solid #888;
+    padding:2px 6px;
+    margin:2px;
+    cursor:pointer;
+}
+.btn-off:hover{
+    color:red;
+}
+.btn-on{
+    display:inline-block;
+    background:#fff;
+    border:1px solid #3CF;
+    padding:2px 6px;
+    margin:2px;
+    cursor:pointer;
+    color:red;
+}
+</style>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">代理商列表</a> > <a href="{:Url('store_sales_wine_list')}">实体销售酒款列表</a> > 修改实体销售酒款</div>
+    <div class="form">
+    <form name="storeSalesMyForm" action="{:Url('store_sales_wine_edit')}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_backpage" value="{$_backpage}">
+        <input type="hidden" name="id" value="{$res.id}">
+        <input type="hidden" name="old_caname_id" value="{$res.wine_caname_id}">
+        <ul class="tabBut cu-li">
+            <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">修改实体销售酒款</li>
+        </ul>
+        <div class="tab-nav" id="tab_1">
+            <table width="100%" cellspacing="0" class="table-form" id="storeSales_table">
+                <tr><td colspan="2"><strong style="color:blue;margin-left:15px;">标准酒款及中文别名信息</strong></td></tr>
+                <if condition="$res['wine_res']">
+                <tr id="search_wine_tr">
+                    <th width="150">搜索酒款</th>
+                    <td><input class="measure-input wine_radio_input" type="text" size="100" value="{$res.wine_res.fname} ╱ {$res.wine_res.cname}" disabled="disabled" /><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-22px;cursor:pointer;" onclick="clear_wine_radio(this);" /><input name="wine_id" type="hidden" value="{$res.wine_res.id}" /></td>
+                </tr>
+                <tr id="wine_caname_tr">
+                    <th>选择酒款中文别名</th>
+                    <td>
+                        <if condition="$wine_caname_list">
+                        <select name="caname_id">
+                            <option value="0">请选择</option>
+                            <volist name="wine_caname_list" id="vo">
+                            <option value="{$vo.id}" <if condition="$res['wine_caname_id'] eq $vo['id']">selected="selected"</if>>{$vo.cname}</option>
+                            </volist>
+                        </select>
+                        </if>
+                        <span style="margin-left:15px;">
+                            <input type="text" />
+                            <input type="button" value="添加" style="padding:4px;" onclick="add_wine_caname();" />
+                        </span>
+                        <br />
+                        <span style="color:red;">*1.中文别名为酒款背标的中文名 2.酒款中文别名应不包含年份</span>
+                    </td>
+                </tr>
+                <tr id="wine_msg_tr">
+                    <th>酒款属性</th>
+                    <td>
+                        <if condition="$res['country_res']"><p>所属国家：{$res.country_res.fname}&nbsp;{$res.country_res.cname}</p></if>
+                        <if condition="$res['region_res']">
+                        <p>所属产区：<volist name="res.region_res" id="vo"><volist name="vo" id="vos">{$vos.fname}&nbsp;{$vos.cname}&nbsp;╱&nbsp;</volist></volist></p>
+                        </if>
+                    </td>
+                </tr>
+                <else/>
+                <tr id="search_wine_tr">
+                    <th width="150">搜索酒款</th>
+                    <td><input class="measure-input wine_radio_input" type="text" size="100" /><img src="{:C('DOMAIN.PUBLIC')}Jiuku/images/common/x.jpg" style="position:relative;left:-22px;display:none;cursor:pointer;" onclick="clear_wine_radio(this);" /><input name="wine_id" type="hidden" value="0" /></td>
+                </tr>
+                </if>
+                <tr><td colspan="2"><strong style="color:blue;margin-left:15px;">代理商酒款信息</strong></td></tr>
+                <tr id="agents_tr">
+                    <th>选择所属代理商</th>
+                    <td>
+                        <input name="agents_id" type="hidden" value="{$res.agents_id}" />
+                        <volist name="agents_list" id="vo">
+                        <span <if condition="$res['agents_id'] eq $vo['id']">class="btn-on"<else/>class="btn-off"</if> onclick="agents_select(this,{$vo.id});">{$vo.fname}&nbsp;╱&nbsp;{$vo.cname}</span>
+                        </volist>
+                    </td>
+                </tr>
+                <if condition="$store_sales_list">
+                <tr id="store_sales_tr">
+                    <th>选择所属实体销售</th>
+                    <td>
+                        <input name="store_sales_id" type="hidden" value="{$res.store_sales_id}" />
+                        <volist name="store_sales_list" id="vo">
+                        <span <if condition="$res['store_sales_id'] eq $vo['id']">class="btn-on"<else/>class="btn-off"</if> onclick="store_sales_select(this,{$vo.id});">{$vo.name}</span>
+                        </volist>
+                    </td>
+                </tr>
+                </if>
+                <tr>
+                    <th>代理商酒款外文名</th>
+                    <td><input type="text" size="80" name="fname" class="measure-input" value="{$res.fname}" /><span style="color:red;">*关联操作，不做替换原酒库英文名动作，仅存储</span></td>
+                </tr>
+                <tr>
+                    <th>代理商酒款中文名</th>
+                    <td><input type="text" size="80" name="cname" class="measure-input" value="{$res.cname}"><span style="color:red;">*该处中文名只在酒款购买的链接处显示，不作为酒款中文别名</span></td>
+                </tr>
+                <tr>
+                    <th>年份</th>
+                    <td>
+                        <select name="year">
+                        <option value="0">请选择年份</option>
+                        <option value="NOYEAR"<if condition="$res['year'] eq 'NOYEAR'">selected="selected"</if>>NOYEAR</option>
+                        <option value="NV"<if condition="$res['year'] eq 'NV'">selected="selected"</if>>NV</option>
+                        <for start="date('Y')" end="1900" step="-1" comparison="egt" name="year">
+                        <option value="{$year}" <if condition="$res['year'] eq $year">selected="selected"</if>>{$year}</option>
+                        </for>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>价格(￥)</th>
+                    <td>
+                        <input name="old_price" type="hidden" value="{$res.price}" />
+                        <input name="old_price_trend" type="hidden" value="{$res.price_trend}" />
+                        <textarea name="old_price_log" style="display:none;">{$res.price_log}</textarea>
+                        <input name="price" class="measure-input" type="text" size="20" value="{$res.price}" />
+                        <label for="is_check_price" style="cursor:pointer;" title="">
+                            <input id="is_check_price" name="is_check_price" type="checkbox" value="1">&nbsp;<span style="color:red;">*此处勾选提交后 即便没有修改价格，也将会将保存更新记录。以作页面价格回顾显示</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>相关图片</th>
+                    <td>
+                        <input type="button" id="imgbtn" value="选择图片" />
+                        <input type="hidden" name="del_img_idstr" />
+                        <div id="img_list_box">
+                            <volist name="res.img_res" id="vo">
+                            <div class="selected_box"><input name="upd_img_id[]" type="hidden" value="{$vo.id}" /><img src="__UPLOAD__Jiuku/Wine/images/{$vo.filename}" /><div><p><var>描述</var><input name="upd_img_description[]" type="text" value="{$vo.description}" /></p><p><var>ALT</var><input name="upd_img_alt[]" type="text" value="{$vo.alt}" /></p><p><var>排序</var><input name="upd_img_queue[]" type="text" value="{$vo.queue}" /></p></div><span class="del_selected" onclick="imgbox_del(this,{$vo.id});"></span></div>
+                            </volist>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="bottom">
+            <!--<input type="button" class="btn" value="加入待添加列表" onclick="pending_list_btn();" />-->
+            <input type="button" class="btn" value="直接修改" onclick="btn();" />
+        </div>
+    </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

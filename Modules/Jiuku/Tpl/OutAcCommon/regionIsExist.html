@@ -1,0 +1,40 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="list">
+    检查该表内“状态”为<span style="color:red;">不存在</span>的数据，在excel表内是否存在，如存在则点击编辑操作，将外文名数据改为excel表内的英文名；如不存在可以无视<br />
+    推荐新窗口打开编辑，编辑后请选择性<span style="color:blue;cursor:pointer;" onclick="location.reload();">刷新页面</span>以保证“状态”显示无误
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">id</th>
+                    <th>外文名</th>
+                    <th>中文名</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <volist id="vo" name="not_exist">
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.fname}</td>
+                <td>{$vo.cname}</td>
+                <td><span style="color:red;">不存在</span></td>
+                <td><a href="{:Url('Jiuku/Region/edit?id='. $vo['id'])}">编辑</a></td>
+            </tr>
+            </volist>
+            <volist id="vo" name="exist">
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.fname}</td>
+                <td>{$vo.cname}</td>
+                <td><span style="color:green;">存在</span></td>
+                <td><a href="{:Url('Jiuku/Region/edit?id='. $vo['id'])}">编辑</a></td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

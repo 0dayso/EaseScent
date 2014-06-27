@@ -1,0 +1,31 @@
+<include file="Common:header" />
+<include file="Common:wine_city" />
+<div class="wine_main">
+	<h3 class="i_c_h3">
+		<span>[<a href="__ROOT__/Detail/index/id/{$partyInfo.id}">{$partyInfo.title}</a>] 的全部照片</span>   
+		<var>(共<em>{$photoCount}</em>张)</var>
+	</h3>
+	<div class="i_show_box">
+		<if condition="$page eq 1">
+		    <div class="i_img_left" id="i_big_lef"></div>
+		<else/>
+		    <div class="i_img_left" id="i_big_lef"><a href="__ROOT__/Img/img/id/{$partyInfo.id}/page/{$lastPage}"></a></div>
+		</if>
+		<div class="i_img_middle">
+			<div class="i_img_con" id="i_big_list_img">
+				<img  src="__ROOT__/Common/images/partyImg/{$partyInfo.id}/{$photoInfo.image}_d.{$photoInfo.description}"/>
+			</div>
+			<div class="i_img_con_t">
+				<em id="i_img_num">{$page}</em>/<span id="i_img_length">{$photoCount}</span>
+			</div>
+		</div>
+		<if condition="$page eq $photoCount">
+		    <div class="i_img_right" id="i_big_rig"></div>
+		<else/>
+		    <div class="i_img_right" id="i_big_rig"><a href="__ROOT__/Img/img/id/{$partyInfo.id}/page/{$nextPage}"></a></div>
+		</if>
+	</div>
+    <input type="hidden" id="sid" value="{$uid}" />
+	<include file="Common:comment" />
+</div>
+<include file="Common:footer" />

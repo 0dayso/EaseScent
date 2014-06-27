@@ -1,0 +1,100 @@
+<div class="l_act" style="margin-bottom:20px;*margin-bottom:0px;">
+			<h3 class="l_h3">
+				<img src="__ROOT__/Common/images/l_pic44.jpg"/>
+			</h3>
+            <div style="width:690px;overflow:hidden;">
+			<!-- 顶部评论框 -->
+			<div class="l_back">
+				<div class="l_back_box">
+					<textarea id="comment"></textarea>
+					<div class="l_back_face">
+						<img src="__ROOT__/Common/images/back_face.jpg"  class="back_face" data="0"/>
+                    	<span class="l_yzm">
+							<input id="verify" type="text" value="验证码"/>
+							<img src="__ROOT__/index.php/Detail/verify"  onclick="this.src='__ROOT__/index.php/Detail/verify/'+Math.random()" title="刷新验证码"/>
+					    </span>
+
+						<!-- <img src="__ROOT__/Common/images/back_img.jpg" class="back_img"/> -->
+						<span>
+							<input type="checkbox" class="l_share_es">
+							<label>同步到逸香社区</label>
+							<input type="button" class="l_back_sent" onclick="javascript:send_comment(0);" hidefocus/>
+						</span>
+					</div>
+				</div>
+			</div>
+            <volist name="comment" id="comment">
+			<div class="l_back_con">
+				<div class="l_back_con_f">
+					<div class="l_user_face">
+                    <a href="__ROOT__/index.php/User/other/uid/{$comment.uid}"><img src="http://user.wine.cn/member/avatar?u=<{$comment.username}"/></a>
+					</div>
+					<div class="l_back_main">
+						<div class="l_user_name">
+							<a href="###" class="l_user">{$comment.nickname}</a>
+						</div>
+						<div class="l_pro">
+                            {$comment.content}
+                            <!--
+					 <if condition="$comment['img'] != ''">
+							<div class="l_back_img">
+								<img src="__ROOT__/images/{$comment['img']}" width="200px"/>
+							</div>
+					</if>-->
+						</div>
+						<div class="l_back_time">
+							<span><em>{$comment.timeline|date="Y-m-d H:i",###}</em>  |  <var>{$comment.count}条回复</var></span>
+							<a href="javascript:;" class="l_s_up" id="l_s_up_{$comment.id}" onclick="comment_up({$comment.id})">收起回复</a>
+						</div>
+						<!-- 展开层 -->
+						<div class="l_others_back" id="comment_{$comment.id}">
+                            <volist name='comment["comment"]' id="comm">
+							<div class="other_back_con" id="child_ren_{$comm.id}">
+								<div class="l_others_face">
+										<a href="__ROOT__/index.php/User/other/uid/{$comm.uid}"><img src="http://user.wine.cn/member/avatar?u=<{$comm.username}" width="24px" height="24px"/></a>
+								</div>
+								<div class="others_back_main">
+									<div class="others_user_name">
+										<a href="###" class="l_user">{$comm.nickname}</a>
+										<span>在{$comm.timeline|date="Y-m-d H:i",###} </span>
+                                        <if condition="$uid == $comm.uid">
+                                            <a href="__ROOT__/index.php/Detail/delComment/id/{$comm.id}" class="my_back_of">删除</a>
+                                        <else/>
+                                            <a href="###" class="l_back_of" data="{$comment.id}">回复</a>
+                                        </if>
+									</div>
+									<div class="l_pro">
+                                    {$comm.content}
+                                    </div>
+								</div>
+							</div>
+					        </volist>		
+						</div>
+						<!-- 下层回复框 -->
+						<div class="my_back">
+							<textarea id="comm_{$comment.id}"></textarea>
+							<div class="l_back_face">
+								<em>您已输入<var>0</var>字，还可以输入<var>46</var>字。</em>
+								<img src="__ROOT__/Common/images/back_face.jpg"  class="back_face" data="{$comment.id}"/>
+								<!-- <img src="__ROOT__/Common/images/back_img.jpg"  class="back_img" data="{$comment.id}"/> -->
+								<span>
+									<input type="button" class="l_back_sent" onclick="javascript:send_comment({$comment.id});" hidefocus/>
+								</span>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+            </volist>
+            </div>
+<input type="hidden" id="comment_username" value="">
+<input type="hidden" id="comment_img" value="" data="">
+<input type="hidden" id="huifu" value="{$userUid}">
+<iframe style="display:none;" name="myhiddenform"></iframe>
+
+                                <div id="new-face-frame"></div>
+			<!-- 评论模块结束 -->
+						<!-- 评论结束 -->
+		</div>

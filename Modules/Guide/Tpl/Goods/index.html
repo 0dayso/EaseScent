@@ -1,0 +1,102 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Guide/Goods/index')}">逸香导购</a> > <a href="{:Url('Guide/Goods/index')}">酒款管理</a> > 酒款列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Guide/Goods/add')}">添加酒款</a>
+        <a class='btn' href="{:Url('Guide/Goods/manual_add')}">手动添加酒款</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        <select name='is_on_sale' style="width:150px;">
+                           <option value="0" >全部酒款</option>
+
+                           <option value="1" <if condition="$_REQUEST['is_on_sale'] eq '1' ">selected</if> />已上架</option>
+                           <option value="2" <if condition="$_REQUEST['is_on_sale'] eq '2' ">selected</if> />已下架</option>
+                       </select>
+                        商品名称：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>酒款id </th>
+                    <th>酒款名称</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+            <script>
+            function s(id)
+			{
+				document.getElementById("show_click_url_"+id).style.display='block';
+				document.getElementById("show_"+id).innerHTML='<a href="javascript:void(0);" onclick="h(\''+id+'\');">关闭推广链接</a>';
+			}
+			function h(id)
+			{
+				document.getElementById("show_click_url_"+id).style.display='none';
+				document.getElementById("show_"+id).innerHTML='<a href="javascript:void(0);" onclick="s(\''+id+'\');">显示推广链接</a>';
+			}
+            </script>
+			<volist id="vo" name="list">
+            <tr>
+				<td>{$vo.goods_id}</td>
+				<td>{$vo.goods_name}</td>
+				<td>
+                <span id="show_{$vo.goods_id}"><a href="javascript:void(0);" onclick="s('{$vo.goods_id}');">显示推广链接</a></span>
+
+                <a href="{:Url('add?goods_id='.$vo['goods_id'])}">编辑</a>
+
+                【<a class="is_on_sale_{$vo.goods_id}" href="javascript:onclick=show({$vo['goods_id']});">
+                       <if condition="$vo.is_on_sale eq '1' ">已上架<elseif condition="$vo.is_on_sale eq 2"/>已下架</if>
+                </a> 】
+                
+                <a href="{:Url('del?goods_id=' . $vo['goods_id'])}" title="是否删除" {$vo.goods_name} "商品?" target="delete">删除</a>
+
+                </td>
+			</tr>
+            <div style="width:300px; height:170px;display:none; position:absolute; background:#CCC; left:600px; top:100px; z-index:999; border:1px solid #666; padding: 5px;" id="show_click_url_{$vo.goods_id}">
+               {$vo.click_url}
+               <br /><br />
+               <a href="javascript:void(0);" onclick="h('{$vo.goods_id}');" style="float:right; margin-right:10px;">关闭</a>
+            </div>
+			</volist>
+        </tbody>
+    </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<script type='text/javascript'>
+    function show(id){
+
+       var val = $(".is_on_sale_"+ id).html();
+           if(val=="已上架"){
+            var is_on_sale=1;
+           }else{
+              is_on_sale=2;
+           }
+
+        $.post("{:Url('Guide/Goods/show_goods')}",{goods_id:id,is_on_sale:is_on_sale},function(data){
+            //$('#show_' + id)
+            if(data.is_on_sale==2 ){
+                $(".is_on_sale_"+ id).html("已下架");
+            }
+            if(data.is_on_sale==1 ){
+                $(".is_on_sale_"+ id).html("已上架");
+            }
+
+        },'json');
+}
+</script>
+<include file="Common:cpfooter"/>

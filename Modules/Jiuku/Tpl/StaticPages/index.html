@@ -1,0 +1,12 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > 静态页面管理</div>
+    <div class="list-menu">
+        <a class='btn' target="iframe1" href="{:Url('generate?what=winery')}">酒庄</a>
+        <a class='btn' target="iframe1" href="{:Url('generate?what=wine')}">酒款</a>
+    </div>
+    <div class="search">
+    	<iframe src="" frameborder="false" name="iframe1" id="iframe1" scrolling="auto" allowtransparency="true" width="100%" height="auto" style="height: 400px;"></iframe>
+    </div>
+</div>
+<include file="Common:cpfooter" />

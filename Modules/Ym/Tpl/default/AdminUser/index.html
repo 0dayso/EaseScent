@@ -1,0 +1,39 @@
+<include file="Common:admin_header" />
+<body class="wp-admin">
+	<div class="list-div">
+    <table>
+    <tr>
+        <th>序号</th>
+        <th>注册名称</th>
+        <th>登录帐号</th>
+        <th>企业简称</th>
+        <th>注册时间</th>
+    </tr>
+    <volist name="userinfo" id="userinfo">
+    <tr>
+        <td>{$userinfo.id}</td>
+        <td>{$userinfo.username}</td>
+        <td><if condition="$userinfo.email neq ''">
+                {$userinfo.email}
+            <else/>
+                未设置
+            </if>
+            /
+            <if condition="$userinfo.moblie neq ''">
+                {$userinfo.moblie}
+            <else/>
+                未设置
+            </if>
+            </if>
+        </td>
+        <td>{$userinfo.nick}</td>
+        <td>{$userinfo.reg_time|date="Y-m-d H:i:s",###}</td>
+    </tr>
+    </volist> 
+    <tr>
+        <td colspan="5" style="text-align:right;">{$page}</td>
+    </tr>
+    </table>
+    </div>
+</body>
+</html>

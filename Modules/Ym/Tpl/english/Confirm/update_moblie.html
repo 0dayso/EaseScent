@@ -1,0 +1,68 @@
+<include file="Common:header" />
+<div class="common-mian">
+	<div class="c-tit">
+		<if condition="$userinfo.moblie neq ''">更换手机号码<else/>手机认证</if>
+	</div>
+	<div class="email-r">
+		<div class="email-con">
+			<div class="email-con-c">
+				<p class="change-email-inf">
+					<if condition="$userinfo.moblie neq ''">	
+					<em>原手机号码：</em>
+					{$userinfo.moblie}  
+						<if condition="$userinfo.moblie_valid eq 1">已认证<else/>未认证</if>
+					</if>	
+				</p>
+				<p class="change-email-inf">
+					<em>新手机号码：</em>
+					<input type="text" id="change_moblie" class="login-ipt2"/>
+					<var>请输入您要更换的手机号</var>
+				</p>
+			</div>
+			<div class="moblie-change-sub">
+				<input type="button" value="下一步" id="update_mobile_btn" class="login-sub"/>
+				<input type="button" value="返 回" class="login-sub2"/>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#change_moblie").focusout(function(){
+		var moblie = $.trim($("#change_moblie").val());
+		if(moblie==""){
+			$(this).next().text("手机不能为空");
+			$(this).next().css({color:"red"});
+		}else{
+			$.post("/index.php/User/check_moblie",{moblie:moblie},function(result){
+				if(result.status==1){
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"#555"});
+				}else{
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"red"});
+				}
+			},"json");
+		}
+	});
+	$("#update_mobile_btn").click(function(){
+		var moblie = $.trim($("#change_moblie").val());
+		if(moblie==""){
+			$("#change_moblie").next().text("邮箱不能为空");
+			$("#change_moblie").next().css({color:"red"});
+		}else{
+			$.post("/index.php/Confirm/update_moblie_do",{moblie:moblie},function(result){
+				if(result.status==1){
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"#555"});
+					window.location.href = result.jumpUrl;
+				}else{
+					$("#change_moblie").next().text(result.message);
+					$("#change_moblie").next().css({color:"red"});
+				}
+			},"json")
+		}
+	})
+})
+</script>
+<include file="Common:footer" />

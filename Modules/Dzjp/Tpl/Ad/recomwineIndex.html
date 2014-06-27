@@ -1,0 +1,90 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+</script>
+<div id="table">
+    <div class="panel">
+        当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Index/index')}">大众酒评管理</a> >
+        <a href="{:Url('index')}">广告管理</a> >
+        推荐酒款列表
+    </div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('recomwineAdd')}&_backurl={$_listurl}">添加推荐酒款</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('recomwineIndex')}" method="post">
+            <tbody>
+                <tr>
+                    <td>
+                        <!-- 关键字：
+                        <input name="keyword" class="input-text" type="text" value="{$_GET.keyword}" size="20" />
+                        &nbsp;&nbsp; -->
+                        状态：
+                        <select name="status">
+                            <option value="">全部</option>
+                            <option value="1" <if condition="$_GET['status'] eq '1'">selected</if>>开启</option>
+                            <option value="0" <if condition="$_GET['status'] eq '0'">selected</if>>关闭</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input class="btn" type="submit" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">ID</th>
+                    <th>代理商</th>
+                    <th>代理商网络销售酒款</th>
+                    <th>折扣价（原价）</th>
+                    <th width="30">状态</th>
+                    <th width="60">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>
+                        <if condition="$vo['agents_res']">
+                        {$vo.agents_res.fname} - {$vo.agents_res.cname}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['agents_internet_sales_wine_res']">
+                        {$vo.agents_internet_sales_wine_res.fname} - {$vo.agents_internet_sales_wine_res.cname}
+                        <else/>
+                        -
+                        </if>
+                    </td>
+                    <td>
+                        <if condition="$vo['agents_internet_sales_wine_res']">
+                        {$vo.agents_internet_sales_wine_res.price}
+                        <else/>
+                        -
+                        </if>
+                        （{$vo.origin_price}）
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 1"><span style="color:green;">开启</span></if>
+                        <if condition="$vo['status'] eq 0"><span style="color:orange;">关闭</span></if>
+                    </td>
+                    <td>
+                        <a href="{:Url('recomwineEdit')}&id={$vo.id}&_backurl={$_listurl}">编辑</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+        <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

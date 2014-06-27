@@ -1,0 +1,101 @@
+<include file="Common:header" />
+<div class="main">
+	<include file="Common:menu" />
+	<div class="main-r">
+		<div class="account">
+			<div class="account-info">
+				<dl class="account-dl">
+					<dt>
+						<if condition="$userinfo.face_type neq ''"><img src="__UPLOAD__/face/u_{$userinfo.id}/s_myface.{$userinfo.face_type}?id={$random}" /><else/><img src="__IMG__/small-img.jpg" /></if>
+						<a href="/index.php/Setface">修改头像</a>
+					</dt>
+					<dd>
+						<p><strong>账号信息</strong><a href="/index.php/Company">修改</a></p>
+						<p>邮箱账号：<if condition="$userinfo.email eq ''">未设置<else/>{$userinfo.email}</if></p>
+						<p><span>企业全称：</span><span class="acc-span">{$userinfo.qy_name}</span></p>
+						<p>企业电话：{$userinfo.qy_moblie}</p>
+						<p><span>企业地址：</span><span class="acc-span">
+						<if condition="$userinfo.qy_address neq ''">
+							{$userinfo.qy_province}&nbsp;{$userinfo.qy_city}&nbsp;{$userinfo.qy_address}</span></p>
+						<else/>
+							未设置
+						</if>
+					</dd>
+				</dl>
+			</div>
+			<div class="account-info">
+				<dl class="auth">
+					<dt>您的账号安全级别</dt>
+					<dd>
+                        <span>
+                            <if condition="$level eq 1">
+                                低
+                            <elseif condition="$level eq 2" />
+                                中
+                            <else/>
+                                高
+                            </if>
+                        </span>
+						<img src="__IMG__/salf{$level}.jpg" class="auth-salf"/>
+					</dd>
+					<dd>
+						<if condition="$userinfo.comany_valid eq 2"><img src="__IMG__/yes-r.jpg" /><else/><img src="__IMG__/no-r.jpg" /></if>
+						<span>身份认证：<if condition="$userinfo.comany_valid eq 2">已认证<else/>未认证</if></span>
+						<if condition="$userinfo.comany_valid neq 2">
+							<a href="/index.php/Confirm/sssing">立即认证>></a>
+						</if>
+					</dd>
+					<dd>
+						<if condition="$userinfo.email_valid eq 1"><img src="__IMG__/yes-r.jpg" /><else/><img src="__IMG__/no-r.jpg" /></if>
+						<span>邮箱认证：<if condition="$userinfo.email_valid eq 1">已认证<else/>未认证</if></span>
+						<if condition="$userinfo.email_valid eq 0">
+							<a href="/index.php/Confirm/emailing">立即认证>></a>
+						</if>
+					</dd>
+					<dd>
+						<if condition="$userinfo.moblie_valid eq 1"><img src="__IMG__/yes-r.jpg" /><else/><img src="__IMG__/no-r.jpg" /></if>
+						<span>手机认证：<if condition="$userinfo.moblie_valid eq 1">已认证<else/>未认证</if></span>
+						<if condition="$userinfo.moblie_valid eq 0">
+							<a href="/index.php/Confirm/mobliing">立即认证>></a>
+						</if>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="service">
+			<div class="service-t">
+				逸香服务
+			</div>
+			<div class="account-info">
+				<dl class="account-dl">
+					<dt>
+						<img src="__IMG__/p5.jpg" />
+					</dt>
+					<dd>
+						<p><strong>逸香Expo</strong></p>
+						<p>永不落幕的线上葡萄酒消息发布平台；逸香Expo，让葡萄酒销售信息更通畅！</p>
+					</dd>
+				</dl>
+				<div class="acc-job">
+					 <a href="__EXPO_HOST__/index.php?m=Select&a=index"><img src="__IMG__/p7.jpg" /></a>
+					 发布供求信息请
+				</div>
+			</div>
+			<div class="account-info">
+				<dl class="account-dl">
+					<dt>
+						<img src="__IMG__/p6.jpg" />
+					</dt>
+					<dd>
+						<p><strong>葡萄酒人才网</strong></p>
+						<p>葡萄酒人才网是目前中国第一家葡萄酒行业的专业求职招聘平台。专业、迅速、准确地为企业找到合适人才，以权威性、专业性著称。</p>
+					</dd>
+				</dl>
+				<div class="acc-job">
+					 暂未开放，敬请期待...
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<include file="Common:footer" />

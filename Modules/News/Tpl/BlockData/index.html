@@ -1,0 +1,56 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：新闻管理 > <a href="{:Url('News/Block/index')}">推荐位管理</a> > “{$block.name}” 数据管理</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('add?bid='.$block['bid'])}">插入数据</a>
+        <a class='btn' href="{:Url('Block/index?bid='.$block['bid'])}">返回推荐位列表</a>
+    </div>
+    <div class="list-menu">
+        推荐位名称：<b>{$block.name}</b>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('News/BlockData/index?bid='.$block['bid'])}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        标题：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30">AID</th>
+                    <th width="80">排序</th>
+                    <th>标题</th>
+                    <th>短标题(stitle)</th>
+                    <th width="150">发布时间</th>
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+            <tr>
+                <td>{$vo.aid}</td>
+                <td><input type="text" class="input-text" size="10" name="display" value="{$vo.display}"></td>
+                <td>{$vo.title}</td>
+                <td>{$vo.stitle}</td>
+                <td>{:date('Y-m-d H:i:s', $vo['dateline'])}</td>
+                <td><a href="{:Url('News/Pub/edit?aid='. $vo['aid'])}">编辑原内容</a> <a href="{:Url('News/BlockData/del?aid='.$vo['aid'].'&bid='.$vo['bid'])}" target="delete" title='确定要删除该信息吗？'>删除推荐内容</a></td>
+            </tr>
+            </volist>
+        </tbody>
+        </table>
+        
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

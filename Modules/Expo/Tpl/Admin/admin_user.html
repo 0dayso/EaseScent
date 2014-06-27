@@ -1,0 +1,75 @@
+
+<include file="Admin:header"/>
+    <include file="Admin:theme_change"/>
+        <include file="Admin:header_nav" />
+        <!-- content -->
+        <div id="content">
+           <include file="Admin:left" />
+           <!-- content / right -->
+            <div id="right">
+                <!-- table -->
+                <div class="box">
+                    <!-- box / title -->
+                    <div class="title">
+                        <h5>产品列表</h5>
+                        <div class="search">
+                            <form action="{:U('AdminUser/index')}" method="post">
+                                <div class="input">
+                                    <input type="text" id="search" name="keyword" value="{$keyword}" style="padding: 9px 7px 4px 7px;"/>
+                                </div>
+
+                                <div class="button">
+                                    <input type="submit" name="submit" value="Search"  style="padding: 7px 10px 6px 10px;"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- end box / title -->
+                    <div class="table">
+                        <form id="managess"  action="{:U('AdminProduct/manage')}" method="post">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>管理员名称</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                               <volist name="adminusers" id="vo">
+                                <tr>
+                                    <td class="title">
+                                       {$vo['username']}
+                                    </td>
+                                    <td>
+                                         <a href="{:U('AdminPower/index')}&uid={$vo['uid']}">权限管理</a>
+                                    </td>
+                                </tr>
+                               </volist>
+                            </tbody>
+                        </table>
+
+                        <!-- pagination -->
+                        <div class="pagination pagination-left">
+                            <ul class="pager">
+                            {$Page}
+                            </ul>
+                        </div>
+
+                        </form>
+                    </div>
+                </div>
+                <!-- end table -->
+
+
+            </div>
+            <!-- end content / right -->
+        </div>
+
+
+        <style type="text/css">
+            #content div.box table td {text-align: center;}
+            .qy_name{width:300px;}
+        </style>
+
+<include file="Admin:footer"/>

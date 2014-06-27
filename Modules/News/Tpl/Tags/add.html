@@ -1,0 +1,27 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('News/Index/index')}">新闻管理</a> > <a href="{:Url('News/Tags/index')}">标签列表</a> > 增加标签</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('index')}">标签列表</a>
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('News/Tags/doadd')}" method="post" enctype="multipart/form-data">
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标签名</th>
+                        <td><input type="text" size="60" name="name" value="" class="measure-input"/> (必填)</td>
+                    </tr>
+                    <tr>
+                        <th width="130">手动排序</th>
+                        <td><input type="text" size="25" name="via" value="" class="measure-input"/> (数值越大越靠前,0为固定到最前面的热门标签)</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

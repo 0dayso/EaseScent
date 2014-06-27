@@ -1,0 +1,60 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="">系统管理</a> > 应用管理</div>
+    <div class="form">
+		<form name="myform" action="{:Url('app')}" method="post">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">应用列表</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">增加新应用</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <td width="130">APPID</td>
+                        <td>名称</td>
+                        <td width="300">APPKEY</td>
+                        <td width="200">增加者</td>
+                        <td width="200">增加时间</td>
+                        <td width="100">操作</td>
+                    </tr>
+                    <volist id="apps" name="list" >
+                    <tr>
+                        <td>{$apps.appid}</td>
+                        <td><input type="text" class="input-text" value="{$apps.name}" size="20" name="appname[{$apps.appid}]"></td>
+                        <td><font style="color:#033C79; font-weight:bold">{$apps.appkey}</font></td>
+                        <td>{$apps.adduser}</td>
+                        <td>{$apps.addtime|date='Y-m-d H:i:s', ###}</td>
+                        <td><a href="{:Url('app?op=del&appid='.$apps['appid'])}" title="你真的确定要删除该应用吗？删除该应用后，依赖于此APPKEY的应用都将无法正常使用" target="delete">删除(慎用)</a></td>
+                    </tr>
+                    </volist>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">应用名称</th>
+                        <td>
+                            <input type="text" class="input-text" name="name">
+						</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<script language="javascript">
+$(document).ready(function(){
+    $("#checkall").click(function(){
+        var opt = $(this).attr('checked');
+        if(opt == 'checked') {
+            $("input[type=checkbox]").attr('checked', 'checked');
+        } else {
+            $("input[type=checkbox]").removeAttr('checked');
+        }
+    });
+});
+</script>
+<include file="Common:cpfooter" />

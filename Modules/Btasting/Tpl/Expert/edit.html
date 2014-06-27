@@ -1,0 +1,112 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Btasting/Expert/index')}">品酒会专家管理</a> > 编辑专家信息</div>
+    <div class="form">
+		<form name="myform" id="myform" method="post" enctype="multipart/form-data">
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">专家</th>
+                        <td><input type="text" id="e-name" size="30" name="name" value="{$expert.name}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">逸香通行证</th>
+                        <td><input type="text" id="e-account" size="30" name="account" value="{$expert.account}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">头像</th>
+                        <td>
+						  <input type="file" name="uploadfile">
+                          <input type="hidden" value="{$expert.avatar}" name="avatar" id="avatar-id">
+						  <input type="button" class="btn" value="添加头像" id="add-avatar">
+						  <div id="expert-avatar-show" style="margin-top:12px; margin-bottom:8px;position:relative; width:133px;">
+                              <img  id="expert-avatar-img" src="{:Url('Btasting/ImageShow/avatar?w=120&h=120&avatar='.$expert['avatar'])}" style="padding:3px; border:1px solid #ccc; background:#dedede">
+							<span id="expert-avatar-delete"  style="position: absolute;cursor: pointer;height: 13px;width:13px;margin:0px;top:-3px; right:0px; background:url(http://public.wine.cn/Jiuku/images/common/x.jpg)"></span>
+						  </div>
+						</td>
+                    </tr>
+                    <tr>
+                        <th width="130">专家介绍</th>
+                        <td><textarea id="e-desc" name="description" style="width:60%;height:120px">{$expert.description}</textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="button" id="e-submit" class="btn" value="提交" />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{:Url('Btasting/Expert/index')}">放弃并返回</a>
+            <div>
+        </form>
+    <div>
+</div>
+<script>
+$(document).ready(function(){
+    var iframeDom = $("<iframe></iframe");
+    iframeDom.attr("style", "width:0px; height:0px;border:0px;");
+    iframeDom.attr("name", "avatarUpload");
+    iframeDom.attr("id", "avatarUpload");
+    iframeDom.appendTo($("body"));
+    $("#add-avatar").click(function(){
+        var form = $("#myform");
+        var oldaction = form.attr("action");
+        form.attr("action", "{:Url('Btasting/Expert/add?op=avatarUpload')}");
+        form.attr("target", "avatarUpload");
+        form.submit();
+        form.attr("action", oldaction);
+        form.attr("target", "");
+    });
+	
+	$("#expert-avatar-delete").click(function(){
+        var avatarid = $("#avatar-id").val();
+        $("#expert-avatar-show").hide(200);
+        $("#avatar-id").val('');
+		$.get("{:Url('Btasting/Expert/avatarDel?avatar=')}" + avatarid);					   
+    });
+
+    $("#e-submit").click(function(){
+        var name = $("#e-name").val(),
+        account = $("#e-account").val(),
+        avatar = $("#avatar-id").val(),
+        description = $("#e-desc").val();
+        var data = {name: name, account: account, avatar:avatar, description:description};
+        $.post('{:Url('Btasting/Expert/edit?id='.$expert['id'])}', data, function(result){
+            if(result.errno == 0) {
+                art.dialog({
+                    title: "提示信息",
+                    content: "专家信息修改成功!",
+                    lock: true,
+                    ok:function(){
+                        window.location.href='{:Url('Btasting/Expert/edit?id='.$expert['id'])}';
+                    },
+                    cancel:function(){
+                        window.location.href='{:Url('Btasting/Expert/index')}';
+                    },
+                    okValue: '再次修改',
+                    cancelValue: '返回列表'
+                });
+            } else {
+                art.dialog({
+                    okValue: '确定',
+                    title: '错误',
+                    content: result.message,
+                    lock: true,
+                    ok: function () {
+                        return true;
+                    }   
+            }); 
+
+            }
+        },'json');
+    });
+});
+var uploadAvatarCallBack = function(status, data){
+    if(status) {
+	    $("#expert-avatar-img").attr("src", "{:Url('Btasting/ImageShow/avatar?w=120&h=120&avatar=')}" + data );
+		$("#avatar-id").val(data);
+		$("#expert-avatar-show").show(200);
+	} else {
+	    alert("头像上传失败：" + data);
+	}
+}
+</script>
+<include file="Common:cpfooter" />

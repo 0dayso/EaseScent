@@ -1,0 +1,81 @@
+<include file="Common:cpheader" />
+<script src="__PUBLIC__/guide/js/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="__PUBLIC__/guide/css/uploadify.css" rel="stylesheet" type="text/css" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Guide/Flashplay/index')}">逸香导购</a> > <a href="{:Url('Guide/Flashplay/index')}">轮换图管理</a> > 轮换图编辑</div>
+    <div class="form">
+	<form name="myform" action="{:Url('Guide/Flashplay/edit')}" method="post" enctype="multipart/form-data">
+        <div class="tab-nav" id="tab_1">
+            <table width="100%" cellspacing="0" class="table-form">
+                <tr>
+                    <th>图片上传</th>
+                    <td>
+                        <span id="img">
+                            <img width="300" height="140" src="{$res.yuan_url}" />
+                        </span>
+                            <input type="hidden" name="pic_url" id="pic_url" value='{$res.pic_url}' />
+                            <input type="hidden" name="yuan_url" id="yuan_url" value="{$res.yuan_url}">
+                        <div id="queue"></div>
+                            <input id="file_upload" name="file_upload" type="file" multiple="false">
+                    </td>
+                </tr>
+
+				<tr>
+                    <th width="130">链接地址</th>
+                    <td><input type="text" size="53" name="img_url"  value="{$res.img_url}" class="measure-input"/></td>
+                </tr>
+                <tr>
+                    <th width="130">图片描述</th>
+                    <td><input type="text" size="53" name="img_text" value="{$res.img_text}" class="measure-input"/></td>
+                </tr>
+                <tr>
+                    <th width="130">排序</th>
+                    <td><input type="text" size="53" name="img_sort" value="{$res.img_sort}" class="measure-input"/></td>
+                </tr>
+                <tr>
+                    <th width="130">状态</th>
+                    <td>
+                        <input type="radio" value='1' name='status' <if condition="$res.status eq '1' ">checked="true"</if> />显示  
+                        <input  type="radio" value='2' name='status' <if condition="$res.status eq '2' ">checked="true"</if>/>隐藏
+                    </td>
+                </tr>
+            </table>
+        </div>
+       
+        <div class="bottom">
+            <input type="hidden" name='img_id' value='{$res.id}'>
+	        <input type="hidden"  name="step" value="2" />
+            <input type="submit" class="btn" value="编辑" />
+        <div>
+	</form>
+</div>
+
+<script type="text/javascript">
+        $(function() {
+            $('#file_upload').uploadify({
+                'swf'      : '__PUBLIC__/guide/images/uploadify.swf',
+                'uploader' : '__PUBLIC__/guide/images/uploadify.php',
+                'buttonText' : '上传图片',
+                'width' :'300',
+                'height' :'30',
+                'auto': 'true',
+                'onUploadError' : function (file, errorCode, errorMsg, errorString){
+                    alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
+                },
+                'onUploadSuccess' :function (file, data, response)
+                {
+                    data = eval("("+ data +")");
+                     if (data.error === 0) {
+                        $('#img').html('<img width="300" height="140" src="'+data.thumb_url+'" />');
+                        $('#pic_url').val(data.thumb_name);
+                        $('#yuan_url').val(data.url);
+                     }
+                     else
+                     {
+                        alert('上传失败');
+                     }
+                }
+            });
+        });
+</script>
+<include file="Common:cpfooter" />

@@ -1,0 +1,60 @@
+<include file="Common:cpheader" />
+<script type="text/javascript">
+$(function() {
+    $("input[name='statime']").datepicker({
+        changeYear: true,
+        changeMonth: true,
+        maxDate: "{$_maxdata}",
+        onClose: function( selectedDate ) {
+            $("input[name='endtime']" ).datepicker( "option", "minDate", selectedDate );
+        }
+    });
+    $("input[name='endtime']").datepicker({
+        changeYear: true,
+        changeMonth: true,
+        maxDate: "{$_maxdata}",
+        onClose: function( selectedDate ) {
+            $("input[name='statime']" ).datepicker( "option", "maxDate", selectedDate );
+        }
+    });
+});
+</script>
+<div id="table">
+    <div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('AppReport/Index/index')}">终端报表</a> >
+        用户-使用时段
+    </div>
+    <div class="div-box-default">
+        <select>
+            <volist name="_applist" id="vo">
+            <option value="{$vo.id}">{$vo.name}</option>
+            </volist>
+        </select>
+    </div>
+    <div class="div-box-default">
+        <div class="div-title1">
+            <span style="margin-right:100px;">使用时段：</span>
+            <a href="#">近7日</a>&nbsp;
+            <a href="#">近30日</a>&nbsp;
+            <input name="statime" class="" type="text" />&nbsp;-&nbsp;<input name="endtime" class="" type="text" />
+        </div>
+        <table class="table-default">
+            <thead>
+                <tr>
+                    <th>时段</th>
+                    <th>启动次数</th>
+                    <th>启动次数占比</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<include file="Common:cpfooter" />

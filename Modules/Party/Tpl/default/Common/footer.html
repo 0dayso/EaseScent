@@ -1,0 +1,53 @@
+    <if condition="$links_list">
+    <div class="firendbox z_main_column linel">
+        <h2><a href="#"><img src="__P_IMAGES__/header20130312/index_tit12.gif" /></a></h2>
+        <ul class="firend">
+        	<volist name="links_list" id="vo">
+            <li><a href="{$vo.links_url}" target="_blank" title="{$vo.links_name}">{$vo.links_name}</a></li>
+            </volist>
+        </ul>
+    </div>
+    </if>
+    <p class="foot">
+        <a href="__WWW__/Emarketing/aboutUs" target="_blank">关于我们</a> |
+        <a href="__WWW__/Emarketing/aboutUs/id/6" target="_blank">联系我们</a> |
+        <a href="http://eswine.hirede.com/CareerSite/Index" target="_blank">加入我们</a> |
+        <a href="__WWW__/Emarketing/aboutUs/id/7" target="_blank">版权信息</a> |
+        <a href="__WWW__/sitemap.html" target="_blank">网站地图</a> |
+        <a href="__WWW__/Emarketing/aboutUs/id/8" target="_blank">About US</a> |
+        <a href="__WWW__/Emarketing" target="_blank">网络营销</a> |
+        <a href="__WWW__/Emarketing/advertise" target="_blank">广告服务</a> |
+        <a href="__WWW__/Emarketing/cooperate" target="_blank">商务合作</a> |
+        <a href="__WWW__/Emarketing/aboutUs/id/9" target="_blank">约稿启事</a> |
+        <a href="__WWW__/Emarketing/Links" target="_blank">友情链接</a> |
+        <a href="__WWW__/Emarketing/partners" target="_blank">合作伙伴</a> |
+        <a href="__WWW__/Rss" target="_blank">Rss订阅</a>
+    </p>
+<script type="text/javascript" src="__PUBLIC__/party/Common/js/jquery.fancyzoom.min.js"></script>
+<script>
+var c = <?php echo $c;?>;
+var t = <?php echo $t;?>;
+var p = <?php echo $p;?>;
+
+function pickedFunc(){
+	var str = $dp.cal.getDateStr();
+	window.location.href="/index.php/PartyList/index/t/"+str+"/c/"+c+"/p/"+p; 
+	//var s = "/Index/index/t/"+str+"/c/"+c+"/p/"+p;
+	//alert(s);
+
+}
+$(function(){
+	$.fn.fancyzoom.defaultsOptions.imgDir='__WWW__/images/ressources/';
+	$('.l_back_img_a').fancyzoom({Speed:400,showoverlay:false});
+    
+});
+</script>
+<script type="text/javascript"> 
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ff22c42114a1a78058ca8277c713df66f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<div style="display:none">
+<script src="http://s15.cnzz.com/stat.php?id=4155064&web_id=4155064" language="JavaScript"></script>
+</div>
+</body>
+</html>

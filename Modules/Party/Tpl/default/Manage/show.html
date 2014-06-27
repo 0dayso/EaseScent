@@ -1,0 +1,39 @@
+<html>
+<head>
+	
+</head>
+<body>
+	<div>
+	<label>
+	酒会详情浏览：<br/>
+		<div>
+			<ul>
+			<input type="hidden" value="{$data.id}"/>
+			<li>酒会标题：{$data.title} </li><br/>
+			<li>开始时间：{$data.party_start|date="Y-m-d",###}</li><br/>
+			<li>结束时间：{$data.party_start|date="Y-m-d",###}</li><br/>
+			<li>联系人：{$data.contactperson}</li><br/>
+			<li>联系电话：{$data.contactphone}</li><br/>
+			<li>酒会人数：{$data.puser_num}人</li><br/>
+			<li>是否需要费用：<if condition="$data.ismoney eq 1">需要<else/>不需要</if></li><br/>
+			<li>酒会市场价：{$data.markprice}/元</li><br/>
+			<li>酒会优惠价：<if condition="$data.lowerprice eq -1">不优惠
+			                <else/>{$data.lowerprice}/元</if>
+				</li><br/>
+			
+			<li>是否推荐：<if condition="$data.isbar = 1 ">推荐
+						    <else /> 不推荐
+						</if>
+						</li><br/>
+			<li>是否显示：{$data.is_show}</li><br/>
+			<li>详细地址:{$data.privoce}(省){$data.city}(市){$data.county}(市/县){$data.address_info}</li><br/>
+			<li>酒会介绍：</li><br/>
+              <div>{$data.introduce}</div>
+			</ul>
+			<a href="index.php?app=Party&m=Manage&a=index"><input type="button" value="返回列表"></a>
+			<a href="index.php?app=Party&m=Manage&a=modify&aid={$data.id}"><input type="button" value="编辑信息"></a>
+		</div>
+	</label>
+	</div>
+</body>
+</html>

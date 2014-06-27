@@ -1,0 +1,115 @@
+<include file="Common:cpheader" />
+<link href="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/css/ui-lightness/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+<style>
+.selector_msg{color:red;}
+.selector_expand{display:none;}
+.table-form1:hover{background: #fbffe4;}
+#store_sales_list img{height:85px;};
+</style>
+<script src="{:C('DOMAIN.PUBLIC')}/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.js"></script>
+<script src="{:C('DOMAIN.PUBLIC')}/Jiuku/js/autocompleteSelect.js"></script>
+<script>
+    $(function(){
+        $('#sub').click(function(){
+            var id = $("input[name='id']").val();
+            var bid = $("input[name='bid']").val();
+            if (bid == '') {
+                art.dialog({content: '请填写要关联的标准品牌/酒庄的ID,若标准库中无此品牌/酒庄,请移步酒库管理中添加标准酒庄后再进行审核',});
+                return;
+            }else{
+                $.post('?app=Agents&m=Jiumethod&a=method_do',{'id':id,'bid':bid},function(msg){
+                    var msg = eval("("+msg+")");
+                    if(msg == 1){
+                        $("form[name='myform']").submit();
+                        art.dialog({content: '审核成功',});
+                        var l = 'location.href="{:Url('Agents/Jiumethod/index')}";';
+                        setTimeout(l, 1000);
+                        return;
+                    }else{
+                        art.dialog({content: '审核失败,请联系技术',}).time(3000);
+                        return;
+                    }
+                });
+            }
+        });
+        $('#back').click(function(){
+            var url = 'location.href="?app=Agents&m=Jiumethod&a=back&id={$list.id}";';
+            setTimeout(url, 0);
+        });
+    });
+</script>
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Agents/Index/index')}">代理商管理</a> > <a href="{:Url('index')}">酒款申请列表</a> > 酒款申请详情</div>
+    <div class="form">
+            <input type="hidden" name="id" value="{$list.id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">关联酒款</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">代理商名称</th>
+                        <td>{$list.agents}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">外文名</th>
+                        <td>{$list.wine_fname}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">中文名</th>
+                        <td>{$list.wine_cname}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">国家/产区</th>
+                        <td>{$list.country_cname}({$list.country_fname}) ╱ <font color="red">{$list.region_fname_one} ╱ {$list.region_cname_one}<if condition="$list.region_fname_two neq ''">({$list.region_cname_two} ╱ {$list.region_cname_two})</if></font> </td>
+                    </tr>
+                    <tr>
+                        <th width="130">酒庄</th>
+                        <td>{$list.brand_fname} ╱ {$list.brand_cname}</td>
+                    </tr>
+                    <tr>
+                        <th width="130">葡萄品种</th>
+                        <td>
+                            <volist id="gv" name="list['grape']">
+                                {$gv.grape_fname} ╱ {$gv.grape_cname}<br />
+                            </volist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">年份/价格</th>
+                        <td>
+                            <volist id="vo" name="list['price']">
+                                {$vo.year}年 ╱ ￥{$vo.price}<br />
+                            </volist> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">商家自传图</th>
+                        <td>
+                            <volist id="v" name="list['img']">
+                                <if condition="$v.cat eq 1">
+                                正标:<img src="http://houtai.wine.cn/Upload/images/{$v.filename}" width="99" height="168">
+                                </if>
+                                <if condition="$v.cat eq 2">
+                                副标:<img src="http://houtai.wine.cn/Upload/images/{$v.filename}" width="99" height="168"> &nbsp;&nbsp;&nbsp;
+                                </if>
+                                <if condition="$v.cat eq 3">
+                                场景图:<img src="http://houtai.wine.cn/Upload/images/{$v.filename}" width="99" height="168"> &nbsp;&nbsp;&nbsp;
+                                </if>
+                            </volist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><font color="red">*关联标准酒款的ID（必填）</font></th>
+                        <td><input type="text" name="bid" value=""></td>
+                    </tr>
+                </table>
+                
+            </div>
+            <div class="bottom">
+                <input type="button" class="btn" value="审核通过" id="sub" />
+                <input type="button" class="btn" value="驳回申请" id="back" />
+            </div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

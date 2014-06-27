@@ -1,0 +1,52 @@
+/*友链*/
+.links{
+	width:1003px;
+	margin:10px auto 10px;
+	overflow:hidden;
+}
+.links h3{
+	height:26px;
+	padding:0 5px 0 10px;
+	font-weight:normal;
+	background:url(../images/header/bg6.jpg) 0 0 repeat-x;
+	overflow:hidden;
+}
+.links h3 strong{
+	float:left;
+	height:22px;
+	padding:4px 10px 0 0;
+	font-size:14px;
+	color:#333;
+	background:url(../images/header/top.jpg) 22px bottom no-repeat;
+}
+.links h3 span{
+	float:left;
+	font-size:12px;
+	padding-top:6px;
+}
+.links h3 a{
+	float:right;
+	width:38px;
+	height:12px;
+	margin-top:6px;
+	background:url(../images/header/more.jpg) 0 0 no-repeat;
+}
+.links_list{
+	margin-top:17px;
+	width:980px;
+	overflow:hidden;
+	margin-left:15px;
+}
+.links_list span{
+	float:left;
+	color:#9D1A27;
+	height:22px;
+	width:95px;
+}
+.links_list span a{
+	color:#2b2b2b;
+}
+.links_list span a:hover{
+	color:#C56627;
+	text-decoration:underline;
+}

@@ -1,0 +1,88 @@
+<include file="Common:cpheader" />
+<link rel="stylesheet" href="__PUBLIC__/ztree/css/ztreestyle.css" type="text/css">
+<script type="text/javascript" src="__PUBLIC__/ztree/js/jquery.ztree.core-3.4.min.js"></script>
+<script language="javascript">
+    var setting = {
+            data:{
+                simpleData:{
+                    enable:true
+                }
+            },
+            view:{
+                selectedMulti: false,
+                nameIsHTML: true,
+                showIcon: false,
+            },
+            callback:{
+                onClick: jumpAction,
+            }
+    };
+    var zNode = [
+        <volist name="list" id="vo">
+        { id:{$vo.acid}, pId:{$vo.pid}, name:"{$vo.name}", open:true},
+        </volist>
+    ];
+
+    $(document).ready(function(){
+        $.fn.zTree.init($("#zTree"), setting, zNode);
+    });
+    
+    var _G_node;
+    function jumpAction(e, treeid, tnode) {
+        _G_node = tnode;
+        art.dialog({
+            title:'选择操作',
+            content: '请选择你要进行的操作',
+            lock:true,
+            button:[
+                {
+                    value : '新增子节点',
+                    callback: function(){
+                        location.href="{:Url('Admin/Ac/add?pid=')}" + _G_node.id;
+                    },
+                    focus: true,
+                },
+                {
+                    value : '编辑节点',
+                    callback: function() {
+                        location.href="{:Url('Admin/Ac/edit?acid=')}" + _G_node.id
+                    }
+                },
+                {
+                    value : '删除节点',
+                    callback: function() {
+                        //不允许删除父节点
+                        if(_G_node.children) {
+                            alert('子节点不为空，禁止删除');
+                            return true;
+                        }
+                        location.href="{:Url('Admin/Ac/del?acid=')}" + _G_node.id
+                    }
+                }
+            ],
+        });
+    }
+
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/Ac/index')}">权限管理</a> > 权限列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Admin/Ac/add?pid=0')}">增加根权限</a>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>权限树<font class="red">(点击权限节点名称即可编辑/删除该节点，或添加字节点)</font></th>
+                </tr>
+            </thead>
+			<tbody>
+                <tr>
+                    <td><ul id="zTree" class="ztree"></ul></td>
+			    </tr>
+            </tbody>
+        </table>
+        <div class="footer"><input type="button" id="submit" value="提交" class="btn"></div>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

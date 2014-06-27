@@ -1,0 +1,32 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Admin/UserGroup/index')}">用户组管理</a> > 用户组列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Admin/UserGroup/add')}">增加用户组</a>
+    </div>
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="100">排序</th>
+                    <th width="100">GID</th>
+                    <th>用户组名称</th>
+					<th>项目权限设定</th>
+                    <th width="180">操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="list">
+            <tr>
+				<td>{$vo.display}</td>
+				<td>{$vo.gid}</td>
+				<td>{$vo.name}</td>
+                <td><a class="btn" href="{:Url('NewsAuth/index?gid='.$vo['gid'])}">资讯权限设定</a></td>
+				<td><a href="{:Url('edit?gid='.$vo['gid'])}">编辑</a> <a href="{:Url('del?gid=' . $vo['gid'])}" title="是否删除“ {$vo.username} ”用户组?" target="delete">删除</a></td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    </div>
+</div>
+<include file="Common:cpfooter"/>

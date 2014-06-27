@@ -1,0 +1,90 @@
+<include file="Common:cpheader" />
+<script language="javascript">
+function arealevel_cn(mark){
+    var iframe_src = "{:Url('Jiuku/Common/arealevelCn')}"+'&mark='+mark;
+    var baidumapdialog = art.dialog({
+        id : 'arealevel_cn',
+        lock: true,
+        background: _DIALOG_BG_COLOR,
+        OPACITY: _DIALOG_BG_OPACITY,
+        content: '<iframe src="'+iframe_src+'" width="320px" height="300px"></iframe>',
+    });
+}
+function close_arealevel_cn(mark,id,text){
+    $("#area_id").val(id);
+    $("#area_text").text(text);
+    art.dialog({id:'arealevel_cn'}).close();
+}
+</script>
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">代理商列表</a> > 实体销售渠道列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('store_sales_add')}<if condition="$_GET['agents_id']">&agents_id={$_GET.agents_id}</if>&_backpage={$_pageurl}">添加实体销售渠道</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('store_sales_list')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        所属代理商：
+                        <select name="agents_id">
+                            <option value="0">全部</option>
+                            <volist name="agents_list" id="vo">
+                            <option value="{$vo.id}" <if condition="$_GET['agents_id'] eq $vo['id']">selected="selected"</if>>{$vo.fname}&nbsp;/&nbsp;{$vo.cname}</option>
+                            </volist>
+                        </select>
+                        &nbsp;&nbsp;
+                        所在城市：
+                        <span id="area_text"><volist name="_GET.area_f_sort" id="vo">{$vo.name} > </volist></span>
+                        <input id="area_id" name="area_id" type="hidden" value="{$_GET.area_id}" />
+                        <a href="javascript:arealevel_cn();">选择</a><a href="javascript:$('#area_text').text('');$('#area_id').val(0);" style="color:red;">重置</a>
+                        &nbsp;&nbsp;
+                        关键字：
+                        <input name="keyword" type="text" value="{$_GET.keyword}" class="input-text" placeholder="名称" />
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn" value="搜索" />
+                    </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+    <div class="list">
+        <form action="{:Url('internet_sales_del')}" method="post">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th width="30"><input type="checkbox" value="" id="check_box" onclick="selectAll('ids[]');"></th>
+                    <th width="30">ID</th>
+                    <th>名称</th>
+                    <th>电话</th>
+                    <th>所在城市</th>
+                    <th width="200">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <volist id="vo" name="list">
+                <tr>
+                    <td><input type="checkbox" value="{$vo.id}" name="ids[]"></td>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.tel}</td>
+                    <td><volist name="vo['area_f_sort']" id="vos">{$vos.name} > </volist></td>
+                    <td>
+                        <a href="{:Url('store_sales_edit')}&id={$vo.id}&_backpage={$_pageurl}">编辑</a>
+                        <a href="{:Url('store_sales_del')}&id={$vo.id}" target="delete" title='确定要删除ID为“{$vo.id}”的实体销售渠道吗？'>删除</a>
+                        <br />
+                        <a href="{:Url('store_sales_wine_list')}&store_sales_id={$vo.id}">代理酒款列表</a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+
+        <div class="footer"><label for="check_box" style="margin-right:10px;cursor:pointer;">全选/取消</label> <input type="submit" class="btn" name="dosubmit" value="删除" onclick="return confirm('您确定要删除吗？')"></div>
+    </form>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<include file="Common:cpfooter" />

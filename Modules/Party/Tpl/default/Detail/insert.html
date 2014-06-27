@@ -1,0 +1,17 @@
+<include file="Common:header" />
+<include file="Common:wine_city" />
+<div class="wine_main">
+	<h3 class="i_h3">
+		<span>关注 [<a href="__ROOT__/index.php/Detail/index/id/{$partyInfo.id}">{$partyInfo.title}</a>] 的全部用户</span>   
+		<var>(共<em>{$joincount}</em>人)</var>
+	</h3>
+	<ul class="u_join_list">
+		<volist name="userInfo" id="user">
+		<li>
+			<a href="__ROOT__/User/otherInsert/uid/{$user.uid}"><img src="{$user.avater}"/></a>
+			<span><a href="__ROOT__/User/otherInsert/uid/{$user.uid}">{$user.nickname}</a></span>
+		</li>
+		</volist>
+	</ul>
+</div>
+<include file="Common:footer" />

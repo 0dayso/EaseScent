@@ -1,0 +1,33 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Jiuku/Index/index')}">酒库管理</a> > <a href="{:Url('index')}">葡萄品种颜色类型列表</a> > 添加葡萄品种颜色类型</div>
+    <div class="form">
+		<form name="myform" action="{:Url('add')}" method="post" enctype="multipart/form-data">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+                <!--<li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');">高级属性</li>-->
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">英文描述</th>
+                        <td><input type="text" size="80" name="fdescription" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">中文描述</th>
+                        <td><input type="text" size="80" name="cdescription" value="" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">状态</th>
+                        <td> <input type="radio" checked name="status" value="1">开启 <input type="radio" name="status" value="-1">关闭 </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none"></div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<include file="Common:cpfooter" />

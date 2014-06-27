@@ -1,0 +1,13 @@
+<php>  ${ACTION_NAME} = 'class="active"'; </php>
+<div class="z_aWrap_l">
+<h2 >{$Think.lang.management}<span><a href="__SELF__&l=zh-cn">中文</a><a href="__SELF__&l=en-us">English</a></span></h2>
+<ul>
+   <li <present name="info">{$info} </present> >             <a href="{:U('Agent/info')}">          {$Think.lang.baseinfo}<em></em></a></li >
+   <li <present name="introduce"> {$introduce}</present> >   <a href="{:U('Agent/introduce')}">     {$Think.lang.company_introduction} </a></li>
+   <li <present name="release">{$release}</present>>         <a href="{:U('Agent/release')}">       {$Think.lang.add_goods} </a></li>
+   <li <present name="release_winetool">{$release_winetool}</present>> <a href="{:U('Agent/release_winetool')}">   {$Think.lang.add_winetool} </a></li>
+   <li <present name="company_view">{$company_view}</present>> <a href="{:U('Agent/company_view')}">   {$Think.lang.company_view} </a></li>
+   <li <present name="cooperation">{$cooperation}</present>> <a href="{:U('Agent/cooperation')}">   {$Think.lang.cooperation} </a></li>
+   <li <present name="goodsManage">{$goodsManage}</present>> <a href="{:U('Agent/goodsManage')}">   {$Think.lang.goods_manage} </a></li>
+</ul>
+</div>

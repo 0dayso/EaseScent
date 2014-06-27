@@ -1,0 +1,185 @@
+<include file="Common:cpheader" />
+<div id="table">
+    <div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Btasting/Wtasting/index')}">品酒会管理</a> > 品酒会列表</div>
+    <div class="list-menu">
+        <a class='btn' href="{:Url('Btasting/Wtasting/add')}">增加新品酒会</a>
+    </div>
+    <div class="search">
+        <table width="100%" cellspacing="0" class="search-form">
+        <form action="{:Url('index')}" method="post">
+            <tbody>
+                <tr>
+                    <td width="">
+                        关键\匹配度：
+                        <input name="keyword" type="text" value="{$_REQUEST['keyword']}" class="input-text" />
+                        &nbsp;&nbsp;
+                        状态：
+                        <select name="locked">
+                            <option value="">全部</option>
+                            <option <if condition="'0' eq $_REQUEST['locked']" >selected</if> value="0">可编辑</option>
+                            <option <if condition="'1' eq $_REQUEST['locked']" >selected</if> value="1">已上传</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        酒会属性：
+                        <select name="type">
+                            <option value="">全部</option>
+                            <option <if condition="1 eq $_REQUEST['type']" >selected</if> value="1">公开品酒会</option>
+                            <option <if condition="2 eq $_REQUEST['type']" >selected</if> value="2">盲品会</option>
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="submit" name="search" class="btn" value="搜索" />
+                </td>
+                </tr>
+            </tbody>
+        </form>
+        </table>
+    </div>
+
+    <div class="list">
+        <table width="100%" cellspacing="0" class="table-list">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>酒会名称</th>
+                    <th>酒会时间</th>
+					<th>专家团</th>
+                    <th>状态</th>
+                    <th>酒会属性</th>
+                    <th>数据统计</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			<volist id="vo" name="volist">
+            <tr id="show-detail-id-{$vo.id}">
+                <td>{$vo.id}</td>
+				<td>{$vo.name}</td>
+				<td>{$vo.dateline|date="Y-m-d", ###}</td>
+				<td>{$vo.experts}</td>
+                <td>{$vo.statement}</td>
+                <td><if condition="$vo.type eq 1">公开酒会<else />盲品会</if></td>
+                <td>{$vo.finish}%</td>
+                <td><a href="{:Url('Btasting/Wtasting/score?id='.$vo['id'])}">查看成绩</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="show-detail" wp-id="{$vo.id}" href="###">查看详情</a>&nbsp;&nbsp;&nbsp;&nbsp;<if condition="$vo.locked eq 1"> 编辑&nbsp;&nbsp;&nbsp;&nbsp;删除&nbsp;&nbsp;&nbsp;&nbsp;上传酒单 <else /><a href="{:Url('Btasting/Wtasting/edit?wpid=')}{$vo.id}">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="delete-this-wineparty" wp-id="{$vo.id}" href="###">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="upload-wineparty" wp-id="{$vo.id}" href="###">上传酒单</a></if> <if condition="$vo.pub eq 1">已发布<else /><a class="pub-wineparty" wp-id="{$vo.id}" href="###">发布</a></if> <a href="http://ajax.wine.cn/?action=UGZzYWZ7fHU9WmZ%2Ffj1hen1l&id={$vo.id}" target="_blank">查看酒会前台页面</a> </td>
+			</tr>
+			</volist>
+        </tbody>
+    </table>
+    <div class="pages">{$page}</div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        var GID = 0;
+        var GITEM = '';
+        var GNAME = '';
+
+        var WPID = 0;
+
+
+        $(".show-detail").click(function(){
+            var id = $(this).attr('wp-id');
+            WPID = id;
+            if($("#score-detail-id-" + id).length > 0) {
+                $("#score-detail-id-" + id).remove();
+                return;
+            }
+            $.post("{:Url('Btasting/Wtasting/index?op=showdetail')}", {wpid: id}, function(data){
+                $(".delete-all-detail").remove();
+                var experts = groups = '';
+                if(data.experts) {
+                    for(enumb in data.experts) {
+                        experts += '&nbsp;&nbsp;' + data.experts[enumb].name;
+                    }
+                }
+                if(data.groups) {
+                    GID = data.groups[0].gid;
+                    GITEM = data.groups[0].item;
+                    GNAME = data.groups[0].name;
+                    groups = '<ul id="group-lists" class="tabBut cu-li">';
+                    for(gnum in data.groups) {
+                        groups += '<li group-id="' + data.groups[gnum].gid + '" group-item="' + data.groups[gnum].item + '" group-name="' + data.groups[gnum].name + '" class="group-list' + ( gnum == 0 ? ' on' : '') + '">' + data.groups[gnum].name + '</li>';
+                    }
+                    groups += "</ul>";
+                }
+                var html = "<tr id='score-detail-id-" + WPID + "' class='delete-all-detail'><td colspan='8'>";
+                    html += "<table class='form' width='90%' style='margin:10px auto;' cellspacing='0'>";
+                    html += "<tr><td width='80'>参与专家：</td><td>" + experts + "</td></tr>";
+                    html += "<tr><td width='80'>分组：</td><td style='padding-bottom:0px;'>" + groups + "</td></tr>";
+                    html += "<tr><td></td><td><div id='show-wines-detail' style='width:49%;float:left;'></div><div id='show-score-detail' style='width:49%; float:right'></div></td></tr>";
+                    html += "</table>";
+                    html += "</td></tr>";
+                $(html).insertAfter($("#show-detail-id-" + id));
+                LoadWinesDetailByGid(GID);
+            }, 'json');
+        });
+
+        $("#group-lists li").live('click', function(){
+            $(".tabBut .on").removeClass('on');
+            $(this).addClass('on');
+            $("#show-score-detail").html('');
+            var gid = $(this).attr('group-id');
+            LoadWinesDetailByGid(gid);
+        });
+
+        $(".show-wine-score-statement").live('click', function(){
+            var wineid = $(this).attr('wine-id');
+            LoadWinesDetailScores(wineid);   
+        });
+
+        $(".delete-this-wineparty").click(function(){
+            var wpid = $(this).attr('wp-id');
+            DeleteWineParty(wpid);
+        });
+
+        $(".upload-wineparty").click(function(){
+            var wpid = $(this).attr('wp-id');
+            $.post("{:Url('Btasting/Wtasting/add?op=locked')}", {wpid:wpid}, function(){
+                window.location.href = '{:Url('Btasting/Wtasting/index')}';
+            }, 'json');
+        });
+
+        $(".pub-wineparty").click(function(){
+            var wpid = $(this).attr('wp-id');
+            $.post("{:Url('Btasting/Wtasting/add?op=pub')}", {wpid:wpid}, function(){
+                alert('发布成功');
+                window.location.href = '{:Url('Btasting/Wtasting/index')}';
+            }, 'json');
+        });
+
+        var LoadWinesDetailByGid = function(gid){
+            $.post("{:Url('Btasting/Wtasting/index?op=getwinedetail')}", {gid:gid}, function(data){
+                var html = "<table class='form' width='99%' style='margin:10px; border:1px solid #eeeeee; background:#FFF;' cellspacing='0'>";
+                    html += "<tr><td width='10%'>序号</td><td>酒名</td><td width='10%'>得分</td><td width='10%'>排名</td><td width='10%'>数据统计</td></tr>";
+                    for(var wnum in data) {
+                        html += "<tr><td>" + GITEM +  data[wnum].item + "</td><td>" + data[wnum].name + "</td><td>" + data[wnum].score + "</td><td>" + data[wnum].order + "</td><td><a href='###' class='show-wine-score-statement' wine-id='" + data[wnum].id + "'>" + data[wnum].statement + "%</a></td></tr>";
+                    }
+                    html += "</table>";
+                $("#show-wines-detail").html($(html));
+            }, 'json');
+        }
+
+        var LoadWinesDetailScores = function(wineid) {
+            $.post("{:Url('Btasting/Wtasting/index?op=getwinescores')}", {wineid:wineid, wpid:WPID}, function(data){
+                var html = "<table class='form' width='99%' style='margin:10px; border:1px solid #eeeeee; background:#FFF;' cellspacing='0'>";
+                    html += data;
+                    html += "</table>";
+                $("#show-score-detail").html($(html));
+            }, 'json');
+        }
+
+        var DeleteWineParty = function(ids) {
+            if(!confirm("警告：删除酒会时该酒会中的分组、酒款、专家评分数据也会被删除！确认删除该酒会吗？")) {
+                return false;
+            }
+            $.post("{:Url('Btasting/Wtasting/index?op=delete')}",{ids:ids}, function(data){
+                if(data.errno == 0) {
+                    window.location.href="{:Url('Btasting/Wtasting/index')}";
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+        }
+
+    });
+</script>
+<include file="Common:cpfooter"/>

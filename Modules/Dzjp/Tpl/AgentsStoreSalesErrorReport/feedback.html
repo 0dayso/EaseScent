@@ -1,0 +1,75 @@
+<include file="Common:cpheader" />
+<script>
+function feedback_on(this1){
+    var feedback = $(this1).find('span').text();
+    $("textarea[name='feedback']").val(feedback);
+    console.log(feedback);
+}
+</script>
+<div id="table">
+	<div class="panel">当前位置：
+        <a href="{:Url('Admin/Index/init')}">管理首页</a> >
+        <a href="{:Url('Dzjp/Index/index')}">大众酒评管理</a> >
+        <a href="{:Url('index')}">代理商实体店报错列表</a> >
+        反馈代理商实体店报错
+    </div>
+    <div class="form">
+		<form name="myform" action="{:Url('feedback')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_backpage" value="{$_REQUEST._backpage}">
+            <input type="hidden" name="id" value="{$res.id}">
+            <input type="hidden" name="uid" value="{$res.uid}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">基本属性</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+            	<table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">报错实体店</th>
+                        <td><if condition="$res['store_sales_res']">{$res.store_sales_res.name}（{$res.store_sales_res.id}）<else/>-</if></td>
+                    </tr>
+                    <tr>
+                        <th>报错时间</th>
+                        <td>{$res.report_time|date="Y-m-d H:i:s",###}</td>
+                    </tr>
+                    <tr>
+                        <th>报错用户</th>
+                        <td><if condition="$vo['uname']">{$vo.uname}<else/>-</if></td>
+                    </tr>
+                    <tr>
+                        <th>报错类型</th>
+                        <td>{$_error_type[$res['error_type']]}</td>
+                    </tr>
+                    <tr>
+                        <th>报错其他信息</th>
+                        <td>{$res.other}</td>
+                    </tr>
+                    <tr>
+                        <th>反馈内容</th>
+                        <td>
+                            <volist name="_error_type" id="vo">
+                            <label for="feedback_0{$i}" style="cursor:pointer;color:#008000;" onclick="feedback_on(this);">
+                                <input id="feedback_0{$i}" name="feedback_radio" type="radio" />
+                                <span>您关于“{$res.store_sales_res.name}”的，{$vo}的报错已通过审核。谢谢您的反馈。</span>
+                            </label>
+                            <br/>
+                            </volist>
+                            <volist name="_error_type" id="vo">
+                            <label for="feedback_1{$i}" style="cursor:pointer;color:#c00;" onclick="feedback_on(this);">
+                                <input id="feedback_1{$i}" name="feedback_radio" type="radio" />
+                                <span>您关于“{$res.store_sales_res.name}”的，{$vo}的报错未能通过审核。谢谢您的反馈。</span>
+                            </label>
+                            <br/>
+                            </volist>
+                            <br/>
+                            <textarea style="width:60%;height:120px" name="feedback" placeholder="反馈内容可选择参考项或自定义"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Common:cpfooter" />

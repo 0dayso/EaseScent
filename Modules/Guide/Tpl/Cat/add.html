@@ -1,0 +1,41 @@
+<include file="Common:cpheader" />
+<div id="table">
+	<div class="panel">当前位置：<a href="{:Url('Admin/Index/init')}">管理首页</a> > <a href="{:Url('Guide/Goods/index')}">逸香导购</a> > <a href="{:Url('Guide/Cat/index')}">分类管理</a> > 分类<if condition="$cat_id neq '' ">编辑<else/>添加</if></div>
+    <div class="form">
+		<form name="myform" action="{:Url('Guide/Cat/add_detil')}" method="post" onsubmit="return check_cat()" enctype="multipart/form-data">
+			<input type="hidden" name="createtime" value="{:time()}">
+            <input type="hidden" name="createuser" value="{$admin_uid}">
+            <input type="hidden" name="cat_id" value="{$cat_id}">
+            <ul class="tabBut cu-li">
+                <li id="tab_setting_1" class="on" onclick="SwapTab('tab_setting_1','tab_1');">添加标签</li>
+                <li id="tab_setting_2" onclick="SwapTab('tab_setting_2','tab_2');" style="display:none">更多信息</li>
+            </ul>
+            <div class="tab-nav" id="tab_1">
+                <table width="100%" cellspacing="0" class="table-form">
+                    <tr>
+                        <th width="130">标签名称</th>
+                        <td><input type="text" size="30" name="cat_name" id="cat_name" value="{$cat_info.cat_name}" class="measure-input"/></td>
+                    </tr>
+                    <tr>
+                        <th width="130">所属标签</th>
+						<td>
+							<select name="p_id">
+                            	<option value="0">顶级标签</option>
+								<volist id="cl" name="cat_list">
+								<option value="{$cl.cat_id}" <if condition="$cl['cat_id'] eq $cat_info['p_id']" >selected="selected"</if>>{$cl.cat_name}</option>
+								</volist>
+							</select>
+						</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-nav" id="tab_2" style="display:none">
+                
+            </div>
+            <div class="bottom">
+                <input type="submit" class="btn" value="提交" />
+            <div>
+        </form>
+    <div>
+</div>
+<include file="Common:cpfooter" />
